@@ -1,0 +1,114 @@
+/* 
+ *  Document   : fm-main.css
+ *  Author     : Bronislav Sedlák
+ *  Project    : File Manager 0.4
+*/
+
+#fm-ajax-spinner { position: fixed; left: 50%; top: 50%; margin: -15px 0 0 -15px; background: white url("../img/spinner.gif") no-repeat 50% 50%; padding: 13px; border: 2px solid #CCC; font-size: 0; z-index: 2; }
+
+.fm-inactive { position: absolute; background-color: #ffffff; opacity: 0.6; filter: alpha(opacity = 60); z-index: 1; }
+
+.file-manager, #snippet-fileManager-message { width: 100%; font-family: 'Segoe UI', 'MS Sans Serif', sans-serif; font-size: 12px; min-width: 450px; z-index: 0; }
+
+.file-manager a { text-decoration: none; color: black; }
+.file-manager h2 { color: #006E12; font-size: 15px; font-weight: normal; }
+.file-manager h3 { font-size: 15px; font-weight: normal; height: 25px; line-height: 25px; margin: 5px 0 10px; padding: 0 7px; }
+.file-manager hr { background-color: #D6E5F5; border: 0 none; height: 1px; }
+
+
+.fm-alert-message { padding: 0pt 0.7em; width: auto; }
+
+
+.file-manager .fm-draggable { cursor: pointer; }
+
+
+.file-manager .fm-adressbar { width: auto; background: url("../img/addressbar.png") repeat transparent; padding: 6px; }
+.file-manager .fm-adressbar ul { width: 100%; list-style: none outside none; margin: 0 auto; }
+.file-manager .fm-adressbar li { float: left; margin-left: 5px; }
+.file-manager .fm-adressbar .fm-location { width: 75%; }
+.file-manager .fm-adressbar .fm-location #frm-fileManager-navigation-locationForm { height: 24px; width: 100%; }
+.file-manager .fm-adressbar .fm-location #frm-fileManager-navigation-locationForm input { height: 24px; width: 100%; padding-left: 5px; border: 1px solid #CCCCCC; background: url('../img/adressbar-background.png') repeat transparent; }
+.file-manager .fm-adressbar .fm-location #frm-fileManager-navigation-locationForm input.active { background: #FFFFFF; }
+.file-manager .fm-adressbar .fm-refresh { margin-left: 0px; width: 26px; height: 26px; background: url('../img/adressbar-background.png') repeat transparent; border: 1px solid #CCCCCC; }
+.file-manager .fm-adressbar .fm-refresh:hover { border: 1px solid #333399; background: url("../img/nav_hover.png") repeat transparent; }
+.file-manager .fm-adressbar .fm-refresh img { margin: 5px 0 0 5px; width: 15px; height: 15px; border: none; }
+.file-manager .fm-adressbar .fm-filter #frmfilterForm-phrase { padding-left: 5px; height: 24px; border: 1px solid #CCCCCC; background: white url('../img/find-loupe.png') no-repeat right; padding-right: 25px; }
+.file-manager .fm-adressbar .fm-filter .frmfilterForm-phrase-active { color: #a1a1a1; font-style: italic; }
+.file-manager .fm-adressbar .fm-navigation { display: block; position:absolute; border: 1px solid #CCCCCC; width: auto; height: 26px; padding-left: 10px; background: url('../img/adressbar-background.png') repeat transparent; line-height: 24px; }
+.file-manager .fm-adressbar .fm-navigation.inactive { display: none; }
+.file-manager .fm-adressbar .fm-navigation a span { float: left; background: url("../img/arrow.png") no-repeat scroll right; padding: 0 14px 0 5px; }
+.file-manager .fm-adressbar .fm-navigation a span:hover { border: 1px solid #333399; background: url("../img/nav_hover.png") repeat transparent; }
+
+
+.file-manager .fm-toolbar { width: auto; background: transparent url(../img/navbar.png) 0 0 repeat-x; height: 31px; padding:0 3px; }
+.file-manager .fm-toolbar ul { width: 100%; list-style: none outside none; margin: 0; padding: 0; }
+.file-manager .fm-toolbar li { float: left; padding: 3px 3px 4px; position: relative; }
+.file-manager .fm-toolbar li a { color: #003366; float: left; line-height: 24px; }
+.file-manager .fm-toolbar li a:hover { background: url(../img/navbar.png) right -79px no-repeat; }
+.file-manager .fm-toolbar li a span { display: block; padding: 0 6px; float: left; height: 24px;}
+.file-manager .fm-toolbar li a:hover span { background: url(../img/navbar.png) left -55px no-repeat; }
+.file-manager .fm-toolbar li a span img { border: 0;}
+.file-manager .fm-toolbar li a span.options { width: 20px; background: transparent url(../img/navbar.png) 0 -31px no-repeat; padding: 0;}
+.file-manager .fm-toolbar li a:hover span.options { background: transparent url(../img/navbar.png) -22px -31px no-repeat;}
+.file-manager .fm-toolbar .fm-clipboard { display: none; min-width: 200px; max-width: 400px; padding: 6px;}
+.file-manager .fm-toolbar .fm-clipboard a { line-height: normal; }
+.file-manager .fm-toolbar .fm-clipboard a:hover { background: none; }
+.file-manager .fm-toolbar .fm-clipboard h3 { margin: 0; padding: 0; }
+.file-manager .fm-toolbar .fm-clipboard .fm-clipboard-item { width: 100%; }
+.file-manager .fm-toolbar .fm-clipboard .fm-delimiter { border-top: 1px solid #CCCCCC; }
+.file-manager .fm-toolbar .fm-clipboard .fm-delimiter #fm-clipboard-hide { float: right; font-size: 11px; color: #3B5998; font-family: 'Lucida Grande',Tahoma,Verdana,Arial,sans-serif; cursor: pointer; }
+.file-manager .fm-toolbar .fm-clipboard .fm-delimiter #fm-clipboard-clear { float: left; font-size: 11px; color: #3B5998; font-family: 'Lucida Grande',Tahoma,Verdana,Arial,sans-serif; cursor: pointer; }
+
+
+.file-manager .fm-body { width: 100%; }
+.file-manager .fm-body .fm-treeview { width: 20%; height: 465px; float: left; margin: 0; padding: 0; background-color: white; overflow: auto; }
+.file-manager .fm-body .fm-treeview .filetree { margin-left: 10px; margin-top: 10px; }
+.file-manager .fm-body .fm-treeview .treeview-folder { margin: 2px; padding: 2px; }
+.file-manager .fm-body .fm-treeview a.treeview-folder:hover { background: url("../img/hover.png") right top no-repeat; }
+
+
+.file-manager .fm-body .fm-content { width: auto; height: 465px; background: url("../img/main_back.jpg") repeat-x scroll left top #FFFFFF; border-left-style: solid; border-left-color: #D6E5F5; border-left-width: 1px; overflow: hidden; }
+.file-manager .fm-body .fm-content h2 { font-size: 18px; margin: 5px; float: left; }
+.file-manager .fm-body .fm-content .fm-link-parent { float: right; }
+.file-manager .fm-body .fm-content .fm-delimiter { clear: both; border-bottom: 1px solid #D6E5F5; }
+
+.file-manager .fm-body .fm-addnewfolder #frm-fileManager-newFolderForm { margin: 5px; }
+.file-manager .fm-body .fm-addnewfoldert #frm-fileManager-renameForm { margin: 5px; }
+.file-manager .fm-body .fm-addnewfolder input#frmnewFolderForm-send, input#frmnewFolderForm-filename { border: 1px solid #CCCCCC; }
+
+
+.file-manager .fm-body #fm-files-large { width: auto; height: 430px; overflow: auto; }
+.file-manager .fm-body #fm-files-large .fm-item { width: 140px; height: 121px; float: left; margin: 5px; padding: 5px; text-align: center; }
+.file-manager .fm-body #fm-files-large .fm-item .fm-thumb { border-style: none; max-height: 96px; }
+.file-manager .fm-body #fm-files-large .fm-item .fm-thumb.photo { border: 1px solid #CCCCCC; max-height: 96px; }
+.file-manager .fm-body #fm-files-large #fm-small-images { list-style: none outside none; margin: 5px; padding: 10px; }
+.file-manager .fm-body #fm-files-large #fm-small-images li:hover { background: url(../img/view_images.png) right -196px no-repeat; }
+
+
+.file-manager .fm-body #fm-files-small { width: auto; height: 430px; overflow: auto; }
+.file-manager .fm-body #fm-files-small .fm-item { width: 80px; height: 121px; float: left; margin: 5px; padding: 5px; text-align: center; }
+.file-manager .fm-body #fm-files-small .fm-item .fm-thumb { border-style: none; max-height: 48px; }
+.file-manager .fm-body #fm-files-small .fm-item .fm-thumb.photo { border: 1px solid #CCCCCC; max-height: 48px; }
+.file-manager .fm-body #fm-files-small #fm-small-images { list-style: none outside none; margin: 5px; padding: 10px; }
+.file-manager .fm-body #fm-files-small #fm-small-images li:hover { background: url(../img/view_images.png) right -196px no-repeat; }
+
+
+.file-manager .fm-body #fm-files-details { width: auto; height: 430px; overflow: auto; }
+.file-manager .fm-body #fm-files-details table { border-collapse: collapse; }
+.file-manager .fm-body #fm-files-details tr { height: 24px; text-align: left; }
+.file-manager .fm-body #fm-files-details td { height: 24px; text-align: left; padding: 0 5px; }
+.file-manager .fm-body #fm-files-details thead th { background: url("../img/views/details/thead_separator.png") no-repeat scroll right top transparent; color: #4C607A; font-weight: normal; padding: 0 5px; }
+
+.file-manager .fm-body .fm-upload #fm-uploader { margin-left: 10px; margin-right: 10px; }
+
+
+.file-manager .fm-info-bar { width: 100%; height: 155px; background: url('../img/details_back_top.gif') repeat-x scroll left top #F1F5FB; margin: 0px; }
+.file-manager .fm-info-bar #snippet-fileManager-fileinfo { float: left; }
+.file-manager .fm-info-bar #snippet-fileManager-diskusage { float: right; }
+.file-manager .fm-info-bar .fm-disk-usage { list-style: none outside none; margin: 0px; padding: 10px; }
+.file-manager .fm-info-bar .fm-disk-usage li { }
+.file-manager .fm-info-bar .fm-disk-usage #fm-disk-usage-bar { width: 150px; height: 15px; }
+.file-manager .fm-info-bar .fm-disk-usage h2 { color: #006E12; font-size: 20px; font-weight: normal; height:25px; line-height:25px; }
+.file-manager .fm-info-bar ul.fm-file-info { list-style: none outside none; margin: 0; padding: 10px; }
+.file-manager .fm-info-bar li.fm-file-info { float: left; padding: 5px 3px 4px; }
+.file-manager .fm-info-bar span.fm-file-info.title { color: #006E12; font-size: 20px; font-weight: normal; height: 25px; line-height: 25px; }

@@ -1,0 +1,26 @@
+<div class="fm-navigation">
+    <script type="text/javascript">
+            $(document).ready(function() {
+                $('.fm-navigation').removeClass("inactive");
+
+                $('.fm-location input').focus( function() {
+                    $(".fm-navigation").addClass("inactive");
+                    $(this).addClass("active");
+                });
+
+                $('.fm-location input').blur( function(){
+                    $(this).removeClass("active");
+                    $('.fm-navigation').removeClass("inactive");
+                });
+            });
+    </script>
+        <a n:foreach="$items as $item" href="{$item['link']}" class="fm-ajax">
+            <span>
+                {$item['name']}
+            </span>
+        </a>
+</div>
+
+{$locationForm->render('begin')}
+{$locationForm['location']->control}
+{$locationForm->render('end')}

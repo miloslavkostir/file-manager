@@ -1,0 +1,146 @@
+<h2 title="{$actualdir}">
+    {$actualdir}
+</h2>
+
+<a n:if="$actualdir <> $rootname" href="{link goToParent!, $actualdir}" title="{_'Go to parent folder'}" class="fm-ajax fm-link-parent">
+   <h2>[..]</h2>
+</a>
+<div class="fm-delimiter"></div>
+
+<div id="fm-files-large">
+
+    <ul id="fm-small-images">
+
+
+        <li n:foreach="$files as $item" class="fm-item" id="context-item-{$iterator->getCounter()}" title="{$item['filename']}">
+
+                    {if $item['create_thumb'] <> 1}
+                            {if $item['type'] == 'file'}
+                                <img src="{$basePath . $thumb_dir . $item['icon']}" alt="{$item['filename']}" id="{$item['actualdir']}" class="fm-draggable fm-thumb" />
+                            {else}
+                                {if $item['actualdir'] == $rootname}
+                                    {var $targetpath = '/' . $item['filename'] . '/'}
+                                {else}
+                                    {var $targetpath = $item['actualdir'] . $item['filename'] . '/'}
+                                {/if}
+                                <a href="{link showContent!, $targetpath}" class="fm-ajax-dbl fm-thumb" title="{_'Open folder'}">
+                                    <img src="{$basePath . $thumb_dir . $item['icon']}" alt="{$item['filename']}" id="{$targetpath}" class="fm-droppable fm-thumb" />
+                                </a>
+                            {/if}
+                    {else}
+                        <a href="{link showFullImage!, $item['actualdir'], $item['filename']}" class="light-box-link" title="{_'View this image in full size'}">
+                            <img src="{link showThumb!, $item['actualdir'], $item['filename']}" alt="{$item['filename']}" id="{$item['actualdir']}" class="fm-thumb photo fm-draggable" />
+                        </a>
+                    {/if}
+
+                    <script type="text/javascript">
+                    $(document).ready(function() {
+
+                            $("#context-item-{$iterator->getCounter()}").contextMenu({
+                                menu: 'myMenu{$iterator->getCounter()}'
+                            });
+
+                    });
+                    </script>
+
+                    <ul class="fm-files-menu contexMenu" id="myMenu{$iterator->getCounter()}">
+                        <li n:if="$item['type'] == 'file'">
+                            <a href="{link cutToClipboard!, $item['actualdir'], $item['filename']}" class="fm-ajax" title="{_'Cut to clipboard'}">
+                                {_'Cut'}
+                            </a>
+                        </li>
+                        <li class="copy">
+                            <a href="{link copyToClipboard!, $item['actualdir'], $item['filename']}" class="fm-ajax" title="{_'Copy to clipboard'}">
+                                {_'Copy'}
+                            </a>
+                        </li>
+                        <li>
+                            <a href="{link showFileInfo!, $item['actualdir'], $item['filename']}" title="{_'Show details'} {$item['filename']}" class="fm-ajax">
+                                {_'Details'}
+                            </a>
+                        </li>
+                        <li n:if="$item['type'] == 'file'">
+                            <a href="{link downloadFile!, $item['actualdir'], $item['filename']}" title="{_'Download file'}">
+                                {_'Download'}
+                            </a>
+                        </li>
+                        <li n:if="$item['type'] == 'file'" class="delete">
+                            <a href="{link deleteFile!, $item['actualdir'], $item['filename']}" title="{_'Delete file'}" class="fm-ajax-delete">
+                                {_'Delete'}
+                            </a>
+                        </li>
+                        <li class="edit">
+                            <a href="{link showRename!, $item['actualdir'], $item['filename']}" title="{_'Rename'}" class="fm-ajax">
+                                {_'Rename'}
+                            </a>
+                        </li>
+                        <li class="quit separator">
+                            <a href="#">{_'Exit'}</a>
+                        </li>
+                    </ul>
+
+                    <div style="text-align: center; word-wrap: break-word;" class="context-item">
+                            {$item['filename']|truncate:20}
+                    </div>
+
+        </li>
+
+
+        <script type="text/javascript">
+        $(document).ready(function() {
+
+            $(".fm-draggable").draggable({
+                containment: "div.fm-body-frame",
+                revert: true,
+                cursor: "pointer",
+                helper: "clone",
+                scroll: false,
+                opacity : 0.6
+            });
+
+            $(".fm-droppable").droppable({
+                    hoverClass: "ui-state-active",
+                    drop: function( event, ui ) {
+                        $( this ).addClass( "ui-state-highlight" );
+
+                        var actualdir = ui.draggable.attr('id'); // actualdir
+                        var filename = ui.draggable.attr('alt'); // filename
+                        var targetdir = $(this).attr('id'); // targetdir
+
+                        if (confirm({_'Do you really want to move this file'} + "?")) {
+                                $.getJSON({link moveFile!}, { actualdir: actualdir, filename: filename, targetdir: targetdir }, function(payload){
+                                    $.nette.success(payload);
+                                    if (payload.result == 'success')
+                                        ui.draggable.remove();
+                                });
+
+                                $('<div id="fm-ajax-spinner"></div>').css({
+                                        position: "absolute",
+                                        left: event.pageX + 20,
+                                        top: event.pageY + 40
+
+                                    }).ajaxStop(function() {
+                                            $(this).remove();
+
+                                    }).appendTo("body");
+                         }
+
+                         $( this ).removeClass( "ui-state-highlight" );
+
+                    }
+            });
+
+            $('div#fm-files a.light-box-link').lightBoxClone({
+                fixedNavigation: true,
+                imageLoading: {$basePath}+{$config['resource_dir']}+'img/spinner.gif',
+                imageBtnClose: {$basePath}+{$config['resource_dir']}+'img/jquery-lightboxclone/lightbox-btn-close.gif',
+                imageBtnPrev: {$basePath}+{$config['resource_dir']}+'img/jquery-lightboxclone/lightbox-btn-prev.gif',
+                imageBtnNext: {$basePath}+{$config['resource_dir']}+'img/jquery-lightboxclone/lightbox-btn-next.gif',
+                imageBlank: {$basePath}+{$config['resource_dir']}+'img/jquery-lightboxclone/lightbox-blank.gif'
+            });
+        });
+        </script>
+
+
+    </ul>
+</div>

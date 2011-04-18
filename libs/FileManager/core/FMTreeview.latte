@@ -1,0 +1,50 @@
+<script type="text/javascript">
+$(document).ready(function() {
+    $(".file-manager .filetree").treeview({
+        persist: "cookie"
+    });
+
+    $(".file-manager .hitarea").hide();
+
+    $(".file-manager .fm-treeview").hover(function() {
+            $(".file-manager .hitarea").stop(true, true)
+            $(".file-manager .hitarea").show('fade');
+    }, function() {
+            $(".file-manager .hitarea").hide('fade', 700);
+    });
+
+
+    $(".fm-droppable").droppable({
+            hoverClass: "ui-state-active",
+            drop: function( event, ui ) {
+                $( this ).addClass( "ui-state-highlight" );
+
+                var actualdir = ui.draggable.attr('id'); // actualdir
+                var filename = ui.draggable.attr('alt'); // filename
+                var targetdir = $(this).attr('id'); // targetdir
+
+                if (confirm({_'Do you really want to move this file'} + "?")) {
+                        $.getJSON({link moveFile!}, { actualdir: actualdir, filename: filename, targetdir: targetdir }, function(payload){
+                            $.nette.success(payload);
+                            if (payload.result == 'success')
+                                ui.draggable.remove();
+                        });
+
+                        $('<div id="fm-ajax-spinner"></div>').css({
+                                position: "absolute",
+                                left: event.pageX + 20,
+                                top: event.pageY + 40
+
+                            }).ajaxStop(function() {
+                                    $(this).remove();
+
+                            }).appendTo("body");
+                 }
+
+                 $( this ).removeClass( "ui-state-highlight" );
+
+            }
+    });
+});
+</script>
+{!$treeview}

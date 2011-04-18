@@ -1,0 +1,16 @@
+<script type="text/javascript">
+$(function() {
+        $( "div#fm-disk-usage-bar" ).progressbar({
+                value: {$sizeinfo['percentused']}
+        });
+});
+</script>
+
+<ul class="fm-disk-usage">
+    <li><h2>{_'Disk usage'}</h2></li>
+    <li>
+        <div id="fm-disk-usage-bar"></div>
+    </li>
+    <li><strong>{_'Used'}: </strong>{$sizeinfo['usedsize']|bytes}</li>
+    <li title="{$sizeinfo['percentused']}{_'% free space left'}"><strong>{_'Available'}: </strong>{$sizeinfo['spaceleft']|bytes}</li>
+</ul>

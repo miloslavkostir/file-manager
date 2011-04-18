@@ -1,0 +1,67 @@
+<div class="fm-clipboard ui-state-highlight ui-corner-bottom">
+        <h3>Clipboard</h3>
+        <div n:foreach="$clipboard as $item" class="fm-clipboard-item">
+                <span style="float: left;">
+                    {if $item['actualdir'] == $rootname}
+                            {$item['actualdir']}/{$item['filename']}
+                    {else}
+                            {$item['actualdir']}
+                            {$item['filename']}
+                    {/if}
+                </span>
+                <span style="float: right;">
+                    <strong>{$item['action']|upper}</strong>
+                </span>
+                <div style="clear: both;"></div>
+        </div>
+        <div class="fm-delimiter">
+
+            <div id="fm-clipboard-clear">
+                <a href="{link clearClipboard!, $actualdir}" title="{_'Delete all items from clipboard'}" class="fm-ajax">
+                    {_'Clear all'}
+                </a>
+            </div>
+            <div id="fm-clipboard-hide">
+                <a href="#" title="{_'Hide clipboard'}" onclick="return false;">{_'Hide'}</a>
+            </div>
+        </div>
+</div>
+
+<script type="text/javascript">
+$(document).ready(function() {
+
+    $('.fm-clipboard').css({
+        position: 'absolute',
+        top: $('.fm-toolbar').height()
+    });
+
+    $('#fm-clipboard-hide a').click(function() {
+          $('.fm-clipboard').slideToggle('slow', function() {
+
+          });
+    });
+
+    $('#show-clipboard').click(function() {
+          $('.fm-clipboard').slideToggle('slow', function() {
+
+          });
+    });
+
+});
+</script>
+
+<a href="#" title="{_'Show items in clipboard'}" id="show-clipboard" onclick="return false;">
+<span>
+    {_'Clipboard'} ({? echo count($clipboard); })
+</span>
+</a>
+<a href="{link clearClipboard!, $actualdir}" title="{_'Delete all items from clipboard'}" class="fm-ajax">
+    <span>
+        {_'Clear clipboard'}
+    </span>
+</a>
+<a n:ifset="$actualdir" href="{link pasteFromClipboard!, $actualdir}" title="{_'Paste from clipboard'}" class="fm-ajax">
+    <span>
+        {_'Paste'}
+    </span>
+</a>

@@ -1,0 +1,292 @@
+<script type="text/javascript">
+$(document).ready(function() {
+
+    $(".file-manager").delegate("a.fm-ajax", "click", function (event) {
+        var fm = $('.file-manager');
+        $.getJSON(this.href);
+        $('<div class="fm-inactive"></div>').css({
+                top: fm.position().top,
+                left: fm.position().left,
+                width: fm.width(),
+                height: fm.height()
+        }).ajaxStop(function() {
+                    $(this).remove();
+
+            }).appendTo(".file-manager");
+
+        $('<div id="fm-ajax-spinner"></div>').css({
+                position: "absolute",
+                left: event.pageX + 20,
+                top: event.pageY + 40
+
+            }).ajaxStop(function() {
+                    $(this).remove();
+
+            }).appendTo("body");
+        return false;
+    });
+
+    $(".file-manager").delegate("a.fm-ajax-dbl", "dblclick", function (event) {
+        var fm = $('.file-manager');
+        $.getJSON(this.href);
+        $('<div class="fm-inactive"></div>').css({
+                top: fm.position().top,
+                left: fm.position().left,
+                width: fm.width(),
+                height: fm.height()
+        }).ajaxStop(function() {
+                    $(this).remove();
+
+            }).appendTo(".file-manager");
+
+        $('<div id="fm-ajax-spinner"></div>').css({
+                position: "absolute",
+                left: event.pageX + 20,
+                top: event.pageY + 40
+
+            }).ajaxStop(function() {
+                    $(this).remove();
+
+            }).appendTo("body");
+        return false;
+    }).delegate("a.fm-ajax-dbl", "click", function (event){
+        return false;
+    });
+
+    $(".file-manager").delegate("a.fm-ajax-delete", "click", function (event) {
+        var fm = $('.file-manager');
+        if (confirm({_'Do you really want to delete this?'})) {
+            $.getJSON(this.href);
+            $('<div class="fm-inactive"></div>').css({
+                    top: fm.position().top,
+                    left: fm.position().left,
+                    width: fm.width(),
+                    height: fm.height()
+            }).ajaxStop(function() {
+                        $(this).remove();
+
+                }).appendTo(".file-manager");
+
+            $('<div id="fm-ajax-spinner"></div>').css({
+                    position: "absolute",
+                    left: event.pageX + 20,
+                    top: event.pageY + 40
+
+                }).ajaxStop(function() {
+                        $(this).remove();
+
+                }).appendTo("body");
+        }
+        return false;
+    });
+
+    $(".file-manager").delegate("form.fm-ajax", "submit", function () {
+        $(this).ajaxSubmit();
+        return false;
+    });
+
+    $(".file-manager").delegate("form.fm-ajax :submit", "click", function () {
+        $(this).ajaxSubmit();
+        return false;
+    });
+
+});
+</script>
+
+{snippet message}
+<script type="text/javascript">
+$(document).ready(function() {
+    $('div.fm-alert-message').fadeIn('slow')
+            .animate({ opacity: 1.0 }, 10000)
+            .fadeOut('slow', function() {
+              $(this).remove();
+            });
+
+    $('div.fm-alert-message span.ui-icon-closethick').hover(
+      function () {
+        $(this).addClass("ui-state-hover");
+      },
+      function () {
+        $(this).removeClass("ui-state-hover");
+      }
+    );
+
+    $('div.fm-alert-message').delegate('span.ui-icon-closethick', 'click', function() {
+        $('div.fm-alert-message').remove();
+    });
+});
+</script>
+
+{foreach $flashes as $flash}
+            {if $flash->type == 'error'}
+                <div class="fm-alert-message ui-state-error ui-corner-all">
+                <p>
+                <span style="float: left; margin-right: 0.3em;" class="ui-icon ui-icon-circle-close"></span>
+            {else}
+                {if $flash->type == 'warning'}
+                    <div class="fm-alert-message ui-state-highlight ui-corner-all">
+                    <p>
+                    <span style="float: left; margin-right: 0.3em;" class="ui-icon ui-icon-alert"></span>
+                {else}
+                    <div class="fm-alert-message ui-state-highlight ui-corner-all">
+                    <p>
+                    <span style="float: left; style="margin-right: 0.3em;" class="ui-icon ui-icon-info"></span>
+                {/if}
+            {/if}
+                    {!$flash->message}
+                    <span class="ui-icon ui-icon-closethick" style="cursor: pointer; float: right;" title="{_'Close message'}"></span>
+                </p>
+            </div>
+{/foreach}
+{/snippet}
+
+
+<div class="file-manager">
+    {snippet plugin}
+        <div n:ifset="$plugin" id="fm-plugin">
+            <script type="text/javascript">
+            $(document).ready(function() {
+                $('#fm-plugin').dialog({
+                    title: {$plugin},
+                    width: 'auto',
+                    height: 'auto'
+                });
+            });
+            </script>
+
+            {control $plugin}
+        </div>
+    {/snippet}
+
+                
+    <div class="fm-adressbar">
+        <ul>
+            <li class="fm-location">
+                {snippet adressbar}
+                        {control navigation}                    
+                {/snippet}
+            </li>
+
+            {snippet refreshButton}
+            <li n:ifset="$actualdir" class="fm-refresh">
+                    <a href="{link refreshContent!, $actualdir}" title="{_'Refresh content'}" class="fm-ajax">
+                        <img src="{$basePath}/fm-src/img/icons/refresh.ico" alt=""/>
+                    </a>
+            </li>
+            {/snippet}
+            
+            <li class="fm-filter">
+            {snippet filter}
+                {control filter}
+            {/snippet}
+            </li>
+
+        </ul>
+        <div style="clear: both;"></div>
+    </div>
+
+
+    <div class="fm-toolbar">
+        {snippet toolbar}
+        {default $actualdir = $rootname}
+        <ul class="fm-toolbar">
+
+            <li>
+                <a href="{link showAddNewFolder!, $actualdir}" title="{_'Create new folder'}" class="fm-ajax">
+                    <span>{_'New folder'}</span>
+                </a>
+            </li>
+            
+            <li>
+                <a href="{link deleteFolder!, $actualdir}" title="{_'Delete this folder'}" class="fm-ajax-delete">
+                    <span>{_'Delete'}</span>
+                </a>
+            </li>
+
+            <li>
+                <a href="{link showUpload!, $actualdir}" title="{_'Upload files'}" class="fm-ajax">
+                    <span>{_'Upload'}</span>
+                </a>
+            </li>
+
+            <li>
+            {snippet clipboard}
+                {ifset $clipboard}
+                    {control clipboard}
+                {/ifset}
+            {/snippet}
+            </li>
+
+            {ifset $plugins}
+            <li n:foreach="$plugins as $plug">
+                <a href="{link runPlugin!, $plug, $actualdir}" title="{_'Run'} {$plug}" class="fm-ajax">
+                    <span>{$plug}</span>
+                </a>
+            </li>
+            {/ifset}
+
+            <li style="float: right;">
+                {control viewSelector}
+            </li>
+        </ul>
+        {/snippet}
+    </div>
+
+
+    <!-- body wrapper -->
+    <div class="fm-body">
+
+            <div class="fm-treeview">
+                    {snippet treeview}
+                        {control treeview}
+                    {/snippet}
+            </div>
+
+
+            <div class="fm-content">
+                    {snippet rename}
+                        <div n:ifset="$rename">
+                            {control rename}
+                        </div>
+                    {/snippet}
+
+                    {snippet content}
+                        {ifset $content}
+                            {control content}
+                        {else}
+                            <!--<h2>{_'Welcome!'}</h2>
+                            <h3>{_'You can start'} <a href="{link showContent!, $rootname}" class="fm-ajax" title="{_'Go to root folder'}" style="text-decoration: underline;">{_'here'}</a>.</h3>
+                        -->{/ifset}
+                    {/snippet}
+
+                    {snippet newfolder}
+                        <div class="fm-addnewfolder" n:ifset="$newfolder">
+                            {control newFolder}
+                        </div>
+                    {/snippet}
+
+                    {snippet upload}
+                        <div class="fm-upload" n:ifset="$upload">
+                            {control upload}
+                        </div>
+                    {/snippet}
+            </div>
+            
+    </div>
+
+
+
+    <div class="fm-info-bar">
+                    {snippet fileinfo}
+                    <div n:ifset="$fileinfo">
+                        {control fileInfo}
+                    </div>
+                    {/snippet}
+
+                    {snippet diskusage}
+                        {control diskUsage}
+                    {/snippet}
+    </div>
+
+
+</div>

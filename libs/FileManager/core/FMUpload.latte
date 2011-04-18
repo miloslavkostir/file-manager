@@ -1,0 +1,89 @@
+<h2>{_'Upload files'}</h2>
+
+<div class="fm-delimiter"></div>
+
+<span style="margin: 5px;">{_'New files will be stored in'}:</span>
+<h3 title="{$actualdir}">{$actualdir|truncate:85}</h3>
+
+<script type="text/javascript">
+$(document).ready(function() {
+        $("div#fm-uploader").plupload({
+                // General settings
+                runtimes : 'silverlight,flash,html5,gears,browserplus,html4',
+                url : {link upload!, $actualdir},
+                max_file_size : {$config['max_upload']},
+
+                {if $config['upload_chunk'] == 1}
+                    chunk_size : {$config['upload_chunk_size']},
+                {/if}
+
+                unique_names : false,
+
+                {if $config['upload_resize'] == 1}
+                    resize : { width : {$config['upload_resize_width']}, height : {$config['upload_resize_height']}, quality : {$config['upload_resize_quality']} },
+                {/if}
+
+                {if ($config['upload_filter'] == 1)}
+                {ifset $config['upload_filter_options']}
+                    filters : [
+                       {foreach $config['upload_filter_options'] as $item}
+                          {if $iterator->isLast()}
+                                { title : {$item['title']}, extensions : {$item['extensions']} }
+                          {else}
+                                { title : {$item['title']}, extensions : {$item['extensions']} },
+                          {/if}
+                       {/foreach}
+                    ],
+                {/ifset}
+                {/if}
+
+                // Flash settings
+                flash_swf_url : {$basePath}+{$config['resource_dir']}+"js/plupload/plupload.flash.swf",
+
+                // Silverlight settings
+                silverlight_xap_url : {$basePath}+{$config['resource_dir']}+"js/plupload/plupload.silverlight.xap",
+
+                init : {
+                        FileUploaded: function(up, file, info) {
+
+                            var obj = jQuery.parseJSON(info.response);
+                            var message = file.name + ': '+ obj.result;
+                            $.getJSON({link refreshMessage!}, { type: obj.type, message: message });
+                        },
+
+                        Error: function(up, args) {
+                            $.getJSON({link refreshMessage!}, { type: 'error', message: {_'File'} + ' <strong>'+args.file.name+'</strong> ' + {_'was not uploaded'} + args.message + ' ' + {_'Code'} + ' ' + args.code});
+                        }
+                }
+
+            });
+
+        // Client side form validation
+        $('form#fm-upload-form').submit(function(e) {
+                var uploader = $('#fm-uploader').pluploadQueue();
+
+                // Validate number of uploaded files
+                if (uploader.total.uploaded == 0) {
+                        // Files in queue upload them first
+                        if (uploader.files.length > 0) {
+                                // When all files are uploaded submit form
+                                uploader.bind('UploadProgress', function() {
+                                        if (uploader.total.uploaded == uploader.files.length)
+                                                $('form#fm-upload-form').submit();
+                                });
+
+                                uploader.start();
+                        } else
+                                alert({_'You must at least upload one file'});
+                }
+        });
+
+});
+</script>
+
+<form method="post" action="{link upload!, $actualdir}" id="fm-upload-form">
+<div id="fm-uploader">
+        <p>{_"You browser doesn't have Flash, Silverlight, Gears, BrowserPlus or HTML5 support"}.</p>
+</div>
+</form>
+
