@@ -55,6 +55,7 @@ class FMNewFolder extends FileManager
     public function NewFolderFormSubmitted($form)
     {
         $translator = new GettextTranslator(__DIR__ . '/../locale/FileManager.' . $this->config['lang'] . '.mo');
+        $values = $form->getValues();
 
         if ($this->config['readonly'] == True)
                             parent::getParent()->flashMessage(
@@ -62,7 +63,6 @@ class FMNewFolder extends FileManager
                                 'warning'
                             );
         else {
-                            $values = $form->getValues();
 
                             if ($this['tools']->validPath($values['actualdir'])) {
 
