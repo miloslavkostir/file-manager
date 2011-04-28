@@ -87,11 +87,31 @@
 .file-manager .fm-body #fm-files-small #fm-small-images li:hover { background: url(../img/view_images.png) right -196px no-repeat; }
 
 
+.file-manager .fm-body #fm-files-list { width: auto; height: 430px; overflow: auto; }
+.file-manager .fm-body #fm-files-list ul#fm-small-images {
+        /* works only for Firefox */
+	-moz-column-count: 2;
+        -moz-column-width: auto;
+	-moz-column-gap: auto;
+	-webkit-column-count: 2;
+	-webkit-column-gap: auto;
+        -webkit-column-width: auto;
+	column-count: 2;
+	column-gap: auto;
+        column-width: auto;
+        list-style: none;
+        height: 350px; }
+.file-manager .fm-body #fm-files-list li { line-height: 24px; text-align: left; padding: 0 5px; }
+.file-manager .fm-body #fm-files-list .fm-thumb { border-style: none; }
+
+
 .file-manager .fm-body #fm-files-details { width: auto; height: 430px; overflow: auto; }
 .file-manager .fm-body #fm-files-details table { border-collapse: collapse; }
 .file-manager .fm-body #fm-files-details tr { height: 24px; text-align: left; }
 .file-manager .fm-body #fm-files-details td { height: 24px; text-align: left; padding: 0 5px; }
 .file-manager .fm-body #fm-files-details thead th { background: url("../img/views/details/thead_separator.png") no-repeat scroll right top transparent; color: #4C607A; font-weight: normal; padding: 0 5px; }
+.file-manager .fm-body #fm-files-list .fm-thumb { border-style: none; }
+
 
 .file-manager .fm-body .fm-upload #fm-uploader { margin-left: 10px; margin-right: 10px; }
 
