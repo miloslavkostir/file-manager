@@ -1,7 +1,7 @@
 <?php
 
-use Nette\Environment;
 use Nette\Utils\Finder;
+use Nette\Http\Url;
 
 class FMPlayer extends FileManager
 {
@@ -44,7 +44,10 @@ class FMPlayer extends FileManager
         
         $template->actualdir = $this->actualdir;
         $template->files = $this->getFiles($this->actualdir);
-        $template->webadress = Environment::getHttpRequest()->uri->getHostUri();
+        
+        $url = new Url;
+        $template->webadress = $url->getHostUrl();
+
         $template->config = parent::getParent()->config;
 
         $template->render();
