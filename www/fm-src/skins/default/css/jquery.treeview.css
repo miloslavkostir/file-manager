@@ -10,7 +10,7 @@
 }
 
 .treeview .hitarea {
-	background: url(images/minus.gif) 0 0 no-repeat;
+	background: url(../img/treeview/minus.gif) 0 0 no-repeat;
 	height: 16px;
 	width: 16px;
 	margin-left: -14px;
@@ -38,10 +38,10 @@
 
 .treeview .hover { cursor: pointer; }
 
-.treeview .expandable-hitarea { background: url(images/plus.gif) 0 0 no-repeat; } /*first level plus*/
+.treeview .expandable-hitarea { background: url(../img/treeview/plus.gif) 0 0 no-repeat; } /*first level plus*/
 
 .filetree li { padding: 3px 0 2px 16px; white-space: nowrap; }
 .filetree span.folder, .filetree span.file, .filetree span.folder-root { padding: 1px 0 1px 16px; display: block; }
-.filetree span.folder { background: url(images/folder.gif) 0 0 no-repeat; }
-.filetree span.folder-root { background: url(images/root.png) 0 0 no-repeat; }
-.filetree li.expandable span.folder { background: url(images/folder-closed.gif) 0 0 no-repeat; }
+.filetree span.folder { background: url(../img/treeview/folder.gif) 0 0 no-repeat; }
+.filetree span.folder-root { background: url(../img/treeview/root.png) 0 0 no-repeat; }
+.filetree li.expandable span.folder { background: url(../img/treeview/folder-closed.gif) 0 0 no-repeat; }
