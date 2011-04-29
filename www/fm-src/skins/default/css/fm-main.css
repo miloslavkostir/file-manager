@@ -25,7 +25,7 @@
 .file-manager .fm-adressbar .fm-location #frm-fileManager-navigation-locationForm input.active { background: #FFFFFF; }
 .file-manager .fm-adressbar .fm-refresh { margin-left: 0px; width: 26px; height: 26px; background: url('../img/adressbar-background.png') repeat transparent; border: 1px solid #CCCCCC; }
 .file-manager .fm-adressbar .fm-refresh:hover { border: 1px solid #333399; background: url("../img/nav_hover.png") repeat transparent; }
-.file-manager .fm-adressbar .fm-refresh img { margin: 5px 0 0 5px; width: 15px; height: 15px; border: none; }
+.file-manager .fm-adressbar .fm-refresh div { background: url("../img/icons/refresh.ico") no-repeat top left transparent; margin: 5px 0 0 5px; width: 15px; height: 15px; border: none; }
 .file-manager .fm-adressbar .fm-filter #frmfilterForm-phrase { padding-left: 5px; height: 24px; border: 1px solid #CCCCCC; background: white url('../img/find-loupe.png') no-repeat right; padding-right: 25px; }
 .file-manager .fm-adressbar .fm-filter .frmfilterForm-phrase-active { color: #a1a1a1; font-style: italic; }
 .file-manager .fm-adressbar .fm-navigation { display: block; position:absolute; border: 1px solid #CCCCCC; width: auto; height: 26px; padding-left: 10px; background: url('../img/adressbar-background.png') repeat transparent; line-height: 24px; }
