@@ -1,5 +1,6 @@
 <?php
 
+use Nette\Application\Responses\FileResponse;
 use Nette\Utils\Finder;
 use Nette\Http\Url;
 
@@ -27,7 +28,7 @@ class FMPlayer extends FileManager
             $path = parent::getParent()->config['uploadroot'] . substr(parent::getParent()->config['uploadpath'], 0, -1) . $actualdir . $filename;
 
         if ( file_exists($path) )
-            $this->presenter->sendResponse(new NDownloadResponse($path, NULL, NULL)); 
+            $this->presenter->sendResponse(new FileResponse($path, NULL, NULL));
     }
 
     public function handlePlayMedia($file, $actualdir)

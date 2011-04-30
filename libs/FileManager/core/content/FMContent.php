@@ -1,5 +1,6 @@
 <?php
 
+use Nette\Application\Responses\FileResponse;
 use Nette\Environment;
 use Nette\Caching\Cache;
 use Nette\Caching\Storages\FileStorage;
@@ -105,7 +106,7 @@ class FMContent extends FileManager
     {
         if ($this['tools']->validPath($actualdir, $filename)) {
             $path = parent::getParent()->getAbsolutePath($actualdir) . $filename;
-            $this->presenter->sendResponse(new NDownloadResponse($path, NULL, NULL));
+            $this->presenter->sendResponse(new FileResponse($path, NULL, NULL));
         }
     }
 
