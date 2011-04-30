@@ -8,7 +8,7 @@
 .file-manager h2 { color: #006E12; font-size: 15px; font-weight: normal; }
 .file-manager h3 { font-size: 15px; font-weight: normal; height: 25px; line-height: 25px; margin: 5px 0 10px; padding: 0 7px; }
 .file-manager hr { background-color: #D6E5F5; border: 0 none; height: 1px; }
-
+.file-manager ul { list-style-type: none; }
 
 .fm-alert-message { padding: 0pt 0.7em; width: auto; }
 
@@ -16,16 +16,16 @@
 .file-manager .fm-draggable { cursor: pointer; }
 
 
-.file-manager .fm-adressbar { width: auto; background: url("../img/addressbar.png") repeat transparent; padding: 6px; }
-.file-manager .fm-adressbar ul { width: 100%; list-style: none outside none; margin: 0 auto; }
-.file-manager .fm-adressbar li { float: left; margin-left: 5px; }
+.file-manager .fm-adressbar { width: auto; background: url("../img/addressbar.png") repeat transparent; }
+.file-manager .fm-adressbar ul { width: 100%; list-style: none outside none; margin: 0; }
+.file-manager .fm-adressbar li { float: left; margin: 7px 0 7px 0; }
 .file-manager .fm-adressbar .fm-location { width: 75%; }
 .file-manager .fm-adressbar .fm-location #frm-fileManager-navigation-locationForm { height: 24px; width: 100%; }
 .file-manager .fm-adressbar .fm-location #frm-fileManager-navigation-locationForm input { height: 24px; width: 100%; padding-left: 5px; border: 1px solid #CCCCCC; background: url('../img/adressbar-background.png') repeat transparent; }
 .file-manager .fm-adressbar .fm-location #frm-fileManager-navigation-locationForm input.active { background: #FFFFFF; }
-.file-manager .fm-adressbar .fm-refresh { margin-left: 0px; width: 26px; height: 26px; background: url('../img/adressbar-background.png') repeat transparent; border: 1px solid #CCCCCC; }
+.file-manager .fm-adressbar .fm-refresh { width: 26px; height: 26px; background: url('../img/adressbar-background.png') repeat transparent; border: 1px solid #CCCCCC; }
 .file-manager .fm-adressbar .fm-refresh:hover { border: 1px solid #333399; background: url("../img/nav_hover.png") repeat transparent; }
-.file-manager .fm-adressbar .fm-refresh div { background: url("../img/icons/refresh.ico") no-repeat top left transparent; margin: 5px 0 0 5px; width: 15px; height: 15px; border: none; }
+.file-manager .fm-adressbar .fm-refresh .fm-refresh-icon { background: url("../img/icons/refresh.ico") no-repeat top left transparent; margin: 5px 0 0 5px; width: 15px; height: 15px; border: none; }
 .file-manager .fm-adressbar .fm-filter #frmfilterForm-phrase { padding-left: 5px; height: 24px; border: 1px solid #CCCCCC; background: white url('../img/find-loupe.png') no-repeat right; padding-right: 25px; }
 .file-manager .fm-adressbar .fm-filter .frmfilterForm-phrase-active { color: #a1a1a1; font-style: italic; }
 .file-manager .fm-adressbar .fm-navigation { display: block; position:absolute; border: 1px solid #CCCCCC; width: auto; height: 26px; padding-left: 10px; background: url('../img/adressbar-background.png') repeat transparent; line-height: 24px; }

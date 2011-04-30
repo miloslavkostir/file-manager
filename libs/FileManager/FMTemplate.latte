@@ -166,14 +166,14 @@ $(document).ready(function() {
                         {control navigation}                    
                 {/snippet}
             </li>
-
-            {snippet refreshButton}
-            <li n:ifset="$actualdir" class="fm-refresh">
-                    <a href="{link refreshContent!, $actualdir}" title="{_'Refresh content'}" class="fm-ajax">
-                        <div></div>
+            
+            <li class="fm-refresh">
+                {snippet refreshButton}
+                    <a n:ifset="$actualdir" href="{link refreshContent!, $actualdir}" title="{_'Refresh content'}" class="fm-ajax">
+                        <div class="fm-refresh-icon"></div>
                     </a>
+                {/snippet}
             </li>
-            {/snippet}
             
             <li class="fm-filter">
             {snippet filter}
