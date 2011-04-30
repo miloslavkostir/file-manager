@@ -10,7 +10,7 @@ class FileManager extends Control
 
     const VERSION = '0.5 dev';
     
-    const DATE = '17.4.2011';
+    const DATE = '30.4.2011';
 
     /** @var string */
     protected $cache_path;
@@ -53,8 +53,11 @@ class FileManager extends Control
         $this->invalidateControl('plugin');
     }
 
-    public function handleShowRename($actualdir, $filename)
+    public function handleShowRename($filename)
     {
+        $namespace = Environment::getSession('file-manager');
+        $actualdir = $namespace->actualdir;
+        
         if ($this['tools']->validPath($actualdir, $filename)) {
                         if ($this->config['readonly'] == True) {
                                         $translator = new GettextTranslator(__DIR__ . '/locale/FileManager.' . $this->config["lang"] . '.mo');
@@ -63,9 +66,10 @@ class FileManager extends Control
                                                 'warning'
                                         );
                         } else {
-                                $rename = array('actualdir' => $actualdir,
-                                                'new_filename' => $filename,
-                                                'orig_filename' => $filename);
+                                $rename = array(
+                                    'new_filename' => $filename,
+                                    'orig_filename' => $filename
+                                );
                                 $this->template->rename = $rename;
                                 $this['rename']->params = $rename;
 
@@ -82,8 +86,11 @@ class FileManager extends Control
     }
 
     // TODO improve, because 2x calling clearFromCache can be little slower
-    public function handleRefreshContent($actualdir)
+    public function handleRefreshContent()
     {
+        $namespace = Environment::getSession('file-manager');
+        $actualdir = $namespace->actualdir;
+
         $this['tools']->clearFromCache('fmtreeview');
         $this['tools']->clearFromCache(array('fmfiles', $actualdir));
 
@@ -183,84 +190,34 @@ class FileManager extends Control
         }
     }
 
-    public function handleShowUpload($actualdir)
+    public function handleShowUpload()
     {
-        $translator = new GettextTranslator(__DIR__ . '/locale/FileManager.' . $this->config["lang"] . '.mo');
+        $namespace = Environment::getSession('file-manager');
+        $actualdir = $namespace->actualdir; 
 
-        $size = 0;
-        $ok = True;
-
-        foreach (Finder::findFiles('*')->from($this->config['uploadroot'] . $this->config['uploadpath']) as $file) {
-                           $size += $file->getSize();
-        }
-
-        if ($this->config['quota'] == True) {
-            $limit = $this->config['quota_limit'] * 1048576;
-            $freespace = $limit - $size;
-            $percentage = ($freespace / $limit)*100;
-        } else {
-            $freespace = disk_free_space($this->config['uploadroot']);
-            $percentage = ($freespace / disk_total_space($this->config['uploadroot']))*100;
-        }
-
-        if ( $freespace <= 0 )
-            $this->flashMessage(
-                    $translator->translate("Disk is full! Files will not be uploaded"),
-                    'warning'
-            );
-        elseif ($percentage <= 5)
-            $this->flashMessage(
-                        $translator->translate("Be careful, less than 5% of free space on disk left"),
-                        'warning'
-            );
-
-        if ($this->config['readonly'] == True)
-                    $this->flashMessage(
-                                $translator->translate("File manager is in read-only mode. Files will not be uploaded"),
-                                'warning'
-                    );        
-
-        /* check uploaddir */
-        $path = $this->getAbsolutePath($actualdir);
-
-        if ( !@is_dir($path)) {
-                    $this->flashMessage(
-                            $translator->translate('An error occurred. Upload path does not exist'),
-                            'error'
-                        );
-                    $ok = False;
-        }
-
-
-        if ($ok == True) {
-                $this->template->upload = $actualdir;
-                
-                $this['upload']->actualdir = $actualdir;
-
-                if ($this->presenter->isAjax())
-                    $this->refreshSnippets(array(
-                        'newfolder',
-                        'content',
-                        'upload',
-                        'fileinfo'
-                    ));                        
-        }
+        $this->template->upload = $actualdir;        
 
         if ($this->presenter->isAjax())
-            $this->invalidateControl('rename');
+            $this->refreshSnippets(array(
+                'newfolder',
+                'content',
+                'upload',
+                'fileinfo',
+                'rename'
+            ));
     }
 
-    public function handleShowFileInfo($actualdir, $filename)
+    public function handleShowFileInfo($filename)
     {
-        $translator = new GettextTranslator(__DIR__ . '/locale/FileManager.' . $this->config["lang"] . '.mo');
+        $namespace = Environment::getSession('file-manager');
+        $actualdir = $namespace->actualdir;
 
         if ($this['tools']->validPath($actualdir, $filename)) {
                 $this->template->fileinfo = $actualdir;
-                $this['fileInfo']->actualdir = $actualdir;
                 $this['fileInfo']->filename = $filename;
         }
 
-       $this->handleShowContent($actualdir);
+       $this->invalidateControl('fileinfo');
     }
 
     public function handleShowContent($actualdir)
@@ -268,14 +225,11 @@ class FileManager extends Control
         if ($this['tools']->validPath($actualdir)) {
                 $this->template->content = $actualdir;
                 $this->template->plugins = $this->config['plugins'];
-                $this->template->actualdir = $actualdir;    // TODO some functions in template still depend on $actualdir in template
+                $this->template->actualdir = $actualdir;
 
-                $this['content']->actualdir = $actualdir;
-                $this['filter']->actualdir = $actualdir;
-                $this['clipboard']->actualdir = $actualdir;
-                $this['navigation']->actualdir = $actualdir;
-                $this['viewSelector']->actualdir = $actualdir;
-
+                // set actualdir
+                $namespace = Environment::getSession('file-manager');
+                $namespace->actualdir = $actualdir;
 
                 if ($this->presenter->isAjax())
                     $this->refreshSnippets(array(
@@ -295,12 +249,13 @@ class FileManager extends Control
         }
     }
 
-    public function handleShowAddNewFolder($actualdir)
-    {       
+    public function handleShowAddNewFolder()
+    {
+        $namespace = Environment::getSession('file-manager');
+        $actualdir = $namespace->actualdir;
+        
         if ($this['tools']->validPath($actualdir)) {
                 $this->template->newfolder = $actualdir;
-
-                $this['newFolder']->actualdir = $actualdir;
 
                 if ($this->presenter->isAjax())
                     $this->refreshSnippets(array(
@@ -314,8 +269,11 @@ class FileManager extends Control
         }
     }
 
-    public function handleDeleteFolder($actualdir)
+    public function handleDeleteFolder()
     {
+        $namespace = Environment::getSession('file-manager');
+        $actualdir = $namespace->actualdir;
+        
         $translator = new GettextTranslator(__DIR__ . '/locale/FileManager.' . $this->config["lang"] . '.mo');
         
         if ($this->config['readonly'] == True)
@@ -403,13 +361,18 @@ class FileManager extends Control
             umask($oldumask);
         }
 
+        $namespace = Environment::getSession('file-manager');
+        
         $template->fmversion = self::VERSION;
         $template->fmdate = self::DATE;
         $template->config = $this->config;
         $template->rootname = $this->getRootname();
+        $template->clipboard = $namespace->clipboard;
 
-        $template->clipboard = Environment::getSession('file-manager')->clipboard;
-
+        $actualdir = $namespace->actualdir;
+        if (empty($actualdir))
+            $this->handleShowContent($this->getRootname());        
+        
         $this->refreshSnippets(array(
             'message',
             'diskusage'

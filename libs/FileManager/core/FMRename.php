@@ -1,6 +1,7 @@
 <?php
 
 use Nette\Application\UI\Form;
+use Nette\Environment;
 
 class FMRename extends FileManager
 {
@@ -43,7 +44,6 @@ class FMRename extends FileManager
         $form->getElementPrototype()->class('fm-ajax');
         $form->addText('new_filename', 'New name')
                 ->addRule(Form::FILLED, 'You must fill new name');
-        $form->addHidden('actualdir');
         $form->addHidden('orig_filename');
         $form->addSubmit('send', 'OK');
         $form->onSubmit[] = array($this, 'RenameFormSubmitted');
@@ -54,10 +54,10 @@ class FMRename extends FileManager
     public function RenameFormSubmitted($form)
     {
         $translator = new GettextTranslator(__DIR__ . '/../locale/FileManager.' . $this->config["lang"] . '.mo');
-
+        $namespace = Environment::getSession('file-manager');
         $values = $form->getValues();
-
-        $path = parent::getParent()->getAbsolutePath($values['actualdir']);
+        $actualdir = $namespace->actualdir;        
+        $path = parent::getParent()->getAbsolutePath($actualdir);
 
         if ($this->config['readonly'] == True)
 
@@ -82,7 +82,7 @@ class FMRename extends FileManager
 
         elseif (!file_exists($path . $values['orig_filename'])) {
                         // refresh folder content cache
-                        $this['tools']->clearFromCache(array('fmfiles', $values['actualdir']));
+                        $this['tools']->clearFromCache(array('fmfiles', $actualdir));
                         $this['tools']->clearFromCache('fmtreeview');
 
                         parent::getParent()->flashMessage(
@@ -95,26 +95,26 @@ class FMRename extends FileManager
                                 $new_filename = $this['fmFiles']->safe_foldername($values['new_filename']);
 
                                 // delete thumb folder & clear old folder cache
-                                if ($values['actualdir'] == parent::getParent()->getRootname()) {
+                                if ($actualdir == parent::getParent()->getRootname()) {
                                     $thumb_folder = '/' . $values['orig_filename'] . '/';
                                     $this['tools']->clearFromCache(array('fmfiles', '/' . $values['orig_filename'] . '/'));
                                 } else {
-                                    $thumb_folder = $values['actualdir'] . $values['orig_filename'] . '/' ;
-                                    $this['tools']->clearFromCache(array('fmfiles', $values['actualdir'] . $values['orig_filename'] . '/'));
+                                    $thumb_folder = $actualdir . $values['orig_filename'] . '/' ;
+                                    $this['tools']->clearFromCache(array('fmfiles', $actualdir . $values['orig_filename'] . '/'));
                                 }
 
                                 $thumb_path = $path . $values['orig_filename'] . '/' . $this['fmFiles']->createThumbFolder($thumb_folder);
                                 if (file_exists($thumb_path))
                                     $this['fmFiles']->deleteFolder($thumb_path);
                         } else {
-                                $cache_file =  $this['fmFiles']->createThumbName($values['actualdir'], $values['orig_filename']);
+                                $cache_file =  $this['fmFiles']->createThumbName($actualdir, $values['orig_filename']);
                                 if (file_exists($cache_file['path']))
                                     unlink($cache_file['path']);
                                 $new_filename = $this['fmFiles']->safe_filename($values['new_filename']);
                         }
 
                         if (rename($path . $values['orig_filename'], $path . $new_filename)) {
-                                $this['tools']->clearFromCache(array('fmfiles', $values['actualdir']));
+                                $this['tools']->clearFromCache(array('fmfiles', $actualdir));
                                 $this['tools']->clearFromCache('fmtreeview');
 
                                 parent::getParent()->flashMessage(
@@ -131,6 +131,6 @@ class FMRename extends FileManager
 
         }
         
-        parent::getParent()->handleShowContent($values['actualdir']);
+        parent::getParent()->handleShowContent($actualdir);
     }
 }

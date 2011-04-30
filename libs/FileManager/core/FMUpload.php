@@ -7,10 +7,7 @@ class FMUpload extends FileManager
 {
     /** @var array */
     public $config;
-
-    /** @var string */
-    public $actualdir;
-    
+   
     public function __construct()
     {
         parent::__construct();
@@ -178,6 +175,7 @@ class FMUpload extends FileManager
 
     public function render()
     {
+        $namespace = Environment::getSession('file-manager');
         $template = $this->template;
         $template->setFile(__DIR__ . '/FMUpload.latte');
 
@@ -188,8 +186,39 @@ class FMUpload extends FileManager
         else
              throw new Exception ("Language file " . $lang_file . " doesn't exist! Application can not be loaded!");
 
+        $size = 0;
+        foreach (Finder::findFiles('*')->from($this->config['uploadroot'] . $this->config['uploadpath']) as $file) {
+                           $size += $file->getSize();
+        }
+
+        if ($this->config['quota'] == True) {
+            $limit = $this->config['quota_limit'] * 1048576;
+            $freespace = $limit - $size;
+            $percentage = ($freespace / $limit)*100;
+        } else {
+            $freespace = disk_free_space($this->config['uploadroot']);
+            $percentage = ($freespace / disk_total_space($this->config['uploadroot']))*100;
+        }
+
+        if ( $freespace <= 0 )
+            parent::getParent()->flashMessage(
+                    $translator->translate("Disk is full! Files will not be uploaded"),
+                    'warning'
+            );
+        elseif ($percentage <= 5)
+            parent::getParent()->flashMessage(
+                        $translator->translate("Be careful, less than 5% of free space on disk left"),
+                        'warning'
+            );
+
+        if ($this->config['readonly'] == True)
+            parent::getParent()->flashMessage(
+                        $translator->translate("File manager is in read-only mode. Files will not be uploaded"),
+                        'warning'
+            );
+
         $template->config = $this->config;
-        $template->actualdir = $this->actualdir;
+        $template->actualdir = $namespace->actualdir;
 
         $template->render();
     }

@@ -1,12 +1,10 @@
 <?php
 
 use Nette\Application\UI\Form;
+use Nette\Environment;
 
 class FMNavigation extends FileManager
 {
-    /** @var string */
-    public $actualdir;
-
     public function __construct()
     {
         parent::__construct();
@@ -14,10 +12,11 @@ class FMNavigation extends FileManager
 
     public function render()
     {
-        $actualdir = $this->actualdir;
+        $namespace = Environment::getSession('file-manager');
+        $actualdir = $namespace->actualdir;        
         $rootname = parent::getParent()->getRootname();
-
         $template = $this->template;
+        
         $template->setFile(__DIR__ . '/FMNavigation.latte');
 
         if (empty($actualdir)) {

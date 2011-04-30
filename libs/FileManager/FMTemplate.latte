@@ -169,7 +169,7 @@ $(document).ready(function() {
             
             <li class="fm-refresh">
                 {snippet refreshButton}
-                    <a n:ifset="$actualdir" href="{link refreshContent!, $actualdir}" title="{_'Refresh content'}" class="fm-ajax">
+                    <a n:ifset="$actualdir" href="{link refreshContent!}" title="{_'Refresh content'}" class="fm-ajax">
                         <div class="fm-refresh-icon"></div>
                     </a>
                 {/snippet}
@@ -188,23 +188,22 @@ $(document).ready(function() {
 
     <div class="fm-toolbar">
         {snippet toolbar}
-        {default $actualdir = $rootname}
         <ul class="fm-toolbar">
-
+        {ifset $actualdir}
             <li>
-                <a href="{link showAddNewFolder!, $actualdir}" title="{_'Create new folder'}" class="fm-ajax">
+                <a href="{link showAddNewFolder!}" title="{_'Create new folder'}" class="fm-ajax">
                     <span>{_'New folder'}</span>
                 </a>
             </li>
             
             <li>
-                <a href="{link deleteFolder!, $actualdir}" title="{_'Delete this folder'}" class="fm-ajax-delete">
+                <a href="{link deleteFolder!}" title="{_'Delete this folder'}" class="fm-ajax-delete">
                     <span>{_'Delete'}</span>
                 </a>
             </li>
 
             <li>
-                <a href="{link showUpload!, $actualdir}" title="{_'Upload files'}" class="fm-ajax">
+                <a href="{link showUpload!}" title="{_'Upload files'}" class="fm-ajax">
                     <span>{_'Upload'}</span>
                 </a>
             </li>
@@ -228,6 +227,7 @@ $(document).ready(function() {
             <li style="float: right;">
                 {control viewSelector}
             </li>
+        {/ifset}
         </ul>
         {/snippet}
     </div>

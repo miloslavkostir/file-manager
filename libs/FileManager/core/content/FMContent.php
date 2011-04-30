@@ -13,9 +13,6 @@ class FMContent extends FileManager
     public $config;
 
     /** @var string */
-    public $actualdir;
-
-    /** @var string */
     public $mask;
 
     public function __construct()
@@ -23,9 +20,9 @@ class FMContent extends FileManager
         parent::__construct();
     }
     
-    public function handleShowFileInfo($actualdir, $filename)
+    public function handleShowFileInfo($filename)
     {
-        parent::getParent()->handleShowFileInfo($actualdir, $filename);
+        parent::getParent()->handleShowFileInfo($filename);
     }
 
     public function handleCopyToClipboard($actualdir, $filename)
@@ -140,8 +137,8 @@ class FMContent extends FileManager
         parent::getParent()->handleShowContent($actualdir);
     }
 
-    public function handleShowRename($dir, $file) {
-        parent::getParent()->handleShowRename($dir, $file);
+    public function handleShowRename($file) {
+        parent::getParent()->handleShowRename($file);
     }
 
     public function handleShowThumb($dir, $file)
@@ -167,10 +164,11 @@ class FMContent extends FileManager
     public function render()
     {
         $translator = new GettextTranslator(__DIR__ . '/../../locale/FileManager.' . $this->config["lang"] . '.mo');
-        $actualdir = $this->actualdir;
-        $template = $this->template;
-
         $namespace = Environment::getSession('file-manager');
+
+        $actualdir = $namespace->actualdir;
+        $template = $this->template;
+        
         $view = $namespace->view;
 
         if (!empty($view)) {

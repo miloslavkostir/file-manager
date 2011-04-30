@@ -8,9 +8,6 @@ class FMViewSelector extends FileManager
     /** @var array */
     public $config;
 
-    /** @var string */
-    public $actualdir;
-
     public function __construct()
     {
         parent::__construct();
@@ -18,9 +15,10 @@ class FMViewSelector extends FileManager
 
     public function render()
     {
-        $actualdir = $this->actualdir;
-        
+        $namespace = Environment::getSession('file-manager');
+        $actualdir = $namespace->actualdir;
         $template = $this->template;
+        
         $template->setFile(__DIR__ . '/FMViewSelector.latte');
 
         // set language

@@ -1,14 +1,12 @@
 <?php
 
 use Nette\Application\UI\Form;
+use Nette\Environment;
 
 class FMFilter extends FileManager
 {
     /** @var array */
     public $config;
-
-    /** @var string */
-    public $actualdir;
 
     public function __construct()
     {
@@ -17,7 +15,9 @@ class FMFilter extends FileManager
 
     public function render()
     {
-        $actualdir = $this->actualdir;
+        $namespace = Environment::getSession('file-manager');
+        $actualdir = $namespace->actualdir;
+
         $template = $this->template;
         $template->setFile(__DIR__ . '/FMFilter.latte');
 

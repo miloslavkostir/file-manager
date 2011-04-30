@@ -1,14 +1,12 @@
 <?php
 
 use Nette\Application\UI\Form;
+use Nette\Environment;
 
 class FMNewFolder extends FileManager
 {
     /** @var array */
     public $config;
-
-    /** @var string */
-    public $actualdir;
 
     public function __construct()
     {
@@ -17,7 +15,10 @@ class FMNewFolder extends FileManager
 
     public function render()
     {
+        $namespace = Environment::getSession('file-manager');
+        $actualdir = $namespace->actualdir;
         $template = $this->template;
+        
         $template->setFile(__DIR__ . '/FMNewFolder.latte');
 
         // set language
@@ -28,11 +29,11 @@ class FMNewFolder extends FileManager
              throw new Exception ("Language file " . $lang_file . " doesn't exist! Application can not be loaded!");
 
         $this['newFolderForm']->setDefaults(array(
-                    'actualdir' => $this->actualdir
+                    'actualdir' => $actualdir
                 ));
 
         $template->config = $this->config;
-        $template->actualdir = $this->actualdir;
+        $template->actualdir = $actualdir;
 
         $template->render();
     }

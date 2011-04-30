@@ -1,12 +1,11 @@
 <?php
 
+use Nette\Environment;
+
 class FMFileInfo extends FileManager
 {
     /** @var array */
     public $config;
-
-    /** @var string */
-    public $actualdir;
 
     /** @var string */
     public $filename;
@@ -18,7 +17,8 @@ class FMFileInfo extends FileManager
 
     public function render()
     {
-        $actualdir = $this->actualdir;
+        $namespace = Environment::getSession('file-manager');
+        $actualdir = $namespace->actualdir;
 
         $template = $this->template;
         $template->setFile(__DIR__ . '/FMFileInfo.latte');

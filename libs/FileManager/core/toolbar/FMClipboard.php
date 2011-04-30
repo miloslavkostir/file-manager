@@ -8,9 +8,6 @@ class FMClipboard extends FileManager
     /** @var array */
     public $config;
 
-    /** @var string */
-    public $actualdir;
-
     public function __construct()
     {
         parent::__construct();
@@ -63,7 +60,7 @@ class FMClipboard extends FileManager
                                     // refresh folder content cache
                                     $this['tools']->clearFromCache(array('fmfiles', $val['actualdir']));
                                     $this['tools']->clearFromCache(array('fmfiles', $actualdir));
-                                    $this['tools']->clearFromCache($cache['fmtreeview']);
+                                    $this['tools']->clearFromCache('fmtreeview');
 
                                     $this->handleClearClipboard($actualdir);
                     }
@@ -82,8 +79,9 @@ class FMClipboard extends FileManager
         else
              throw new Exception ("Language file " . $lang_file . " doesn't exist! Application can not be loaded!");
 
-        $template->clipboard = Environment::getSession('file-manager')->clipboard;
-        $template->actualdir = $this->actualdir;
+        $namespace = Environment::getSession('file-manager');
+        $template->clipboard = $namespace->clipboard;
+        $template->actualdir = $namespace->actualdir;
         $template->rootname = parent::getParent()->getRootname();
         
         $template->render();
