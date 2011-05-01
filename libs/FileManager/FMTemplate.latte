@@ -1,6 +1,9 @@
 <script type="text/javascript">
 $(document).ready(function() {
 
+    // disable text highlighting
+    $(".file-manager .fm-body").disableSelection();
+
     $(".file-manager").delegate("a.fm-ajax", "click", function (event) {
         var fm = $('.file-manager');
         $.getJSON(this.href);
