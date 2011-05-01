@@ -13,7 +13,7 @@
     <table id="fm-small-images">
 
     <thead>
-        <tr>
+        <tr class="unselectable">
             <th>{_'Name'}</th>
             <th>{_'Date Modified'}</th>
             <th>{_'Type'}</th>
@@ -113,6 +113,19 @@
 
             $.ctrl('A', function() {
                 $("#fm-small-images tbody").markAll("tr", "selected");
+            });
+
+            $("#fm-files-details").selectable({
+                filter: "tr",
+                selecting: function(event, ui) {
+                    var tag = $(ui.selecting).parent().get(0).tagName.toLowerCase();
+                    // exclude header
+                    if (tag === "tbody")
+                        $(ui.selecting).addClass("selected");
+                },
+                unselecting: function(event, ui) {
+                    $(ui.unselecting).removeClass("selected");
+                }
             });
 
             $(".fm-draggable").draggable({

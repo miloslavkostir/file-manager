@@ -95,6 +95,16 @@
                 $("#fm-small-images").markAll("li", "selected");
             });
 
+            $("#fm-files-small").selectable({
+                filter: "li",
+                selecting: function(event, ui) {
+                    $(ui.selecting).addClass("selected");
+                },
+                unselecting: function(event, ui) {
+                    $(ui.unselecting).removeClass("selected");
+                }
+            });
+
             $(".fm-draggable").draggable({
                 containment: "div.fm-body-frame",
                 revert: true,
