@@ -77,7 +77,12 @@
 .file-manager .fm-body #fm-files-large .fm-item .fm-thumb { border-style: none; max-height: 96px; }
 .file-manager .fm-body #fm-files-large .fm-item .fm-thumb.photo { border: 1px solid #CCCCCC; max-height: 96px; }
 .file-manager .fm-body #fm-files-large #fm-small-images { list-style: none outside none; margin: 5px; padding: 10px; }
-.file-manager .fm-body #fm-files-large #fm-small-images li { border: 1px solid #ffffff; }
+.file-manager .fm-body #fm-files-large #fm-small-images li {
+  border: 1px solid #ffffff;
+  -webkit-border-radius: 4px;
+  -moz-border-radius: 4px;
+  border-radius: 4px;
+}
 .file-manager .fm-body #fm-files-large #fm-small-images li:hover { background: url(../img/view_images.png) right -196px no-repeat; }
 .file-manager .fm-body #fm-files-large #fm-small-images li.selected { background: url("../img/addressbar.png") repeat scroll 0 0 transparent; border-color: #624BD1; color: #ffffff; }
 .file-manager .fm-body #fm-files-large #fm-small-images li.selected:hover { background: url("../img/addressbar.png") repeat scroll 0 0 transparent; border-color: #624BD1; color: #ffffff; }
@@ -88,7 +93,12 @@
 .file-manager .fm-body #fm-files-small .fm-item .fm-thumb { border-style: none; max-height: 48px; }
 .file-manager .fm-body #fm-files-small .fm-item .fm-thumb.photo { border: 1px solid #CCCCCC; max-height: 48px; }
 .file-manager .fm-body #fm-files-small #fm-small-images { list-style: none outside none; margin: 5px; padding: 10px; }
-.file-manager .fm-body #fm-files-small #fm-small-images li { border: 1px solid #ffffff; }
+.file-manager .fm-body #fm-files-small #fm-small-images li {
+  border: 1px solid #ffffff;
+  -webkit-border-radius: 4px;
+  -moz-border-radius: 4px;
+  border-radius: 4px;
+}
 .file-manager .fm-body #fm-files-small #fm-small-images li:hover { background: url(../img/view_images.png) right -196px no-repeat; }
 .file-manager .fm-body #fm-files-small #fm-small-images li.selected { background: url("../img/addressbar.png") repeat scroll 0 0 transparent; border-color: #624BD1; color: #ffffff; }
 .file-manager .fm-body #fm-files-small #fm-small-images li.selected:hover { background: url("../img/addressbar.png") repeat scroll 0 0 transparent; border-color: #624BD1; color: #ffffff; }
@@ -109,7 +119,15 @@
         list-style: none;
         height: 350px;
 }
-.file-manager .fm-body #fm-files-list #fm-small-images li { line-height: 24px; text-align: left; padding: 0 5px; border: 1px solid #ffffff; }
+.file-manager .fm-body #fm-files-list #fm-small-images li {
+    line-height: 24px;
+    text-align: left;
+    padding: 0 5px;
+    border: 1px solid #ffffff;
+    -webkit-border-radius: 4px;
+    -moz-border-radius: 4px;
+    border-radius: 4px;
+}
 .file-manager .fm-body #fm-files-list .fm-thumb { border-style: none; }
 .file-manager .fm-body #fm-files-list #fm-small-images li.selected { background: url("../img/addressbar.png") repeat scroll 0 0 transparent; border-color: #624BD1; color: #ffffff; }
 .file-manager .fm-body #fm-files-list #fm-small-images li.selected:hover { background: url("../img/addressbar.png") repeat scroll 0 0 transparent; border-color: #624BD1; color: #ffffff; }
