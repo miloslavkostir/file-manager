@@ -86,6 +86,10 @@
 
             $("#fm-small-images").shiftClick("li", "selected");
 
+            $.ctrl('A', function() {
+                $("#fm-small-images").markAll("li", "selected");
+            });
+
             $(".fm-draggable").draggable({
                 containment: "div.fm-body-frame",
                 revert: true,

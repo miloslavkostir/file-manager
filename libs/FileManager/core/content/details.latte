@@ -111,6 +111,10 @@
             
             $("#fm-small-images tbody").shiftClick("tr", "selected");
 
+            $.ctrl('A', function() {
+                $("#fm-small-images tbody").markAll("tr", "selected");
+            });
+
             $(".fm-draggable").draggable({
                 containment: "div.fm-body-frame",
                 revert: true,
