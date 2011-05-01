@@ -16,6 +16,31 @@
 
  (function($) {
 
+        // disable file manager and show spinner
+	$.animateProgress = function(selector, e) {
+                var fm = $(selector);
+                $('<div class="fm-inactive"></div>').css({
+                        top: fm.position().top,
+                        left: fm.position().left,
+                        width: fm.width(),
+                        height: fm.height()
+                }).ajaxStop(function() {
+                            $(this).remove();
+
+                }).appendTo(fm);
+
+                $('<div id="fm-ajax-spinner"></div>').css({
+                        position: "absolute",
+                        left: e.pageX + 20,
+                        top: e.pageY + 40
+
+                }).ajaxStop(function() {
+                            $(this).remove();
+
+                }).appendTo("body");
+        };
+
+
         /* Based on Arron Bailiss <arron@arronbailiss.com> jQuery Shift-click Plugin */
 	$.fn.shiftClick = function(tag, clickedClass) {
 
@@ -46,7 +71,8 @@
 		});
 	};
 
-        $.fn.disableSelection = function() {
+
+        $.fn.noTextHighlight = function() {
                 return this.each(function() {
                         this.onselectstart = function() {
                             return false;
@@ -59,6 +85,7 @@
                         $(this).css('-webkit-user-select', 'none');
                 });
         }
+        
 
         $.ctrl = function(key, callback, args) {
             $(document).keydown(function(e) {

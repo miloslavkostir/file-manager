@@ -12,7 +12,7 @@
 
     <ul id="fm-small-images">
 
-        <li n:foreach="$files as $item" id="context-item-{$iterator->getCounter()}">
+        <li n:foreach="$files as $item" class="fm-item" id="{$item['filename']}">
                     {if $item['type'] == 'file'}
                         <img src="{$basePath . $thumb_dir . $item['icon']}" alt="{$item['filename']}" id="{$item['actualdir']}" class="fm-draggable fm-thumb" />
                     {else}
@@ -27,122 +27,117 @@
                     {/if}
 
                     {$item['filename']|truncate:100}
-
-                    <script type="text/javascript">
-                    $(document).ready(function() {
-
-                            $("#context-item-{$iterator->getCounter()}").contextMenu({
-                                menu: 'myMenu{$iterator->getCounter()}'
-                            });
-
-                    });
-                    </script>
-
-                    <ul class="fm-files-menu contexMenu" id="myMenu{$iterator->getCounter()}">
-                        <li n:if="$item['type'] == 'file'">
-                            <a href="{link cutToClipboard!, $item['actualdir'], $item['filename']}" class="fm-ajax" title="{_'Cut to clipboard'}">
-                                {_'Cut'}
-                            </a>
-                        </li>
-                        <li class="copy">
-                            <a href="{link copyToClipboard!, $item['actualdir'], $item['filename']}" class="fm-ajax" title="{_'Copy to clipboard'}">
-                                {_'Copy'}
-                            </a>
-                        </li>
-                        <li>
-                            <a href="{link showFileInfo!, $item['filename']}" title="{_'Show details'} {$item['filename']}" class="fm-ajax">
-                                {_'Details'}
-                            </a>
-                        </li>
-                        <li n:if="$item['type'] == 'file'">
-                            <a href="{link downloadFile!, $item['actualdir'], $item['filename']}" title="{_'Download file'}">
-                                {_'Download'}
-                            </a>
-                        </li>
-                        <li n:if="$item['type'] == 'file'" class="delete">
-                            <a href="{link deleteFile!, $item['actualdir'], $item['filename']}" title="{_'Delete file'}" class="fm-ajax-delete">
-                                {_'Delete'}
-                            </a>
-                        </li>
-                        <li class="edit">
-                            <a href="{link showRename!, $item['filename']}" title="{_'Rename'}" class="fm-ajax">
-                                {_'Rename'}
-                            </a>
-                        </li>
-                        <li class="quit separator">
-                            <a href="#">{_'Exit'}</a>
-                        </li>
-                    </ul>
         </li>
     </ul>
 
 
+    <script type="text/javascript">
+    $(document).ready(function() {
 
+        var menu4 = [
+                  { {_'Copy'}: function(menuItem, menuObject, e) {
+                        var file = $(this).attr("id");
+                        $.getJSON({link copyToClipboard!},  { filename: file });
+                        $.animateProgress(".file-manager", e);
+                  }},
 
+                  { {_'Cut'}: function(menuItem, menuObject) {
+                        var file = $(this).attr("id");
+                        $.getJSON({link cutToClipboard!},  { filename: file });
+                        $.animateProgress(".file-manager", e);
+                  }},
 
+                  { {_'Delete'}: function(menuItem, menuObject, e) {
+                        var file = $(this).attr("id");
+                        if (confirm({_'Do you really want to delete '} + file + "?")) {
+                                $.getJSON({link deleteFile!},  { filename: file });
+                                $.animateProgress(".file-manager", e);
+                        }
+                  }},
 
-        <script type="text/javascript">
-        $(document).ready(function() {
+                  { {_'Details'}: function(menuItem, menuObject, e) {
+                        var file = $(this).attr("id");
+                        $.getJSON({link showFileInfo!},  { filename: file });
+                        $.animateProgress(".file-manager", e);
+                  }},
 
-            $("#fm-small-images").shiftClick("li", "selected");
+                  // TODO - non-functional
+                  { {_'Download'}: function(menuItem, menuObject) {
+                        var file = $(this).attr("id");
+                        $.getJSON({link downloadFile!},  { filename: file });
+                  }},
 
-            $.ctrl('A', function() {
-                $("#fm-small-images").markAll("li", "selected");
-            });
+                  { {_'Rename'}: function(menuItem, menuObject, e) {
+                        var file = $(this).attr("id");
+                        $.getJSON({link showRename!},  { filename: file });
+                        $.animateProgress(".file-manager", e);
+                  }}
+        ];
 
-            $("#fm-files-list").selectable({
-                filter: "li",
-                selecting: function(event, ui) {
-                    $(ui.selecting).addClass("selected");
-                },
-                unselecting: function(event, ui) {
-                    $(ui.unselecting).removeClass("selected");
-                }
-            });
-
-            $(".fm-draggable").draggable({
-                containment: "div.fm-body-frame",
-                revert: true,
-                cursor: "pointer",
-                helper: "clone",
-                scroll: false,
-                opacity : 0.6
-            });
-
-            $(".fm-droppable").droppable({
-                    hoverClass: "ui-state-active",
-                    drop: function( event, ui ) {
-                        $( this ).addClass( "ui-state-highlight" );
-
-                        var actualdir = ui.draggable.attr('id'); // actualdir
-                        var filename = ui.draggable.attr('alt'); // filename
-                        var targetdir = $(this).attr('id'); // targetdir
-
-                        if (confirm({_'Do you really want to move this file'} + "?")) {
-                                $.getJSON({link moveFile!}, { actualdir: actualdir, filename: filename, targetdir: targetdir }, function(payload){
-                                    $.nette.success(payload);
-                                    if (payload.result == 'success')
-                                        ui.draggable.remove();
-                                });
-
-                                $('<div id="fm-ajax-spinner"></div>').css({
-                                        position: "absolute",
-                                        left: event.pageX + 20,
-                                        top: event.pageY + 40
-
-                                    }).ajaxStop(function() {
-                                            $(this).remove();
-
-                                    }).appendTo("body");
-                         }
-
-                         $( this ).removeClass( "ui-state-highlight" );
-
-                    }
-            });
-
+        $('.fm-item').contextMenu(menu4, {
+            theme: 'vista',
+            constrainToScreen: true
         });
-        </script>
+
+        $("#fm-small-images").shiftClick("li", "selected");
+
+        $.ctrl('A', function() {
+            $("#fm-small-images").markAll("li", "selected");
+        });
+
+        $("#fm-files-list").selectable({
+            filter: "li",
+            selecting: function(event, ui) {
+                $(ui.selecting).addClass("selected");
+            },
+            unselecting: function(event, ui) {
+                $(ui.unselecting).removeClass("selected");
+            }
+        });
+
+        $(".fm-draggable").draggable({
+            containment: "div.fm-body-frame",
+            revert: true,
+            cursor: "pointer",
+            helper: "clone",
+            scroll: false,
+            opacity : 0.6
+        });
+
+        $(".fm-droppable").droppable({
+                hoverClass: "ui-state-active",
+                drop: function( event, ui ) {
+                    $( this ).addClass( "ui-state-highlight" );
+
+                    var actualdir = ui.draggable.attr('id'); // actualdir
+                    var filename = ui.draggable.attr('alt'); // filename
+                    var targetdir = $(this).attr('id'); // targetdir
+
+                    if (confirm({_'Do you really want to move this file'} + "?")) {
+                            $.getJSON({link moveFile!}, { actualdir: actualdir, filename: filename, targetdir: targetdir }, function(payload){
+                                $.nette.success(payload);
+                                if (payload.result == 'success')
+                                    ui.draggable.remove();
+                            });
+
+                            $('<div id="fm-ajax-spinner"></div>').css({
+                                    position: "absolute",
+                                    left: event.pageX + 20,
+                                    top: event.pageY + 40
+
+                                }).ajaxStop(function() {
+                                        $(this).remove();
+
+                                }).appendTo("body");
+                     }
+
+                     $( this ).removeClass( "ui-state-highlight" );
+
+                }
+        });
+
+    });
+    </script>
 
 
 </div>

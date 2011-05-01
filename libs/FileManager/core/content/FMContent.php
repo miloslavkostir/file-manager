@@ -20,14 +20,26 @@ class FMContent extends FileManager
         parent::__construct();
     }
     
-    public function handleShowFileInfo($filename)
+    public function handleShowFileInfo($filename = "")
     {
+        // if sended by AJAX
+        if (empty($filename)) {
+            $request = Environment::getHttpRequest();
+            $filename = $request->getQuery('filename');
+        }
         parent::getParent()->handleShowFileInfo($filename);
     }
 
-    public function handleCopyToClipboard($actualdir, $filename)
+    public function handleCopyToClipboard($filename = "")
     {
+        // if sended by AJAX
+        if (empty($filename)) {
+            $request = Environment::getHttpRequest();
+            $filename = $request->getQuery('filename');
+        }
+
         $namespace = Environment::getSession('file-manager');
+        $actualdir = $namespace->actualdir;
         $namespace->clipboard[$actualdir.$filename] = array(
             'action' => 'copy',
             'actualdir' => $actualdir,
@@ -37,10 +49,18 @@ class FMContent extends FileManager
         $this->handleShowContent($actualdir);
     }
 
-    public function handleCutToClipboard($actualdir, $filename)
+    public function handleCutToClipboard($filename = "")
     {
+        // if sended by AJAX
+        if (empty($filename)) {
+            $request = Environment::getHttpRequest();
+            $filename = $request->getQuery('filename');
+        }
+
+        $namespace = Environment::getSession('file-manager');
+        $actualdir = $namespace->actualdir;
+        
         if ($this['tools']->validPath($actualdir, $filename)) {
-            $namespace = Environment::getSession('file-manager');
             $namespace->clipboard[$actualdir.$filename] = array(
                 'action' => 'cut',
                 'actualdir' => $actualdir,
@@ -51,9 +71,17 @@ class FMContent extends FileManager
         }
     }
 
-    public function handleDeleteFile($actualdir, $filename)
+    public function handleDeleteFile($filename = "")
     {
+        $namespace = Environment::getSession('file-manager');
+        $actualdir = $namespace->actualdir;
         $translator = new GettextTranslator(__DIR__ . '/../../locale/FileManager.' . $this->config["lang"] . '.mo');
+
+        // if sended by AJAX
+        if (empty($filename)) {
+            $request = Environment::getHttpRequest();
+            $filename = $request->getQuery('filename');
+        }
 
         if ($this->config['readonly'] == True)
                         parent::getParent()->flashMessage(
@@ -99,8 +127,17 @@ class FMContent extends FileManager
         }
     }
     
-    public function handleDownloadFile($actualdir, $filename)
+    public function handleDownloadFile($filename = "")
     {
+        $namespace = Environment::getSession('file-manager');
+        $actualdir = $namespace->actualdir;
+        
+        // if sended by AJAX
+        if (empty($filename)) {
+            $request = Environment::getHttpRequest();
+            $filename = $request->getQuery('filename');
+        }
+
         if ($this['tools']->validPath($actualdir, $filename)) {
             $path = parent::getParent()->getAbsolutePath($actualdir) . $filename;
             $this->presenter->sendResponse(new FileResponse($path, NULL, NULL));
@@ -137,8 +174,13 @@ class FMContent extends FileManager
         parent::getParent()->handleShowContent($actualdir);
     }
 
-    public function handleShowRename($file) {
-        parent::getParent()->handleShowRename($file);
+    public function handleShowRename($filename = "") {
+        // if sended by AJAX
+        if (empty($filename)) {
+            $request = Environment::getHttpRequest();
+            $filename = $request->getQuery('filename');
+        }
+        parent::getParent()->handleShowRename($filename);
     }
 
     public function handleShowThumb($dir, $file)

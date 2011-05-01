@@ -118,8 +118,8 @@
 .file-manager .fm-body #fm-files-details { width: auto; height: 430px; overflow: auto; }
 .file-manager .fm-body #fm-files-details table { border-collapse: collapse; }
 .file-manager .fm-body #fm-files-details tbody tr { border: 1px solid #ffffff; height: 24px; text-align: left; margin: 1px; }
-.file-manager .fm-body #fm-files-details tr.selected { background: url("../img/addressbar.png") repeat scroll 0 0 transparent; border-color: #624BD1; color: #ffffff; }
-.file-manager .fm-body #fm-files-details tr.selected:hover { background: url("../img/addressbar.png") repeat scroll 0 0 transparent; border-color: #624BD1; color: #ffffff; }
+.file-manager .fm-body #fm-files-details tr.selected { background: url("../img/addressbar.png") repeat scroll 0 0 transparent; border: 1px solid #624BD1; color: #ffffff; }
+.file-manager .fm-body #fm-files-details tr.selected:hover { background: url("../img/addressbar.png") repeat scroll 0 0 transparent; border: 1px solid #624BD1; color: #ffffff; }
 .file-manager .fm-body #fm-files-details tbody td { height: 24px; text-align: left; padding-left: 5px; }
 .file-manager .fm-body #fm-files-details thead th { background: url("../img/views/details/thead_separator.png") no-repeat scroll right top transparent; color: #4C607A; font-weight: normal; padding: 0 5px; }
 .file-manager .fm-body #fm-files-details .fm-thumb { border-style: none; }

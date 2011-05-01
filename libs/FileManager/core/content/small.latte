@@ -12,7 +12,7 @@
     <ul id="fm-small-images">
 
 
-        <li n:foreach="$files as $item" class="fm-item" id="context-item-{$iterator->getCounter()}" title="{$item['filename']}">
+        <li n:foreach="$files as $item" class="fm-item" id="{$item['filename']}">
 
                     {if $item['create_thumb'] <> 1}
                             {if $item['type'] == 'file'}
@@ -33,61 +33,59 @@
                         </a>
                     {/if}
 
-                    <script type="text/javascript">
-                    $(document).ready(function() {
-
-                            $("#context-item-{$iterator->getCounter()}").contextMenu({
-                                menu: 'myMenu{$iterator->getCounter()}'
-                            });
-
-                    });
-                    </script>
-
-                    <ul class="fm-files-menu contexMenu" id="myMenu{$iterator->getCounter()}">
-                        <li n:if="$item['type'] == 'file'">
-                            <a href="{link cutToClipboard!, $item['actualdir'], $item['filename']}" class="fm-ajax" title="{_'Cut to clipboard'}">
-                                {_'Cut'}
-                            </a>
-                        </li>
-                        <li class="copy">
-                            <a href="{link copyToClipboard!, $item['actualdir'], $item['filename']}" class="fm-ajax" title="{_'Copy to clipboard'}">
-                                {_'Copy'}
-                            </a>
-                        </li>
-                        <li>
-                            <a href="{link showFileInfo!, $item['filename']}" title="{_'Show details'} {$item['filename']}" class="fm-ajax">
-                                {_'Details'}
-                            </a>
-                        </li>
-                        <li n:if="$item['type'] == 'file'">
-                            <a href="{link downloadFile!, $item['actualdir'], $item['filename']}" title="{_'Download file'}">
-                                {_'Download'}
-                            </a>
-                        </li>
-                        <li n:if="$item['type'] == 'file'" class="delete">
-                            <a href="{link deleteFile!, $item['actualdir'], $item['filename']}" title="{_'Delete file'}" class="fm-ajax-delete">
-                                {_'Delete'}
-                            </a>
-                        </li>
-                        <li class="edit">
-                            <a href="{link showRename!, $item['filename']}" title="{_'Rename'}" class="fm-ajax">
-                                {_'Rename'}
-                            </a>
-                        </li>
-                        <li class="quit separator">
-                            <a href="#">{_'Exit'}</a>
-                        </li>
-                    </ul>
-
                     <div style="text-align: center; word-wrap: break-word;" class="context-item">
                             {$item['filename']|truncate:20}
                     </div>
-
         </li>
 
 
         <script type="text/javascript">
         $(document).ready(function() {
+
+            var menu4 = [
+                      { {_'Copy'}: function(menuItem, menuObject, e) {
+                            var file = $(this).attr("id");
+                            $.getJSON({link copyToClipboard!},  { filename: file });
+                            $.animateProgress(".file-manager", e);
+                      }},
+
+                      { {_'Cut'}: function(menuItem, menuObject) {
+                            var file = $(this).attr("id");
+                            $.getJSON({link cutToClipboard!},  { filename: file });
+                            $.animateProgress(".file-manager", e);
+                      }},
+
+                      { {_'Delete'}: function(menuItem, menuObject, e) {
+                            var file = $(this).attr("id");
+                            if (confirm({_'Do you really want to delete '} + file + "?")) {
+                                    $.getJSON({link deleteFile!},  { filename: file });
+                                    $.animateProgress(".file-manager", e);
+                            }
+                      }},
+
+                      { {_'Details'}: function(menuItem, menuObject, e) {
+                            var file = $(this).attr("id");
+                            $.getJSON({link showFileInfo!},  { filename: file });
+                            $.animateProgress(".file-manager", e);
+                      }},
+
+                      // TODO - non-functional
+                      { {_'Download'}: function(menuItem, menuObject) {
+                            var file = $(this).attr("id");
+                            $.getJSON({link downloadFile!},  { filename: file });
+                      }},
+
+                      { {_'Rename'}: function(menuItem, menuObject, e) {
+                            var file = $(this).attr("id");
+                            $.getJSON({link showRename!},  { filename: file });
+                            $.animateProgress(".file-manager", e);
+                      }}
+            ];
+
+            $('.fm-item').contextMenu(menu4, {
+                theme: 'vista',
+                constrainToScreen: true
+            });
 
             $("#fm-small-images").shiftClick("li", "selected");
 

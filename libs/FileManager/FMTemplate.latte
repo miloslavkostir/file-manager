@@ -2,83 +2,26 @@
 $(document).ready(function() {
 
     // disable text highlighting
-    $(".file-manager .fm-body").disableSelection();
+    $(".file-manager .fm-body").noTextHighlight();
 
-    $(".file-manager").delegate("a.fm-ajax", "click", function (event) {
-        var fm = $('.file-manager');
+    $(".file-manager").delegate("a.fm-ajax", "click", function (e) {
         $.getJSON(this.href);
-        $('<div class="fm-inactive"></div>').css({
-                top: fm.position().top,
-                left: fm.position().left,
-                width: fm.width(),
-                height: fm.height()
-        }).ajaxStop(function() {
-                    $(this).remove();
-
-            }).appendTo(".file-manager");
-
-        $('<div id="fm-ajax-spinner"></div>').css({
-                position: "absolute",
-                left: event.pageX + 20,
-                top: event.pageY + 40
-
-            }).ajaxStop(function() {
-                    $(this).remove();
-
-            }).appendTo("body");
+        $.animateProgress(".file-manager", e);
         return false;
     });
 
-    $(".file-manager").delegate("a.fm-ajax-dbl", "dblclick", function (event) {
-        var fm = $('.file-manager');
+    $(".file-manager").delegate("a.fm-ajax-dbl", "dblclick", function (e) {
         $.getJSON(this.href);
-        $('<div class="fm-inactive"></div>').css({
-                top: fm.position().top,
-                left: fm.position().left,
-                width: fm.width(),
-                height: fm.height()
-        }).ajaxStop(function() {
-                    $(this).remove();
-
-            }).appendTo(".file-manager");
-
-        $('<div id="fm-ajax-spinner"></div>').css({
-                position: "absolute",
-                left: event.pageX + 20,
-                top: event.pageY + 40
-
-            }).ajaxStop(function() {
-                    $(this).remove();
-
-            }).appendTo("body");
+        $.animateProgress(".file-manager", e);
         return false;
-    }).delegate("a.fm-ajax-dbl", "click", function (event){
+    }).delegate("a.fm-ajax-dbl", "click", function (e){
         return false;
     });
 
-    $(".file-manager").delegate("a.fm-ajax-delete", "click", function (event) {
-        var fm = $('.file-manager');
+    $(".file-manager").delegate("a.fm-ajax-delete", "click", function (e) {
         if (confirm({_'Do you really want to delete this?'})) {
             $.getJSON(this.href);
-            $('<div class="fm-inactive"></div>').css({
-                    top: fm.position().top,
-                    left: fm.position().left,
-                    width: fm.width(),
-                    height: fm.height()
-            }).ajaxStop(function() {
-                        $(this).remove();
-
-                }).appendTo(".file-manager");
-
-            $('<div id="fm-ajax-spinner"></div>').css({
-                    position: "absolute",
-                    left: event.pageX + 20,
-                    top: event.pageY + 40
-
-                }).ajaxStop(function() {
-                        $(this).remove();
-
-                }).appendTo("body");
+            $.animateProgress(".file-manager", e);
         }
         return false;
     });
