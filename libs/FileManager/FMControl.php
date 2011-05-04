@@ -269,69 +269,6 @@ class FileManager extends Control
         }
     }
 
-    public function handleDeleteFolder()
-    {
-        $namespace = Environment::getSession('file-manager');
-        $actualdir = $namespace->actualdir;
-        
-        $translator = new GettextTranslator(__DIR__ . '/locale/FileManager.' . $this->config["lang"] . '.mo');
-        
-        if ($this->config['readonly'] == True)
-                        $this->flashMessage(
-                            $translator->translate('File manager is in read-only mode!'),
-                            'warning'
-                        );
-        else {
-                        if ($actualdir == $this->getRootname()) {
-                            $path = $this->config['uploadroot'] . $this->config['uploadpath'];
-                            $empty = True;  // only clear files in folder
-                            $dir = null;    // because of delete sub-folders cache recursively
-                        } else {
-                            $path = $this->config['uploadroot'] . substr($this->config['uploadpath'], 0, -1) . $actualdir;
-                            $empty = False; // delete folder completely
-                            $dir = substr($actualdir, 0, -1);
-                        }
-                        
-                        if ($this['tools']->validPath($actualdir)) {
-
-                                            // delete sub-folders cache recursively
-                                            $dirs = $this['treeview']->getDirTree($path);
-                                            $this['tools']->clearDirCache($dirs, $dir);
-                                            
-                                            if ($this['fmFiles']->deleteFolder($path, $empty) == true) {
-
-                                                            // TODO clear old folder content cache recursively
-                                                            // refresh cache
-                                                            $this['tools']->clearFromCache('fmtreeview');
-                                                            $this['tools']->clearFromCache(array('fmfiles', $actualdir));
-
-                                                            // clear cache in parent directory                                                             
-                                                            if (dirname($actualdir) == '\\')
-                                                                $this['tools']->clearFromCache(array('fmfiles', $this->getRootname()));
-                                                            else
-                                                                $this['tools']->clearFromCache(array('fmfiles', dirname($actualdir). '/'));
-
-                                                            $this['clipboard']->clearClipboard();
-
-                                                            $this->flashMessage(
-                                                                $translator->translate('Folder succesfully deleted'),
-                                                                'info'
-                                                            );
-
-                                                            $this['content']->handleGoToParent($actualdir);
-                                                            
-                                                } else
-                                                            $this->flashMessage(
-                                                                $translator->translate('An error occurred, folder was not completely deleted.'),
-                                                                'error'
-                                                            );
-                        }                            
-        }
-
-
-        $this->invalidateControl('rename');
-    }
-
     public function render()
     {
         $template = $this->template;
