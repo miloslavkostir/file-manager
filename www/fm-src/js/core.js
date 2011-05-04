@@ -102,5 +102,16 @@
                 $(this).addClass(clickedClass);
             });
         };
+        
+        $.fn.unmarkAll = function(tag, clickedClass) {
+            this.children(tag).each(function() {
+                $(this).removeClass(clickedClass);
+            });
+        };        
+        
+        $.getSelected = function() {
+            var items = $("#fm-small-images .selected");          
+            return items;
+        };
 
 })(jQuery);

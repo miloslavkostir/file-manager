@@ -6,6 +6,7 @@ use Nette\Caching\Cache;
 use Nette\Caching\Storages\FileStorage;
 use Nette\Image;
 use Nette\Utils\Finder;
+use Nette\Templating\DefaultHelpers;
 
 class FMContent extends FileManager
 {
@@ -29,6 +30,32 @@ class FMContent extends FileManager
         }
         parent::getParent()->handleShowFileInfo($filename);
     }
+    
+    public function handleShowMultiFileInfo($files = "")
+    {
+        $namespace = Environment::getSession('file-manager');
+        $actualdir = $namespace->actualdir;
+        $translator = new GettextTranslator(__DIR__ . '/../../locale/FileManager.' . $this->config["lang"] . '.mo');        
+        
+        // if sended by AJAX
+        if (empty($files)) {
+            $request = Environment::getHttpRequest();
+            $files = $request->getQuery('files');
+        }
+        
+        if (is_array($files)) {
+                $info = $this['fmFiles']->getFilesInfo($actualdir, $files, true);
+                $this->presenter->payload->result = 'success';
+                $this->presenter->payload->size = DefaultHelpers::bytes($info['size']);
+                $this->presenter->payload->dirCount = $info['dirCount'];
+                $this->presenter->payload->fileCount = $info['fileCount'];                
+                $this->presenter->sendPayload();
+        } else
+                parent::getParent()->flashMessage(
+                        $translator->translate("Incorrect input type data. Must be an array!"),
+                        'error'
+                );            
+    }
 
     public function handleCopyToClipboard($filename = "")
     {
@@ -47,6 +74,36 @@ class FMContent extends FileManager
         );
 
         $this->handleShowContent($actualdir);
+    }
+    
+    public function handleMultiCopyToClipboard($files = "")
+    {
+        $namespace = Environment::getSession('file-manager');
+        $actualdir = $namespace->actualdir;
+        $translator = new GettextTranslator(__DIR__ . '/../../locale/FileManager.' . $this->config["lang"] . '.mo');        
+        
+        // if sended by AJAX
+        if (empty($files)) {
+            $request = Environment::getHttpRequest();
+            $files = $request->getQuery('files');
+        }
+        
+        if (is_array($files)) {
+
+                foreach($files as $file) {
+                        $namespace->clipboard[$actualdir.$file] = array(
+                            'action' => 'copy',
+                            'actualdir' => $actualdir,
+                            'filename' => $file
+                        );
+                }
+        } else
+                parent::getParent()->flashMessage(
+                        $translator->translate("Incorrect input type data. Must be an array!"),
+                        'error'
+                );
+        
+        parent::getParent()->refreshSnippets(array('clipboard'));
     }
 
     public function handleCutToClipboard($filename = "")
@@ -70,8 +127,38 @@ class FMContent extends FileManager
             $this->handleShowContent($actualdir);
         }
     }
+    
+    public function handleMultiCutToClipboard($files = "")
+    {
+        $namespace = Environment::getSession('file-manager');
+        $actualdir = $namespace->actualdir;
+        $translator = new GettextTranslator(__DIR__ . '/../../locale/FileManager.' . $this->config["lang"] . '.mo');        
+        
+        // if sended by AJAX
+        if (empty($files)) {
+            $request = Environment::getHttpRequest();
+            $files = $request->getQuery('files');
+        }
+        
+        if (is_array($files)) {
 
-    public function handleDeleteFile($filename = "")
+                foreach($files as $file) {
+                        $namespace->clipboard[$actualdir.$file] = array(
+                            'action' => 'cut',
+                            'actualdir' => $actualdir,
+                            'filename' => $file
+                        );
+                }
+        } else
+                parent::getParent()->flashMessage(
+                        $translator->translate("Incorrect input type data. Must be an array!"),
+                        'error'
+                );
+        
+        parent::getParent()->refreshSnippets(array('clipboard'));
+    }    
+
+    public function handleDelete($filename = "")
     {
         $namespace = Environment::getSession('file-manager');
         $actualdir = $namespace->actualdir;
@@ -88,44 +175,64 @@ class FMContent extends FileManager
                                 $translator->translate("File manager is in read-only mode"),
                                 'warning'
                         );
-        else {
-                        $path = parent::getParent()->getAbsolutePath($actualdir);
+        elseif ($this['tools']->validPath($actualdir, $filename)) {
 
-                        if ($this['tools']->validPath($actualdir, $filename)) {
+                        if ($this['fmFiles']->delete($actualdir, $filename))
+                            parent::getParent()->flashMessage(
+                                    $translator->translate('Successfuly deleted'),
+                                    'info'
+                            );
+                        else
+                            parent::getParent()->flashMessage(
+                                    $translator->translate('An error occured!'),
+                                    'error'
+                            );
+                        
+        }
+        
+        $this->handleShowContent($actualdir);
+    }
+    
+    public function handleMultiDelete($files = "")
+    {
+        $namespace = Environment::getSession('file-manager');
+        $actualdir = $namespace->actualdir;
+        $translator = new GettextTranslator(__DIR__ . '/../../locale/FileManager.' . $this->config["lang"] . '.mo');
 
-                            if (is_writable($path . $filename)) {
-                                    $cache_file =  $this['fmFiles']->createThumbName($actualdir, $filename);
+        // if sended by AJAX
+        if (empty($files)) {
+            $request = Environment::getHttpRequest();
+            $files = $request->getQuery('files');
+        }
 
-                                    // delete thumb
-                                    if ( file_exists($cache_file['path']) && is_writable($path . $filename) )
-                                           unlink($cache_file['path']);
-
-                                    // delete source file
-                                    if (@unlink($path . $filename))
-                                            parent::getParent()->flashMessage(
-                                                    $translator->translate('File was successfuly deleted'),
-                                                    'info'
-                                            );
-                                    else
-                                            parent::getParent()->flashMessage(
-                                                    $translator->translate('An error occurred during deleting file.'),
-                                                    'error'
-                                            );
-                                            
-                                     $this['clipboard']->clearClipboard();
-                            } else
-                                    parent::getParent()->flashMessage(
-                                            $translator->translate('Permission denied.'),
-                                            'warning'
-                                    );
-
-                        }
-
-                        // refresh folder content cache
-                        $this['tools']->clearFromCache(array('fmfiles', $actualdir));
+        if ($this->config['readonly'] == True)
+                        parent::getParent()->flashMessage(
+                                $translator->translate("File manager is in read-only mode"),
+                                'warning'
+                        );
+        else {            
+                        if (is_array($files)) {
+                                foreach($files as $file) {
+                                            if ($this['fmFiles']->delete($actualdir, $file))
+                                                parent::getParent()->flashMessage(
+                                                        $translator->translate('Successfuly deleted'),
+                                                        'info'
+                                                );
+                                            else
+                                                parent::getParent()->flashMessage(
+                                                        $translator->translate('An error occured!'),
+                                                        'error'
+                                                );
+                                }
+                        } else
+                                parent::getParent()->flashMessage(
+                                        $translator->translate("Incorrect input type data. Must be an array!"),
+                                        'error'
+                                );
+                        
                         $this->handleShowContent($actualdir);
         }
-    }
+    }    
     
     public function handleDownloadFile($filename = "")
     {

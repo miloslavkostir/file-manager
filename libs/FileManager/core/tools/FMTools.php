@@ -14,15 +14,20 @@ class FMTools extends FileManager
         parent::__construct();
     }
 
-    /* clear recursively */
+    /**
+     * Clear cache recursively
+     * @param array     dir tree
+     * @param string    actualdir
+     */
     public function clearDirCache($dirs, $superior)
-    {
+    {            
             foreach ($dirs as $key => $value) {
 
                     $cache_const = md5($this->config['uploadroot'] . $this->config['uploadpath']);
                     $cache_dir = parent::getParent()->cache_path . $cache_const;
                     $storage = new FileStorage($cache_dir);
                     $cache = new Cache($storage);
+                                       
                     unset($cache[array('fmfiles', $superior . "/" . $key . "/")]);
 
                     if (count($dirs[$key]) > 0) {
@@ -34,7 +39,8 @@ class FMTools extends FileManager
     }
 
     /**
-     * $key string, array
+     * Clear single item from cache
+     * @param mixed string, array
      */
     public function clearFromCache($key)
     {

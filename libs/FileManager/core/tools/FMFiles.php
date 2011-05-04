@@ -8,8 +8,8 @@ class FMFiles extends FileManager
     public $config;
 
     /**
-     * @var string
      * Prefix for thumb folders and thumbnails
+     * @var string
      */
     public $thumb;
 
@@ -133,7 +133,42 @@ class FMFiles extends FileManager
             
             return $info;
     }
-
+    
+    /*
+     * $files   @array
+     * $dir     @string - absolutepath
+     * $iterate @bool   - include subdirectories
+     * @return array
+     */
+    public function getFilesInfo($dir, $files, $iterate = false)
+    {
+        $path = parent::getParent()->getAbsolutePath($dir);
+        $info = array(
+            'size' => 0,
+            'dirCount' => 0,
+            'fileCount' => 0            
+        );
+        
+        foreach ($files as $file) {
+            $filepath = $path . $file;
+            if (!is_dir($filepath)) {
+                    $info['size'] += filesize($filepath);
+                    $info['fileCount']++;
+            } elseif ($iterate === true) {
+                    $info['dirCount']++;                    
+                    foreach (Finder::find('*')->from($filepath)->exclude($this->thumb . '*') as $item) {
+                                       $info['size'] += $item->getSize();
+                                       if ($item->isDir())
+                                           $info['dirCount']++;
+                                       else
+                                           $info['fileCount']++;
+                    }        
+            }
+        }
+        
+        return $info;
+    }
+    
     public function getFolderInfo($path)
     {
         $info = array();
@@ -258,27 +293,100 @@ class FMFiles extends FileManager
         return $this->remove_diacritic($name);
     }
 
-    // http://php.net/manual/en/function.rmdir.php
+    /**
+     * Delete file or folder from disk and clear cache
+     * @param  string  relative folder path
+     * @param  string  filename - optional
+     * @return bool
+     */
+    public function delete($dir, $file = "")
+    {
+        $absDir = parent::getParent()->getAbsolutePath($dir);
+        
+        if (is_dir($absDir . $file)) {
+                     
+                if ($this->deleteFolder($absDir . $file)) {
+                    
+                    // clear actual dir cache
+                    $this['tools']->clearFromCache(array('fmfiles', $dir));           
+                    
+                    // clear sub-folders cache recursively
+                    if ($dir == parent::getParent()->getRootname())
+                        $startDir = null;
+                    else
+                        $startDir = substr($dir, 0, -1);                      
+                    $dirs = $this['treeview']->getDirTree($absDir);
+                    $this['tools']->clearDirCache($dirs, $startDir);
+                    
+                    // clear treeview cache
+                    $this['tools']->clearFromCache('fmtreeview');
+                    
+                    return true;
+                } else
+                    return false;
+                
+        } else {
+                if ($this->deleteFile($dir, $file)) {
+                    $this['tools']->clearFromCache(array('fmfiles', $dir));                    
+                    return true;
+                } else
+                    return false;
+        }
+    }
+    
+    /**
+     * Delete file
+     * @param  string  relative folder path
+     * @param  string  filename
+     * @return bool
+     */
+    function deleteFile($actualdir, $filename)
+    {
+        $path = parent::getParent()->getAbsolutePath($actualdir);
+
+        if (is_writable($path)) {
+                $cache_file =  $this->createThumbName($actualdir, $filename);
+                // delete thumb
+                if ( file_exists($cache_file['path']) && is_writable($path . $filename) )
+                   unlink($cache_file['path']);
+
+                // delete source file
+                if (unlink($path . $filename))                   
+                    return true;                    
+                else
+                    return false;
+                
+        } else
+                return false;
+    }    
+    
+    /**
+     * Delete folder recursively
+     * @param string aboslute path
+     * @param-optional bool only clear direcotry content if true
+     * @return bool
+     * thx O S http://php.net/manual/en/function.rmdir.php
+     * 
+     */
     function deleteFolder($directory, $empty = false)
     {
-        if(substr($directory,-1) == "/") {
+        if(substr($directory,-1) == "/")
             $directory = substr($directory,0,-1);
-        }
 
-        if(!file_exists($directory) || !is_dir($directory)) {
+        if(!file_exists($directory) || !is_dir($directory))
             return false;
-        } elseif(!is_readable($directory)) {
+        elseif(!is_readable($directory))
             return false;
-        } else {
+        else {
             $directoryHandle = opendir($directory);
 
             while ($contents = readdir($directoryHandle)) {
                 if($contents != '.' && $contents != '..') {
                     $path = $directory . "/" . $contents;
 
-                    if(is_dir($path)) {
+                    if(is_dir($path))
                         $this->deleteFolder($path);
-                    } else {
+                    else {
                         if ( is_writable($path))
                             unlink($path);
                         else
@@ -290,9 +398,8 @@ class FMFiles extends FileManager
             closedir($directoryHandle);
 
             if($empty == false) {
-                if(!@rmdir($directory)) {
+                if(!@rmdir($directory))
                     return false;
-                }
             }
 
             return true;
