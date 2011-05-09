@@ -46,7 +46,16 @@ class FMClipboard extends FileManager
 
                                             if ($val['action'] == 'copy') {
 
-                                                            $this->copy($val['actualdir'], $actualdir, $val['filename']);
+                                                            if ($this['fmFiles']->copy($val['actualdir'], $actualdir, $val['filename']))
+                                                                    parent::getParent()->flashMessage(
+                                                                            $translator->translate("Succesfully copied."),
+                                                                            'info'
+                                                                    );
+                                                            else
+                                                                    parent::getParent()->flashMessage(
+                                                                            $translator->translate("An error occured!"),
+                                                                            'error'
+                                                                    );                                                                
                                                             
                                             } elseif ($val['action'] == 'cut') {
 
@@ -85,77 +94,5 @@ class FMClipboard extends FileManager
         $template->rootname = parent::getParent()->getRootname();
         
         $template->render();
-    }
-
-    function copy($actualdir, $targetdir, $filename)
-    {
-        $translator = new GettextTranslator(__DIR__ . '/../../locale/FileManager.' . $this->config["lang"] . '.mo');
-
-        $actualpath = parent::getParent()->getAbsolutePath($actualdir);
-        $targetpath = parent::getParent()->getAbsolutePath($targetdir);
-
-        // check name duplicity
-        if (file_exists($targetpath . $filename)) {
-            $i = 1;
-            while (file_exists($targetpath . '(' . $i . ')' . $filename)) {
-                $i++;
-            }
-            $newfilename = '(' . $i . ')' . $filename;
-        } else
-            $newfilename = $filename;
-
-
-        if (is_writable($targetpath)) {
-
-            if (!is_dir($actualpath . $filename)) {
-
-                    $filesize = filesize($actualpath . $filename);
-                    $disksize = $this['tools']->diskSizeInfo();
-                    if ($disksize['spaceleft'] >= $filesize) {
-
-                            copy($actualpath . $filename, $targetpath . $newfilename);
-                            parent::getParent()->flashMessage(
-                                $translator->translate("File succesfully copied."),
-                                'info'
-                            );
-
-                    } else
-                            parent::getParent()->flashMessage(
-                                    $translator->translate("Disk is full!"),
-                                    'error'
-                            );
-
-            } else {
-                    $dirinfo = $this['fmFiles']->getFolderInfo(realpath($actualpath . $filename));
-                    $disksize = $this['tools']->diskSizeInfo();
-                    if ($disksize['spaceleft'] < $dirinfo['size'])
-                                    parent::getParent()->flashMessage(
-                                            $translator->translate("Disk is full!"),
-                                            'error'
-                                    );
-                    else {
-                                    // detect if target folder is sub-folder of source folder :-)
-                                    $ok = True;
-                                    foreach (Finder::findDirectories('*')->from(realpath($actualpath . $filename)) as $folder) {
-                                        if ($folder->getRealPath() == realpath($targetpath) )
-                                                $ok = False;
-                                    }
-
-                                    if ($ok == True) {
-
-                                        $this['fmFiles']->recurse_copy($actualpath . $filename, $targetpath . $filename);
-                                        parent::getParent()->flashMessage(
-                                                $translator->translate("Folder succesfully copied."),
-                                                'info'
-                                        );
-                                    } else
-                                        parent::getParent()->flashMessage(
-                                                $translator->translate("Parent folder can not be copied to sub-folder!"),
-                                                'warning'
-                                        );
-                    }
-            }
-
-        }
     }
 }

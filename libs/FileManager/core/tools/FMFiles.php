@@ -17,6 +17,112 @@ class FMFiles extends FileManager
     {
         parent::__construct();
     }
+    
+    /**
+     * Check if file exists and give alternative name
+     * @param  string  actual dir (absolute path)
+     * @param  string  filename
+     * @return string
+     */    
+    public function checkDuplName($targetpath, $filename)
+    {   
+        if (file_exists($targetpath . $filename)) {
+            $i = 1;
+            while (file_exists($targetpath . '(' . $i . ')' . $filename)) {
+                $i++;
+            }
+            return '(' . $i . ')' . $filename;
+        } else
+            return $filename;        
+    }    
+    
+    /**
+     * Copy file or folder from disk and clear cache
+     * @param  string  actual dir
+     * @param  string  target dir
+     * @param  string  filename
+     * @return bool
+     */
+    function copy($actualdir, $targetdir, $filename)
+    {
+        $actualpath = parent::getParent()->getAbsolutePath($actualdir);
+        $targetpath = parent::getParent()->getAbsolutePath($targetdir);
+
+        $filename = $this->checkDuplName($targetpath, $filename);
+        
+        if (is_writable($targetpath)) {
+
+            $disksize = $this['tools']->diskSizeInfo();            
+            
+            if (is_dir($actualpath . $filename)) {
+                    $dirinfo = $this->getFolderInfo(realpath($actualpath . $filename));
+                    if ($disksize['spaceleft'] < $dirinfo['size'])
+                                    return false;
+                    else {                        
+                                    if ($this->isSubFolder($actualpath, $targetpath, $filename) == false) {                                        
+                                        $this->copyFolder($actualpath . $filename, $targetpath . $filename);
+                                        return true;
+                                    } else
+                                        return false;
+                    }                
+            } else {
+                    $filesize = filesize($actualpath . $filename);
+                    if ($disksize['spaceleft'] >= $filesize) {
+                            copy($actualpath . $filename, $targetpath . $filename);
+                            return true;
+                    } else
+                            return false;
+            }
+
+        } else
+            return false;
+    }
+
+    /**
+     * Copy folder recursively
+     * @param  string  actual dir
+     * @param  string  target dir
+     */    
+    function copyFolder($src, $dst)
+    {
+            $dir = opendir($src);
+            $oldumask = umask(0);
+            mkdir($dst);
+            umask($oldumask);
+
+            while(false !== ( $file = readdir($dir)) ) {                
+                if ( ( $file != '.' ) && ( $file != '..' ) ) {
+
+                        if ( is_dir($src . '/' . $file) ) {
+                                if (strpos( '11' . $file, $this->thumb) != 2 )  // exclude thumb folders
+                                    $this->copyFolder($src . '/' . $file, $dst . '/' . $file);
+                        } else
+                                copy($src . '/' . $file, $dst . '/' . $file);
+
+                }
+            }
+
+            closedir($dir);
+    }
+
+    /**
+     * Check if target folder is it's sub-folder
+     * @param  string  actual dir (absolute path)
+     * @param  string  target dir (absolute path)
+     * @param  string  filename
+     * @return bool
+     */    
+    function isSubFolder($actualpath, $targetpath, $filename)
+    {
+        $state = false;
+        
+        foreach (Finder::findDirectories('*')->from(realpath($actualpath . $filename)) as $folder) {          
+            if ($folder->getRealPath() == realpath($targetpath) )
+                    $state = true;
+                        
+        }
+        return $state;
+    }
 
     function isThumb($path)
     {
@@ -91,7 +197,7 @@ class FMFiles extends FileManager
 
         return $info;
     }
-
+    
     function fileDetails($actualdir, $filename)
     {
             $thumb_dir = $this->config['resource_dir'] . 'img/icons/';
@@ -450,66 +556,6 @@ class FMFiles extends FileManager
         return $foldername;
     }
 
-    function smartCopy($source, $dest, $options = array('folderPermission'=>0777, 'filePermission'=>0755))
-    {
-        $result = false;
-
-        if (is_file($source)) {
-            if ($dest[strlen($dest)-1] == '/') {
-                if (!file_exists($dest)) {
-                    cmfcDirectory::makeAll($dest, $options['folderPermission'], true);
-                }
-                $__dest = $dest . "/" . basename($source);
-            } else {
-                $__dest = $dest;
-            }
-            $result = copy($source, $__dest);
-            chmod($__dest, $options['filePermission']);
-
-        } elseif(is_dir($source)) {
-            if ($dest[strlen($dest)-1] == '/') {
-                if ($source[strlen($source)-1]=='/') {
-                    //Copy only contents
-                } else {
-                    //Change parent itself and its contents
-                    $dest = $dest . basename($source);
-                    @mkdir($dest);
-                    chmod($dest, $options['filePermission']);
-                }
-            } else {
-                if ($source[strlen($source)-1]=='/') {
-                    //Copy parent directory with new name and all its content
-                    @mkdir($dest, $options['folderPermission']);
-                    chmod($dest, $options['filePermission']);
-                } else {
-                    //Copy parent directory with new name and all its content
-                    @mkdir($dest, $options['folderPermission']);
-                    chmod($dest, $options['filePermission']);
-                }
-            }
-
-            $dirHandle = opendir($source);
-            while($file = readdir($dirHandle))
-            {
-                if($file != "." && $file != "..")
-                {
-                    if(!is_dir($source . "/" . $file)) {
-                        $__dest = $dest . "/" . $file;
-                    } else {
-                        $__dest = $dest . "/" . $file;
-                    }
-                    $result = $this->smartCopy($source . "/" . $file, $__dest, $options);
-                }
-            }
-            closedir($dirHandle);
-
-        } else {
-            $result = false;
-        }
-        return $result;
-    }
-
-
     function bytes_from_string($val)
     {
         $last = strtolower(substr($val, strlen($val)-2, 2));
@@ -527,28 +573,5 @@ class FMFiles extends FileManager
                 $val *= 1;
 
         return $val;
-    }
-
-
-    function recurse_copy($src, $dst)
-    {
-            $dir = opendir($src);
-            $oldumask = umask(0);
-            @mkdir($dst);
-            umask($oldumask);
-
-            while(false !== ( $file = readdir($dir)) ) {                
-                if ( ( $file != '.' ) && ( $file != '..' ) ) {
-
-                        if ( is_dir($src . '/' . $file) ) {
-                                if (strpos( '11' . $file, $this->thumb) != 2 )  // exclude thumb folders
-                                    $this->recurse_copy($src . '/' . $file, $dst . '/' . $file);
-                        } else
-                                copy($src . '/' . $file, $dst . '/' . $file);
-
-                }
-            }
-
-            closedir($dir);
     }
 }
