@@ -84,6 +84,11 @@ class FileManager extends Control
                             ));
         }
     }
+    
+    public function handleMove()
+    {
+        $this['content']->handleMove();
+    }
 
     // TODO improve, because 2x calling clearFromCache can be little slower
     public function handleRefreshContent()
@@ -95,99 +100,6 @@ class FileManager extends Control
         $this['tools']->clearFromCache(array('fmfiles', $actualdir));
 
         $this->handleShowContent($actualdir);
-    }
-
-    // TODO add move folder function & REFACTORING
-    public function handleMoveFile($actualdir = "", $targetdir = "", $filename = "")
-    {
-        $translator = new GettextTranslator(__DIR__ . '/locale/FileManager.' . $this->config["lang"] . '.mo');
-
-        if ($this->config['readonly'] == True)
-                        $this->flashMessage(
-                                $translator->translate("File manager is in read-only mode!"),
-                                'warning'
-                        );
-        else {
-                            // if sended by ajax (using drag&drop)
-                            if ($actualdir == "" && $targetdir == "" && $filename == "") {
-                                $request = Environment::getHttpRequest();
-                                $actualdir = $request->getQuery('actualdir');
-                                $targetdir = $request->getQuery('targetdir');
-                                $filename = $request->getQuery('filename');
-                            }
-
-                            $actualpath = $this->getAbsolutePath($actualdir) . $filename;
-                            $targetpath = $this->getAbsolutePath($targetdir);
-
-                            if ($actualdir == $targetdir)
-
-                                            $this->flashMessage(
-                                                    $translator->translate('File can not be moved to same folder'),
-                                                    'warning'
-                                            );
-
-                            elseif ( file_exists($targetpath . $filename) && file_exists($actualpath) && is_writable($actualpath) ) {
-
-                                            $i = 1;
-                                            while (file_exists($targetpath . '(' .$i . ')' . $filename)) {
-                                                $i++;
-                                            }
-
-                                            copy($actualpath, $targetpath . '(' .$i . ')' . $filename);
-
-                                            // refresh folder content cache
-                                            $this['tools']->clearFromCache(array('fmfiles', $actualdir));
-                                            $this['tools']->clearFromCache(array('fmfiles', $targetdir));
-
-                                            $cache_file =  $this['fmFiles']->createThumbName($actualdir, $filename);
-                                            if (file_exists($cache_file['path']))
-                                                unlink($cache_file['path']);
-
-                                            unlink($actualpath);
-
-                                            $this->flashMessage(
-                                                    $translator->translate('File was moved under new name, because file name in target directory already exists.'),
-                                                    'warning'
-                                            );
-
-                                            $this['clipboard']->clearClipboard();
-
-
-                                            $this->presenter->payload->result = 'success';
-
-                                            $this->handleShowContent($actualdir);
-
-                            } elseif ( file_exists($actualpath) && is_writable($actualpath) ) {
-
-                                            copy($actualpath, $targetpath . $filename);
-                                            
-                                            // refresh folder content cache
-                                            $this['tools']->clearFromCache(array('fmfiles', $actualdir));
-                                            $this['tools']->clearFromCache(array('fmfiles', $targetdir));
-                                            
-                                            $cache_file =  $this['fmFiles']->createThumbName($actualdir, $filename);
-                                            if (file_exists($cache_file['path']))
-                                                unlink($cache_file['path']);
-
-                                            unlink($actualpath);
-
-                                             $this['clipboard']->clearClipboard();
-
-                                            $this->flashMessage(
-                                                    $translator->translate('File was succesfully moved'),
-                                                    'info'
-                                            );
-
-                                            $this->presenter->payload->result = 'success';                                            
-                                            $this->handleShowContent($targetdir);
-                            } else {
-                                            $this->flashMessage(
-                                                    $translator->translate('An error occured. File was not moved.'),
-                                                    'error'
-                                            );
-                                            $this->handleShowContent($actualdir);
-                            }
-        }
     }
 
     public function handleShowUpload()

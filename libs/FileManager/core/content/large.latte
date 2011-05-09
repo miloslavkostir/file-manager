@@ -192,7 +192,7 @@
                         var targetdir = $(this).attr('id'); // targetdir
 
                         if (confirm({_'Do you really want to move this file'} + "?")) {
-                                $.getJSON({link moveFile!}, { actualdir: actualdir, filename: filename, targetdir: targetdir }, function(payload){
+                                $.getJSON({link move!}, { actualdir: actualdir, filename: filename, targetdir: targetdir }, function(payload){
                                     $.nette.success(payload);
                                     if (payload.result == 'success')
                                         ui.draggable.remove();

@@ -38,8 +38,8 @@ class FMFiles extends FileManager
     
     /**
      * Copy file or folder from disk and clear cache
-     * @param  string  actual dir
-     * @param  string  target dir
+     * @param  string  actual dir (relative path)
+     * @param  string  target dir (relative path)
      * @param  string  filename
      * @return bool
      */
@@ -78,8 +78,8 @@ class FMFiles extends FileManager
 
     /**
      * Copy folder recursively
-     * @param  string  actual dir
-     * @param  string  target dir
+     * @param  string  actual dir (absolute path)
+     * @param  string  target dir (absolute path)
      */    
     function copyFolder($src, $dst)
     {
@@ -140,6 +140,79 @@ class FMFiles extends FileManager
             return True;
         else
             return False;
+    }
+    
+    /**
+     * Move file or folder
+     * @param  string  actual folder (relative path)
+     * @param  string  target folder (relative path)
+     * @param  string  filename
+     * @return bool
+     */    
+    public function move($actualdir, $targetdir, $filename)
+    {
+        $actualpath = parent::getParent()->getAbsolutePath($actualdir);
+
+        if ($actualdir == $targetdir)
+                return false;
+        else {
+                if (is_dir($actualpath . $filename)) {
+                        if ($this->moveFolder($actualdir, $targetdir, $filename))
+                                return true;
+                        else
+                                return false;
+                } else {
+                        if ($this->moveFile($actualdir, $targetdir, $filename))
+                                return true;
+                        else
+                                return false;
+                }        
+        }
+    }
+    
+    /**
+     * Move file
+     * @param  string  actual folder (relative path)
+     * @param  string  target folder (relative path)
+     * @param  string  filename
+     * @return bool
+     */    
+    public function moveFile($actualdir, $targetdir, $filename)
+    {
+        $actualpath = parent::getParent()->getAbsolutePath($actualdir);
+        $targetpath = parent::getParent()->getAbsolutePath($targetdir);
+        
+        if (copy($actualpath . $filename, $targetpath . $this->checkDuplName($targetpath, $filename))) {
+            $this->deleteFile($actualdir, $filename);
+            $this['clipboard']->clearClipboard();
+
+            // refresh folder content cache
+            $this['tools']->clearFromCache(array('fmfiles', $actualdir));
+            $this['tools']->clearFromCache(array('fmfiles', $targetdir));                    
+            
+            return true;
+        } else
+            return false;
+    }
+    
+    /**
+     * Move folder
+     * @param  string  actual folder (relative path)
+     * @param  string  target folder (relative path)
+     * @param  string  filename
+     * @return bool
+     */    
+    public function moveFolder($actualdir, $targetdir, $filename)
+    {
+        $actualpath = parent::getParent()->getAbsolutePath($actualdir);
+        
+        if ($this->copy($actualdir, $targetdir, $filename)) {
+            if ($this->delete($actualdir, $filename))
+                return true;
+            else
+                return false;
+        } else
+            return false;
     }
 
     function get_file_mod($path)
@@ -399,7 +472,7 @@ class FMFiles extends FileManager
 
     /**
      * Delete file or folder from disk and clear cache
-     * @param  string  relative folder path
+     * @param  string  folder (relative path)
      * @param  string  filename - optional
      * @return bool
      */

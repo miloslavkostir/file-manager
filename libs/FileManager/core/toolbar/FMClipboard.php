@@ -59,11 +59,22 @@ class FMClipboard extends FileManager
                                                             
                                             } elseif ($val['action'] == 'cut') {
 
-                                                            $src_file = parent::getParent()->getAbsolutePath($val['actualdir']) . $val['filename'];
-                                                            if (!is_dir($src_file)) // TODO move to handleMoveFile function
-                                                                parent::getParent()->handleMoveFile($val['actualdir'], $actualdir, $val['filename']);
+                                                            if ($this['fmFiles']->move($val['actualdir'], $actualdir, $val['filename']))
+                                                                    parent::getParent()->flashMessage(
+                                                                            $translator->translate("Succesfully moved."),
+                                                                            'info'
+                                                                    );
+                                                            else
+                                                                    parent::getParent()->flashMessage(
+                                                                            $translator->translate("An error occured!"),
+                                                                            'error'
+                                                                    );                                                                    
 
-                                            }
+                                            } else
+                                                            parent::getParent()->flashMessage(
+                                                                    $translator->translate("Unknown action!"),
+                                                                    'error'
+                                                            );                                                
                                     }
 
                                     // refresh folder content cache

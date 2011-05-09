@@ -263,9 +263,41 @@ class FMContent extends FileManager
         $this->handleShowContent($parent_path);
     }
 
-    public function handleMoveFile($actualdir = "", $targetdir = "", $filename = "")
+    public function handleMove($targetdir = "", $filename = "")
     {
-        parent::getParent()->handleMoveFile($actualdir = "", $targetdir = "", $filename = "");
+        $namespace = Environment::getSession('file-manager');
+        $actualdir = $namespace->actualdir;        
+        $translator = new GettextTranslator(__DIR__ . '/../../locale/FileManager.' . $this->config["lang"] . '.mo');
+        $request = Environment::getHttpRequest();
+        
+        // if sended by AJAX
+        if (empty($targetdir))
+            $targetdir = $request->getQuery('targetdir');            
+        if (empty($filename))            
+            $filename = $request->getQuery('filename');        
+        
+        if ($this->config['readonly'] == True)
+                        parent::getParent()->flashMessage(
+                                $translator->translate("File manager is in read-only mode!"),
+                                'warning'
+                        );
+        else {
+            
+                if ($this['fmFiles']->move($actualdir, $targetdir, $filename)) {
+                        $this->presenter->payload->result = 'success';
+                        parent::getParent()->flashMessage(
+                                $translator->translate('Successfuly moved.'),
+                                'info'
+                        );                        
+                        parent::getParent()->handleShowContent($targetdir);
+                } else {
+                        parent::getParent()->flashMessage(
+                                $translator->translate('An error occured. File was not moved.'),
+                                'error'
+                        );
+                        parent::getParent()->handleShowContent($actualdir);
+                }
+        }
     }
 
     public function handleShowFullImage($actualdir, $filename)
