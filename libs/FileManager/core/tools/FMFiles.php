@@ -47,9 +47,7 @@ class FMFiles extends FileManager
     {
         $actualpath = parent::getParent()->getAbsolutePath($actualdir);
         $targetpath = parent::getParent()->getAbsolutePath($targetdir);
-
-        $filename = $this->checkDuplName($targetpath, $filename);
-        
+       
         if (is_writable($targetpath)) {
 
             $disksize = $this['tools']->diskSizeInfo();            
@@ -60,7 +58,7 @@ class FMFiles extends FileManager
                                     return false;
                     else {                        
                                     if ($this->isSubFolder($actualpath, $targetpath, $filename) == false) {                                        
-                                        $this->copyFolder($actualpath . $filename, $targetpath . $filename);
+                                        $this->copyFolder($actualpath . $filename, $targetpath . $this->checkDuplName($targetpath, $filename));
                                         return true;
                                     } else
                                         return false;
@@ -68,7 +66,7 @@ class FMFiles extends FileManager
             } else {
                     $filesize = filesize($actualpath . $filename);
                     if ($disksize['spaceleft'] >= $filesize) {
-                            copy($actualpath . $filename, $targetpath . $filename);
+                            copy($actualpath . $filename, $targetpath . $this->checkDuplName($targetpath, $filename));
                             return true;
                     } else
                             return false;
