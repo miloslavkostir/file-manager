@@ -70,5 +70,4 @@ class SortedFinder extends Finder
 
         return $iterator;
     }
-
 }

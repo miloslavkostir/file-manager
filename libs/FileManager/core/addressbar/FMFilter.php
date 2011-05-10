@@ -30,15 +30,9 @@ class FMFilter extends FileManager
 
         $template->filterForm = $this['filterForm'];
 
-        // set dir for filtering
-        if (empty($actualdir))
-                $this['filterForm']->setDefaults(array(
-                            'actualdir' => parent::getParent()->getRootname()
-                ));
-        else
-                $this['filterForm']->setDefaults(array(
-                            'actualdir' => $actualdir
-                ));
+        $this['filterForm']->setDefaults(array(
+                    'phrase' => $namespace->mask
+        ));
         
         $template->render();
     }
@@ -50,7 +44,6 @@ class FMFilter extends FileManager
         $form->setTranslator($translator);
         $form->getElementPrototype()->class('fm-ajax');
         $form->addText('phrase')->getControlPrototype()->setTitle('Filter');
-        $form->addHidden('actualdir');
         $form->onSubmit[] = array($this, 'FilterFormSubmitted');
 
         return $form;
@@ -58,8 +51,11 @@ class FMFilter extends FileManager
 
     public function FilterFormSubmitted($form)
     {
+        $namespace = Environment::getSession('file-manager');
+        $actualdir = $namespace->actualdir;
+        
         $val = $form->values;
-        $this['content']->mask = $val['phrase'];
-        parent::getParent()->handleShowContent($val['actualdir']);
+        $namespace->mask = $val['phrase'];
+        parent::getParent()->handleShowContent($actualdir);
     }
 }

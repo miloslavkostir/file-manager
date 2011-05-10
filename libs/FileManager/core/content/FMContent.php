@@ -13,9 +13,6 @@ class FMContent extends FileManager
     /** @var array */
     public $config;
 
-    /** @var string */
-    public $mask;
-
     public function __construct()
     {
         parent::__construct();
@@ -351,7 +348,8 @@ class FMContent extends FileManager
         $template = $this->template;
         
         $view = $namespace->view;
-
+        $mask = $namespace->mask;
+        
         if (!empty($view)) {
             $c_template = __DIR__ . '/' . $view . '.latte';
             if (file_exists($c_template))
@@ -381,7 +379,7 @@ class FMContent extends FileManager
         $storage = new FileStorage($cache_dir);
         $cache = new Cache($storage);
 
-        if (empty($this->mask)) {
+        if ($mask == "") {
                     if (isset($cache[array('fmfiles', $actualdir)]))
                         $output = $cache[array('fmfiles', $actualdir)];
                     else {
@@ -389,7 +387,7 @@ class FMContent extends FileManager
                         $cache->save(array('fmfiles', $actualdir), $output);
                     }
         } else
-                    $output = $this->getDirectoryContent($actualdir, $this->mask, $view);
+                    $output = $this->getDirectoryContent($actualdir, $mask, $view);
 
         $template->files = $output;
         $template->config = $this->config;
@@ -418,11 +416,10 @@ class FMContent extends FileManager
 
         $dir_array = array();
 
-        // TODO workaround for missing sort method in Nette Finder
-        $sort = new SortedFinder(Finder::find($mask));
-        $files = $sort->in($absolutePath)
+        $files = SortedFinder::find($mask)
+                    ->in($absolutePath)
                     ->exclude(parent::getParent()->thumb . '*')
-                    ->orderByType();        
+                    ->orderByType();
 
         foreach( $files as $file ) {
 
