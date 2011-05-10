@@ -22,7 +22,7 @@
                             {var $targetpath = $item['actualdir'] . $item['filename'] . '/'}
                         {/if}
                         <a href="{link showContent!, $targetpath}" class="fm-ajax-dbl fm-thumb" title="{_'Open folder'}">
-                            <img src="{$basePath . $thumb_dir . $item['icon']}" alt="{$item['filename']}" id="{$targetpath}" class="fm-droppable fm-thumb" />
+                            <img src="{$basePath . $thumb_dir . $item['icon']}" alt="{$item['filename']}" id="{$targetpath}" class="fm-droppable fm-draggable fm-thumb" />
                         </a>
                     {/if}
 
@@ -182,7 +182,7 @@
                     var targetdir = $(this).attr('id'); // targetdir
 
                     if (confirm({_'Do you really want to move this file'} + "?")) {
-                            $.getJSON({link move!}, { actualdir: actualdir, filename: filename, targetdir: targetdir }, function(payload){
+                            $.getJSON({link move!}, { filename: filename, targetdir: targetdir }, function(payload){
                                 $.nette.success(payload);
                                 if (payload.result == 'success')
                                     ui.draggable.remove();
