@@ -35,7 +35,7 @@
 /* Windows Vista Theme */
 /* =================== */
 .context-menu-theme-vista {
-	background:#FAFAFA url(../contextmenu/cmenu-vista-bg.gif) repeat-y left top;
+	background:#FAFAFA url(../img/contextmenu/cmenu-vista-bg.gif) repeat-y left top;
 	border:1px solid #868686;
 }
 .context-menu-theme-vista .context-menu-item {
@@ -52,7 +52,7 @@
 	border-bottom:1px solid #F5F5F5;
 }
 .context-menu-theme-vista .context-menu-item-hover {
-	background:transparent url(../contextmenu/cmenu-vista-menu-item-hover.gif) repeat-x left center;
+	background:transparent url(../img/contextmenu/cmenu-vista-menu-item-hover.gif) repeat-x left center;
 	border:1px solid #D7D0B3;
 }
 .context-menu-theme-vista .context-menu-item .context-menu-item-inner {
