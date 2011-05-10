@@ -92,11 +92,10 @@
                                             $.animateProgress(".file-manager", e);
                                     }
 
-                                    // TODO - non-functional
                                     o6[{_'Download'}] = function(menuItem, menuObject, e) {                            
                                             var filename = $(this).attr("id");
                                             $(this).addClass("selected");
-                                            $.getJSON({link downloadFile!},  { filename: filename });                                                        
+                                            window.location.href={link downloadFile!} + "&filename=" + filename;
                                     }                                    
 
                                     return [o1, o2, o3, o4, o5, o6];
