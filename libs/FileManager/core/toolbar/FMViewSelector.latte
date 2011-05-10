@@ -1,3 +1,12 @@
 {$changeViewForm->render('begin')}
 {$changeViewForm['view']->control}
 {$changeViewForm->render('end')}
+
+<script type="text/javascript">
+$(document).ready(function() {
+    $("#frm-fileManager-viewSelector-changeViewForm").change(function () {
+        $(this).ajaxSubmit();
+        return false;
+    });
+});
+</script>

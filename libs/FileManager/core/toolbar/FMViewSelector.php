@@ -51,8 +51,7 @@ class FMViewSelector extends FileManager
 
         $form = new Form;
         $form->getElementPrototype()->class('fm-ajax');
-        $form->addSelect('view', NULL, $items)
-                ->controlPrototype->onchange('submit();');
+        $form->addSelect('view', NULL, $items);
         $form->addHidden('actualdir');
 
         $form->onSubmit[] = array($this, 'ChangeViewFormSubmitted');
