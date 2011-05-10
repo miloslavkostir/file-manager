@@ -32,7 +32,7 @@ class FMViewSelector extends FileManager
         $template->changeViewForm = $this['changeViewForm'];
 
         $this['changeViewForm']->setDefaults(array(
-                    'actualdir' => $actualdir
+                    'view' => $namespace->view
         ));
 
         $template->render();
@@ -52,7 +52,6 @@ class FMViewSelector extends FileManager
         $form = new Form;
         $form->getElementPrototype()->class('fm-ajax');
         $form->addSelect('view', NULL, $items);
-        $form->addHidden('actualdir');
 
         $form->onSubmit[] = array($this, 'ChangeViewFormSubmitted');
 
@@ -62,10 +61,8 @@ class FMViewSelector extends FileManager
     public function ChangeViewFormSubmitted($form)
     {
         $val = $form->values;
-
-        $namespace = Environment::getSession('file-manager');
+        $namespace = Environment::getSession('file-manager');        
         $namespace->view = $val['view'];
-
-        parent::getParent()->handleShowContent($val['actualdir']);
+        parent::getParent()->handleShowContent($namespace->actualdir);
     }
 }
