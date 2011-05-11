@@ -110,7 +110,7 @@
                                             $.each(selected, function(i) {
                                                 files[i] = $(this).attr("id");
                                             });
-                                            $.getJSON({link showMultiFileInfo!},  { files: files }, function(payload) {
+                                            $.post({link showMultiFileInfo!},  { files: files }, function(payload) {
                                                 if (payload.result === 'success')
                                                     alert(
                                                         {_'Files count: '} + payload.fileCount + "\n" +
@@ -125,7 +125,7 @@
                                             $.each(selected, function(i) {
                                                 files[i] = $(this).attr("id");
                                             });
-                                            $.getJSON({link multiCopyToClipboard!},  { files: files });
+                                            $.post({link multiCopyToClipboard!},  { files: files });
                                             $.animateProgress(".file-manager", e);
                                     }
 
@@ -134,7 +134,7 @@
                                             $.each(selected, function(i) {
                                                 files[i] = $(this).attr("id");
                                             });
-                                            $.getJSON({link multiCutToClipboard!},  { files: files });
+                                            $.post({link multiCutToClipboard!},  { files: files });
                                             $.animateProgress(".file-manager", e);
                                     }
 
@@ -143,7 +143,7 @@
                                             $.each(selected, function(i) {
                                                 files[i] = $(this).attr("id");
                                             });                                            
-                                            $.getJSON({link multiDelete!},  { files: files });
+                                            $.post({link multiDelete!},  { files: files });
                                             $.animateProgress(".file-manager", e);
                                     }                                    
 

@@ -37,7 +37,7 @@ class Content extends FileManager
         // if sended by AJAX
         if (empty($files)) {
             $request = Environment::getHttpRequest();
-            $files = $request->getQuery('files');
+            $files = $request->getPost('files');
         }
         
         if (is_array($files)) {
@@ -82,7 +82,7 @@ class Content extends FileManager
         // if sended by AJAX
         if (empty($files)) {
             $request = Environment::getHttpRequest();
-            $files = $request->getQuery('files');
+            $files = $request->getPost('files');
         }
         
         if (is_array($files)) {
@@ -108,7 +108,7 @@ class Content extends FileManager
         // if sended by AJAX
         if (empty($filename)) {
             $request = Environment::getHttpRequest();
-            $filename = $request->getQuery('filename');
+            $filename = $request->getPost('filename');
         }
 
         $namespace = Environment::getSession('file-manager');
@@ -134,7 +134,7 @@ class Content extends FileManager
         // if sended by AJAX
         if (empty($files)) {
             $request = Environment::getHttpRequest();
-            $files = $request->getQuery('files');
+            $files = $request->getPost('files');
         }
         
         if (is_array($files)) {
@@ -199,7 +199,7 @@ class Content extends FileManager
         // if sended by AJAX
         if (empty($files)) {
             $request = Environment::getHttpRequest();
-            $files = $request->getQuery('files');
+            $files = $request->getPost('files');
         }
 
         if ($this->config['readonly'] == True)
