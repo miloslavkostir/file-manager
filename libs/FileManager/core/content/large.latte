@@ -144,9 +144,11 @@
                                             var files = {};
                                             $.each(selected, function(i) {
                                                 files[i] = $(this).attr("id");
-                                            });                                            
-                                            $.post({link multiDelete!},  { files: files });
-                                            $.animateProgress(".file-manager", e);
+                                            });
+                                            if (confirm({_'Do you really want to delete all these files?'})) {                                            
+                                                $.post({link multiDelete!},  { files: files });
+                                                $.animateProgress(".file-manager", e);
+                                            }
                                     }                                    
                                                                        
                                     return [o1, o2, o3, o4];
