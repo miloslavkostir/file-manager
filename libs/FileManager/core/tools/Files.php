@@ -2,7 +2,7 @@
 
 use Nette\Utils\Finder;
 
-class FMFiles extends FileManager
+class Files extends FileManager
 {
     /** @var array */
     public $config;

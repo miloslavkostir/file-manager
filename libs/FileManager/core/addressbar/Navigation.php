@@ -3,7 +3,7 @@
 use Nette\Application\UI\Form;
 use Nette\Environment;
 
-class FMNavigation extends FileManager
+class Navigation extends FileManager
 {
     public function __construct()
     {
@@ -17,7 +17,7 @@ class FMNavigation extends FileManager
         $rootname = parent::getParent()->getRootname();
         $template = $this->template;
         
-        $template->setFile(__DIR__ . '/FMNavigation.latte');
+        $template->setFile(__DIR__ . '/Navigation.latte');
 
         if (empty($actualdir)) {
             $template->items = $this->getNav($rootname);

@@ -8,7 +8,7 @@ use Nette\Image;
 use Nette\Utils\Finder;
 use Nette\Templating\DefaultHelpers;
 
-class FMContent extends FileManager
+class Content extends FileManager
 {
     /** @var array */
     public $config;
@@ -41,7 +41,7 @@ class FMContent extends FileManager
         }
         
         if (is_array($files)) {
-                $info = $this['fmFiles']->getFilesInfo($actualdir, $files, true);
+                $info = $this['files']->getFilesInfo($actualdir, $files, true);
                 $this->presenter->payload->result = 'success';
                 $this->presenter->payload->size = DefaultHelpers::bytes($info['size']);
                 $this->presenter->payload->dirCount = $info['dirCount'];
@@ -174,7 +174,7 @@ class FMContent extends FileManager
                         );
         elseif ($this['tools']->validPath($actualdir, $filename)) {
 
-                        if ($this['fmFiles']->delete($actualdir, $filename))
+                        if ($this['files']->delete($actualdir, $filename))
                             parent::getParent()->flashMessage(
                                     $translator->translate('Successfuly deleted'),
                                     'info'
@@ -210,7 +210,7 @@ class FMContent extends FileManager
         else {            
                         if (is_array($files)) {
                                 foreach($files as $file) {
-                                            if ($this['fmFiles']->delete($actualdir, $file))
+                                            if ($this['files']->delete($actualdir, $file))
                                                 parent::getParent()->flashMessage(
                                                         $translator->translate('Successfuly deleted'),
                                                         'info'
@@ -280,7 +280,7 @@ class FMContent extends FileManager
                         );
         else {
             
-                if ($this['fmFiles']->move($actualdir, $targetdir, $filename)) {
+                if ($this['files']->move($actualdir, $targetdir, $filename)) {
                         $this->presenter->payload->result = 'success';
                         parent::getParent()->flashMessage(
                                 $translator->translate('Successfuly moved.'),
@@ -323,7 +323,7 @@ class FMContent extends FileManager
     {
         $path = parent::getParent()->getAbsolutePath($dir) . $file;
 
-        $cache_file =  $this['fmFiles']->createThumbName($dir, $file);
+        $cache_file =  $this['files']->createThumbName($dir, $file);
 
         if ( file_exists($cache_file['path']) ) {
                     $image = Image::fromFile($cache_file['path']);

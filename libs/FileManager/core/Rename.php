@@ -3,7 +3,7 @@
 use Nette\Application\UI\Form;
 use Nette\Environment;
 
-class FMRename extends FileManager
+class Rename extends FileManager
 {
     /** @var array */
     public $config;
@@ -19,7 +19,7 @@ class FMRename extends FileManager
     public function render()
     {
         $template = $this->template;
-        $template->setFile(__DIR__ . '/FMRename.latte');
+        $template->setFile(__DIR__ . '/Rename.latte');
 
         // set language
         $lang_file = __DIR__ . '/../locale/FileManager.'. $this->config['lang'].'.mo';
@@ -92,7 +92,7 @@ class FMRename extends FileManager
         } else {
 
                         if (is_dir( realpath($path . $values['orig_filename']) )) {
-                                $new_filename = $this['fmFiles']->safe_foldername($values['new_filename']);
+                                $new_filename = $this['files']->safe_foldername($values['new_filename']);
 
                                 // delete thumb folder & clear old folder cache
                                 if ($actualdir == parent::getParent()->getRootname()) {
@@ -103,14 +103,14 @@ class FMRename extends FileManager
                                     $this['tools']->clearFromCache(array('fmfiles', $actualdir . $values['orig_filename'] . '/'));
                                 }
 
-                                $thumb_path = $path . $values['orig_filename'] . '/' . $this['fmFiles']->createThumbFolder($thumb_folder);
+                                $thumb_path = $path . $values['orig_filename'] . '/' . $this['files']->createThumbFolder($thumb_folder);
                                 if (file_exists($thumb_path))
-                                    $this['fmFiles']->deleteFolder($thumb_path);
+                                    $this['files']->deleteFolder($thumb_path);
                         } else {
-                                $cache_file =  $this['fmFiles']->createThumbName($actualdir, $values['orig_filename']);
+                                $cache_file =  $this['files']->createThumbName($actualdir, $values['orig_filename']);
                                 if (file_exists($cache_file['path']))
                                     unlink($cache_file['path']);
-                                $new_filename = $this['fmFiles']->safe_filename($values['new_filename']);
+                                $new_filename = $this['files']->safe_filename($values['new_filename']);
                         }
 
                         if (rename($path . $values['orig_filename'], $path . $new_filename)) {

@@ -3,7 +3,7 @@
 use Nette\Caching\Cache;
 use Nette\Caching\Storages\FileStorage;
 
-class FMTreeview extends FileManager
+class Treeview extends FileManager
 {
     /** @var array */
     public $config;
@@ -21,7 +21,7 @@ class FMTreeview extends FileManager
     public function render()
     {
         $template = $this->template;
-        $template->setFile(__DIR__ . '/FMTreeview.latte');
+        $template->setFile(__DIR__ . '/Treeview.latte');
 
         // set language
         $lang_file = __DIR__ . '/../locale/FileManager.'. $this->config['lang'].'.mo';
@@ -74,7 +74,7 @@ class FMTreeview extends FileManager
    {
             $d = dir($dir);
             $x = array();
-            $files = new FMFiles;
+            $files = new Files;
 
             while (false !== ($r = $d->read())) {
 

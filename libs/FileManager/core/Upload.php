@@ -3,7 +3,7 @@
 use Nette\Environment;
 use Nette\Utils\Finder;
 
-class FMUpload extends FileManager
+class Upload extends FileManager
 {
     /** @var array */
     public $config;
@@ -14,9 +14,9 @@ class FMUpload extends FileManager
         
         // upload limit detection
         if ($this->config['upload_chunk'] == True) {
-                $post_max_size = $this['fmFiles']->bytes_from_string(ini_get('post_max_size'));
-                $upload_chunk_size = $this['fmFiles']->bytes_from_string($this->config['upload_chunk_size']);
-                $upload_max_filesize = $this['fmFiles']->bytes_from_string(ini_get('upload_max_filesize'));
+                $post_max_size = $this['files']->bytes_from_string(ini_get('post_max_size'));
+                $upload_chunk_size = $this['files']->bytes_from_string($this->config['upload_chunk_size']);
+                $upload_max_filesize = $this['files']->bytes_from_string(ini_get('upload_max_filesize'));
 
                 if ($post_max_size < $upload_chunk_size)
                     throw new Exception ("Upload chunk size option (" . $this->config['upload_chunk_size'] . ") is bigger than allowed POST_MAX_SIZE (" . ini_get('post_max_size') . ") in php.ini. Files can not be uploaded!");
@@ -77,7 +77,7 @@ class FMUpload extends FileManager
                                         $fileName = isset($_REQUEST["name"]) ? $_REQUEST["name"] : '';
 
                                         // Clean the fileName for security reasons
-                                        $fileName = $this['fmFiles']->safe_filename($fileName);
+                                        $fileName = $this['files']->safe_filename($fileName);
 
                                         // Make sure the fileName is unique but only if chunking is disabled
                                         if ($chunks < 2 && file_exists($targetDir . DIRECTORY_SEPARATOR . $fileName)) {
@@ -177,7 +177,7 @@ class FMUpload extends FileManager
     {
         $namespace = Environment::getSession('file-manager');
         $template = $this->template;
-        $template->setFile(__DIR__ . '/FMUpload.latte');
+        $template->setFile(__DIR__ . '/Upload.latte');
 
         // set language
         $lang_file = __DIR__ . '/../locale/FileManager.'. $this->config['lang'].'.mo';

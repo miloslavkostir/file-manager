@@ -4,7 +4,7 @@ use Nette\Caching\Cache;
 use Nette\Caching\Storages\FileStorage;
 use Nette\Utils\Finder;
 
-class FMTools extends FileManager
+class Tools extends FileManager
 {
     /** @var array */
     public $config;

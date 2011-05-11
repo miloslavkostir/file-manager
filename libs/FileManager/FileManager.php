@@ -35,7 +35,7 @@ class FileManager extends Control
         'upload_filter' => False,
         'upload_chunk' => False,
         'upload_chunk_size' => '1mb',
-        'plugins' => array('fmPlayer'),
+        'plugins' => array('player'),
         'lang' => 'en'
     );
 
@@ -184,7 +184,7 @@ class FileManager extends Control
     public function render()
     {
         $template = $this->template;
-        $template->setFile(__DIR__ . '/FMTemplate.latte');
+        $template->setFile(__DIR__ . '/FileManager.latte');
 
         if(!@is_dir($this->config['uploadroot'] . $this->config['uploadpath']))
              throw new Exception ("Upload dir ".$this->config['uploadpath']." doesn't exist! Application can not be loaded!");
@@ -251,20 +251,20 @@ class FileManager extends Control
 
     public function createComponentTools()
     {
-        $tools = new FMTools;
+        $tools = new Tools;
         $tools->config = $this->config;
         return $tools;
     }
 
-    public function createComponentFmPlayer()
+    public function createComponentPlayer()
     {
-        $player = new FMPlayer;
+        $player = new Player;
         return $player;
     }
 
-    public function createComponentFmFiles()
+    public function createComponentFiles()
     {
-        $f = new FMFiles;
+        $f = new Files;
         $f->config = $this->config;
         $f->thumb = $this->thumb;
         return $f;
@@ -272,77 +272,77 @@ class FileManager extends Control
 
     public function createComponentNavigation()
     {
-        $nav = new FMNavigation;
+        $nav = new Navigation;
         $nav->config = $this->config;
         return $nav;
     }
 
     public function createComponentUpload()
     {
-        $up = new FMUpload;
+        $up = new Upload;
         $up->config = $this->config;
         return $up;
     }
 
     public function createComponentNewFolder()
     {
-        $nf = new FMNewFolder;
+        $nf = new NewFolder;
         $nf->config = $this->config;
         return $nf;
     }
 
     public function createComponentRename()
     {
-        $r = new FMRename;
+        $r = new Rename;
         $r->config = $this->config;
         return $r;
     }
 
     public function createComponentContent()
     {
-        $c = new FMContent;
+        $c = new Content;
         $c->config = $this->config;
         return $c;
     }
 
     public function createComponentFileInfo()
     {
-        $fi = new FMFileInfo;
+        $fi = new FileInfo;
         $fi->config = $this->config;
         return $fi;
     }
 
     public function createComponentDiskUsage()
     {
-        $du = new FMDiskUsage;
+        $du = new DiskUsage;
         $du->config = $this->config;
         return $du;
     }
 
     public function createComponentTreeview()
     {
-        $t = new FMTreeview;
+        $t = new Treeview;
         $t->config = $this->config;
         return $t;
     }
 
     public function createComponentClipboard()
     {
-        $c = new FMClipboard;
+        $c = new Clipboard;
         $c->config = $this->config;
         return $c;
     }
 
     public function createComponentFilter()
     {
-        $f = new FMFilter;
+        $f = new Filter;
         $f->config = $this->config;
         return $f;
     }
 
     public function createComponentViewSelector()
     {
-        $sv = new FMViewSelector;
+        $sv = new ViewSelector;
         $sv->config = $this->config;
         return $sv;
     }

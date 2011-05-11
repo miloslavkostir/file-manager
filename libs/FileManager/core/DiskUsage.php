@@ -1,14 +1,9 @@
 <?php
 
-use Nette\Environment;
-
-class FMFileInfo extends FileManager
+class DiskUsage extends FileManager
 {
     /** @var array */
     public $config;
-
-    /** @var string */
-    public $filename;
 
     public function __construct()
     {
@@ -17,11 +12,8 @@ class FMFileInfo extends FileManager
 
     public function render()
     {
-        $namespace = Environment::getSession('file-manager');
-        $actualdir = $namespace->actualdir;
-
         $template = $this->template;
-        $template->setFile(__DIR__ . '/FMFileInfo.latte');
+        $template->setFile(__DIR__ . '/DiskUsage.latte');
 
         // set language
         $lang_file = __DIR__ . '/../locale/FileManager.'. $this->config['lang'].'.mo';
@@ -30,10 +22,7 @@ class FMFileInfo extends FileManager
         else
              throw new Exception ("Language file " . $lang_file . " doesn't exist! Application can not be loaded!");
 
-
-        $template->fileinfo = $this['fmFiles']->fileDetails($actualdir, $this->filename);
-        $template->config = $this->config;
-        $template->actualdir = $actualdir;
+        $template->sizeinfo = $this['tools']->diskSizeInfo();
 
         $template->render();
     }

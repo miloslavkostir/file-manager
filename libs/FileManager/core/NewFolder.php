@@ -3,7 +3,7 @@
 use Nette\Application\UI\Form;
 use Nette\Environment;
 
-class FMNewFolder extends FileManager
+class NewFolder extends FileManager
 {
     /** @var array */
     public $config;
@@ -19,7 +19,7 @@ class FMNewFolder extends FileManager
         $actualdir = $namespace->actualdir;
         $template = $this->template;
         
-        $template->setFile(__DIR__ . '/FMNewFolder.latte');
+        $template->setFile(__DIR__ . '/NewFolder.latte');
 
         // set language
         $lang_file = __DIR__ . '/../locale/FileManager.'. $this->config['lang'].'.mo';
@@ -67,7 +67,7 @@ class FMNewFolder extends FileManager
 
                             if ($this['tools']->validPath($values['actualdir'])) {
 
-                                        $foldername = $this['fmFiles']->safe_foldername($values['foldername']);
+                                        $foldername = $this['files']->safe_foldername($values['foldername']);
 
                                         if ($values['actualdir'] == parent::getParent()->getRootname()) {
                                             $target_dir = $this->config['uploadroot'] . $this->config['uploadpath'] . $foldername;

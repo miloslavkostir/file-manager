@@ -4,7 +4,7 @@ use Nette\Application\Responses\FileResponse;
 use Nette\Utils\Finder;
 use Nette\Http\Url;
 
-class FMPlayer extends FileManager
+class Player extends FileManager
 {
     const NAME = "File Manager Player";
 
@@ -41,7 +41,7 @@ class FMPlayer extends FileManager
     public function render()
     {
         $template = $this->template;
-        $template->setFile(__DIR__ . '/FMPlayer.latte');
+        $template->setFile(__DIR__ . '/Player.latte');
         
         $template->actualdir = $this->actualdir;
         $template->files = $this->getFiles($this->actualdir);

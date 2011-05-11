@@ -3,7 +3,7 @@
 use Nette\Environment;
 use Nette\Utils\Finder;
 
-class FMClipboard extends FileManager
+class Clipboard extends FileManager
 {
     /** @var array */
     public $config;
@@ -46,7 +46,7 @@ class FMClipboard extends FileManager
 
                                             if ($val['action'] == 'copy') {
 
-                                                            if ($this['fmFiles']->copy($val['actualdir'], $actualdir, $val['filename']))
+                                                            if ($this['files']->copy($val['actualdir'], $actualdir, $val['filename']))
                                                                     parent::getParent()->flashMessage(
                                                                             $translator->translate("Succesfully copied."),
                                                                             'info'
@@ -59,7 +59,7 @@ class FMClipboard extends FileManager
                                                             
                                             } elseif ($val['action'] == 'cut') {
 
-                                                            if ($this['fmFiles']->move($val['actualdir'], $actualdir, $val['filename']))
+                                                            if ($this['files']->move($val['actualdir'], $actualdir, $val['filename']))
                                                                     parent::getParent()->flashMessage(
                                                                             $translator->translate("Succesfully moved."),
                                                                             'info'
@@ -90,7 +90,7 @@ class FMClipboard extends FileManager
     public function render()
     {
         $template = $this->template;
-        $template->setFile(__DIR__ . '/FMClipboard.latte');
+        $template->setFile(__DIR__ . '/Clipboard.latte');
 
         // set language
         $lang_file = __DIR__ . '/../../locale/FileManager.'. $this->config['lang'].'.mo';

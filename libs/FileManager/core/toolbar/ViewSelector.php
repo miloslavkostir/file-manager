@@ -3,7 +3,7 @@
 use Nette\Environment;
 use Nette\Application\UI\Form;
 
-class FMViewSelector extends FileManager
+class ViewSelector extends FileManager
 {
     /** @var array */
     public $config;
@@ -19,7 +19,7 @@ class FMViewSelector extends FileManager
         $actualdir = $namespace->actualdir;
         $template = $this->template;
         
-        $template->setFile(__DIR__ . '/FMViewSelector.latte');
+        $template->setFile(__DIR__ . '/ViewSelector.latte');
 
         // set language
         $lang_file = __DIR__ . '/../../locale/FileManager.'. $this->config['lang'].'.mo';

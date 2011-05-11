@@ -3,7 +3,7 @@
 use Nette\Application\UI\Form;
 use Nette\Environment;
 
-class FMFilter extends FileManager
+class Filter extends FileManager
 {
     /** @var array */
     public $config;
@@ -19,7 +19,7 @@ class FMFilter extends FileManager
         $actualdir = $namespace->actualdir;
 
         $template = $this->template;
-        $template->setFile(__DIR__ . '/FMFilter.latte');
+        $template->setFile(__DIR__ . '/Filter.latte');
 
         // set language
         $lang_file = __DIR__ . '/../../locale/FileManager.'. $this->config['lang'].'.mo';
