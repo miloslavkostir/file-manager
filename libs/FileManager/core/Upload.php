@@ -1,6 +1,9 @@
 <?php
 
+use Nette\Application\Responses\JsonResponse;
+use Nette\Application\UI\Presenter;
 use Nette\Environment;
+use Nette\Http\Response;
 use Nette\Utils\Finder;
 
 class Upload extends FileManager
@@ -28,17 +31,26 @@ class Upload extends FileManager
     public function handleUpload($actualdir)
     {
 	// HTTP headers for no cache etc
-	header("Expires: Mon, 26 Jul 1997 05:00:00 GMT");
-	header("Last-Modified: " . gmdate("D, d M Y H:i:s") . " GMT");
-	header("Cache-Control: no-store, no-cache, must-revalidate");
-	header("Cache-Control: post-check=0, pre-check=0", false);
-	header("Pragma: no-cache");
+	$httpResponse = new Response;
+        $httpResponse->setHeader('Expires', 'Mon, 26 Jul 1997 05:00:00 GMT');
+        $httpResponse->setHeader('Last-Modified', gmdate('D, d M Y H:i:s') . ' GMT');
+        $httpResponse->setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, post-check=0, pre-check=0');
+        $httpResponse->setHeader('Pragma', 'no-cache');
 
         $translator = new GettextTranslator(__DIR__ . '/../locale/FileManager.' . $this->config["lang"] . '.mo');
 
-        if ($this->config['readonly'] == True)
-            die('{"jsonrpc" : "2.0", "result" : "' . $translator->translate("File manager is in read-only mode! Files can not be uploaded") . '", "type" : "warning"}');
-        else {
+        $response = array(
+            'jsonrpc' => '2.0',
+            'result' => '',
+            'id' => 'id',
+            'type' => ''
+        );
+        
+        if ($this->config['readonly'] == True) {
+            $response['result'] = $translator->translate('File manager is in read-only mode! Files can not be uploaded!');
+            $response['type'] = 'warning';
+            $this->presenter->sendResponse(new JsonResponse($response));             
+        } else {
 
                     $size = 0;
                     $filesize = filesize($_FILES["file"]["tmp_name"]);
@@ -52,9 +64,11 @@ class Upload extends FileManager
                     else
                         $freespace = disk_free_space($this->config['uploadroot'] . $this->config['uploadpath']);
 
-                    if ( $freespace < $filesize )
-                            die('{"jsonrpc" : "2.0", "result" : "' . $translator->translate("Disk full! File was not uploaded completely!").'", "type" : "error"}');
-                    else {
+                    if ( $freespace < $filesize ) {
+                            $response['result'] = $translator->translate('Disk full! File was not uploaded completely!');
+                            $response['type'] = 'error';
+                            $this->presenter->sendResponse(new JsonResponse($response));                            
+                    } else {
                             $this['tools']->clearFromCache(array('fmfiles', $actualdir));
 
                             $targetDir = parent::getParent()->getAbsolutePath($actualdir);
@@ -66,7 +80,7 @@ class Upload extends FileManager
                                         $maxFileAge = 60 * 60; // Temp file age in seconds
 
                                         // 5 minutes execution time
-                                        @set_time_limit(5 * 60);
+                                        set_time_limit(5 * 60);
 
                                         // Uncomment this one to fake upload time
                                         // usleep(5000);
@@ -99,12 +113,15 @@ class Upload extends FileManager
 
                                                         // Remove temp files if they are older than the max age
                                                         if (preg_match('/\\.tmp$/', $file) && (filemtime($filePath) < time() - $maxFileAge))
-                                                                @unlink($filePath);
+                                                                unlink($filePath);
                                                 }
 
                                                 closedir($dir);
-                                        } else
-                                                die('{"jsonrpc" : "2.0", "result" : "' . $translator->translate("Failed to open temp directory") . '", "id" : "id", "type" : "error"}');
+                                        } else {
+                                                $response['result'] = $translator->translate('Failed to open temp directory!');
+                                                $response['type'] = 'error';
+                                                $this->presenter->sendResponse(new JsonResponse($response));
+                                        }
 
                                         // Look for the content type header
                                         if (isset($_SERVER["HTTP_CONTENT_TYPE"]))
@@ -125,16 +142,25 @@ class Upload extends FileManager
                                                                 if ($in) {
                                                                         while ($buff = fread($in, 4096))
                                                                                 fwrite($out, $buff);
-                                                                } else
-                                                                    die('{"jsonrpc" : "2.0", "result" : "' . $translator->translate("Failed to open input stream") . '", "id" : "id", "type" : "error"}');
+                                                                } else {
+                                                                        $response['result'] = $translator->translate('Failed to open output stream!');
+                                                                        $response['type'] = 'error';
+                                                                        $this->presenter->sendResponse(new JsonResponse($response));
+                                                                }
 
                                                                 fclose($out);
                                                                 fclose($in);
-                                                                @unlink($_FILES['file']['tmp_name']);
-                                                        } else
-                                                                die('{"jsonrpc" : "2.0", "result" : "' . $translator->translate("Failed to open output stream.") . '", "id" : "id", "type" : "error"}');
-                                                } else
-                                                        die('{"jsonrpc" : "2.0", "result" : "' . $translator->translate("Failed to move uploaded file") . '", "id" : "id", "type" : "error"}');
+                                                                unlink($_FILES['file']['tmp_name']);
+                                                        } else {
+                                                                $response['result'] = $translator->translate('Failed to open output stream!');
+                                                                $response['type'] = 'error';
+                                                                $this->presenter->sendResponse(new JsonResponse($response));
+                                                        }
+                                                } else {
+                                                        $response['result'] = $translator->translate('Failed to move uploaded file!');
+                                                        $response['type'] = 'error';
+                                                        $this->presenter->sendResponse(new JsonResponse($response));
+                                                }
                                         } else {
                                                 // Open temp file
                                                 $out = fopen($targetDir . DIRECTORY_SEPARATOR . $fileName, $chunk == 0 ? "wb" : "ab");
@@ -145,19 +171,29 @@ class Upload extends FileManager
                                                         if ($in) {
                                                                 while ($buff = fread($in, 4096))
                                                                         fwrite($out, $buff);
-                                                        } else
-                                                                die('{"jsonrpc" : "2.0", "result" : "' . $translator->translate("Failed to open input stream") . '", "id" : "id", "type" : "error"}');
+                                                        } else {
+                                                                $response['result'] = $translator->translate('Failed to open input stream!');
+                                                                $response['type'] = 'error';
+                                                                $this->presenter->sendResponse(new JsonResponse($response));
+                                                        }
 
                                                         fclose($out);
                                                         fclose($in);
-                                                } else
-                                                        die('{"jsonrpc" : "2.0", "result" : "' . $translator->translate("Failed to open output stream") . '", "id" : "id", "type" : "error"}');
+                                                } else {
+                                                        $response['result'] = $translator->translate('Failed to open output stream!');
+                                                        $response['type'] = 'error';
+                                                        $this->presenter->sendResponse(new JsonResponse($response));
+                                                }
                                         }
 
-                                        // Return JSON-RPC response
-                                        die('{"jsonrpc" : "2.0", "result" : "' . $translator->translate("Successfuly uploaded") . '", "id" : "id", "type" : "info"}');
-                            } else
-                                die('{"jsonrpc" : "2.0", "result" : "' . $translator->translate("Target directory is not available") . '", "id" : "id", "type" : "error"}');
+                                        $response['result'] = $translator->translate('Successfuly uploaded.');
+                                        $response['type'] = 'info';
+                                        $this->presenter->sendResponse(new JsonResponse($response));
+                            } else {
+                                        $response['result'] = $translator->translate('Target directory is not available!');
+                                        $response['type'] = 'error';
+                                        $this->presenter->sendResponse(new JsonResponse($response));
+                            }
 
                     }
 
@@ -171,6 +207,7 @@ class Upload extends FileManager
         $type = $request->getQuery('type');
         $text = $request->getQuery('message');
         parent::getParent()->flashMessage($text, $type);
+        parent::getParent()->refreshSnippets(array('message'));
     }
 
     public function render()
