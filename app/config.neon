@@ -12,8 +12,8 @@ common:
 		# default_charset: "UTF-8"
 
 	service:
-		Nette\Security\IAuthenticator: UsersModel
-		Nette\Loaders\RobotLoader:
+		authenticator: UsersModel
+		robotLoader:
 			option:
 				directory: [%appDir%, %libsDir%]
 			run: true
