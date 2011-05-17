@@ -14,10 +14,10 @@
 
     <thead>
         <tr>
-            <th>{_'Name'}</th>
-            <th>{_'Date Modified'}</th>
-            <th>{_'Type'}</th>
-            <th>{_'Size'}</th>
+            <th><a href="{link orderBy!, 'name'}" class="fm-ajax">{_'Name'}</a></th>
+            <th><a href="{link orderBy!, 'time'}" class="fm-ajax">{_'Date Modified'}</a></th>
+            <th><a href="{link orderBy!, 'type'}" class="fm-ajax">{_'Type'}</a></th>
+            <th><a href="{link orderBy!, 'size'}" class="fm-ajax">{_'Size'}</a></th>
         </tr>
     </thead>
     <tbody>
@@ -185,6 +185,7 @@
 
             $("#fm-files-details").selectable({
                 filter: "tr",
+                cancel: 'th',
                 selecting: function(event, ui) {
                     var tag = $(ui.selecting).parent().get(0).tagName.toLowerCase();
                     // exclude header

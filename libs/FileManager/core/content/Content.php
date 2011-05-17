@@ -229,8 +229,19 @@ class Content extends FileManager
                         
                         $this->handleShowContent($actualdir);
         }
-    }    
+    }
     
+    public function handleOrderBy($key)
+    {
+        $namespace = Environment::getSession('file-manager');
+        $namespace->order = $key;
+        $actualdir = $namespace->actualdir;
+
+        $this['tools']->clearFromCache(array('fmfiles', $actualdir));
+
+        parent::getParent()->handleShowContent($actualdir);
+    }
+
     public function handleDownloadFile($filename = "")
     {
         $namespace = Environment::getSession('file-manager');
@@ -349,14 +360,15 @@ class Content extends FileManager
         
         $view = $namespace->view;
         $mask = $namespace->mask;
-        
+        $order = $namespace->order;
+
         if (!empty($view)) {
             $c_template = __DIR__ . '/' . $view . '.latte';
             if (file_exists($c_template))
                 $template->setFile($c_template);
             else {
                 $template->setFile(__DIR__ . '/large.latte');
-                parent::getParent()->flashMEssage(
+                parent::getParent()->flashMessage(
                             $translator->translate('Unknown view selected.'),
                             'warning'
                         );
@@ -379,15 +391,15 @@ class Content extends FileManager
         $storage = new FileStorage($cache_dir);
         $cache = new Cache($storage);
 
-        if ($mask == "") {
+        if (empty($mask)) {
                     if (isset($cache[array('fmfiles', $actualdir)]))
                         $output = $cache[array('fmfiles', $actualdir)];
                     else {
-                        $output = $this->getDirectoryContent($actualdir, '*', $view);
+                        $output = $this->getDirectoryContent($actualdir, '*', $view, $order);
                         $cache->save(array('fmfiles', $actualdir), $output);
                     }
         } else
-                    $output = $this->getDirectoryContent($actualdir, $mask, $view);
+                    $output = $this->getDirectoryContent($actualdir, $mask, $view, $order);
 
         $template->files = $output;
         $template->config = $this->config;
@@ -398,8 +410,17 @@ class Content extends FileManager
         $template->render();
     }
 
-    // TODO Nette Finder does not support mask for folders
-    function getDirectoryContent($actualdir, $mask, $view)
+    /**
+     * Load directory content
+     * TODO Nette Finder does not support mask for folders
+     * 
+     * @param string $actualdir
+     * @param string $mask
+     * @param string $view
+     * @param string $order (optional)
+     * @return array
+     */
+    function getDirectoryContent($actualdir, $mask, $view, $order = 'type')
     {
         $thumb_dir = $this->config['resource_dir'] . 'img/icons/' . $view . '/';
 
@@ -419,14 +440,14 @@ class Content extends FileManager
         $files = SortedFinder::find($mask)
                     ->in($absolutePath)
                     ->exclude(parent::getParent()->thumb . '*')
-                    ->orderByType();
+                    ->orderBy($order);
 
         foreach( $files as $file ) {
 
                     $name = $file->getFilename();
                     $dir_array[ $name ]['filename'] =  $name;
                     $dir_array[ $name ]['actualdir'] =  $actualdir;
-                    $dir_array[ $name ]['modified'] =  $file->getMTime();                    
+                    $dir_array[ $name ]['modified'] =  $file->getMTime();
 
                     if ( !is_dir($file->getPath() . '/' . $name)  ) {
 
@@ -451,6 +472,7 @@ class Content extends FileManager
                             $dir_array[ $name ]['create_thumb'] =  False;
                     }
         }
+
         return $dir_array;
     }
 }

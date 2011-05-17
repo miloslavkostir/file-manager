@@ -25,34 +25,37 @@ class SortedFinder extends Finder
         return $this;
     }
 
-
-    public function orderByName()
+    public function orderBy($key)
     {
-        $this->order = function($f1, $f2) {
-            return \strcasecmp($f1->getFilename(), $f2->getFilename());
-        };
+        switch ($key) {
+            case 'name':
+                $this->order = function($f1, $f2) {
+                    return \strcasecmp($f1->getFilename(), $f2->getFilename());
+                };
+                break;
+            case 'type':
+                $this->order = function($f1, $f2) {
+                    return \strcasecmp(
+                            pathinfo($f1->getPathName(), PATHINFO_EXTENSION),
+                            pathinfo($f2->getPathName(), PATHINFO_EXTENSION));
+                };
+                break;
+            case 'time':
+                $this->order = function($f1, $f2) {
+                    return $f2->getMTime() - $f1->getMTime();
+                };
+                break;
+            case 'size':
+                $this->order = function($f1, $f2) {
+                    return $f2->getSize() - $f1->getSize();
+                };
+                break;
+            default:
+                throw new InvalidArgumentException('Unknown expression, allowed are NAME, TYPE, TIME, SIZE');
+        }
+
         return $this;
     }
-
-    public function orderByType()
-    {
-        $this->order = function($f1, $f2) {
-            return \strcasecmp(
-                    pathinfo($f1->getPathName(), PATHINFO_EXTENSION),
-                    pathinfo($f2->getPathName(), PATHINFO_EXTENSION));
-        };
-        return $this;
-    }
-
-
-    public function orderByMTime()
-    {
-        $this->order = function($f1, $f2) {
-            return $f2->getMTime() - $f2->getMTime();
-        };
-        return $this;
-    }
-
 
     /**
      * Returns iterator.
