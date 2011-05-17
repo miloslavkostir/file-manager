@@ -11,7 +11,7 @@ common:
 		# zlib.output_compression: yes
 		# default_charset: "UTF-8"
 
-	service:
+	services:
 		authenticator: UsersModel
 		robotLoader:
 			option:
