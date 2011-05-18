@@ -361,6 +361,9 @@ class Content extends FileManager
         $view = $namespace->view;
         $mask = $namespace->mask;
         $order = $namespace->order;
+        
+        if (empty($order))
+            $order = 'type';
 
         if (!empty($view)) {
             $c_template = __DIR__ . '/' . $view . '.latte';
@@ -417,10 +420,10 @@ class Content extends FileManager
      * @param string $actualdir
      * @param string $mask
      * @param string $view
-     * @param string $order (optional)
+     * @param string $order
      * @return array
      */
-    function getDirectoryContent($actualdir, $mask, $view, $order = 'type')
+    function getDirectoryContent($actualdir, $mask, $view, $order)
     {
         $thumb_dir = $this->config['resource_dir'] . 'img/icons/' . $view . '/';
 
