@@ -147,6 +147,50 @@
             theme: 'vista',
             constrainToScreen: true            
         });
+        
+        $('#fm-files-list').contextMenu(function() {
+
+            var o1 = {},
+                o2 = {},
+                o3 = {},
+                o4 = {},
+                o5 = {},
+                o6 = {};
+
+            o1[{_'Select all'}] = function(menuItem, menuObject) {
+                $("#fm-small-images").markAll("li", "selected");
+            }
+
+            o2[{_'Sort by name'}] = function(menuItem, menuObject, e) {
+                    $.getJSON({link orderBy!, 'name'});
+                    $.animateProgress(".file-manager", e);
+            }
+
+            o3[{_'Sort by size'}] = function(menuItem, menuObject, e) {
+                    $.getJSON({link orderBy!, 'size'});
+                    $.animateProgress(".file-manager", e);
+            }
+
+            o3[{_'Sort by time'}] = function(menuItem, menuObject, e) {
+                    $.getJSON({link orderBy!, 'time'});
+                    $.animateProgress(".file-manager", e);
+            }
+
+            o5[{_'Sort by type'}] = function(menuItem, menuObject, e) {
+                    $.getJSON({link orderBy!, 'type'});
+                    $.animateProgress(".file-manager", e);
+            }
+
+            o6[{_'New folder'}] = function(menuItem, menuObject, e) {
+                    $.getJSON({link showAddNewFolder!});
+                    $.animateProgress(".file-manager", e)
+            }
+
+            return [o1, o2, o3, o4, o5, o6];
+        }, {
+            theme: 'vista',
+            constrainToScreen: true
+        });
 
         $("#fm-small-images").shiftClick("li", "selected");
 
