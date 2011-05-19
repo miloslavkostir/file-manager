@@ -242,12 +242,6 @@ class FileManager extends Control
         return $tools;
     }
 
-    public function createComponentPlayer()
-    {
-        $player = new Player;
-        return $player;
-    }
-
     public function createComponentFiles()
     {
         $f = new Files;
