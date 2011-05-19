@@ -200,8 +200,6 @@ class FileManager extends Control
 
         $namespace = Environment::getSession('file-manager');
         
-        $template->fmversion = self::VERSION;
-        $template->fmdate = self::DATE;
         $template->config = $this->config;
         $template->rootname = $this->getRootname();
         $template->clipboard = $namespace->clipboard;
