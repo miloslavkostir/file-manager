@@ -35,7 +35,6 @@ class FileManager extends Control
         'upload_filter' => False,
         'upload_chunk' => False,
         'upload_chunk_size' => '1mb',
-        'plugins' => array('player'),
         'lang' => 'en'
     );
 
@@ -46,13 +45,6 @@ class FileManager extends Control
         $this->thumb = "__system_thumb";
     }
     
-    public function handleRunPlugin($plugin, $actualdir)
-    {
-        $this->template->plugin = $plugin;
-        $this[$plugin]->actualdir = $actualdir;
-        $this->invalidateControl('plugin');
-    }
-
     public function handleShowRename($filename)
     {
         $namespace = Environment::getSession('file-manager');
@@ -136,7 +128,6 @@ class FileManager extends Control
     {       
         if ($this['tools']->validPath($actualdir)) {
                 $this->template->content = $actualdir;
-                $this->template->plugins = $this->config['plugins'];
                 $this->template->actualdir = $actualdir;
 
                 // set actualdir
@@ -153,7 +144,6 @@ class FileManager extends Control
                         'upload',
                         'fileinfo',
                         'rename',
-                        'plugin',
                         'filter',
                         'clipboard',
                         'refreshButton'

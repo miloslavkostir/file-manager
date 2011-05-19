@@ -80,22 +80,6 @@ $(document).ready(function() {
 
 
 <div class="file-manager">
-    {snippet plugin}
-        <div n:ifset="$plugin" id="fm-plugin">
-            <script type="text/javascript">
-            $(document).ready(function() {
-                $('#fm-plugin').dialog({
-                    title: {$plugin},
-                    width: 'auto',
-                    height: 'auto'
-                });
-            });
-            </script>
-
-            {control $plugin}
-        </div>
-    {/snippet}
-
                 
     <div class="fm-adressbar">
         <ul>
@@ -147,14 +131,6 @@ $(document).ready(function() {
                 {/ifset}
             {/snippet}
             </li>
-
-            {ifset $plugins}
-            <li n:foreach="$plugins as $plug">
-                <a href="{link runPlugin!, $plug, $actualdir}" title="{_'Run'} {$plug}" class="fm-ajax">
-                    <span>{$plug}</span>
-                </a>
-            </li>
-            {/ifset}
 
             <li style="float: right;">
                 {control viewSelector}
