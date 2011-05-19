@@ -17,7 +17,7 @@
         <div class="fm-delimiter">
 
             <div id="fm-clipboard-clear">
-                <a href="{link clearClipboard!, $actualdir}" title="{_'Delete all items from clipboard'}" class="fm-ajax">
+                <a href="{link clearClipboard!}" title="{_'Delete all items from clipboard'}" class="fm-ajax">
                     {_'Clear all'}
                 </a>
             </div>
@@ -55,12 +55,12 @@ $(document).ready(function() {
     {_'Clipboard'} ({? echo count($clipboard); })
 </span>
 </a>
-<a href="{link clearClipboard!, $actualdir}" title="{_'Delete all items from clipboard'}" class="fm-ajax">
+<a href="{link clearClipboard!}" title="{_'Delete all items from clipboard'}" class="fm-ajax">
     <span>
         {_'Clear clipboard'}
     </span>
 </a>
-<a n:ifset="$actualdir" href="{link pasteFromClipboard!, $actualdir}" title="{_'Paste from clipboard'}" class="fm-ajax">
+<a n:ifset="$actualdir" href="{link pasteFromClipboard!}" title="{_'Paste from clipboard'}" class="fm-ajax">
     <span>
         {_'Paste'}
     </span>

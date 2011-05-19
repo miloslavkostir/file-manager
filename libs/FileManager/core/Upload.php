@@ -28,7 +28,7 @@ class Upload extends FileManager
         }
     }
    
-    public function handleUpload($actualdir)
+    public function handleUpload()
     {
 	// HTTP headers for no cache etc
 	$httpResponse = new Response;
@@ -36,6 +36,9 @@ class Upload extends FileManager
         $httpResponse->setHeader('Last-Modified', gmdate('D, d M Y H:i:s') . ' GMT');
         $httpResponse->setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, post-check=0, pre-check=0');
         $httpResponse->setHeader('Pragma', 'no-cache');
+
+        $namespace = Environment::getSession('file-manager');
+        $actualdir = $namespace->actualdir;
 
         $translator = new GettextTranslator(__DIR__ . '/../locale/FileManager.' . $this->config["lang"] . '.mo');
 

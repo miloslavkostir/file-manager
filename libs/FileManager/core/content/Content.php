@@ -264,8 +264,10 @@ class Content extends FileManager
         }
     }
 
-    public function handleGoToParent($actualdir)
+    public function handleGoToParent()
     {
+        $namespace = Environment::getSession('file-manager');
+        $actualdir = $namespace->actualdir;        
         $parent = dirname($actualdir);
 
         if ($parent == '\\' || $parent == '.')

@@ -19,17 +19,19 @@ class Clipboard extends FileManager
         unset($namespace->clipboard);
     }
 
-    public function handleClearClipboard($dir)
+    public function handleClearClipboard()
     {
+        $namespace = Environment::getSession('file-manager');        
         $this->clearClipboard();
-        parent::getParent()->handleShowContent($dir);
+        parent::getParent()->handleShowContent($namespace->actualdir);
     }
 
-    public function handlePasteFromClipboard($actualdir)
+    public function handlePasteFromClipboard()
     {
         $translator = new GettextTranslator(__DIR__ . '/../../locale/FileManager.' . $this->config["lang"] . '.mo');
         $namespace = Environment::getSession('file-manager');
-
+        $actualdir = $namespace->actualdir;
+        
         if ($this['tools']->validPath($actualdir)) {
                     if ($this->config['readonly'] == True)
                                     parent::getParent()->flashMessage(
@@ -82,7 +84,7 @@ class Clipboard extends FileManager
                                     $this['tools']->clearFromCache(array('fmfiles', $actualdir));
                                     $this['tools']->clearFromCache('fmtreeview');
 
-                                    $this->handleClearClipboard($actualdir);
+                                    $this->handleClearClipboard();
                     }
         }
     }

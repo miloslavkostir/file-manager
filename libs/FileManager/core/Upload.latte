@@ -10,7 +10,7 @@ $(document).ready(function() {
         $("div#fm-uploader").plupload({
                 // General settings
                 runtimes : 'silverlight,flash,html5,gears,browserplus,html4',
-                url : {link upload!, $actualdir},
+                url : {link upload!},
                 max_file_size : {$config['max_upload']},
 
                 {if $config['upload_chunk'] == 1}
@@ -81,7 +81,7 @@ $(document).ready(function() {
 });
 </script>
 
-<form method="post" action="{link upload!, $actualdir}" id="fm-upload-form">
+<form method="post" action="{link upload!}" id="fm-upload-form">
 <div id="fm-uploader">
         <p>{_"You browser doesn't have Flash, Silverlight, Gears, BrowserPlus or HTML5 support"}.</p>
 </div>

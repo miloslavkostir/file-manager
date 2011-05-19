@@ -16,7 +16,6 @@ class ViewSelector extends FileManager
     public function render()
     {
         $namespace = Environment::getSession('file-manager');
-        $actualdir = $namespace->actualdir;
         $template = $this->template;
         
         $template->setFile(__DIR__ . '/ViewSelector.latte');
@@ -28,7 +27,7 @@ class ViewSelector extends FileManager
         else
              throw new Exception ("Language file " . $lang_file . " doesn't exist! Application can not be loaded!");
 
-        $template->actualdir = $actualdir;
+        $template->actualdir = $namespace->actualdir;
         $template->changeViewForm = $this['changeViewForm'];
 
         $this['changeViewForm']->setDefaults(array(
