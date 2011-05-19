@@ -91,7 +91,7 @@ $(document).ready(function() {
             
             <li class="fm-refresh">
                 {snippet refreshButton}
-                    <a n:ifset="$actualdir" href="{link refreshContent!}" title="{_'Refresh content'}" class="fm-ajax">
+                    <a href="{link refreshContent!}" title="{_'Refresh content'}" class="fm-ajax">
                         <div class="fm-refresh-icon"></div>
                     </a>
                 {/snippet}
@@ -111,7 +111,7 @@ $(document).ready(function() {
     <div class="fm-toolbar">
         {snippet toolbar}
         <ul class="fm-toolbar">
-        {ifset $actualdir}
+
             <li>
                 <a href="{link showAddNewFolder!}" title="{_'Create new folder'}" class="fm-ajax">
                     <span>{_'New folder'}</span>
@@ -135,7 +135,7 @@ $(document).ready(function() {
             <li style="float: right;">
                 {control viewSelector}
             </li>
-        {/ifset}
+
         </ul>
         {/snippet}
     </div>
