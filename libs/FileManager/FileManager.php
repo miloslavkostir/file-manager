@@ -10,8 +10,6 @@ class FileManager extends Control
 
     const VERSION = '0.5 dev';
     
-    const DATE = '30.4.2011';
-
     /** @var string */
     protected $cache_path;
 
