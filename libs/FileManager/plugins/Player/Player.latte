@@ -1,0 +1,64 @@
+<script type="text/javascript">
+$(document).ready(function(){
+
+    $("a.fmplayer-ajax").live("click", function (event) {        
+        event.preventDefault();
+        $.get(this.href);
+        $('<div id="fm-ajax-spinner"></div>').css({
+                position: "absolute",
+                left: event.pageX + 20,
+                top: event.pageY + 40
+
+            }).ajaxStop(function() {
+                    $(this).remove();
+
+            }).appendTo("body");
+        return false;
+    });
+
+    $( ".fmp-player" ).dialog({
+        width: 'auto'
+    });
+});
+</script>
+
+<style type="text/css">
+    .fmp-player { width: 650px; height: 350px; background: #000000; color: #ffffff; }
+    .fmp-playlist { width: 240px; height: 100%; float: right; border-left: 1px solid #ffffff; background: #000000; overflow: auto; white-space: nowrap; }
+    .fmp-playlist ul { list-style-type: none; font-family: 'Segoe UI', 'MS Sans Serif', sans-serif; font-size: 12px; padding: 10px; }
+    .fmp-playlist ul a { color: #ffffff; }
+    .fmp-playlist ul a:hover { text-decoration: underline; }
+    .fmp-playlist li { margin: 3px 0 3px 0; }
+    #snippet-fileManager-fmPlayer-fmplayer { float: left; width: 400px; background: #000000; height: 100%; }
+    a.fmplayer-ajax { text-decoration: none; }
+</style>
+
+<div class="fmp-player">
+
+    {snippet player}
+    {ifset $file_media}
+        <object>
+          <embed type="application/x-mplayer2"
+            pluginspage="http://www.microsoft.com/Windows/MediaPlayer/"
+            name="VideoPlayer" ShowStatusBar="true"
+            EnableContextMenu="true" autostart="true"
+            width="400" height="285" loop="false"
+            src="{link getFile!, $file_media, $playdir}" />
+        </object>
+    {/ifset}
+    {/snippet}
+
+    <div class="fmp-playlist">
+    <ul>
+    {foreach $files as $file}
+        <li>
+            <a href="{link playMedia!, $file['filename'], $actualdir}" class="fmplayer-ajax">
+                {$file['filename']}
+            </a>
+        </li>
+    {/foreach}
+    </ul>
+    </div>
+
+</div>
+
