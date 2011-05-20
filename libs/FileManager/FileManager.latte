@@ -158,6 +158,12 @@ $(document).ready(function() {
                         </div>
                     {/snippet}
 
+                    {snippet plugin}
+                        <div n:ifset="$plugin">
+                            {control $plugin}
+                        </div>
+                    {/snippet}
+
                     {snippet content}
                         {ifset $content}
                             {control content}

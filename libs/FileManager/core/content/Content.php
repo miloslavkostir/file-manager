@@ -242,6 +242,17 @@ class Content extends FileManager
         parent::getParent()->handleShowContent($actualdir);
     }
 
+    public function handleRunPlugin($plugin, $files = "")
+    {
+        // if sended by AJAX
+        if (empty($files)) {
+            $request = Environment::getHttpRequest();
+            $file = $request->getPost('files');
+        }
+
+        parent::getParent()->handleRunPlugin($plugin, $files);
+    }
+
     public function handleShowAddNewFolder()
     {
         parent::getParent()->handleShowAddNewFolder();
@@ -416,6 +427,9 @@ class Content extends FileManager
         $template->actualdir = $actualdir;
         $template->rootname = parent::getParent()->getRootname();
         $template->thumb_dir = $this->config['resource_dir'] . 'img/icons/' . $view . '/';
+        
+        if (isset($this->config['plugins']) && !empty($this->config['plugins']))
+                $template->plugins = $this->config['plugins'];
         
         $template->render();
     }

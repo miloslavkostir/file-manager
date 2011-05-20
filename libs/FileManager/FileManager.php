@@ -30,7 +30,8 @@ class FileManager extends Control
         'upload_filter' => False,
         'upload_chunk' => False,
         'upload_chunk_size' => '1mb',
-        'lang' => 'en'
+        'lang' => 'en',
+        'plugins' => array('Player')
     );
 
     public function __construct()
@@ -88,6 +89,22 @@ class FileManager extends Control
         $this->handleShowContent($actualdir);
     }
 
+    public function handleRunPlugin($name, $files = "")
+    {
+        $namespace = Environment::getSession('file-manager');
+        $actualdir = $namespace->actualdir;
+
+        $this->template->plugin = $name;
+
+        $this[$name]->actualdir = $actualdir;
+        $this[$name]->files = $files;
+
+        $this->refreshSnippets(array(
+            'plugin',
+            'content'
+        ));
+    }
+
     public function handleShowUpload()
     {
         $namespace = Environment::getSession('file-manager');
@@ -140,7 +157,8 @@ class FileManager extends Control
                         'rename',
                         'filter',
                         'clipboard',
-                        'refreshButton'
+                        'refreshButton',
+                        'plugin'
                     ));
         }
     }

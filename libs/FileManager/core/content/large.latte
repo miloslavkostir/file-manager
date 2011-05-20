@@ -47,12 +47,18 @@
             $('.fm-item').contextMenu(function() {
                     var selected = $.getSelected();
                     
-                    if ($(selected).length <= 1 ) {                                    
+                    if ($(selected).length <= 1 ) {
+
                                     var o1 = {},
                                         o2 = {},
                                         o3 = {},
                                         o4 = {},
                                         o5 = {},
+                                        {ifset $plugins}
+                                            {foreach $plugins as $plugin}
+                                                o{6 + $iterator->getCounter()} = {},
+                                            {/foreach}
+                                        {/ifset}
                                         o6 = {};
     
                                     $("#fm-small-images ul").unmarkAll("li", "selected");
@@ -86,25 +92,51 @@
                                             $.getJSON({link copyToClipboard!},  { filename: filename });                                            
                                             $.animateProgress(".file-manager", e);
                                     }
-                                    
+
                                     o5[{_'Cut'}] = function(menuItem, menuObject, e) {
                                             var filename = $(this).attr("id");
                                             $(this).addClass("selected");
                                             $.getJSON({link cutToClipboard!},  { filename: filename });                                                        
                                             $.animateProgress(".file-manager", e);
                                     }
-                                    
+
                                     o6[{_'Download'}] = function(menuItem, menuObject, e) {                            
                                             var filename = $(this).attr("id");
                                             $(this).addClass("selected");                                                                                       
                                             window.location.href={link downloadFile!} + "&filename=" + filename;
-                                    }                                    
-                                    
-                                    return [o1, o2, o3, o4, o5, o6];
+                                    }
+
+                                    {ifset $plugins}
+                                        {foreach $plugins as $plugin}
+                                            o{6 + $iterator->getCounter()}[{$plugin}] = function(menuItem, menuObject, e) {
+                                                var filename = $(this).attr("id");
+                                                $(this).addClass("selected");
+                                                $.post({link runPlugin!, $plugin},  { files: filename });
+                                                $.animateProgress(".file-manager", e);
+                                            }
+                                        {/foreach}
+                                    {/ifset}
+
+                                    return [ o1,
+                                             o2,
+                                             o3,
+                                             o4,
+                                             o5,
+                                             {ifset $plugins}
+                                                {foreach $plugins as $plugin}
+                                                    o{6 + $iterator->getCounter()},
+                                                {/foreach}
+                                             {/ifset}
+                                             o6 ];
                     } else {
                                     var o1 = {},
                                         o2 = {},
                                         o3 = {},
+                                        {ifset $plugins}
+                                            {foreach $plugins as $plugin}
+                                                o{4 + $iterator->getCounter()} = {},
+                                            {/foreach}
+                                        {/ifset}
                                         o4 = {};
                                         
                                     o1[{_'Properties'}] = function(menuItem, menuObject, e) {
@@ -149,9 +181,30 @@
                                                 $.post({link multiDelete!},  { files: files });
                                                 $.animateProgress(".file-manager", e);
                                             }
-                                    }                                    
+                                    }
+
+                                    {ifset $plugins}
+                                        {foreach $plugins as $plugin}
+                                            o{4 + $iterator->getCounter()}[{$plugin}] = function(menuItem, menuObject, e) {
+                                                var files = {};
+                                                $.each(selected, function(i) {
+                                                    files[i] = $(this).attr("id");
+                                                });
+                                                $.post({link runPlugin!, $plugin},  { files: files });
+                                                $.animateProgress(".file-manager", e);
+                                            }
+                                        {/foreach}
+                                    {/ifset}
                                                                        
-                                    return [o1, o2, o3, o4];
+                                    return [ o1,
+                                             o2,
+                                             o3,
+                                             {ifset $plugins}
+                                                {foreach $plugins as $plugin}
+                                                    o{4 + $iterator->getCounter()},
+                                                {/foreach}
+                                             {/ifset}
+                                             o4 ];
                     }
             }, {
                 theme: 'vista',
