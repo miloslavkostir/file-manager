@@ -199,7 +199,6 @@ class FileManager extends Control
         $template->config = $this->config;
         $template->rootname = $this->getRootname();
         $template->clipboard = $namespace->clipboard;
-
         $actualdir = $namespace->actualdir;
         if (empty($actualdir))
             $this->handleShowContent($this->getRootname());        
@@ -239,15 +238,14 @@ class FileManager extends Control
      */
     protected function createComponent($name)
     {
-            $className = ucfirst($name);
-            if ( !method_exists($this, "createComponent$className") ) {
-                    if ( class_exists($className) ) {
-                            $class = new $className();
+            if ( !method_exists($this, 'createComponent$name') ) {
+                    if ( class_exists($name) ) {
+                            $class = new $name();
                             $class->config = $this->config;
                             return $class;
                     } else
-                            throw new Exception("Can not create component '$name'. Required class '$name' not found.");
+                            throw new Exception('Can not create component ' . $name . '. Required class not found.');
             } else
-                return parent::createComponent($name);
+                    return parent::createComponent($name);
     }
 }
