@@ -238,7 +238,7 @@ class FileManager extends Control
      */
     protected function createComponent($name)
     {
-            if ( !method_exists($this, 'createComponent$name') ) {
+            if ( !method_exists($this, 'createComponent'.$name) ) {
                     if ( class_exists($name) ) {
                             $class = new $name();
                             $class->config = $this->config;
