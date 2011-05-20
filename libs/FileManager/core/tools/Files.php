@@ -7,25 +7,19 @@ class Files extends FileManager
     /** @var array */
     public $config;
 
-    /**
-     * Prefix for thumb folders and thumbnails
-     * @var string
-     */
-    public $thumb;
-
     public function __construct()
     {
         parent::__construct();
     }
-    
+
     /**
      * Check if file exists and give alternative name
      * @param  string  actual dir (absolute path)
      * @param  string  filename
      * @return string
-     */    
+     */
     public function checkDuplName($targetpath, $filename)
-    {   
+    {
         if (file_exists($targetpath . $filename)) {
             $i = 1;
             while (file_exists($targetpath . '(' . $i . ')' . $filename)) {
@@ -92,7 +86,7 @@ class Files extends FileManager
                 if ( ( $file != '.' ) && ( $file != '..' ) ) {
 
                         if ( is_dir($src . '/' . $file) ) {
-                                if (strpos( '11' . $file, $this->thumb) != 2 )  // exclude thumb folders
+                                if (strpos( '11' . $file, parent::getParent()->thumb) != 2 )  // exclude thumb folders
                                     $this->copyFolder($src . '/' . $file, $dst . '/' . $file);
                         } else
                                 copy($src . '/' . $file, $dst . '/' . $file);
@@ -124,8 +118,8 @@ class Files extends FileManager
 
     function isThumb($path)
     {
-        $checkname = substr_count(strtolower($path), $this->thumb);
-        $checkname_pos = strpos(strtolower($path), $this->thumb);
+        $checkname = substr_count(strtolower($path), parent::getParent()->thumb);
+        $checkname_pos = strpos(strtolower($path), parent::getParent()->thumb);
         if ( ($checkname > 0) and ($checkname_pos == 0))
             return True;
         else
@@ -134,8 +128,8 @@ class Files extends FileManager
 
     function isThumbDir($name)
     {
-        $checkname = substr_count(strtolower($name), $this->thumb);
-        $checkname_pos = strpos(strtolower($name), $this->thumb);
+        $checkname = substr_count(strtolower($name), parent::getParent()->thumb);
+        $checkname_pos = strpos(strtolower($name), parent::getParent()->thumb);
         if ( ($checkname > 0) and ($checkname_pos == 0))
             return True;
         else
@@ -333,7 +327,7 @@ class Files extends FileManager
                     $info['fileCount']++;
             } elseif ($iterate === true) {
                     $info['dirCount']++;                    
-                    foreach (Finder::find('*')->from($filepath)->exclude($this->thumb . '*') as $item) {
+                    foreach (Finder::find('*')->from($filepath)->exclude(parent::getParent()->thumb . '*') as $item) {
                                        $info['size'] += $item->getSize();
                                        if ($item->isDir())
                                            $info['dirCount']++;
@@ -351,7 +345,7 @@ class Files extends FileManager
         $info = array();
         $info['size'] = 0;
         $info['count'] = 0;
-        foreach (Finder::findFiles('*')->from($path)->exclude($this->thumb . '*') as $file) {
+        foreach (Finder::findFiles('*')->from($path)->exclude(parent::getParent()->thumb . '*') as $file) {
                            $info['size'] += $file->getSize();
                            $info['count']++;
         }
@@ -594,11 +588,11 @@ class Files extends FileManager
 
         if ($actualdir == $rootname) {
             $path = $uploadroot . $uploadpath . $filename;
-            $result['name'] = $this->thumb .md5($filename . @filesize($path)) . "." . pathinfo($filename, PATHINFO_EXTENSION);
+            $result['name'] = parent::getParent()->thumb . md5($filename . @filesize($path)) . "." . pathinfo($filename, PATHINFO_EXTENSION);
             $result['path'] = $uploadroot . $uploadpath . $thumb_folder . "/" . $result['name'];
         } else {
             $path = $uploadroot . substr($uploadpath,0,-1) . $actualdir . $filename;            
-            $result['name'] = $this->thumb .md5($filename . @filesize($path)) . "." . pathinfo($filename, PATHINFO_EXTENSION);
+            $result['name'] = parent::getParent()->thumb . md5($filename . @filesize($path)) . "." . pathinfo($filename, PATHINFO_EXTENSION);
             $result['path'] = $uploadroot . substr($uploadpath,0,-1) . $actualdir . $thumb_folder . "/" . $result['name'];
         }
         
@@ -611,7 +605,7 @@ class Files extends FileManager
         $rootname = parent::getParent()->getRootName();
         $uploadroot = $this->config['uploadroot'];
         
-        $foldername = $this->thumb . md5($actualdir);
+        $foldername = parent::getParent()->thumb . md5($actualdir);
         
         if ($actualdir == $rootname)
             $path = $uploadpath ;

@@ -13,11 +13,8 @@ class FileManager extends Control
     /** @var string */
     protected $cache_path;
 
-    /**
-     * @var string
-     * Prefix for thumb folders and thumbnails
-     */
-    protected $thumb;
+    /** @var string */
+    protected $thumb = "__system_thumb";
 
     /** @var array */
     public $config = array(
@@ -40,7 +37,6 @@ class FileManager extends Control
     {
         parent::__construct();
         $this->cache_path = TEMP_DIR . '/cache/_filemanager';
-        $this->thumb = "__system_thumb";
     }
     
     public function handleShowRename($filename)
