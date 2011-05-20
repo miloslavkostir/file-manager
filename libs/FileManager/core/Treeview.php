@@ -74,11 +74,10 @@ class Treeview extends FileManager
    {
             $d = dir($dir);
             $x = array();
-            $files = new Files;
 
             while (false !== ($r = $d->read())) {
 
-                    if($files->isThumbDir($r) != True && $r != "." && $r != ".." && ((!preg_match('/^\..*/', $r) && !is_dir($dir.$r)) || is_dir($dir.$r)) && (($showfiles == false && is_dir($dir.$r)) || $showfiles == true)) {
+                    if($this['files']->isThumbDir($r) != True && $r != "." && $r != ".." && ((!preg_match('/^\..*/', $r) && !is_dir($dir.$r)) || is_dir($dir.$r)) && (($showfiles == false && is_dir($dir.$r)) || $showfiles == true)) {
                             $x[$r] = (is_dir($dir.$r)?array():(is_file($dir.$r)?true:false));
                     }
             }
