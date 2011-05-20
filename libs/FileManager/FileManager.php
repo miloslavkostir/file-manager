@@ -235,95 +235,23 @@ class FileManager extends Control
             $this->invalidateControl($snippet);
     }
 
-    public function createComponentTools()
+    /**
+     * Global component factory
+     *
+     * @param	string	$name
+     * @return	Control
+     */
+    protected function createComponent($name)
     {
-        $tools = new Tools;
-        $tools->config = $this->config;
-        return $tools;
-    }
-
-    public function createComponentFiles()
-    {
-        $f = new Files;
-        $f->config = $this->config;
-        $f->thumb = $this->thumb;
-        return $f;
-    }
-
-    public function createComponentNavigation()
-    {
-        $nav = new Navigation;
-        $nav->config = $this->config;
-        return $nav;
-    }
-
-    public function createComponentUpload()
-    {
-        $up = new Upload;
-        $up->config = $this->config;
-        return $up;
-    }
-
-    public function createComponentNewFolder()
-    {
-        $nf = new NewFolder;
-        $nf->config = $this->config;
-        return $nf;
-    }
-
-    public function createComponentRename()
-    {
-        $r = new Rename;
-        $r->config = $this->config;
-        return $r;
-    }
-
-    public function createComponentContent()
-    {
-        $c = new Content;
-        $c->config = $this->config;
-        return $c;
-    }
-
-    public function createComponentFileInfo()
-    {
-        $fi = new FileInfo;
-        $fi->config = $this->config;
-        return $fi;
-    }
-
-    public function createComponentDiskUsage()
-    {
-        $du = new DiskUsage;
-        $du->config = $this->config;
-        return $du;
-    }
-
-    public function createComponentTreeview()
-    {
-        $t = new Treeview;
-        $t->config = $this->config;
-        return $t;
-    }
-
-    public function createComponentClipboard()
-    {
-        $c = new Clipboard;
-        $c->config = $this->config;
-        return $c;
-    }
-
-    public function createComponentFilter()
-    {
-        $f = new Filter;
-        $f->config = $this->config;
-        return $f;
-    }
-
-    public function createComponentViewSelector()
-    {
-        $sv = new ViewSelector;
-        $sv->config = $this->config;
-        return $sv;
+            $className = ucfirst($name);
+            if ( !method_exists($this, "createComponent$className") ) {
+                    if ( class_exists($className) ) {
+                            $class = new $className();
+                            $class->config = $this->config;
+                            return $class;
+                    } else
+                            throw new Exception("Can not create component '$name'. Required class '$name' not found.");
+            } else
+                return parent::createComponent($name);
     }
 }
