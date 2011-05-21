@@ -326,15 +326,6 @@ class Content extends FileManager
         }
     }
 
-    public function handleShowFullImage($actualdir, $filename)
-    {
-        if ($this['tools']->validPath($actualdir, $filename)) {
-            $path = parent::getParent()->getAbsolutePath($actualdir) . $filename;
-            $image = Image::fromFile($path);
-            $image->send();
-        }
-    }
-
     public function handleShowContent($actualdir) {
         parent::getParent()->handleShowContent($actualdir);
     }
