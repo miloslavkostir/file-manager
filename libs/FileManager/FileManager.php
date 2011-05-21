@@ -30,6 +30,7 @@ class FileManager extends Control
         'upload_filter' => False,
         'upload_chunk' => False,
         'upload_chunk_size' => '1mb',
+        'imagemagick' => False,
         'lang' => 'en',
         'plugins' => array('Player')
     );

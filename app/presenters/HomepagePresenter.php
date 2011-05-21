@@ -51,6 +51,8 @@ class HomepagePresenter extends BasePresenter
             $fm->config['upload_resize_height'] = 600;          // default is 480
             $fm->config['upload_resize_quality'] = 80;          // default is 90
 
+            //$fm->config['imagemagick'] = True;                // default is False
+
             $fm->config['lang'] = 'en';                         // default is en; others - cs
 
             return $fm;

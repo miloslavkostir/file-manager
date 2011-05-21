@@ -342,7 +342,16 @@ class Content extends FileManager
         } else {
                     $disksize = $this['tools']->diskSizeInfo();
                     if ($disksize['spaceleft'] > 2 ) {
-                            $image = Image::fromFile($path);
+                        
+                            if ( $this->config['imagemagick'] == True ) {
+                                @exec('convert -version', $results, $status);
+                                if (class_exists('\Nette\ImageMagick') && !$status)
+                                    $image = new \Nette\ImageMagick($path);
+                                else
+                                    throw new Exception('Missing ImageMagick!');
+                            } else
+                                $image = Image::fromFile($path);
+
                             $image->resize(96, NULL);
                             $image->save($cache_file['path'], 80);
                             $image->send();
