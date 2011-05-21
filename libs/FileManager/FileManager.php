@@ -77,22 +77,6 @@ class FileManager extends Control
         ));
     }
 
-    public function handleShowUpload()
-    {
-        $namespace = Environment::getSession('file-manager');
-        $actualdir = $namespace->actualdir; 
-
-        $this->template->upload = $actualdir;        
-
-        if ($this->presenter->isAjax())
-            $this->refreshSnippets(array(
-                'newfolder',
-                'content',
-                'upload',
-                'fileinfo'
-            ));
-    }
-
     public function handleShowFileInfo($filename)
     {
         $namespace = Environment::getSession('file-manager');
@@ -121,34 +105,13 @@ class FileManager extends Control
                         'treeview',
                         'adressbar',
                         'toolbar',
-                        'newfolder',
                         'content',
-                        'upload',
                         'fileinfo',
                         'filter',
                         'clipboard',
                         'refreshButton',
                         'plugin'
                     ));
-        }
-    }
-
-    public function handleShowAddNewFolder()
-    {
-        $namespace = Environment::getSession('file-manager');
-        $actualdir = $namespace->actualdir;
-        
-        if ($this['tools']->validPath($actualdir)) {
-                $this->template->newfolder = $actualdir;
-
-                if ($this->presenter->isAjax())
-                    $this->refreshSnippets(array(
-                        'content',
-                        'newfolder',
-                        'upload',
-                        'fileinfo'
-                    ));
-                
         }
     }
 

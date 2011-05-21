@@ -113,13 +113,13 @@ $(document).ready(function() {
         <ul class="fm-toolbar">
 
             <li>
-                <a href="{link showAddNewFolder!}" title="{_'Create new folder'}" class="fm-ajax">
+                <a href="{link runPlugin!, 'NewFolder'}" title="{_'Create new folder'}" class="fm-ajax">
                     <span>{_'New folder'}</span>
                 </a>
             </li>
             
             <li>
-                <a href="{link showUpload!}" title="{_'Upload files'}" class="fm-ajax">
+                <a href="{link runPlugin!, 'upload'}" title="{_'Upload files'}" class="fm-ajax">
                     <span>{_'Upload'}</span>
                 </a>
             </li>
@@ -166,18 +166,6 @@ $(document).ready(function() {
                             <!--<h2>{_'Welcome!'}</h2>
                             <h3>{_'You can start'} <a href="{link showContent!, $rootname}" class="fm-ajax" title="{_'Go to root folder'}" style="text-decoration: underline;">{_'here'}</a>.</h3>
                         -->{/ifset}
-                    {/snippet}
-
-                    {snippet newfolder}
-                        <div class="fm-addnewfolder" n:ifset="$newfolder">
-                            {control newFolder}
-                        </div>
-                    {/snippet}
-
-                    {snippet upload}
-                        <div class="fm-upload" n:ifset="$upload">
-                            {control upload}
-                        </div>
                     {/snippet}
             </div>
             

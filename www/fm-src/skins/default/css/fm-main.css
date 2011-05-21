@@ -73,9 +73,9 @@
 .file-manager .fm-body .fm-content .fm-delimiter { clear: both; border-bottom: 1px solid #D6E5F5; }
 
 
-.file-manager .fm-body .fm-addnewfolder #frm-fileManager-newFolderForm { margin: 5px; }
-.file-manager .fm-body .fm-addnewfoldert #frm-fileManager-renameForm { margin: 5px; }
-.file-manager .fm-body .fm-addnewfolder input#frmnewFolderForm-send, input#frmnewFolderForm-filename { border: 1px solid #CCCCCC; }
+.file-manager .fm-body #frm-fileManager-newFolderForm { margin: 5px; }
+.file-manager .fm-body #frm-fileManager-renameForm { margin: 5px; }
+.file-manager .fm-body input#frmnewFolderForm-send, input#frmnewFolderForm-filename { border: 1px solid #CCCCCC; }
 
 
 .file-manager .fm-body #fm-files-large { width: auto; height: 430px; overflow: auto; }
