@@ -55,6 +55,8 @@ class HomepagePresenter extends BasePresenter
 
             $fm->config['lang'] = 'en';                         // default is en; others - cs
 
+            //$fm->config['plugins'] = array('Player');           // default is empty
+
             return $fm;
         }
 }
