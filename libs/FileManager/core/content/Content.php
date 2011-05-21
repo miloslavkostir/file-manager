@@ -247,7 +247,7 @@ class Content extends FileManager
         // if sended by AJAX
         if (empty($files)) {
             $request = Environment::getHttpRequest();
-            $file = $request->getPost('files');
+            $files = $request->getPost('files');
         }
 
         parent::getParent()->handleRunPlugin($plugin, $files);
@@ -337,15 +337,6 @@ class Content extends FileManager
 
     public function handleShowContent($actualdir) {
         parent::getParent()->handleShowContent($actualdir);
-    }
-
-    public function handleShowRename($filename = "") {
-        // if sended by AJAX
-        if (empty($filename)) {
-            $request = Environment::getHttpRequest();
-            $filename = $request->getQuery('filename');
-        }
-        parent::getParent()->handleShowRename($filename);
     }
 
     public function handleShowThumb($dir, $file)

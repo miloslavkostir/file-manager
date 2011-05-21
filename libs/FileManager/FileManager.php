@@ -39,39 +39,7 @@ class FileManager extends Control
         parent::__construct();
         $this->cache_path = TEMP_DIR . '/cache/_filemanager';
     }
-    
-    public function handleShowRename($filename)
-    {
-        $namespace = Environment::getSession('file-manager');
-        $actualdir = $namespace->actualdir;
-        
-        if ($this['tools']->validPath($actualdir, $filename)) {
-                        if ($this->config['readonly'] == True) {
-                                        $translator = new GettextTranslator(__DIR__ . '/locale/FileManager.' . $this->config["lang"] . '.mo');
-                                        $this->flashMessage(
-                                                $translator->translate("File manager is in read-only mode"),
-                                                'warning'
-                                        );
-                        } else {
-                                $rename = array(
-                                    'new_filename' => $filename,
-                                    'orig_filename' => $filename
-                                );
-                                $this->template->rename = $rename;
-                                $this['rename']->params = $rename;
-
-                                if ($this->presenter->isAjax())
-                                    $this->invalidateControl('rename');
-                        }
-
-                        if ($this->presenter->isAjax())
-                            $this->refreshSnippets(array(
-                                'content',
-                                'fileinfo'
-                            ));
-        }
-    }
-    
+   
     public function handleMove()
     {
         $this['content']->handleMove();
@@ -89,19 +57,23 @@ class FileManager extends Control
         $this->handleShowContent($actualdir);
     }
 
-    public function handleRunPlugin($name, $files = "")
+    public function handleRunPlugin($plugin, $files = "")
     {
         $namespace = Environment::getSession('file-manager');
         $actualdir = $namespace->actualdir;
 
-        $this->template->plugin = $name;
+        $this->template->plugin = $plugin;
 
-        $this[$name]->actualdir = $actualdir;
-        $this[$name]->files = $files;
+        if ( property_exists($this[$plugin], 'actualdir') )
+            $this[$plugin]->actualdir = $actualdir;
+
+        if ( property_exists($this[$plugin], 'files') )
+            $this[$plugin]->files = $files;
 
         $this->refreshSnippets(array(
             'plugin',
-            'content'
+            'content',
+            'fileinfo'
         ));
     }
 
@@ -117,8 +89,7 @@ class FileManager extends Control
                 'newfolder',
                 'content',
                 'upload',
-                'fileinfo',
-                'rename'
+                'fileinfo'
             ));
     }
 
@@ -154,7 +125,6 @@ class FileManager extends Control
                         'content',
                         'upload',
                         'fileinfo',
-                        'rename',
                         'filter',
                         'clipboard',
                         'refreshButton',
@@ -176,8 +146,7 @@ class FileManager extends Control
                         'content',
                         'newfolder',
                         'upload',
-                        'fileinfo',
-                        'rename'
+                        'fileinfo'
                     ));
                 
         }

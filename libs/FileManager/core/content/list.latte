@@ -72,7 +72,7 @@
 
                                 o3[{_'Rename'}] = function(menuItem, menuObject, e) {
                                         var filename = $(this).attr("id");
-                                        $.getJSON({link showRename!},  { filename: filename });
+                                            $.post({link runPlugin!, 'rename'},  { files: filename });
                                         $.animateProgress(".file-manager", e);
                                 }
 

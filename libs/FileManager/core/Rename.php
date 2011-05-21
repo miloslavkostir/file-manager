@@ -8,8 +8,8 @@ class Rename extends FileManager
     /** @var array */
     public $config;
 
-    /** @var array */
-    public $params;
+    /** @var string */
+    public $files;
 
     public function __construct()
     {
@@ -28,10 +28,13 @@ class Rename extends FileManager
         else
              throw new Exception ("Language file " . $lang_file . " doesn't exist! Application can not be loaded!");
 
-        $this['renameForm']->setDefaults($this->params);
+        $this['renameForm']->setDefaults(array(
+            'new_filename' => $this->files,
+            'orig_filename' => $this->files,
+        ));
 
         $template->config = $this->config;
-        $template->params = $this->params;
+        $template->origFile = $this->files;
 
         $template->render();
     }
