@@ -1,7 +1,6 @@
 <script type="text/javascript">
 $(document).ready(function() {
 
-    // disable text highlighting
     $(".file-manager .fm-body").noTextHighlight();
 
     $(".file-manager").delegate("a.fm-ajax", "click", function (e) {
@@ -84,17 +83,17 @@ $(document).ready(function() {
     <div class="fm-adressbar">
         <ul>
             <li class="fm-location">
-                {snippet adressbar}
-                        {control navigation}                    
-                {/snippet}
+            {snippet adressbar}
+                    {control navigation}                    
+            {/snippet}
             </li>
             
             <li class="fm-refresh">
-                {snippet refreshButton}
-                    <a href="{link refreshContent!}" title="{_'Refresh content'}" class="fm-ajax">
-                        <div class="fm-refresh-icon"></div>
-                    </a>
-                {/snippet}
+            {snippet refreshButton}
+                <a href="{link refreshContent!}" title="{_'Refresh content'}" class="fm-ajax">
+                    <div class="fm-refresh-icon"></div>
+                </a>
+            {/snippet}
             </li>
             
             <li class="fm-filter">
@@ -117,7 +116,7 @@ $(document).ready(function() {
                     <span>{_'New folder'}</span>
                 </a>
             </li>
-            
+
             <li>
                 <a href="{link runPlugin!, 'upload'}" title="{_'Upload files'}" class="fm-ajax">
                     <span>{_'Upload'}</span>
@@ -141,49 +140,42 @@ $(document).ready(function() {
     </div>
 
 
-    <!-- body wrapper -->
     <div class="fm-body">
 
             <div class="fm-treeview">
-                    {snippet treeview}
-                        {control treeview}
-                    {/snippet}
+            {snippet treeview}
+                {control treeview}
+            {/snippet}
             </div>
 
 
             <div class="fm-content">
+            {snippet plugin}
+                <div n:ifset="$plugin">
+                    {control $plugin}
+                </div>
+            {/snippet}
 
-                    {snippet plugin}
-                        <div n:ifset="$plugin">
-                            {control $plugin}
-                        </div>
-                    {/snippet}
-
-                    {snippet content}
-                        {ifset $content}
-                            {control content}
-                        {else}
-                            <!--<h2>{_'Welcome!'}</h2>
-                            <h3>{_'You can start'} <a href="{link showContent!, $rootname}" class="fm-ajax" title="{_'Go to root folder'}" style="text-decoration: underline;">{_'here'}</a>.</h3>
-                        -->{/ifset}
-                    {/snippet}
+            {snippet content}
+                {ifset $content}
+                    {control content}
+                {/ifset}
+            {/snippet}
             </div>
             
     </div>
 
 
-
     <div class="fm-info-bar">
-                    {snippet fileinfo}
-                    <div n:ifset="$fileinfo">
-                        {control fileInfo}
-                    </div>
-                    {/snippet}
-
-                    {snippet diskusage}
-                        {control diskUsage}
-                    {/snippet}
+    {snippet fileinfo}
+    <div n:ifset="$fileinfo">
+        {control fileInfo}
     </div>
+    {/snippet}
 
+    {snippet diskusage}
+        {control diskUsage}
+    {/snippet}
+    </div>
 
 </div>
