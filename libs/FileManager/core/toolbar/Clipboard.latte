@@ -1,29 +1,31 @@
 <div class="fm-clipboard ui-state-highlight ui-corner-bottom">
         <h3>Clipboard</h3>
         <div class="fm-delimiter"></div>
-        <div n:foreach="$clipboard as $item" class="fm-clipboard-item">
-                <div class="fm-clipboard-item-left">
-                    {if $item['actualdir'] == $rootname}
-                            {$item['actualdir']}/{$item['filename']}
-                    {else}
-                            {$item['actualdir']}
-                            {$item['filename']}
-                    {/if}
+        <div class="fm-clipboard-container">
+                <div n:foreach="$clipboard as $item" class="fm-clipboard-item">
+                        <div class="fm-clipboard-item-left">
+                            {if $item['actualdir'] == $rootname}
+                                    {$item['actualdir']}/{$item['filename']}
+                            {else}
+                                    {$item['actualdir']}
+                                    {$item['filename']}
+                            {/if}
+                        </div>
+
+                        <div class="fm-clipboard-item-right">
+                            <div style="float: left;">
+                                {$item['action']|upper}
+                            </div>
+                            <div style="float: right; margin: 0 2px 0 2px;">
+                                <a href="{link removeFromClipboard!, $item['actualdir'], $item['filename']}" class="fm-ajax" title="{_'Remove item from clipboard'}">
+                                    <span class="ui-icon ui-icon-circle-close"></span>
+                                </a>
+                            </div>
+                            <div style="clear: both;"></div>
+                        </div>                
+                        <div style="clear: both;"></div>
+
                 </div>
-
-                <div class="fm-clipboard-item-right">
-                    <div style="float: left;">
-                        {$item['action']|upper}
-                    </div>
-                    <div style="float: right;">
-                        <a href="{link removeFromClipboard!, $item['actualdir'], $item['filename']}" class="fm-ajax" title="{_'Remove item from clipboard'}">
-                            <span class="ui-icon ui-icon-circle-close"></span>
-                        </a>
-                    </div>
-                    <div style="clear: both;"></div>
-                </div>                
-                <div style="clear: both;"></div>
-
         </div>
         <div class="fm-delimiter">
 
