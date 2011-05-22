@@ -87,14 +87,14 @@
                                     o4[{_'Copy'}] = function(menuItem, menuObject, e) {
                                             var filename = $(this).attr("id");
                                             $(this).addClass("selected");
-                                            $.getJSON({link copyToClipboard!},  { filename: filename });                                            
+                                            $.post({link copyToClipboard!},  { filename: filename });                                            
                                             $.animateProgress(".file-manager", e);
                                     }
 
                                     o5[{_'Cut'}] = function(menuItem, menuObject, e) {
                                             var filename = $(this).attr("id");
                                             $(this).addClass("selected");
-                                            $.getJSON({link cutToClipboard!},  { filename: filename });                                                        
+                                            $.post({link cutToClipboard!},  { filename: filename });                                                        
                                             $.animateProgress(".file-manager", e);
                                     }
 

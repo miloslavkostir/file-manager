@@ -59,18 +59,21 @@ class Content extends FileManager
         // if sended by AJAX
         if (empty($filename)) {
             $request = Environment::getHttpRequest();
-            $filename = $request->getQuery('filename');
+            $filename = $request->getPost('filename');
         }
 
         $namespace = Environment::getSession('file-manager');
         $actualdir = $namespace->actualdir;
-        $namespace->clipboard[$actualdir.$filename] = array(
-            'action' => 'copy',
-            'actualdir' => $actualdir,
-            'filename' => $filename
-        );
 
-        $this->handleShowContent($actualdir);
+        if ($this['tools']->validPath($actualdir, $filename)) {
+            $namespace->clipboard[$actualdir.$filename] = array(
+                'action' => 'copy',
+                'actualdir' => $actualdir,
+                'filename' => $filename
+            );
+
+            $this->handleShowContent($actualdir);
+        }
     }
     
     public function handleMultiCopyToClipboard($files = "")
