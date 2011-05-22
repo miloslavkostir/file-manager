@@ -89,6 +89,23 @@ class Clipboard extends FileManager
         }
     }
 
+    public function handleRemoveFromClipboard($actualdir, $filename)
+    {
+        $translator = new GettextTranslator(__DIR__ . '/../../locale/FileManager.' . $this->config["lang"] . '.mo');
+        $namespace = Environment::getSession('file-manager');
+        $path = $actualdir.$filename;
+
+        if (isset($namespace->clipboard[$path]))
+            unset($namespace->clipboard[$path]);
+        else
+            parent::getParent()->flashMessage(
+                    $translator->translate('Item %s does not exist in clipboard!', $path),
+                    'error'
+            );
+
+        parent::getParent()->handleShowContent($namespace->actualdir);
+    }
+
     public function render()
     {
         $template = $this->template;

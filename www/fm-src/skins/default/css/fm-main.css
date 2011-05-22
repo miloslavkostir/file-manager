@@ -37,13 +37,13 @@
 .file-manager .fm-toolbar { width: auto; background: transparent url(../img/navbar.png) 0 0 repeat-x; height: 31px; padding:0 3px; }
 .file-manager .fm-toolbar ul { width: 100%; list-style: none outside none; margin: 0; padding: 0; }
 .file-manager .fm-toolbar li { float: left; padding: 3px 3px 4px; position: relative; }
-.file-manager .fm-toolbar li a { color: #003366; float: left; line-height: 24px; }
-.file-manager .fm-toolbar li a:hover { background: url(../img/navbar.png) right -79px no-repeat; }
-.file-manager .fm-toolbar li a span { display: block; padding: 0 6px; float: left; height: 24px;}
-.file-manager .fm-toolbar li a:hover span { background: url(../img/navbar.png) left -55px no-repeat; }
-.file-manager .fm-toolbar li a span img { border: 0;}
-.file-manager .fm-toolbar li a span.options { width: 20px; background: transparent url(../img/navbar.png) 0 -31px no-repeat; padding: 0;}
-.file-manager .fm-toolbar li a:hover span.options { background: transparent url(../img/navbar.png) -22px -31px no-repeat;}
+.file-manager .fm-toolbar li a.fm-toolbar-item { color: #003366; float: left; line-height: 24px; }
+.file-manager .fm-toolbar li a.fm-toolbar-item:hover { background: url(../img/navbar.png) right -79px no-repeat; }
+.file-manager .fm-toolbar li a.fm-toolbar-item span { display: block; padding: 0 6px; float: left; height: 24px;}
+.file-manager .fm-toolbar li a.fm-toolbar-item:hover span { background: url(../img/navbar.png) left -55px no-repeat; }
+.file-manager .fm-toolbar li a.fm-toolbar-item span img { border: 0;}
+.file-manager .fm-toolbar li a.fm-toolbar-item span.options { width: 20px; background: transparent url(../img/navbar.png) 0 -31px no-repeat; padding: 0;}
+.file-manager .fm-toolbar li a.fm-toolbar-item:hover span.options { background: transparent url(../img/navbar.png) -22px -31px no-repeat;}
 .file-manager .fm-toolbar .fm-clipboard { display: none; min-width: 200px; max-width: 400px; padding: 6px;}
 .file-manager .fm-toolbar .fm-clipboard a { line-height: normal; }
 .file-manager .fm-toolbar .fm-clipboard a:hover { background: none; }

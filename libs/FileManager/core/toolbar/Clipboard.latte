@@ -1,18 +1,29 @@
 <div class="fm-clipboard ui-state-highlight ui-corner-bottom">
         <h3>Clipboard</h3>
+        <div class="fm-delimiter"></div>
         <div n:foreach="$clipboard as $item" class="fm-clipboard-item">
-                <span style="float: left;">
+                <div style="float: left; vertical-align: top; width: 70%;">
                     {if $item['actualdir'] == $rootname}
                             {$item['actualdir']}/{$item['filename']}
                     {else}
                             {$item['actualdir']}
                             {$item['filename']}
                     {/if}
-                </span>
-                <span style="float: right;">
-                    <strong>{$item['action']|upper}</strong>
-                </span>
+                </div>
+
+                <div style="float: right; vertical-align: top; width: 30%;">
+                    <div style="font-weight: bold; float: left;">
+                        {$item['action']|upper}
+                    </div>
+                    <div style="float: right; margin: 2px;">
+                        <a href="{link removeFromClipboard!, $item['actualdir'], $item['filename']}" class="fm-ajax" title="{_'Remove item from clipboard'}">
+                            <span class="ui-icon ui-icon-circle-close"></span>
+                        </a>
+                    </div>
+                    <div style="clear: both;"></div>
+                </div>                
                 <div style="clear: both;"></div>
+
         </div>
         <div class="fm-delimiter">
 
@@ -29,11 +40,20 @@
 
 <script type="text/javascript">
 $(document).ready(function() {
-
+   
     $('.fm-clipboard').css({
         position: 'absolute',
         top: $('.fm-toolbar').height()
     });
+
+    $(".fm-clipboard-item").hover(
+      function () {
+        $(this).addClass("ui-state-hover");
+      },
+      function () {
+        $(this).removeClass("ui-state-hover");
+      }
+    );
 
     $('#fm-clipboard-hide a').click(function() {
           $('.fm-clipboard').slideToggle('slow', function() {
@@ -50,17 +70,17 @@ $(document).ready(function() {
 });
 </script>
 
-<a href="#" title="{_'Show items in clipboard'}" id="show-clipboard" onclick="return false;">
+<a href="#" title="{_'Show items in clipboard'}" id="show-clipboard" onclick="return false;" class="fm-toolbar-item">
 <span>
     {_'Clipboard'} ({? echo count($clipboard); })
 </span>
 </a>
-<a href="{link clearClipboard!}" title="{_'Delete all items from clipboard'}" class="fm-ajax">
+<a href="{link clearClipboard!}" title="{_'Delete all items from clipboard'}" class="fm-ajax fm-toolbar-item">
     <span>
         {_'Clear clipboard'}
     </span>
 </a>
-<a href="{link pasteFromClipboard!}" title="{_'Paste from clipboard'}" class="fm-ajax">
+<a href="{link pasteFromClipboard!}" title="{_'Paste from clipboard'}" class="fm-ajax fm-toolbar-item">
     <span>
         {_'Paste'}
     </span>
