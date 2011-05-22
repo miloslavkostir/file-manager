@@ -256,11 +256,6 @@ class Content extends FileManager
         parent::getParent()->handleRunPlugin($plugin, $files);
     }
 
-    public function handleShowAddNewFolder()
-    {
-        parent::getParent()->handleShowAddNewFolder();
-    }
-
     public function handleDownloadFile($filename = "")
     {
         $namespace = Environment::getSession('file-manager');
