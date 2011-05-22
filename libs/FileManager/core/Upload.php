@@ -226,6 +226,8 @@ class Upload extends FileManager
         else
              throw new Exception ("Language file " . $lang_file . " doesn't exist! Application can not be loaded!");
 
+        $translator = new GettextTranslator(__DIR__ . '/../locale/FileManager.' . $this->config['lang'] . '.mo');        
+        
         $size = 0;
         foreach (Finder::findFiles('*')->from($this->config['uploadroot'] . $this->config['uploadpath']) as $file) {
                            $size += $file->getSize();
