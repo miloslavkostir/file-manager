@@ -2,7 +2,7 @@
         <h3>Clipboard</h3>
         <div class="fm-delimiter"></div>
         <div n:foreach="$clipboard as $item" class="fm-clipboard-item">
-                <div style="float: left; vertical-align: top; width: 70%;">
+                <div class="fm-clipboard-item-left">
                     {if $item['actualdir'] == $rootname}
                             {$item['actualdir']}/{$item['filename']}
                     {else}
@@ -11,11 +11,11 @@
                     {/if}
                 </div>
 
-                <div style="float: right; vertical-align: top; width: 30%;">
-                    <div style="font-weight: bold; float: left;">
+                <div class="fm-clipboard-item-right">
+                    <div style="float: left;">
                         {$item['action']|upper}
                     </div>
-                    <div style="float: right; margin: 2px;">
+                    <div style="float: right;">
                         <a href="{link removeFromClipboard!, $item['actualdir'], $item['filename']}" class="fm-ajax" title="{_'Remove item from clipboard'}">
                             <span class="ui-icon ui-icon-circle-close"></span>
                         </a>

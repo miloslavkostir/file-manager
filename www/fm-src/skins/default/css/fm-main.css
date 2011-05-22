@@ -44,11 +44,13 @@
 .file-manager .fm-toolbar li a.fm-toolbar-item span img { border: 0;}
 .file-manager .fm-toolbar li a.fm-toolbar-item span.options { width: 20px; background: transparent url(../img/navbar.png) 0 -31px no-repeat; padding: 0;}
 .file-manager .fm-toolbar li a.fm-toolbar-item:hover span.options { background: transparent url(../img/navbar.png) -22px -31px no-repeat;}
-.file-manager .fm-toolbar .fm-clipboard { display: none; min-width: 200px; max-width: 400px; padding: 6px;}
+.file-manager .fm-toolbar .fm-clipboard { display: none; width: 200px; padding: 6px;}
 .file-manager .fm-toolbar .fm-clipboard a { line-height: normal; }
 .file-manager .fm-toolbar .fm-clipboard a:hover { background: none; }
 .file-manager .fm-toolbar .fm-clipboard h3 { margin: 0; padding: 0; }
 .file-manager .fm-toolbar .fm-clipboard .fm-clipboard-item { width: 100%; }
+.file-manager .fm-toolbar .fm-clipboard .fm-clipboard-item .fm-clipboard-item-left { float: left; width: 70%; word-wrap: break-word; }
+.file-manager .fm-toolbar .fm-clipboard .fm-clipboard-item .fm-clipboard-item-right { float: right; font-weight: bold; }
 .file-manager .fm-toolbar .fm-clipboard .fm-delimiter { border-top: 1px solid #CCCCCC; }
 .file-manager .fm-toolbar .fm-clipboard .fm-delimiter #fm-clipboard-hide { float: right; font-size: 11px; color: #3B5998; font-family: 'Lucida Grande',Tahoma,Verdana,Arial,sans-serif; cursor: pointer; }
 .file-manager .fm-toolbar .fm-clipboard .fm-delimiter #fm-clipboard-clear { float: left; font-size: 11px; color: #3B5998; font-family: 'Lucida Grande',Tahoma,Verdana,Arial,sans-serif; cursor: pointer; }
