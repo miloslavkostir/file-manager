@@ -43,3 +43,12 @@ $application->onStartup[] = function() use ($application) {
 
 // Run the application!
 $application->run();
+
+/**
+ * create PO language files
+ * https://github.com/karelklima/gettext-extractor
+ */
+//$ge = new NetteGettextExtractor('extractor.log');
+//$ge->setupForms()->setupDataGrid();
+//$ge->scan(LIBS_DIR . "/FileManager");
+//$ge->save(LIBS_DIR . '/FileManager/locale/FileManager.en.po');
