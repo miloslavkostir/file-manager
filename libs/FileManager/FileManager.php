@@ -17,6 +17,13 @@ class FileManager extends Control
     protected $thumb = "__system_thumb";
 
     /** @var array */
+    protected $core = array(
+        'NewFolder',
+        'upload',
+        'rename'
+    );
+
+    /** @var array */
     public $config = array(
         'readonly' => False,
         'resource_dir' => '/fm-src/',
@@ -63,19 +70,27 @@ class FileManager extends Control
         $namespace = Environment::getSession('file-manager');
         $actualdir = $namespace->actualdir;
 
-        $this->template->plugin = $plugin;
+        if (in_array($plugin, $this->core) || in_array($plugin, $this->config['plugins'])) {
+                $this->template->plugin = $plugin;
 
-        if ( property_exists($this[$plugin], 'actualdir') )
-            $this[$plugin]->actualdir = $actualdir;
+                if ( property_exists($this[$plugin], 'actualdir') )
+                    $this[$plugin]->actualdir = $actualdir;
 
-        if ( property_exists($this[$plugin], 'files') )
-            $this[$plugin]->files = $files;
+                if ( property_exists($this[$plugin], 'files') )
+                    $this[$plugin]->files = $files;
 
-        $this->refreshSnippets(array(
-            'plugin',
-            'content',
-            'fileinfo'
-        ));
+                $this->refreshSnippets(array(
+                    'plugin',
+                    'content',
+                    'fileinfo'
+                ));
+        } else {
+                $translator = new GettextTranslator(__DIR__ . '/locale/FileManager.' . $this->config['lang'] . '.mo');
+                $this->flashMessage(
+                    $translator->translate('Plugin not found!'),
+                    'warning'
+                );
+        }
     }
 
     public function handleShowFileInfo($filename)
