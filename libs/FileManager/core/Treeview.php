@@ -2,6 +2,7 @@
 
 use Nette\Caching\Cache;
 use Nette\Caching\Storages\FileStorage;
+use Nette\Utils\Finder;
 
 class Treeview extends FileManager
 {
@@ -70,31 +71,23 @@ class Treeview extends FileManager
             return $html;
    }
 
-   function getDirTree($dir, $showfiles=false, $iterateSubDirectories=true )
+   function getDirTree($dir)
    {
-            $d = dir($dir);
-            $x = array();
+       $x = array();
+       $dirs = Finder::findDirectories('*')
+                    ->in($dir)
+                    ->exclude(parent::getParent()->thumb . '*');
 
-            while (false !== ($r = $d->read())) {
+       foreach ($dirs as $dir)
+           $x[$dir->getFilename()] = $this->getDirTree($dir->getPathName());
 
-                    if($this['files']->isThumbDir($r) != True && $r != "." && $r != ".." && ((!preg_match('/^\..*/', $r) && !is_dir($dir.$r)) || is_dir($dir.$r)) && (($showfiles == false && is_dir($dir.$r)) || $showfiles == true)) {
-                            $x[$r] = (is_dir($dir.$r)?array():(is_file($dir.$r)?true:false));
-                    }
-            }
-            foreach ($x as $key => $value) {
-                            if (is_dir($dir.$key."/") && $iterateSubDirectories) {
-                                    $x[$key] = $this->getDirTree($dir.$key."/", $showfiles);
-                            } else {
-                                    $x[$key] = is_file($dir.$key) ? (preg_match("/\.([^\.]+)$/", $key, $matches) ? str_replace(".","",$matches[0]) : 'file') : "folder";
-                            }
-            }
-            uksort($x, "strnatcasecmp");
-            return $x;
+       return $x;
     }
 
     function generateTreeview()
     {
-        $dirs = $this->getDirTree($this->config['uploadroot'] . $this->config['uploadpath'], false);
+        $dirs = $this->getDirTree($this->config['uploadroot'] . $this->config['uploadpath']);
+
         $rootname = parent::getParent()->getRootname();
         
         return '<ul class="filetree" style="display: block;">
