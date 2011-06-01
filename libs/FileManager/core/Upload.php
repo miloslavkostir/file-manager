@@ -72,8 +72,6 @@ class Upload extends FileManager
                             $response['type'] = 'error';
                             $this->presenter->sendResponse(new JsonResponse($response));                            
                     } else {
-                            $this['tools']->clearFromCache(array('fmfiles', $actualdir));
-
                             $targetDir = parent::getParent()->getAbsolutePath($actualdir);
 
                             if ( file_exists($targetDir)) {

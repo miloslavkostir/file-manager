@@ -2,8 +2,6 @@
 
 use Nette\Application\Responses\FileResponse;
 use Nette\Environment;
-use Nette\Caching\Cache;
-use Nette\Caching\Storages\FileStorage;
 use Nette\Image;
 use Nette\Utils\Finder;
 use Nette\Templating\DefaultHelpers;
@@ -240,8 +238,6 @@ class Content extends FileManager
         $namespace->order = $key;
         $actualdir = $namespace->actualdir;
 
-        $this['tools']->clearFromCache(array('fmfiles', $actualdir));
-
         parent::getParent()->handleShowContent($actualdir);
     }
 
@@ -390,20 +386,10 @@ class Content extends FileManager
                 $view = 'large';
         }
 
-        $cache_const = md5($this->config['uploadroot'] . $this->config['uploadpath']);
-        $cache_dir = parent::getParent()->cache_path . $cache_const;
-        $storage = new FileStorage($cache_dir);
-        $cache = new Cache($storage);
-
-        if (empty($mask)) {
-                    if (isset($cache[array('fmfiles', $actualdir)]))
-                        $output = $cache[array('fmfiles', $actualdir)];
-                    else {
-                        $output = $this->getDirectoryContent($actualdir, '*', $view, $order);
-                        $cache->save(array('fmfiles', $actualdir), $output);
-                    }
-        } else
-                    $output = $this->getDirectoryContent($actualdir, $mask, $view, $order);
+        if (empty($mask))
+            $output = $this->getDirectoryContent($actualdir, '*', $view, $order);
+        else
+            $output = $this->getDirectoryContent($actualdir, $mask, $view, $order);
 
         $template->files = $output;
         $template->actualdir = $actualdir;

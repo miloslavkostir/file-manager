@@ -86,9 +86,6 @@ class NewFolder extends FileManager
                                                     $oldumask = umask(0);
                                                     if (mkdir($target_dir, 0777)) {
 
-                                                        $this['tools']->clearFromCache('fmtreeview');
-                                                        $this['tools']->clearFromCache(array('fmfiles', $values['actualdir']));
-
                                                         parent::getParent()->flashMessage(
                                                             $translator->translate('Folder successfully created'),
                                                             'info'

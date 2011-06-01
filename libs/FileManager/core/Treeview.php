@@ -1,7 +1,5 @@
 <?php
 
-use Nette\Caching\Cache;
-use Nette\Caching\Storages\FileStorage;
 use Nette\Utils\Finder;
 
 class Treeview extends FileManager
@@ -24,19 +22,7 @@ class Treeview extends FileManager
         $template = $this->template;
         $template->setFile(__DIR__ . '/Treeview.latte');
         $template->setTranslator(parent::getParent()->getTranslator());
-
-        // rendering treeview with caching
-        $cache_const = md5($this->config['uploadroot'] . $this->config['uploadpath']);
-        $cache_dir = parent::getParent()->cache_path . $cache_const;
-        $storage = new FileStorage($cache_dir);
-        $cache = new Cache($storage);
-        if (isset($cache['fmtreeview']))
-            $template->treeview = $cache['fmtreeview'];
-        else {
-            $template->treeview = $this->generateTreeview();
-            $cache->save('fmtreeview', $this->generateTreeview());
-        }
-
+        $template->treeview = $this->generateTreeview();
         $template->render();
     }
 

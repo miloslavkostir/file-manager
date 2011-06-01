@@ -79,11 +79,6 @@ class Clipboard extends FileManager
                                                             );                                                
                                     }
 
-                                    // refresh folder content cache
-                                    $this['tools']->clearFromCache(array('fmfiles', $val['actualdir']));
-                                    $this['tools']->clearFromCache(array('fmfiles', $actualdir));
-                                    $this['tools']->clearFromCache('fmtreeview');
-
                                     $this->handleClearClipboard();
                     }
         }

@@ -11,9 +11,6 @@ class FileManager extends Control
     const VERSION = '0.5 dev';
     
     /** @var string */
-    protected $cache_path;
-
-    /** @var string */
     protected $thumb = "__system_thumb";
 
     /** @var array */
@@ -45,7 +42,6 @@ class FileManager extends Control
     public function __construct()
     {
         parent::__construct();
-        $this->cache_path = TEMP_DIR . '/cache/_filemanager';
     }
    
     public function handleMove()
@@ -53,15 +49,10 @@ class FileManager extends Control
         $this['content']->handleMove();
     }
 
-    // TODO improve, because 2x calling clearFromCache can be little slower
     public function handleRefreshContent()
     {
         $namespace = Environment::getSession('file-manager');
         $actualdir = $namespace->actualdir;
-
-        $this['tools']->clearFromCache('fmtreeview');
-        $this['tools']->clearFromCache(array('fmfiles', $actualdir));
-
         $this->handleShowContent($actualdir);
     }
 
@@ -144,14 +135,6 @@ class FileManager extends Control
 
         if(!@is_dir(WWW_DIR . $this->config['resource_dir']))
              throw new Exception ("Resource dir " . $this->config['resource_dir'] . " doesn't exist! Application can not be loaded!");
-
-        $cache_const = md5($this->config['uploadroot'] . $this->config['uploadpath']);
-        $cache_dir = $this->cache_path . $cache_const;
-        if(!@is_dir($cache_dir)) {
-            $oldumask = umask(0);
-            mkdir($cache_dir, 0777);
-            umask($oldumask);
-        }
 
         $namespace = Environment::getSession('file-manager');
         

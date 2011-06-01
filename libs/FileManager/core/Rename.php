@@ -75,28 +75,20 @@ class Rename extends FileManager
                                 'warning'
                         );
 
-        elseif (!file_exists($path . $values['orig_filename'])) {
-                        // refresh folder content cache
-                        $this['tools']->clearFromCache(array('fmfiles', $actualdir));
-                        $this['tools']->clearFromCache('fmtreeview');
-
+        elseif (!file_exists($path . $values['orig_filename']))
                         parent::getParent()->flashMessage(
                                 $translator->translate("File/folder does not already exists!"),
                                 'error'
                         );
-        } else {
+        else {
 
                         if (is_dir( realpath($path . $values['orig_filename']) )) {
                                 $new_filename = $this['files']->safe_foldername($values['new_filename']);
 
-                                // delete thumb folder & clear old folder cache
-                                if ($actualdir == parent::getParent()->getRootname()) {
+                                if ($actualdir == parent::getParent()->getRootname())
                                     $thumb_folder = '/' . $values['orig_filename'] . '/';
-                                    $this['tools']->clearFromCache(array('fmfiles', '/' . $values['orig_filename'] . '/'));
-                                } else {
+                                else
                                     $thumb_folder = $actualdir . $values['orig_filename'] . '/' ;
-                                    $this['tools']->clearFromCache(array('fmfiles', $actualdir . $values['orig_filename'] . '/'));
-                                }
 
                                 $thumb_path = $path . $values['orig_filename'] . '/' . $this['files']->createThumbFolder($thumb_folder);
                                 if (file_exists($thumb_path))
@@ -109,8 +101,6 @@ class Rename extends FileManager
                         }
 
                         if (rename($path . $values['orig_filename'], $path . $new_filename)) {
-                                $this['tools']->clearFromCache(array('fmfiles', $actualdir));
-                                $this['tools']->clearFromCache('fmtreeview');
 
                                 parent::getParent()->flashMessage(
                                         $translator->translate("File/folder name successfully changed."),

@@ -31,7 +31,7 @@ class Files extends FileManager
     }    
     
     /**
-     * Copy file or folder from disk and clear cache
+     * Copy file or folder from disk
      * @param  string  actual dir (relative path)
      * @param  string  target dir (relative path)
      * @param  string  filename
@@ -179,11 +179,6 @@ class Files extends FileManager
         if (copy($actualpath . $filename, $targetpath . $this->checkDuplName($targetpath, $filename))) {
             $this->deleteFile($actualdir, $filename);
             $this['clipboard']->clearClipboard();
-
-            // refresh folder content cache
-            $this['tools']->clearFromCache(array('fmfiles', $actualdir));
-            $this['tools']->clearFromCache(array('fmfiles', $targetdir));                    
-            
             return true;
         } else
             return false;
@@ -465,7 +460,7 @@ class Files extends FileManager
     }
 
     /**
-     * Delete file or folder from disk and clear cache
+     * Delete file or folder from disk
      * @param  string  folder (relative path)
      * @param  string  filename - optional
      * @return bool
@@ -476,31 +471,15 @@ class Files extends FileManager
         
         if (is_dir($absDir . $file)) {
                      
-                if ($this->deleteFolder($absDir . $file)) {
-                    
-                    // clear actual dir cache
-                    $this['tools']->clearFromCache(array('fmfiles', $dir));           
-                    
-                    // clear sub-folders cache recursively
-                    if ($dir == parent::getParent()->getRootname())
-                        $startDir = null;
-                    else
-                        $startDir = substr($dir, 0, -1);                      
-                    $dirs = $this['treeview']->getDirTree($absDir);
-                    $this['tools']->clearDirCache($dirs, $startDir);
-                    
-                    // clear treeview cache
-                    $this['tools']->clearFromCache('fmtreeview');
-                    
+                if ($this->deleteFolder($absDir . $file))
                     return true;
-                } else
+                else
                     return false;
                 
         } else {
-                if ($this->deleteFile($dir, $file)) {
-                    $this['tools']->clearFromCache(array('fmfiles', $dir));                    
+                if ($this->deleteFile($dir, $file))
                     return true;
-                } else
+                else
                     return false;
         }
     }
