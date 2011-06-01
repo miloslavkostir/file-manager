@@ -194,7 +194,7 @@ class FileManager extends Control
 
     public function getTranslator()
     {
-        $lang = __DIR__ . '/locale/FileManager.' . $this->config["lang"] . '.mo';
+        $lang = __DIR__ . '/locale/' . $this->config["lang"] . '.mo';
         if (file_exists($lang)) {
             $transl = new GettextTranslator($lang);
             return $transl;
