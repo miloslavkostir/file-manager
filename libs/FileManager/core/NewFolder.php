@@ -17,30 +17,23 @@ class NewFolder extends FileManager
     {
         $namespace = Environment::getSession('file-manager');
         $actualdir = $namespace->actualdir;
-        $template = $this->template;
-        
-        $template->setFile(__DIR__ . '/NewFolder.latte');
 
-        // set language
-        $lang_file = __DIR__ . '/../locale/FileManager.'. $this->config['lang'].'.mo';
-        if (file_exists($lang_file))
-            $template->setTranslator(new GettextTranslator($lang_file));
-        else
-             throw new Exception ("Language file " . $lang_file . " doesn't exist! Application can not be loaded!");
+        $template = $this->template;
+        $template->setFile(__DIR__ . '/NewFolder.latte');
+        $template->setTranslator(parent::getParent()->getTranslator());
+        $template->config = $this->config;
+        $template->actualdir = $actualdir;
 
         $this['newFolderForm']->setDefaults(array(
                     'actualdir' => $actualdir
                 ));
-
-        $template->config = $this->config;
-        $template->actualdir = $actualdir;
 
         $template->render();
     }
 
     public function  createComponentNewFolderForm()
     {
-        $translator = new GettextTranslator(__DIR__ . '/../locale/FileManager.' . $this->config['lang'] . '.mo');
+        $translator = parent::getParent()->getTranslator();
         $form = new Form;
         $form->setTranslator($translator);
         $form->getElementPrototype()->class('fm-ajax');
@@ -55,7 +48,7 @@ class NewFolder extends FileManager
 
     public function NewFolderFormSubmitted($form)
     {
-        $translator = new GettextTranslator(__DIR__ . '/../locale/FileManager.' . $this->config['lang'] . '.mo');
+        $translator = parent::getParent()->getTranslator();
         $values = $form->getValues();
 
         if ($this->config['readonly'] == True)

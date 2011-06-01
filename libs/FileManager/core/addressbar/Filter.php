@@ -20,14 +20,7 @@ class Filter extends FileManager
 
         $template = $this->template;
         $template->setFile(__DIR__ . '/Filter.latte');
-
-        // set language
-        $lang_file = __DIR__ . '/../../locale/FileManager.'. $this->config['lang'].'.mo';
-        if (file_exists($lang_file))
-            $template->setTranslator(new GettextTranslator($lang_file));
-        else
-             throw new Exception ("Language file " . $lang_file . " doesn't exist! Application can not be loaded!");
-
+        $template->setTranslator(parent::getParent()->getTranslator());
         $template->filterForm = $this['filterForm'];
 
         $this['filterForm']->setDefaults(array(
@@ -39,7 +32,7 @@ class Filter extends FileManager
 
     public function createComponentFilterForm()
     {
-        $translator = new GettextTranslator(__DIR__ . '/../../locale/FileManager.' . $this->config["lang"] . '.mo');
+        $translator = parent::getParent()->getTranslator();
         $form = new Form;
         $form->setTranslator($translator);
         $form->getElementPrototype()->class('fm-ajax');

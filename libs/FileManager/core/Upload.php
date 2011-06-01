@@ -40,7 +40,7 @@ class Upload extends FileManager
         $namespace = Environment::getSession('file-manager');
         $actualdir = $namespace->actualdir;
 
-        $translator = new GettextTranslator(__DIR__ . '/../locale/FileManager.' . $this->config["lang"] . '.mo');
+        $translator = parent::getParent()->getTranslator();
 
         $response = array(
             'jsonrpc' => '2.0',
@@ -215,19 +215,13 @@ class Upload extends FileManager
 
     public function render()
     {
+        $translator = parent::getParent()->getTranslator();
         $namespace = Environment::getSession('file-manager');
+
         $template = $this->template;
         $template->setFile(__DIR__ . '/Upload.latte');
+        $template->setTranslator($translator);
 
-        // set language
-        $lang_file = __DIR__ . '/../locale/FileManager.'. $this->config['lang'].'.mo';
-        if (file_exists($lang_file))
-            $template->setTranslator(new GettextTranslator($lang_file));
-        else
-             throw new Exception ("Language file " . $lang_file . " doesn't exist! Application can not be loaded!");
-
-        $translator = new GettextTranslator(__DIR__ . '/../locale/FileManager.' . $this->config['lang'] . '.mo');        
-        
         $size = 0;
         foreach (Finder::findFiles('*')->from($this->config['uploadroot'] . $this->config['uploadpath']) as $file) {
                            $size += $file->getSize();

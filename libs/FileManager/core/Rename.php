@@ -20,28 +20,21 @@ class Rename extends FileManager
     {
         $template = $this->template;
         $template->setFile(__DIR__ . '/Rename.latte');
-
-        // set language
-        $lang_file = __DIR__ . '/../locale/FileManager.'. $this->config['lang'].'.mo';
-        if (file_exists($lang_file))
-            $template->setTranslator(new GettextTranslator($lang_file));
-        else
-             throw new Exception ("Language file " . $lang_file . " doesn't exist! Application can not be loaded!");
+        $template->setTranslator(parent::getParent()->getTranslator());
+        $template->config = $this->config;
+        $template->origFile = $this->files;
 
         $this['renameForm']->setDefaults(array(
             'new_filename' => $this->files,
             'orig_filename' => $this->files,
         ));
 
-        $template->config = $this->config;
-        $template->origFile = $this->files;
-
         $template->render();
     }
 
     public function createComponentRenameForm()
     {
-        $translator = new GettextTranslator(__DIR__ . '/../locale/FileManager.' . $this->config['lang'] . '.mo');
+        $translator = parent::getParent()->getTranslator();
         $form = new Form;
         $form->setTranslator($translator);
         $form->getElementPrototype()->class('fm-ajax');
@@ -56,7 +49,7 @@ class Rename extends FileManager
 
     public function RenameFormSubmitted($form)
     {
-        $translator = new GettextTranslator(__DIR__ . '/../locale/FileManager.' . $this->config["lang"] . '.mo');
+        $translator = parent::getParent()->getTranslator();
         $namespace = Environment::getSession('file-manager');
         $values = $form->getValues();
         $actualdir = $namespace->actualdir;        

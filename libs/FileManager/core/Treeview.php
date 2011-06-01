@@ -23,13 +23,7 @@ class Treeview extends FileManager
     {
         $template = $this->template;
         $template->setFile(__DIR__ . '/Treeview.latte');
-
-        // set language
-        $lang_file = __DIR__ . '/../locale/FileManager.'. $this->config['lang'].'.mo';
-        if (file_exists($lang_file))
-            $template->setTranslator(new GettextTranslator($lang_file));
-        else
-             throw new Exception ("Language file " . $lang_file . " doesn't exist! Application can not be loaded!");
+        $template->setTranslator(parent::getParent()->getTranslator());
 
         // rendering treeview with caching
         $cache_const = md5($this->config['uploadroot'] . $this->config['uploadpath']);
@@ -42,8 +36,6 @@ class Treeview extends FileManager
             $template->treeview = $this->generateTreeview();
             $cache->save('fmtreeview', $this->generateTreeview());
         }
-
-        $template->config = $this->config;
 
         $template->render();
     }

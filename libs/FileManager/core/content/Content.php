@@ -32,7 +32,7 @@ class Content extends FileManager
     {
         $namespace = Environment::getSession('file-manager');
         $actualdir = $namespace->actualdir;
-        $translator = new GettextTranslator(__DIR__ . '/../../locale/FileManager.' . $this->config["lang"] . '.mo');        
+        $translator = parent::getParent()->getTranslator();
         
         // if sended by AJAX
         if (empty($files)) {
@@ -80,7 +80,7 @@ class Content extends FileManager
     {
         $namespace = Environment::getSession('file-manager');
         $actualdir = $namespace->actualdir;
-        $translator = new GettextTranslator(__DIR__ . '/../../locale/FileManager.' . $this->config["lang"] . '.mo');        
+        $translator = parent::getParent()->getTranslator();
         
         // if sended by AJAX
         if (empty($files)) {
@@ -132,7 +132,7 @@ class Content extends FileManager
     {
         $namespace = Environment::getSession('file-manager');
         $actualdir = $namespace->actualdir;
-        $translator = new GettextTranslator(__DIR__ . '/../../locale/FileManager.' . $this->config["lang"] . '.mo');        
+        $translator = parent::getParent()->getTranslator();
         
         // if sended by AJAX
         if (empty($files)) {
@@ -162,7 +162,7 @@ class Content extends FileManager
     {
         $namespace = Environment::getSession('file-manager');
         $actualdir = $namespace->actualdir;
-        $translator = new GettextTranslator(__DIR__ . '/../../locale/FileManager.' . $this->config["lang"] . '.mo');
+        $translator = parent::getParent()->getTranslator();
 
         // if sended by AJAX
         if (empty($filename)) {
@@ -197,7 +197,7 @@ class Content extends FileManager
     {
         $namespace = Environment::getSession('file-manager');
         $actualdir = $namespace->actualdir;
-        $translator = new GettextTranslator(__DIR__ . '/../../locale/FileManager.' . $this->config["lang"] . '.mo');
+        $translator = parent::getParent()->getTranslator();
 
         // if sended by AJAX
         if (empty($files)) {
@@ -291,7 +291,7 @@ class Content extends FileManager
     {
         $namespace = Environment::getSession('file-manager');
         $actualdir = $namespace->actualdir;        
-        $translator = new GettextTranslator(__DIR__ . '/../../locale/FileManager.' . $this->config["lang"] . '.mo');
+        $translator = parent::getParent()->getTranslator();
         $request = Environment::getHttpRequest();
         
         // if sended by AJAX
@@ -359,12 +359,13 @@ class Content extends FileManager
 
     public function render()
     {
-        $translator = new GettextTranslator(__DIR__ . '/../../locale/FileManager.' . $this->config["lang"] . '.mo');
+        $translator = parent::getParent()->getTranslator();
         $namespace = Environment::getSession('file-manager');
-
         $actualdir = $namespace->actualdir;
+
         $template = $this->template;
-        
+        $template->setTranslator($translator);
+
         $view = $namespace->view;
         $mask = $namespace->mask;
         $order = $namespace->order;
@@ -388,13 +389,6 @@ class Content extends FileManager
                 $template->setFile(__DIR__ . '/large.latte');
                 $view = 'large';
         }
-
-        // set language
-        $lang_file = __DIR__ . '/../../locale/FileManager.'. $this->config['lang'].'.mo';
-        if (file_exists($lang_file))
-            $template->setTranslator(new GettextTranslator($lang_file));
-        else
-             throw new Exception ("Language file " . $lang_file . " doesn't exist! Application can not be loaded!");
 
         $cache_const = md5($this->config['uploadroot'] . $this->config['uploadpath']);
         $cache_dir = parent::getParent()->cache_path . $cache_const;

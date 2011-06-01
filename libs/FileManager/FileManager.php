@@ -85,7 +85,7 @@ class FileManager extends Control
                     'fileinfo'
                 ));
         } else {
-                $translator = new GettextTranslator(__DIR__ . '/locale/FileManager.' . $this->config['lang'] . '.mo');
+                $translator = parent::getParent()->getTranslator();
                 $this->flashMessage(
                     $translator->translate('Plugin not found!'),
                     'warning'
@@ -135,6 +135,7 @@ class FileManager extends Control
     {
         $template = $this->template;
         $template->setFile(__DIR__ . '/FileManager.latte');
+        $template->setTranslator($this->getTranslator());
 
         if(!@is_dir($this->config['uploadroot'] . $this->config['uploadpath']))
              throw new Exception ("Upload dir ".$this->config['uploadpath']." doesn't exist! Application can not be loaded!");
@@ -145,13 +146,6 @@ class FileManager extends Control
         if(!@is_dir(WWW_DIR . $this->config['resource_dir']))
              throw new Exception ("Resource dir " . $this->config['resource_dir'] . " doesn't exist! Application can not be loaded!");
 
-        // set language
-        $lang_file = __DIR__ . '/locale/FileManager.'.$this->config['lang'].'.mo';
-        if (file_exists($lang_file))
-            $template->setTranslator(new GettextTranslator($lang_file));
-        else
-             throw new Exception ("Language file " . $lang_file . " doesn't exist! Application can not be loaded!");
-       
         $cache_const = md5($this->config['uploadroot'] . $this->config['uploadpath']);
         $cache_dir = $this->cache_path . $cache_const;
         if(!@is_dir($cache_dir)) {
@@ -196,6 +190,16 @@ class FileManager extends Control
     {
         foreach ($snippets as $snippet)
             $this->invalidateControl($snippet);
+    }
+
+    public function getTranslator()
+    {
+        $lang = __DIR__ . '/locale/FileManager.' . $this->config["lang"] . '.mo';
+        if (file_exists($lang)) {
+            $transl = new GettextTranslator($lang);
+            return $transl;
+        } else
+            throw new Exception("Language file $lang does not exists!");
     }
 
     /**

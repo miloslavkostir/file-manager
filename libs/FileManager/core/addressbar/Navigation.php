@@ -36,7 +36,7 @@ class Navigation extends FileManager
 
     public function createComponentLocationForm()
     {
-        $translator = new GettextTranslator(__DIR__ . '/../../locale/FileManager.' . $this->config["lang"] . '.mo');
+        $translator = parent::getParent()->getTranslator();
         $form = new Form;
         $form->setTranslator($translator);
         $form->getElementPrototype()->class('fm-ajax');
@@ -55,7 +55,7 @@ class Navigation extends FileManager
         if (file_exists($path))
             parent::getParent()->handleShowContent($val['location']);
         else {
-            $translator = new GettextTranslator(__DIR__ . '/../../locale/FileManager.' . $this->config["lang"] . '.mo');
+            $translator = parent::getParent()->getTranslator();
             parent::getParent()->flashMessage(
                 $translator->translate('Directory does not exists.'),
                 'warning'

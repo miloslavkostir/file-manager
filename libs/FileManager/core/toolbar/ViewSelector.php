@@ -16,17 +16,10 @@ class ViewSelector extends FileManager
     public function render()
     {
         $namespace = Environment::getSession('file-manager');
+
         $template = $this->template;
-        
         $template->setFile(__DIR__ . '/ViewSelector.latte');
-
-        // set language
-        $lang_file = __DIR__ . '/../../locale/FileManager.'. $this->config['lang'].'.mo';
-        if (file_exists($lang_file))
-            $template->setTranslator(new GettextTranslator($lang_file));
-        else
-             throw new Exception ("Language file " . $lang_file . " doesn't exist! Application can not be loaded!");
-
+        $template->setTranslator(parent::getParent()->getTranslator());
         $template->actualdir = $namespace->actualdir;
         $template->changeViewForm = $this['changeViewForm'];
 
@@ -39,7 +32,7 @@ class ViewSelector extends FileManager
 
     public function createComponentChangeViewForm()
     {
-        $translator = new GettextTranslator(__DIR__ . '/../../locale/FileManager.' . $this->config['lang'] . '.mo');
+        $translator = parent::getParent()->getTranslator();
 
         $items = array(
             'large' => $translator->translate('Large images'),

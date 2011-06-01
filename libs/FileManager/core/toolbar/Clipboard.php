@@ -28,7 +28,7 @@ class Clipboard extends FileManager
 
     public function handlePasteFromClipboard()
     {
-        $translator = new GettextTranslator(__DIR__ . '/../../locale/FileManager.' . $this->config["lang"] . '.mo');
+        $translator =  parent::getParent()->getTranslator();
         $namespace = Environment::getSession('file-manager');
         $actualdir = $namespace->actualdir;
         
@@ -91,7 +91,7 @@ class Clipboard extends FileManager
 
     public function handleRemoveFromClipboard($actualdir, $filename)
     {
-        $translator = new GettextTranslator(__DIR__ . '/../../locale/FileManager.' . $this->config["lang"] . '.mo');
+        $translator = parent::getParent()->getTranslator();
         $namespace = Environment::getSession('file-manager');
         $path = $actualdir.$filename;
 
@@ -110,13 +110,7 @@ class Clipboard extends FileManager
     {
         $template = $this->template;
         $template->setFile(__DIR__ . '/Clipboard.latte');
-
-        // set language
-        $lang_file = __DIR__ . '/../../locale/FileManager.'. $this->config['lang'].'.mo';
-        if (file_exists($lang_file))
-            $template->setTranslator(new GettextTranslator($lang_file));
-        else
-             throw new Exception ("Language file " . $lang_file . " doesn't exist! Application can not be loaded!");
+        $template->setTranslator(parent::getParent()->getTranslator());
 
         $namespace = Environment::getSession('file-manager');
         $template->clipboard = $namespace->clipboard;

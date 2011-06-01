@@ -105,7 +105,7 @@ class Tools extends FileManager
         if (file_exists($path))
             return True;
         else {
-            $translator = new GettextTranslator(__DIR__ . '/../../locale/FileManager.' . $this->config["lang"] . '.mo');
+            $translator = parent::getParent()->getTranslator();
             parent::getParent()->flashMessage(
                 $translator->translate('Target path %s not found!', $dir),
                 'warning'
