@@ -107,10 +107,9 @@ class FileManager extends Control
     }
 
     public function handleShowContent($actualdir)
-    {       
+    {
         if ($this['tools']->validPath($actualdir)) {
                 $this->template->content = $actualdir;
-                $this->template->actualdir = $actualdir;
 
                 // set actualdir
                 $namespace = Environment::getSession('file-manager');

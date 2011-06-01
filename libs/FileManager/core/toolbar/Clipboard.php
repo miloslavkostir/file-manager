@@ -114,7 +114,6 @@ class Clipboard extends FileManager
 
         $namespace = Environment::getSession('file-manager');
         $template->clipboard = $namespace->clipboard;
-        $template->actualdir = $namespace->actualdir;
         $template->rootname = parent::getParent()->getRootname();
         
         $template->render();
