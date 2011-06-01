@@ -21,7 +21,6 @@ class Rename extends FileManager
         $template = $this->template;
         $template->setFile(__DIR__ . '/Rename.latte');
         $template->setTranslator(parent::getParent()->getTranslator());
-        $template->config = $this->config;
         $template->origFile = $this->files;
 
         $this['renameForm']->setDefaults(array(

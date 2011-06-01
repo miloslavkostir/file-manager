@@ -156,8 +156,6 @@ class FileManager extends Control
 
         $namespace = Environment::getSession('file-manager');
         
-        $template->config = $this->config;
-
         $clipboard = $namespace->clipboard;
         if (!empty($clipboard ))
             $template->clipboard = $namespace->clipboard;

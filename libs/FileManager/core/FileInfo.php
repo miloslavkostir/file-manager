@@ -24,7 +24,6 @@ class FileInfo extends FileManager
         $template->setFile(__DIR__ . '/FileInfo.latte');
         $template->setTranslator(parent::getParent()->getTranslator());
         $template->fileinfo = $this['files']->fileDetails($actualdir, $this->filename);
-        $template->config = $this->config;
         $template->actualdir = $actualdir;
         $template->render();
     }

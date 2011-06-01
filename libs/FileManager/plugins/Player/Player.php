@@ -43,12 +43,8 @@ class Player extends FileManager
     {
         $template = $this->template;
         $template->setFile(__DIR__ . '/Player.latte');
-        
         $template->actualdir = $this->actualdir;
         $template->files = $this->getFiles($this->actualdir);
-        
-        $template->config = parent::getParent()->config;
-
         $template->render();
     }
 

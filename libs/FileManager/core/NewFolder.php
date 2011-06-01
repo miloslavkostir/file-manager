@@ -21,7 +21,6 @@ class NewFolder extends FileManager
         $template = $this->template;
         $template->setFile(__DIR__ . '/NewFolder.latte');
         $template->setTranslator(parent::getParent()->getTranslator());
-        $template->config = $this->config;
         $template->actualdir = $actualdir;
 
         $this['newFolderForm']->setDefaults(array(

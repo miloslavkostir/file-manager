@@ -406,7 +406,6 @@ class Content extends FileManager
                     $output = $this->getDirectoryContent($actualdir, $mask, $view, $order);
 
         $template->files = $output;
-        $template->config = $this->config;
         $template->actualdir = $actualdir;
         $template->rootname = parent::getParent()->getRootname();
         $template->thumb_dir = $this->config['resource_dir'] . 'img/icons/' . $view . '/';
