@@ -23,6 +23,6 @@ $(document).ready(function()
 });
 </script>
 
-{$filterForm->render('begin')}
-{$filterForm['phrase']->control}
-{$filterForm->render('end')}
+{form filterForm}
+    {input phrase}
+{/form}

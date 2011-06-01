@@ -15,16 +15,14 @@ class Navigation extends FileManager
         $namespace = Environment::getSession('file-manager');
         $actualdir = $namespace->actualdir;        
         $rootname = parent::getParent()->getRootname();
+
         $template = $this->template;
-        
         $template->setFile(__DIR__ . '/Navigation.latte');
 
         if (empty($actualdir)) {
             $template->items = $this->getNav($rootname);
         } else
             $template->items = $this->getNav($actualdir);
-
-        $template->locationForm = $this['locationForm'];
 
         $this['locationForm']->setDefaults(array(
                     'actualdir' => $actualdir,

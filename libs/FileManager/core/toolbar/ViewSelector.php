@@ -20,7 +20,6 @@ class ViewSelector extends FileManager
         $template = $this->template;
         $template->setFile(__DIR__ . '/ViewSelector.latte');
         $template->setTranslator(parent::getParent()->getTranslator());
-        $template->changeViewForm = $this['changeViewForm'];
 
         $this['changeViewForm']->setDefaults(array(
                     'view' => $namespace->view

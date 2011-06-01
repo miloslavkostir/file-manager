@@ -21,7 +21,6 @@ class Filter extends FileManager
         $template = $this->template;
         $template->setFile(__DIR__ . '/Filter.latte');
         $template->setTranslator(parent::getParent()->getTranslator());
-        $template->filterForm = $this['filterForm'];
 
         $this['filterForm']->setDefaults(array(
                     'phrase' => $namespace->mask
