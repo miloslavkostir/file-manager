@@ -7,9 +7,6 @@ use Nette\Caching\Cache,
 
 class Caching extends FileManager
 {
-    /** @var array */
-    public $config;
-
     /** @var object */
     private $cache;
 
