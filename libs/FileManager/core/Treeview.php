@@ -79,7 +79,6 @@ class Treeview extends FileManager
     }
 
     /**
-     * TODO: save unique treeviews
      * Load data
      *
      * @return string
