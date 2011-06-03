@@ -24,6 +24,7 @@ class HomepagePresenter extends BasePresenter
         {
             $fm = new FileManager;
 
+            $fm->config['cache'] = False;                     // default is True
             //$fm->config['resource_dir'] = '/resources/';      // default is /fm-src/ (must be located in WWW_DIR)
             $fm->config['uploadroot'] = WWW_DIR;
             //$fm->config['uploadroot'] = APP_DIR;

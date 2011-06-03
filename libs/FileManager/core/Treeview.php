@@ -11,7 +11,7 @@ class Treeview extends FileManager
     {
         parent::__construct();
     }
-    
+
     public function handleMoveFile($actualdir = "", $targetdir = "", $filename = "")
     {
         parent::getParent()->handleMoveFile($actualdir = "", $targetdir = "", $filename = "");
@@ -22,7 +22,7 @@ class Treeview extends FileManager
         $template = $this->template;
         $template->setFile(__DIR__ . '/Treeview.latte');
         $template->setTranslator(parent::getParent()->getTranslator());
-        $template->treeview = $this->generateTreeview();
+        $template->treeview = $this->loadData();
         $template->render();
     }
 
@@ -76,5 +76,30 @@ class Treeview extends FileManager
                     </span>'.
                     $this->generateTree($dirs, null).
                 '</ul>';
+    }
+
+    /**
+     * TODO: save unique treeviews
+     * Load data
+     *
+     * @return string
+     */
+    public function loadData()
+    {
+        if ($this->config['cache'] == True) {
+
+            $path = realpath($this->config['uploadroot'] . $this->config['uploadpath']);
+
+            $cacheData = $this['caching']->getItem($path);
+
+            if (empty($cacheData)) {
+                $output = $this->generateTreeview();
+                $this['caching']->saveItem($path, $output, array('tags' => array('treeview')));
+                return $output;
+            } else
+                return $cacheData;
+
+        } else
+            return $this->generateTreeview();
     }
 }

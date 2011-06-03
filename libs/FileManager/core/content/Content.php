@@ -365,7 +365,10 @@ class Content extends FileManager
         $view = $namespace->view;
         $mask = $namespace->mask;
         $order = $namespace->order;
-        
+
+        if (empty($mask))
+            $mask = '*';
+
         if (empty($order))
             $order = 'type';
 
@@ -386,12 +389,7 @@ class Content extends FileManager
                 $view = 'large';
         }
 
-        if (empty($mask))
-            $output = $this->getDirectoryContent($actualdir, '*', $view, $order);
-        else
-            $output = $this->getDirectoryContent($actualdir, $mask, $view, $order);
-
-        $template->files = $output;
+        $template->files = $this->loadData($actualdir, $mask, $view, $order);
         $template->actualdir = $actualdir;
         $template->rootname = parent::getParent()->getRootname();
         $template->thumb_dir = $this->config['resource_dir'] . 'img/icons/' . $view . '/';
@@ -466,5 +464,32 @@ class Content extends FileManager
         }
 
         return $dir_array;
+    }
+
+    /**
+     * Load data
+     *
+     * @param string $actualdir
+     * @param string $mask
+     * @param string $view
+     * @param string $order
+     * @return array 
+     */
+    public function loadData($actualdir, $mask, $view, $order)
+    {
+        if ($this->config['cache'] == True) {
+
+            $absDir = realpath(parent::getParent()->getAbsolutePath($actualdir));
+            $cacheData = $this['caching']->getItem(array('content',  $absDir));
+
+            if (empty($cacheData)) {
+                $output = $this->getDirectoryContent($actualdir, $mask, $view, $order);
+                $this['caching']->saveItem(array('content',  $absDir), $output);
+                return $output;
+            } else
+                return $cacheData;
+
+        } else
+            return $this->getDirectoryContent($actualdir, $mask, $view, $order);
     }
 }

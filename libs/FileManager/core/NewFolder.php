@@ -91,6 +91,11 @@ class NewFolder extends FileManager
                                                             'info'
                                                         );
 
+                                                        if ($this->config['cache'] == True) {
+                                                            $this['caching']->deleteItem(array('content', realpath(parent::getParent()->getAbsolutePath($values['actualdir']))));
+                                                            $this['caching']->deleteItem(NULL, array('tags' => 'treeview'));
+                                                        }
+
                                                         parent::getParent()->handleShowContent($values['actualdir']);   //   TODO replace actualdir with redirect to new created folder
 
                                                     } else {

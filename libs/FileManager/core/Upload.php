@@ -187,8 +187,12 @@ class Upload extends FileManager
                                                 }
                                         }
 
+                                        if ($this->config['cache'] == True)
+                                            $this['caching']->deleteItem(array('content', realpath($targetDir)));
+
                                         $response['result'] = $translator->translate('Successfuly uploaded.');
                                         $response['type'] = 'info';
+
                                         $this->presenter->sendResponse(new JsonResponse($response));
                             } else {
                                         $response['result'] = $translator->translate('Target directory is not available!');

@@ -44,9 +44,18 @@ class Files extends FileManager
        
         if (is_writable($targetpath)) {
 
-            $disksize = $this['tools']->diskSizeInfo();            
-            
+            $disksize = $this['tools']->diskSizeInfo();
+
+            if ($this->config['cache'] == True)
+                $this['caching']->deleteItem(array('content', realpath($targetpath)));
+
             if (is_dir($actualpath . $filename)) {
+
+                    if ($this->config['cache'] == True) {
+                        $this['caching']->deleteItem(NULL, array('tags' => 'treeview'));
+                        $this['caching']->deleteItem(array('content', realpath($targetpath)));
+                    }
+
                     $dirinfo = $this->getFolderInfo(realpath($actualpath . $filename));
                     if ($disksize['spaceleft'] < $dirinfo['size'])
                                     return false;
@@ -468,14 +477,18 @@ class Files extends FileManager
     public function delete($dir, $file = "")
     {
         $absDir = parent::getParent()->getAbsolutePath($dir);
-        
+
         if (is_dir($absDir . $file)) {
-                     
-                if ($this->deleteFolder($absDir . $file))
-                    return true;
-                else
-                    return false;
+
+                if ($this->config['cache'] == True)
+                    $this['caching']->deleteItemsRecursive($absDir);
                 
+                if ($this->deleteFolder($absDir . $file)) {
+
+                    return true;
+                } else
+                    return false;
+
         } else {
                 if ($this->deleteFile($dir, $file))
                     return true;
@@ -501,9 +514,11 @@ class Files extends FileManager
                    unlink($cache_file['path']);
 
                 // delete source file
-                if (unlink($path . $filename))                   
-                    return true;                    
-                else
+                if (unlink($path . $filename)) {
+                    if ($this->config['cache'] == True)
+                        $this['caching']->deleteItem(array('content', realpath($path)));
+                    return true;
+                } else
                     return false;
                 
         } else

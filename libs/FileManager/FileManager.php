@@ -22,6 +22,7 @@ class FileManager extends Control
 
     /** @var array */
     public $config = array(
+        'cache' => True,
         'readonly' => False,
         'resource_dir' => '/fm-src/',
         'quota' => False,
@@ -43,7 +44,7 @@ class FileManager extends Control
     {
         parent::__construct();
     }
-   
+
     public function handleMove()
     {
         $this['content']->handleMove();
@@ -53,6 +54,12 @@ class FileManager extends Control
     {
         $namespace = Environment::getSession('file-manager');
         $actualdir = $namespace->actualdir;
+
+        if ($this->config['cache'] == True) {
+            $this['caching']->deleteItem(NULL, array('tags' => 'treeview'));
+            $this['caching']->deleteItem(array('content', realpath($this->getAbsolutePath($actualdir))));
+        }
+
         $this->handleShowContent($actualdir);
     }
 

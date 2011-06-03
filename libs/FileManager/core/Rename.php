@@ -93,11 +93,19 @@ class Rename extends FileManager
                                 $thumb_path = $path . $values['orig_filename'] . '/' . $this['files']->createThumbFolder($thumb_folder);
                                 if (file_exists($thumb_path))
                                     $this['files']->deleteFolder($thumb_path);
+
+                                if ($this->config['cache'] == True) {
+                                    $this['caching']->deleteItem(array('content', realpath($path)));
+                                    $this['caching']->deleteItemsRecursive($path . $values['orig_filename']);
+                                }
                         } else {
                                 $cache_file =  $this['files']->createThumbName($actualdir, $values['orig_filename']);
                                 if (file_exists($cache_file['path']))
                                     unlink($cache_file['path']);
                                 $new_filename = $this['files']->safe_filename($values['new_filename']);
+
+                                if ($this->config['cache'] == True)
+                                    $this['caching']->deleteItem(array('content', realpath($path)));
                         }
 
                         if (rename($path . $values['orig_filename'], $path . $new_filename)) {
