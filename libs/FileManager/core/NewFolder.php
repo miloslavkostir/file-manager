@@ -1,7 +1,6 @@
 <?php
 
 use Nette\Application\UI\Form;
-use Nette\Environment;
 
 class NewFolder extends FileManager
 {
@@ -15,8 +14,7 @@ class NewFolder extends FileManager
 
     public function render()
     {
-        $namespace = Environment::getSession('file-manager');
-        $actualdir = $namespace->actualdir;
+        $actualdir = $this['system']->getActualDir();
 
         $template = $this->template;
         $template->setFile(__DIR__ . '/NewFolder.latte');

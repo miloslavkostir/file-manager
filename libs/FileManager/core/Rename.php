@@ -1,7 +1,6 @@
 <?php
 
 use Nette\Application\UI\Form;
-use Nette\Environment;
 
 class Rename extends FileManager
 {
@@ -49,9 +48,8 @@ class Rename extends FileManager
     public function RenameFormSubmitted($form)
     {
         $translator = parent::getParent()->getTranslator();
-        $namespace = Environment::getSession('file-manager');
         $values = $form->getValues();
-        $actualdir = $namespace->actualdir;        
+        $actualdir = $this['system']->getActualDir();
         $path = parent::getParent()->getAbsolutePath($actualdir);
 
         if ($this->config['readonly'] == True)

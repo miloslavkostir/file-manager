@@ -1,8 +1,7 @@
 <?php
 
-use Nette\Environment;
-use Nette\Application\UI\Control;
-use Nette\Utils\Finder;
+use Nette\Application\UI\Control,
+        Nette\Utils\Finder;
 
 class FileManager extends Control
 {
@@ -52,8 +51,7 @@ class FileManager extends Control
 
     public function handleRefreshContent()
     {
-        $namespace = Environment::getSession('file-manager');
-        $actualdir = $namespace->actualdir;
+        $actualdir = $this['system']->getActualDir();
 
         if ($this->config['cache'] == True) {
             $this['caching']->deleteItem(NULL, array('tags' => 'treeview'));
@@ -65,8 +63,7 @@ class FileManager extends Control
 
     public function handleRunPlugin($plugin, $files = "")
     {
-        $namespace = Environment::getSession('file-manager');
-        $actualdir = $namespace->actualdir;
+        $actualdir = $this['system']->getActualDir();
 
         if (in_array($plugin, $this->core) || in_array($plugin, $this->config['plugins'])) {
                 $this->template->plugin = $plugin;
@@ -93,8 +90,7 @@ class FileManager extends Control
 
     public function handleShowFileInfo($filename)
     {
-        $namespace = Environment::getSession('file-manager');
-        $actualdir = $namespace->actualdir;
+        $actualdir = $this['system']->getActualDir();
 
         if ($this['tools']->validPath($actualdir, $filename)) {
                 $this->template->fileinfo = $actualdir;
@@ -109,9 +105,7 @@ class FileManager extends Control
         if ($this['tools']->validPath($actualdir)) {
                 $this->template->content = $actualdir;
 
-                // set actualdir
-                $namespace = Environment::getSession('file-manager');
-                $namespace->actualdir = $actualdir;
+                $this['system']->setActualDir($actualdir);
 
                 if ($this->presenter->isAjax())
                     $this->refreshSnippets(array(
@@ -143,8 +137,8 @@ class FileManager extends Control
         if(!@is_dir(WWW_DIR . $this->config['resource_dir']))
              throw new Exception ("Resource dir " . $this->config['resource_dir'] . " doesn't exist! Application can not be loaded!");
 
-        $namespace = Environment::getSession('file-manager');
-        
+        $namespace = $this->presenter->context->session->getNamespace('file-manager');
+
         $clipboard = $namespace->clipboard;
         if (!empty($clipboard ))
             $template->clipboard = $namespace->clipboard;
@@ -193,7 +187,7 @@ class FileManager extends Control
      * Global component factory
      *
      * @param	string	$name
-     * @return	Control
+     * @return	Component
      */
     protected function createComponent($name)
     {

@@ -1,7 +1,6 @@
 <?php
 
 use Nette\Application\UI\Form;
-use Nette\Environment;
 
 class Filter extends FileManager
 {
@@ -15,8 +14,7 @@ class Filter extends FileManager
 
     public function render()
     {
-        $namespace = Environment::getSession('file-manager');
-        $actualdir = $namespace->actualdir;
+        $namespace = $this->presenter->context->session->getNamespace('file-manager');
 
         $template = $this->template;
         $template->setFile(__DIR__ . '/Filter.latte');
@@ -43,9 +41,9 @@ class Filter extends FileManager
 
     public function FilterFormSubmitted($form)
     {
-        $namespace = Environment::getSession('file-manager');
-        $actualdir = $namespace->actualdir;
-        
+        $namespace = $this->presenter->context->session->getNamespace('file-manager');
+        $actualdir = $this['system']->getActualDir();
+
         $val = $form->values;
         $namespace->mask = $val['phrase'];
         parent::getParent()->handleShowContent($actualdir);

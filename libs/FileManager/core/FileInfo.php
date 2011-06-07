@@ -1,7 +1,5 @@
 <?php
 
-use Nette\Environment;
-
 class FileInfo extends FileManager
 {
     /** @var array */
@@ -17,8 +15,7 @@ class FileInfo extends FileManager
 
     public function render()
     {
-        $namespace = Environment::getSession('file-manager');
-        $actualdir = $namespace->actualdir;
+        $actualdir = $this['system']->getActualDir();
 
         $template = $this->template;
         $template->setFile(__DIR__ . '/FileInfo.latte');

@@ -2,7 +2,6 @@
 
 use Nette\Application\Responses\JsonResponse;
 use Nette\Application\UI\Presenter;
-use Nette\Environment;
 use Nette\Http\Response;
 use Nette\Utils\Finder;
 
@@ -37,8 +36,7 @@ class Upload extends FileManager
         $httpResponse->setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, post-check=0, pre-check=0');
         $httpResponse->setHeader('Pragma', 'no-cache');
 
-        $namespace = Environment::getSession('file-manager');
-        $actualdir = $namespace->actualdir;
+        $actualdir = $this['system']->getActualDir();
 
         $translator = parent::getParent()->getTranslator();
 
@@ -208,7 +206,7 @@ class Upload extends FileManager
 
     public function handleRefreshMessage()
     {
-        $request = Environment::getHttpRequest();
+        $request = $this->presenter->context->httpRequest;
         $type = $request->getQuery('type');
         $text = $request->getQuery('message');
         parent::getParent()->flashMessage($text, $type);
@@ -218,7 +216,6 @@ class Upload extends FileManager
     public function render()
     {
         $translator = parent::getParent()->getTranslator();
-        $namespace = Environment::getSession('file-manager');
 
         $template = $this->template;
         $template->setFile(__DIR__ . '/Upload.latte');
@@ -256,7 +253,7 @@ class Upload extends FileManager
             );
 
         $template->config = $this->config;
-        $template->actualdir = $namespace->actualdir;
+        $template->actualdir = $this['system']->getActualDir();
 
         $template->render();
     }

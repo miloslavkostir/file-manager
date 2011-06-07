@@ -1,7 +1,6 @@
 <?php
 
 use Nette\Application\UI\Form;
-use Nette\Environment;
 
 class Navigation extends FileManager
 {
@@ -12,8 +11,7 @@ class Navigation extends FileManager
 
     public function render()
     {
-        $namespace = Environment::getSession('file-manager');
-        $actualdir = $namespace->actualdir;        
+        $actualdir = $this['system']->getActualDir();
         $rootname = parent::getParent()->getRootname();
 
         $template = $this->template;

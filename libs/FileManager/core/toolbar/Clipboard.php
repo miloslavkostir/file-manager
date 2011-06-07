@@ -1,6 +1,5 @@
 <?php
 
-use Nette\Environment;
 use Nette\Utils\Finder;
 
 class Clipboard extends FileManager
@@ -15,13 +14,13 @@ class Clipboard extends FileManager
 
     public function clearClipboard()
     {
-        $namespace = Environment::getSession('file-manager');
+        $namespace = $this->presenter->context->session->getNamespace('file-manager');
         unset($namespace->clipboard);
     }
 
     public function handleClearClipboard()
     {
-        $namespace = Environment::getSession('file-manager');        
+        $namespace = $this->presenter->context->session->getNamespace('file-manager');        
         $this->clearClipboard();
         parent::getParent()->handleShowContent($namespace->actualdir);
     }
@@ -29,8 +28,8 @@ class Clipboard extends FileManager
     public function handlePasteFromClipboard()
     {
         $translator =  parent::getParent()->getTranslator();
-        $namespace = Environment::getSession('file-manager');
-        $actualdir = $namespace->actualdir;
+        $namespace = $this->presenter->context->session->getNamespace('file-manager');
+        $actualdir = $this['system']->getActualDir();
         
         if ($this['tools']->validPath($actualdir)) {
                     if ($this->config['readonly'] == True)
@@ -87,7 +86,7 @@ class Clipboard extends FileManager
     public function handleRemoveFromClipboard($actualdir, $filename)
     {
         $translator = parent::getParent()->getTranslator();
-        $namespace = Environment::getSession('file-manager');
+        $namespace = $this->presenter->context->session->getNamespace('file-manager');
         $path = $actualdir.$filename;
 
         if (isset($namespace->clipboard[$path]))
@@ -107,7 +106,7 @@ class Clipboard extends FileManager
         $template->setFile(__DIR__ . '/Clipboard.latte');
         $template->setTranslator(parent::getParent()->getTranslator());
 
-        $namespace = Environment::getSession('file-manager');
+        $namespace = $this->presenter->context->session->getNamespace('file-manager');
         $template->clipboard = $namespace->clipboard;
         $template->rootname = parent::getParent()->getRootname();
         

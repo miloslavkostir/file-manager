@@ -1,7 +1,6 @@
 <?php
 
 use Nette\Application\Responses\FileResponse;
-use Nette\Environment;
 use Nette\Image;
 use Nette\Utils\Finder;
 use Nette\Templating\DefaultHelpers;
@@ -19,24 +18,20 @@ class Content extends FileManager
     public function handleShowFileInfo($filename = "")
     {
         // if sended by AJAX
-        if (empty($filename)) {
-            $request = Environment::getHttpRequest();
-            $filename = $request->getQuery('filename');
-        }
+        if (empty($filename))
+            $filename = $this->presenter->context->httpRequest->getQuery('filename');
+
         parent::getParent()->handleShowFileInfo($filename);
     }
     
     public function handleShowMultiFileInfo($files = "")
     {
-        $namespace = Environment::getSession('file-manager');
-        $actualdir = $namespace->actualdir;
+        $actualdir = $this['system']->getActualDir();
         $translator = parent::getParent()->getTranslator();
         
         // if sended by AJAX
-        if (empty($files)) {
-            $request = Environment::getHttpRequest();
-            $files = $request->getPost('files');
-        }
+        if (empty($files))
+            $files = $this->presenter->context->httpRequest->getPost('files');
         
         if (is_array($files)) {
                 $info = $this['files']->getFilesInfo($actualdir, $files, true);
@@ -55,13 +50,10 @@ class Content extends FileManager
     public function handleCopyToClipboard($filename = "")
     {
         // if sended by AJAX
-        if (empty($filename)) {
-            $request = Environment::getHttpRequest();
-            $filename = $request->getPost('filename');
-        }
+        if (empty($filename))
+            $filename = $this->presenter->context->httpRequest->getPost('filename');
 
-        $namespace = Environment::getSession('file-manager');
-        $actualdir = $namespace->actualdir;
+        $actualdir = $this['system']->getActualDir();
 
         if ($this['tools']->validPath($actualdir, $filename)) {
             $namespace->clipboard[$actualdir.$filename] = array(
@@ -76,15 +68,13 @@ class Content extends FileManager
     
     public function handleMultiCopyToClipboard($files = "")
     {
-        $namespace = Environment::getSession('file-manager');
-        $actualdir = $namespace->actualdir;
+        $namespace = $this->presenter->context->session->getNamespace('file-manager');
+        $actualdir = $this['system']->getActualDir();
         $translator = parent::getParent()->getTranslator();
         
         // if sended by AJAX
-        if (empty($files)) {
-            $request = Environment::getHttpRequest();
-            $files = $request->getPost('files');
-        }
+        if (empty($files))
+            $files = $this->presenter->context->httpRequest->getPost('files');
         
         if (is_array($files)) {
 
@@ -107,13 +97,11 @@ class Content extends FileManager
     public function handleCutToClipboard($filename = "")
     {
         // if sended by AJAX
-        if (empty($filename)) {
-            $request = Environment::getHttpRequest();
-            $filename = $request->getPost('filename');
-        }
+        if (empty($filename))
+            $filename = $this->presenter->context->httpRequest->getPost('filename');
 
-        $namespace = Environment::getSession('file-manager');
-        $actualdir = $namespace->actualdir;
+        $namespace = $this->presenter->context->session->getNamespace('file-manager');
+        $actualdir = $this['system']->getActualDir();
         
         if ($this['tools']->validPath($actualdir, $filename)) {
             $namespace->clipboard[$actualdir.$filename] = array(
@@ -125,18 +113,16 @@ class Content extends FileManager
             $this->handleShowContent($actualdir);
         }
     }
-    
+
     public function handleMultiCutToClipboard($files = "")
     {
-        $namespace = Environment::getSession('file-manager');
-        $actualdir = $namespace->actualdir;
+        $namespace = $this->presenter->context->session->getNamespace('file-manager');
+        $actualdir = $this['system']->getActualDir();
         $translator = parent::getParent()->getTranslator();
         
         // if sended by AJAX
-        if (empty($files)) {
-            $request = Environment::getHttpRequest();
-            $files = $request->getPost('files');
-        }
+        if (empty($files))
+            $files = $this->presenter->context->httpRequest->getPost('files');
         
         if (is_array($files)) {
 
@@ -158,15 +144,12 @@ class Content extends FileManager
 
     public function handleDelete($filename = "")
     {
-        $namespace = Environment::getSession('file-manager');
-        $actualdir = $namespace->actualdir;
+        $actualdir = $this['system']->getActualDir();
         $translator = parent::getParent()->getTranslator();
 
         // if sended by AJAX
-        if (empty($filename)) {
-            $request = Environment::getHttpRequest();
-            $filename = $request->getQuery('filename');
-        }
+        if (empty($filename))
+            $filename = $this->presenter->context->httpRequest->getQuery('filename');
 
         if ($this->config['readonly'] == True)
                         parent::getParent()->flashMessage(
@@ -193,15 +176,12 @@ class Content extends FileManager
     
     public function handleMultiDelete($files = "")
     {
-        $namespace = Environment::getSession('file-manager');
-        $actualdir = $namespace->actualdir;
+        $actualdir = $this['system']->getActualDir();
         $translator = parent::getParent()->getTranslator();
 
         // if sended by AJAX
-        if (empty($files)) {
-            $request = Environment::getHttpRequest();
-            $files = $request->getPost('files');
-        }
+        if (empty($files))
+            $files = $this->presenter->context->httpRequest->getPost('files');
 
         if ($this->config['readonly'] == True)
                         parent::getParent()->flashMessage(
@@ -234,9 +214,9 @@ class Content extends FileManager
     
     public function handleOrderBy($key)
     {
-        $namespace = Environment::getSession('file-manager');
+        $namespace = $this->presenter->context->session->getNamespace('file-manager');
         $namespace->order = $key;
-        $actualdir = $namespace->actualdir;
+        $actualdir = $this['system']->getActualDir();
 
         parent::getParent()->handleShowContent($actualdir);
     }
@@ -244,24 +224,19 @@ class Content extends FileManager
     public function handleRunPlugin($plugin, $files = "")
     {
         // if sended by AJAX
-        if (empty($files)) {
-            $request = Environment::getHttpRequest();
-            $files = $request->getPost('files');
-        }
+        if (empty($files))
+            $files = $this->presenter->context->httpRequest->getPost('files');
 
         parent::getParent()->handleRunPlugin($plugin, $files);
     }
 
     public function handleDownloadFile($filename = "")
     {
-        $namespace = Environment::getSession('file-manager');
-        $actualdir = $namespace->actualdir;
+        $actualdir = $this['system']->getActualDir();
         
         // if sended by AJAX
-        if (empty($filename)) {
-            $request = Environment::getHttpRequest();
-            $filename = $request->getQuery('filename');
-        }
+        if (empty($filename))
+            $filename = $this->presenter->context->httpRequest->getQuery('filename');
 
         if ($this['tools']->validPath($actualdir, $filename)) {
             $path = parent::getParent()->getAbsolutePath($actualdir) . $filename;
@@ -271,8 +246,7 @@ class Content extends FileManager
 
     public function handleGoToParent()
     {
-        $namespace = Environment::getSession('file-manager');
-        $actualdir = $namespace->actualdir;        
+        $actualdir = $this['system']->getActualDir();      
         $parent = dirname($actualdir);
 
         if ($parent == '\\' || $parent == '.')
@@ -285,10 +259,10 @@ class Content extends FileManager
 
     public function handleMove($targetdir = "", $filename = "")
     {
-        $namespace = Environment::getSession('file-manager');
+        $namespace = $this->presenter->context->session->getNamespace('file-manager');
         $actualdir = $namespace->actualdir;        
         $translator = parent::getParent()->getTranslator();
-        $request = Environment::getHttpRequest();
+        $request = $this->presenter->context->httpRequest;
         
         // if sended by AJAX
         if (empty($targetdir))
@@ -356,7 +330,7 @@ class Content extends FileManager
     public function render()
     {
         $translator = parent::getParent()->getTranslator();
-        $namespace = Environment::getSession('file-manager');
+        $namespace = $this->presenter->context->session->getNamespace('file-manager');
         $actualdir = $namespace->actualdir;
 
         $template = $this->template;

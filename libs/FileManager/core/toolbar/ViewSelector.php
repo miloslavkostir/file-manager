@@ -1,6 +1,5 @@
 <?php
 
-use Nette\Environment;
 use Nette\Application\UI\Form;
 
 class ViewSelector extends FileManager
@@ -15,7 +14,7 @@ class ViewSelector extends FileManager
 
     public function render()
     {
-        $namespace = Environment::getSession('file-manager');
+        $namespace = $this->presenter->context->session->getNamespace('file-manager');
 
         $template = $this->template;
         $template->setFile(__DIR__ . '/ViewSelector.latte');
@@ -51,8 +50,8 @@ class ViewSelector extends FileManager
     public function ChangeViewFormSubmitted($form)
     {
         $val = $form->values;
-        $namespace = Environment::getSession('file-manager');        
+        $namespace = $this->presenter->context->session->getNamespace('file-manager');
         $namespace->view = $val['view'];
-        parent::getParent()->handleShowContent($namespace->actualdir);
+        parent::getParent()->handleShowContent($this['system']->getActualDir());
     }
 }
