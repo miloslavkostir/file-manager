@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+
+	<meta name="description" content="Administration for NetFileMan">
+
+        <title>NetFileMan - Administration</title>
+
+        <link type="text/css" href="{$basePath}/css/jqueryui/ui-lightness/jquery-ui-1.8.13.custom.css" rel="stylesheet" />
+
+        <script type="text/javascript" src="http://code.jquery.com/jquery-1.6.1.min.js"></script>
+        <script type="text/javascript" src="{$basePath}/js/jquery-ui-1.8.13.custom.min.js"></script>
+	<script type="text/javascript" src="{$basePath}/js/netteForms.js"></script>
+        <script type="text/javascript" src="{$basePath}/js/jquery.nette.js"></script>
+        <script type="text/javascript" src="{$basePath}/js/jquery.ajaxform.js"></script>
+
+	{block head}{/block}
+</head>
+<body>
+    <div n:foreach="$flashes as $flash" class="flash {$flash->type}">{$flash->message}</div>
+
+    <div class="ui-tabs ui-widget ui-widget-content ui-corner-all" style="font-size: 80%; width: 750px; margin: 0 auto; font-family: Trebuchet MS,Tahoma,Verdana,Arial,sans-serif;">
+
+        <p id="logged-in" n:if="$user->loggedIn" style="text-align: right;">
+            Signed in as '{$user->identity->real_name}' | <a n:href="Sign:out">Sign out</a>
+        </p>        
+
+        <ul class="ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all">
+            <li class="ui-state-default ui-corner-top">
+                <a n:href="Overview:" title="Overview">
+                    Overview
+                </a>
+            </li>
+
+            <li class="ui-state-default ui-corner-top">
+                <a n:href="Users:" title="Users">
+                    Users
+                </a>
+            </li>
+
+            <li class="ui-state-default ui-corner-top">
+                <a n:href="Settings:" title="Settings">
+                    Settings
+                </a>
+            </li>
+        </ul>
+
+        <div class="ui-tabs-panel ui-widget-content ui-corner-bottom">
+                {include #content}
+        </div>
+    </div>
+</body>
+</html>

@@ -16,13 +16,27 @@
  * @package    MyApplication
  */
 
-use Nette\Application\UI\Control;
+namespace FrontModule;
 
 class HomepagePresenter extends BasePresenter
 {
+	protected function startup()
+	{
+		parent::startup();
+
+		// user authentication
+		if (!$this->user->isLoggedIn()) {
+			if ($this->user->logoutReason === \Nette\Http\User::INACTIVITY) {
+				$this->flashMessage('You have been signed out due to inactivity. Please sign in again.');
+			}
+			$backlink = $this->application->storeRequest();
+			$this->redirect('Sign:', array('backlink' => $backlink));
+		}
+	}
+
         public function  createComponentFileManager()
         {
-            $fm = new FileManager;
+            $fm = new \FileManager;
 
             //$fm->config['cache'] = False;                     // default is True
             //$fm->config['resource_dir'] = '/resources/';      // default is /fm-src/ (must be located in WWW_DIR)

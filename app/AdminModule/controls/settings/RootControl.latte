@@ -1,0 +1,33 @@
+<table class="ui-widget ui-widget-content">
+    <thead>
+            <tr class="ui-widget-header ">
+                    <th>Path</th>
+                    <th></th>
+            </tr>
+    </thead>
+    <tbody>
+            <tr n:foreach="$roots as $root">
+                    <td>{$root->path}</td>
+                    <td>
+                            <a n:href="edit!, $root->id">Edit</a>
+                            <a n:href="delete!, $root->id">Delete</a>
+                    </td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <div class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only">
+                        <a n:href="add!" class="ui-button-text">
+                            Add root
+                        </a>
+                    </div>
+                    {ifset $action}
+                        {if $action == 'edit'}
+                            {control editRootForm}
+                        {elseif $action == 'add'}
+                            {control addRootForm}
+                        {/if}
+                    {/ifset}
+                </td>
+            </tr>
+    </tbody>
+</table>

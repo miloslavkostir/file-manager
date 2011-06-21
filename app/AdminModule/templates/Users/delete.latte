@@ -1,0 +1,11 @@
+{block #content}
+
+<h1 n:block="title">Delete user</h1>
+
+{if $currentUser}
+	<p>Are you sure that you want to delete ‘{$currentUser->username}’?</p>
+	{control deleteForm}
+
+{else}
+	<p>Cannot find user.</p>
+{/if}

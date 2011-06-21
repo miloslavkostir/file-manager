@@ -1,0 +1,30 @@
+{block #content}
+<div id="accordion">
+	<h3>
+                <a href="#">Upload roots</a>
+        </h3>
+        <div>
+                {control root}
+        </div>
+</div>
+{/block}
+
+{block #head}
+<style type="text/css">
+    table {
+        border-collapse: collapse;
+        margin: 1em 0;
+    }
+
+    table td, table th {
+        border: 1px solid #EEEEEE;
+        padding: 0.6em 10px;
+        text-align: left;
+    }
+</style>
+<script>
+	$(function() {
+		$( "#accordion" ).accordion();
+	});
+</script>
+{/block}

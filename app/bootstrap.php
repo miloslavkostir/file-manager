@@ -5,9 +5,9 @@
  */
 
 
-use Nette\Diagnostics\Debugger;
-use Nette\Environment;
-use Nette\Application\Routers\Route;
+use Nette\Diagnostics\Debugger,
+	Nette\Application\Routers\Route,
+        Nette\Application\Routers\RouteList;
 
 
 // Load Nette Framework
@@ -16,28 +16,32 @@ use Nette\Application\Routers\Route;
 require LIBS_DIR . '/Nette/Nette/loader.php';
 
 
-// Enable Nette\Debug for error visualisation & logging
+// Enable Nette\Debugger for error visualisation & logging
 Debugger::$strictMode = TRUE;
 Debugger::enable();
 
 
-// Load configuration from config.neon file
-Environment::loadConfig();
+$configurator = new Nette\Configurator;
+$configurator->loadConfig(__DIR__ . '/config.neon');
 
 
-// Configure application
-$application = Environment::getApplication();
+$application = $configurator->container->application;
 $application->errorPresenter = 'Error';
 //$application->catchExceptions = TRUE;
 
+dibi::connect($configurator->container->params->database);
 
 // Setup router
 $application->onStartup[] = function() use ($application) {
 	$router = $application->getRouter();
 
-	$router[] = new Route('index.php', 'Homepage:default', Route::ONE_WAY);
+        $admin = $router[] = new RouteList('Admin');
+        $admin[] = new Route('index.php', 'Overview:', Route::ONE_WAY);
+        $admin[] = new Route('admin/<presenter>/<action>[/<id>]', 'Overview:');
 
-	$router[] = new Route('<presenter>/<action>[/<id>]', 'Homepage:default');
+        $front = $router[] = new RouteList('Front');
+        $front[] = new Route('index.php', 'Homepage:', Route::ONE_WAY);
+        $front[] = new Route('<presenter>/<action>[/<id>]', 'Homepage:');
 };
 
 
