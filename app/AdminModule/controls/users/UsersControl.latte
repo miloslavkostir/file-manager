@@ -1,0 +1,35 @@
+<table class="ui-widget ui-widget-content">
+    <thead>
+            <tr class="ui-widget-header ">
+                    <th>Name</th>
+                    <th>Username</th>
+                    <th></th>
+            </tr>
+    </thead>
+    <tbody>
+            <tr n:foreach="$users as $user">
+                    <td>{$user->real_name}</td>
+                    <td>{$user->username}</td>
+                    <td>
+                            <a n:href="edit!, $user->id">Edit</a>
+                            <a n:href="delete!, $user->id">Delete</a>
+                    </td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <div class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only">
+                        <a n:href="add!" class="ui-button-text">
+                            Add user
+                        </a>
+                    </div>
+                    {ifset $action}
+                        {if $action == 'edit'}
+                            {control editUserForm}
+                        {elseif $action == 'add'}
+                            {control addUserForm}
+                        {/if}
+                    {/ifset}
+                </td>
+            </tr>
+    </tbody>
+</table>

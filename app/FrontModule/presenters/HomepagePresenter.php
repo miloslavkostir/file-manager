@@ -20,6 +20,12 @@ namespace FrontModule;
 
 class HomepagePresenter extends BasePresenter
 {
+        /** @var User Model */
+        private $umodel;
+
+        /** @var Settings Model */
+        private $smodel;
+
 	protected function startup()
 	{
 		parent::startup();
@@ -32,23 +38,27 @@ class HomepagePresenter extends BasePresenter
 			$backlink = $this->application->storeRequest();
 			$this->redirect('Sign:', array('backlink' => $backlink));
 		}
+                $this->umodel = new \UserModel;
+                $this->smodel = new \SettingsModel;
 	}
 
         public function  createComponentFileManager()
         {
+            $conf = $this->umodel->getUser($this->user->id);
+            $conf = $conf[0];
+
+            $root = $this->smodel->getRoot($conf->uploadroot);           
+            
             $fm = new \FileManager;
-
-            //$fm->config['cache'] = False;                     // default is True
-            //$fm->config['resource_dir'] = '/resources/';      // default is /fm-src/ (must be located in WWW_DIR)
-            $fm->config['uploadroot'] = WWW_DIR;
-            //$fm->config['uploadroot'] = APP_DIR;
-            $fm->config['uploadpath'] = '/data/';               // ! DO NOT forget slashes !
-            //$fm->config['uploadpath'] = '/data/bronek/';        // ! DO NOT forget slashes !
-            //$fm->config['readonly'] = True;                   // default is False
-
-            $fm->config['quota'] = True;                        // default is False
-            $fm->config['quota_limit'] = 20;                   // default is 20; size is in MB
-
+            $fm->config['cache'] = $conf->cache;
+            $fm->config['uploadroot'] = $root[0]->path;
+            $fm->config['uploadpath'] = $conf->uploadpath;
+            $fm->config['readonly'] = $conf->readonly;
+            $fm->config['quota'] = $conf->quota;
+            $fm->config['quota_limit'] = $conf->quota_limit;
+            $fm->config['imagemagick'] = $conf->imagemagick;
+            $fm->config['lang'] = $conf->lang;
+            
             $fm->config['max_upload'] = '1000mb';                // default is 1mb. You can use following examples: 100b, 10kb, 1mb
             $fm->config['upload_chunk'] = True;                 // default is False
             $fm->config['upload_chunk_size'] = '2mb';           // default is 1mb. You can use following examples: 100b, 10kb, 1mb.
@@ -65,10 +75,6 @@ class HomepagePresenter extends BasePresenter
             $fm->config['upload_resize_width'] = 800;           // default is 640
             $fm->config['upload_resize_height'] = 600;          // default is 480
             $fm->config['upload_resize_quality'] = 80;          // default is 90
-
-            //$fm->config['imagemagick'] = True;                // default is False
-
-            $fm->config['lang'] = 'en';                         // default is en; others - cs
 
             //$fm->config['plugins'] = array('Player');           // default is empty
 
