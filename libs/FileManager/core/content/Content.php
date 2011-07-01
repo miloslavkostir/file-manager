@@ -211,7 +211,24 @@ class Content extends FileManager
                         $this->handleShowContent($actualdir);
         }
     }
-    
+
+    public function handleMultiDownload($files = "")
+    {
+        $actualdir = $this['system']->getActualDir();
+
+        // if sended by AJAX
+        if (empty($files))
+            $files = $this->presenter->context->httpRequest->getPost('files');
+
+        $path = $this['zip']->addFiles($actualdir, $files);
+
+        $payload = $this->presenter->payload;
+        $payload->result = 'success';
+        $payload->filename = $path;
+
+        parent::getParent()->refreshSnippets(array('message'));
+    }
+
     public function handleOrderBy($key)
     {
         $namespace = $this->presenter->context->session->getNamespace('file-manager');
@@ -242,6 +259,18 @@ class Content extends FileManager
             $path = parent::getParent()->getAbsolutePath($actualdir) . $filename;
             $this->presenter->sendResponse(new FileResponse($path, NULL, NULL));
         }
+    }
+
+    public function handleDownloadZip($filename = "")
+    {
+        // if sended by AJAX
+        if (empty($filename))
+            $filename = $this->presenter->context->httpRequest->getQuery('filename');
+
+        $path = $this['zip']->getTempDir() . '/' . $filename;
+
+        if (file_exists($path))
+            $this->presenter->sendResponse(new FileResponse($path, NULL, NULL));
     }
 
     public function handleGoToParent()

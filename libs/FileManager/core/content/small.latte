@@ -128,12 +128,13 @@
                                     var o1 = {},
                                         o2 = {},
                                         o3 = {},
+                                        o4 = {},
                                         {ifset $plugins}
                                             {foreach $plugins as $plugin}
-                                                o{4 + $iterator->getCounter()} = {},
+                                                o{5 + $iterator->getCounter()} = {},
                                             {/foreach}
                                         {/ifset}
-                                        o4 = {};
+                                        o5 = {};
 
                                     o1[{_'Properties'}] = function(menuItem, menuObject, e) {
                                             var files = {};
@@ -179,9 +180,21 @@
                                             }
                                     }                                    
 
+                                    o5[{_'Download'}] = function(menuItem, menuObject, e) {
+                                            var files = {};
+                                            $.each(selected, function(i) {
+                                                files[i] = $(this).attr("id");
+                                            });                                           
+                                            $.post({link multiDownload!},  { files: files }, function (payload) {
+                                                $.nette.success(payload);
+                                                if (payload.result === 'success')
+                                                    window.location.href={link downloadZip!} + "&filename=" + payload.filename;
+                                            });
+                                    }
+
                                     {ifset $plugins}
                                         {foreach $plugins as $plugin}
-                                            o{4 + $iterator->getCounter()}[{$plugin['title']}] = function(menuItem, menuObject, e) {
+                                            o{5 + $iterator->getCounter()}[{$plugin['title']}] = function(menuItem, menuObject, e) {
                                                 var files = {};
                                                 $.each(selected, function(i) {
                                                     files[i] = $(this).attr("id");
@@ -195,12 +208,13 @@
                                     return [ o1,
                                              o2,
                                              o3,
+                                             o4,
                                              {ifset $plugins}
                                                 {foreach $plugins as $plugin}
-                                                    o{4 + $iterator->getCounter()},
+                                                    o{5 + $iterator->getCounter()},
                                                 {/foreach}
                                              {/ifset}
-                                             o4 ];
+                                             o5 ];
                     }
             }, {
                 theme: 'vista',
