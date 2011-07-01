@@ -1,7 +1,5 @@
 <?php
 
-use Nette\Utils\Finder;
-
 class Zip extends FileManager
 {
     /** @var string */
