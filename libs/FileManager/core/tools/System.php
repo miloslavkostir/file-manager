@@ -26,4 +26,21 @@ class System extends FileManager
     {
         $this->presenter->context->session->getNamespace('file-manager')->actualdir = $dir;
     }
+
+    /**
+     * Check if string is name of valid plugin
+     * 
+     * @param array $plugins
+     * @param string $name
+     * @return bool
+     */
+    public function isPlugin($plugins, $name)
+    {
+        foreach ($plugins as $plugin) {
+            if ($plugin['name'] === $name)
+                return true;
+        }
+
+        return false;
+    }
 }

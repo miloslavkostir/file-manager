@@ -106,10 +106,10 @@
 
                                     {ifset $plugins}
                                         {foreach $plugins as $plugin}
-                                            o{6 + $iterator->getCounter()}[{$plugin}] = function(menuItem, menuObject, e) {
+                                            o{6 + $iterator->getCounter()}[{$plugin['title']}] = function(menuItem, menuObject, e) {
                                                 var filename = $(this).attr("id");
                                                 $(this).addClass("selected");
-                                                $.post({link runPlugin!, $plugin},  { files: filename });
+                                                $.post({link runPlugin!, $plugin['name']},  { files: filename });
                                                 $.animateProgress(".file-manager", e);
                                             }
                                         {/foreach}
@@ -183,12 +183,12 @@
 
                                     {ifset $plugins}
                                         {foreach $plugins as $plugin}
-                                            o{4 + $iterator->getCounter()}[{$plugin}] = function(menuItem, menuObject, e) {
+                                            o{4 + $iterator->getCounter()}[{$plugin['title']}] = function(menuItem, menuObject, e) {
                                                 var files = {};
                                                 $.each(selected, function(i) {
                                                     files[i] = $(this).attr("id");
                                                 });
-                                                $.post({link runPlugin!, $plugin},  { files: files });
+                                                $.post({link runPlugin!, $plugin['name']},  { files: files });
                                                 $.animateProgress(".file-manager", e);
                                             }
                                         {/foreach}

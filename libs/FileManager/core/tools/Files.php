@@ -614,23 +614,4 @@ class Files extends FileManager
         
         return $foldername;
     }
-
-    function bytes_from_string($val)
-    {
-        $last = strtolower(substr($val, strlen($val)-2, 2));
-	$vowels = array("1", "2", "3", "4", "5", "6", "7", "8", "9", "0", " ");
-        $last = str_replace($vowels, '', $last);
-
-        // 'gb' and 'g' modifier are available since PHP 5.1.0
-        if ($last == 'gb' || $last == 'g' )
-                $val *= 1024*1024*1024;
-        if ($last == 'mb' || $last == 'm' )
-                $val *= 1024*1024;
-        if ($last == 'kb' || $last == 'k' )
-                $val *= 1024;
-        if ($last == 'b')
-                $val *= 1;
-
-        return $val;
-    }
 }

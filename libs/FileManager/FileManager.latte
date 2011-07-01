@@ -117,10 +117,10 @@ $(document).ready(function() {
                 </a>
             </li>
 
-            <li>
-                <a href="{link runPlugin!, 'upload'}" title="{_'Upload files'}" class="fm-ajax fm-toolbar-item">
-                    <span>{_'Upload'}</span>
-                </a>
+            <li n:ifset="$plugins">
+                <a n:foreach="$plugins as $plugin" n:href="runPlugin!, $plugin['name']" class="fm-ajax fm-toolbar-item">
+                    <span>{$plugin['title']}</span>
+                </a>                
             </li>
 
             <li>

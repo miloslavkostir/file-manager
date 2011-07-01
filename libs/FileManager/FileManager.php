@@ -1,21 +1,17 @@
 <?php
 
-use Nette\Application\UI\Control,
-        Nette\Utils\Finder;
-
-class FileManager extends Control
+class FileManager extends Nette\Application\UI\Control
 {
     const NAME = "File Manager";
 
     const VERSION = '0.5 dev';
-    
+
     /** @var string */
     protected $thumb = "__system_thumb";
 
     /** @var array */
     protected $core = array(
         'NewFolder',
-        'upload',
         'rename'
     );
 
@@ -26,22 +22,18 @@ class FileManager extends Control
         'resource_dir' => '/fm-src/',
         'quota' => False,
         'quota_limit' => 20,
-        'max_upload' => '1mb',
-        'upload_resize' => False,
-        'upload_resize_width' => 640,
-        'upload_resize_height' => 480,
-        'upload_resize_quality' => 90,
-        'upload_filter' => False,
-        'upload_chunk' => False,
-        'upload_chunk_size' => '1mb',
         'imagemagick' => False,
-        'lang' => 'en',
-        'plugins' => ''
+        'lang' => 'en'
     );
+
+    /** @var array */
+    public $plugins;
 
     public function __construct()
     {
         parent::__construct();
+        $plugins = new Plugins;
+        $this->plugins = $plugins->loadPlugins();
     }
 
     public function handleMove()
@@ -65,11 +57,8 @@ class FileManager extends Control
     {
         $actualdir = $this['system']->getActualDir();
 
-        if (in_array($plugin, $this->core) || in_array($plugin, $this->config['plugins'])) {
+        if (in_array($plugin, $this->core) || $this['system']->isPlugin($this->plugins, $plugin)) {
                 $this->template->plugin = $plugin;
-
-                if ( property_exists($this[$plugin], 'actualdir') )
-                    $this[$plugin]->actualdir = $actualdir;
 
                 if ( property_exists($this[$plugin], 'files') )
                     $this[$plugin]->files = $files;
@@ -80,8 +69,8 @@ class FileManager extends Control
                     'fileinfo'
                 ));
         } else {
-                $translator = parent::getParent()->getTranslator();
-                $this->flashMessage(
+                $translator = $this->getTranslator();
+                $this->flashMessage(    // TODO message is missing in main template
                     $translator->translate('Plugin not found!'),
                     'warning'
                 );
@@ -145,7 +134,21 @@ class FileManager extends Control
 
         if (empty($namespace->actualdir))
             $this->handleShowContent($this->getRootname());        
-        
+
+        $plugins = $this->plugins;
+
+        if (!empty($plugins)) {
+            $toolbarPlugins = array();
+
+            foreach($plugins as $plugin) {
+                if ($plugin['toolbar'] == True)
+                    $toolbarPlugins[] = $plugin;
+            }
+
+            if (!empty($toolbarPlugins))
+                $template->plugins = $toolbarPlugins;
+        }
+
         $this->refreshSnippets(array(
             'message',
             'diskusage'

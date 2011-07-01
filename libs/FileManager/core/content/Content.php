@@ -340,6 +340,8 @@ class Content extends FileManager
         $mask = $namespace->mask;
         $order = $namespace->order;
 
+        $plugins = parent::getParent()->plugins;
+
         if (empty($mask))
             $mask = '*';
 
@@ -367,10 +369,19 @@ class Content extends FileManager
         $template->actualdir = $actualdir;
         $template->rootname = parent::getParent()->getRootname();
         $template->thumb_dir = $this->config['resource_dir'] . 'img/icons/' . $view . '/';
-        
-        if (isset($this->config['plugins']) && !empty($this->config['plugins']))
-                $template->plugins = $this->config['plugins'];
-        
+
+        if (!empty($plugins)) {
+            $cotnextPlugins = array();
+
+            foreach($plugins as $plugin) {
+                if ($plugin['context'] == True)
+                    $contextPlugins[] = $plugin;
+            }
+
+            if (!empty($contextPlugins))
+                $template->plugins = $contextPlugins;
+        }
+
         $template->render();
     }
 
