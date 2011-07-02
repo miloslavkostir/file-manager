@@ -53,6 +53,7 @@ class Content extends FileManager
         if (empty($filename))
             $filename = $this->presenter->context->httpRequest->getPost('filename');
 
+        $namespace = $this->presenter->context->session->getNamespace('file-manager');
         $actualdir = $this['system']->getActualDir();
 
         if ($this['tools']->validPath($actualdir, $filename)) {
