@@ -117,6 +117,9 @@ class FileManager extends Nette\Application\UI\Control
         $template->setFile(__DIR__ . '/FileManager.latte');
         $template->setTranslator($this->getTranslator());
 
+        if (!function_exists("exec"))
+             throw new Exception ("Missing exec function! Application can not be loaded!");
+
         if(!@is_dir($this->config['uploadroot'] . $this->config['uploadpath']))
              throw new Exception ("Upload dir ".$this->config['uploadpath']." doesn't exist! Application can not be loaded!");
 

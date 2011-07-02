@@ -67,7 +67,7 @@ class Files extends FileManager
                                         return false;
                     }                
             } else {
-                    $filesize = filesize($actualpath . $filename);
+                    $filesize = $this->getFileSize($actualpath . $filename);
                     if ($disksize['spaceleft'] >= $filesize) {
                             copy($actualpath . $filename, $targetpath . $this->checkDuplName($targetpath, $filename));
                             return true;
@@ -284,7 +284,7 @@ class Files extends FileManager
                 $info['actualdir'] = $actualdir;
                 $info['filename'] = $filename;
                 $info['type'] = pathinfo($path, PATHINFO_EXTENSION);
-                $info['size'] = filesize($path);
+                $info['size'] = $this->getFileSize($path);
                 $info['modificated'] = date("F d Y H:i:s", filemtime($path));
                 $info['permissions'] = $this->get_file_mod($path);
                 
@@ -327,7 +327,7 @@ class Files extends FileManager
         foreach ($files as $file) {
             $filepath = $path . $file;
             if (!is_dir($filepath)) {
-                    $info['size'] += filesize($filepath);
+                    $info['size'] += $this->getFileSize($filepath);
                     $info['fileCount']++;
             } elseif ($iterate === true) {
                     $info['dirCount']++;                    
@@ -343,7 +343,35 @@ class Files extends FileManager
         
         return $info;
     }
-    
+
+    /**
+     * Get File size for files > 2 GB
+     * http://php.net/manual/en/function.filesize.php
+     * @param string $file
+     * @return integer
+     */
+    function getFileSize($file)
+    {
+		// filesize using exec
+		if (function_exists("exec")) {
+			$escapedPath = escapeshellarg($file);
+
+			if (strtoupper(substr(PHP_OS, 0, 3)) == 'WIN') { // Windows
+				// Try using the NT substition modifier %~z
+				$size = trim(exec("for %F in ($escapedPath) do @echo %~zF"));
+			}else{ // other OS
+				// If the platform is not Windows, use the stat command (should work for *nix and MacOS)
+				$size = trim(exec("stat -c%s $escapedPath"));
+			}
+
+			// If the return is not blank, not zero, and is number
+			if ($size AND ctype_digit($size)) {
+				return (string) $size;
+			}
+		}
+		return false;
+    }
+
     public function getFolderInfo($path)
     {
         $info = array();
@@ -582,11 +610,11 @@ class Files extends FileManager
 
         if ($actualdir == $rootname) {
             $path = $uploadroot . $uploadpath . $filename;
-            $result['name'] = parent::getParent()->thumb . md5($filename . @filesize($path)) . "." . pathinfo($filename, PATHINFO_EXTENSION);
+            $result['name'] = parent::getParent()->thumb . md5($filename . $this->getFileSize($path)) . "." . pathinfo($filename, PATHINFO_EXTENSION);
             $result['path'] = $uploadroot . $uploadpath . $thumb_folder . "/" . $result['name'];
         } else {
             $path = $uploadroot . substr($uploadpath,0,-1) . $actualdir . $filename;            
-            $result['name'] = parent::getParent()->thumb . md5($filename . @filesize($path)) . "." . pathinfo($filename, PATHINFO_EXTENSION);
+            $result['name'] = parent::getParent()->thumb . md5($filename . $this->getFileSize($path)) . "." . pathinfo($filename, PATHINFO_EXTENSION);
             $result['path'] = $uploadroot . substr($uploadpath,0,-1) . $actualdir . $thumb_folder . "/" . $result['name'];
         }
         
