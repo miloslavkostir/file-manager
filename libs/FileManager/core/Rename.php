@@ -40,7 +40,7 @@ class Rename extends FileManager
                 ->addRule(Form::FILLED, 'You must fill new name');
         $form->addHidden('orig_filename');
         $form->addSubmit('send', 'OK');
-        $form->onSubmit[] = array($this, 'RenameFormSubmitted');
+        $form->onSuccess[] = array($this, 'RenameFormSubmitted');
 
         return $form;
     }

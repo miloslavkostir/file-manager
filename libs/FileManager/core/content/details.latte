@@ -30,11 +30,11 @@
                             {var $targetpath = '/' . $item['filename'] . '/'}
                         {else}
                             {var $targetpath = $item['actualdir'] . $item['filename'] . '/'}
-                        {/if}
+                        {/}
                         <a href="{link showContent!, $targetpath}" class="fm-ajax-dbl fm-thumb" title="{_'Open folder'}">
                             <img src="{$basePath . $thumb_dir . $item['icon']}" alt="{$item['filename']}" id="{$targetpath}" class="fm-droppable fm-draggable fm-thumb" />
                         </a>
-                    {/if}
+                    {/}
 
                     {$item['filename']|truncate:100}                                
             </td>
@@ -44,12 +44,12 @@
             <td>
                 {ifset $item['filetype']}
                     {$item['filetype']|upper}
-                {/ifset}
+                {/}
             </td>
             <td>
                 {ifset $item['size']}
                     {$item['size']|bytes}
-                {/ifset}
+                {/}
             </td>
         </tr>
     </tbody>
@@ -76,8 +76,8 @@
                                         {ifset $plugins}
                                             {foreach $plugins as $plugin}
                                                 o{6 + $iterator->getCounter()} = {},
-                                            {/foreach}
-                                        {/ifset}
+                                            {/}
+                                        {/}
                                         o6 = {};
     
                                     $("#fm-small-images tbody").unmarkAll("tr", "selected");
@@ -133,8 +133,8 @@
                                                 $.post({link runPlugin!, $plugin['name']},  { files: filename });
                                                 $.animateProgress(".file-manager", e);
                                             }
-                                        {/foreach}
-                                    {/ifset}
+                                        {/}
+                                    {/}
 
                                     return [ o1,
                                              o2,
@@ -144,8 +144,8 @@
                                              {ifset $plugins}
                                                 {foreach $plugins as $plugin}
                                                     o{6 + $iterator->getCounter()},
-                                                {/foreach}
-                                             {/ifset}
+                                                {/}
+                                             {/}
                                              o6 ];
                     } else {
                                     var o1 = {},
@@ -155,8 +155,8 @@
                                         {ifset $plugins}
                                             {foreach $plugins as $plugin}
                                                 o{5 + $iterator->getCounter()} = {},
-                                            {/foreach}
-                                        {/ifset}
+                                            {/}
+                                        {/}
                                         o5 = {};
                                         
                                     o1[{_'Properties'}] = function(menuItem, menuObject, e) {
@@ -225,8 +225,8 @@
                                                 $.post({link runPlugin!, $plugin['name']},  { files: files });
                                                 $.animateProgress(".file-manager", e);
                                             }
-                                        {/foreach}
-                                    {/ifset}
+                                        {/}
+                                    {/}
                                                                        
                                     return [ o1,
                                              o2,
@@ -235,8 +235,8 @@
                                              {ifset $plugins}
                                                 {foreach $plugins as $plugin}
                                                     o{5 + $iterator->getCounter()},
-                                                {/foreach}
-                                             {/ifset}
+                                                {/}
+                                             {/}
                                              o5 ];
                     }
             }, {

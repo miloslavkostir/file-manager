@@ -53,11 +53,11 @@ class Content extends FileManager
         if (empty($filename))
             $filename = $this->presenter->context->httpRequest->getPost('filename');
 
-        $namespace = $this->presenter->context->session->getNamespace('file-manager');
+        $session = $this->presenter->context->session->getSection('file-manager');
         $actualdir = $this['system']->getActualDir();
 
         if ($this['tools']->validPath($actualdir, $filename)) {
-            $namespace->clipboard[$actualdir.$filename] = array(
+            $session->clipboard[$actualdir.$filename] = array(
                 'action' => 'copy',
                 'actualdir' => $actualdir,
                 'filename' => $filename
@@ -69,7 +69,7 @@ class Content extends FileManager
     
     public function handleMultiCopyToClipboard($files = "")
     {
-        $namespace = $this->presenter->context->session->getNamespace('file-manager');
+        $session = $this->presenter->context->session->getSection('file-manager');
         $actualdir = $this['system']->getActualDir();
         $translator = parent::getParent()->getTranslator();
         
@@ -80,7 +80,7 @@ class Content extends FileManager
         if (is_array($files)) {
 
                 foreach($files as $file) {
-                        $namespace->clipboard[$actualdir.$file] = array(
+                        $session->clipboard[$actualdir.$file] = array(
                             'action' => 'copy',
                             'actualdir' => $actualdir,
                             'filename' => $file
@@ -101,11 +101,11 @@ class Content extends FileManager
         if (empty($filename))
             $filename = $this->presenter->context->httpRequest->getPost('filename');
 
-        $namespace = $this->presenter->context->session->getNamespace('file-manager');
+        $session = $this->presenter->context->session->getSection('file-manager');
         $actualdir = $this['system']->getActualDir();
         
         if ($this['tools']->validPath($actualdir, $filename)) {
-            $namespace->clipboard[$actualdir.$filename] = array(
+            $session->clipboard[$actualdir.$filename] = array(
                 'action' => 'cut',
                 'actualdir' => $actualdir,
                 'filename' => $filename
@@ -117,7 +117,7 @@ class Content extends FileManager
 
     public function handleMultiCutToClipboard($files = "")
     {
-        $namespace = $this->presenter->context->session->getNamespace('file-manager');
+        $session = $this->presenter->context->session->getSection('file-manager');
         $actualdir = $this['system']->getActualDir();
         $translator = parent::getParent()->getTranslator();
         
@@ -128,7 +128,7 @@ class Content extends FileManager
         if (is_array($files)) {
 
                 foreach($files as $file) {
-                        $namespace->clipboard[$actualdir.$file] = array(
+                        $session->clipboard[$actualdir.$file] = array(
                             'action' => 'cut',
                             'actualdir' => $actualdir,
                             'filename' => $file
@@ -232,8 +232,8 @@ class Content extends FileManager
 
     public function handleOrderBy($key)
     {
-        $namespace = $this->presenter->context->session->getNamespace('file-manager');
-        $namespace->order = $key;
+        $session = $this->presenter->context->session->getSection('file-manager');
+        $session->order = $key;
         $actualdir = $this['system']->getActualDir();
 
         parent::getParent()->handleShowContent($actualdir);
@@ -289,8 +289,8 @@ class Content extends FileManager
 
     public function handleMove($targetdir = "", $filename = "")
     {
-        $namespace = $this->presenter->context->session->getNamespace('file-manager');
-        $actualdir = $namespace->actualdir;        
+        $session = $this->presenter->context->session->getSection('file-manager');
+        $actualdir = $session->actualdir;        
         $translator = parent::getParent()->getTranslator();
         $request = $this->presenter->context->httpRequest;
         
@@ -360,15 +360,15 @@ class Content extends FileManager
     public function render()
     {
         $translator = parent::getParent()->getTranslator();
-        $namespace = $this->presenter->context->session->getNamespace('file-manager');
-        $actualdir = $namespace->actualdir;
+        $session = $this->presenter->context->session->getSection('file-manager');
+        $actualdir = $session->actualdir;
 
         $template = $this->template;
         $template->setTranslator($translator);
 
-        $view = $namespace->view;
-        $mask = $namespace->mask;
-        $order = $namespace->order;
+        $view = $session->view;
+        $mask = $session->mask;
+        $order = $session->order;
 
         $plugins = parent::getParent()->plugins;
 
@@ -429,7 +429,7 @@ class Content extends FileManager
     {
         $thumb_dir = $this->config['resource_dir'] . 'img/icons/' . $view . '/';
 
-        if (!file_exists(WWW_DIR . $thumb_dir)) {
+        if (!file_exists($this->presenter->context->params['wwwDir'] . $thumb_dir)) {
             throw new Exception("Missing folder with icons for " . $view . " view");
             exit;
         }
@@ -460,7 +460,7 @@ class Content extends FileManager
                             $dir_array[ $name ]['size'] =  $file->getSize();
                             $filetype = strtolower(pathinfo($name, PATHINFO_EXTENSION));
                             $dir_array[ $name ]['filetype'] = $filetype;
-                            if (file_exists(WWW_DIR . $thumb_dir . $filetype . '.png')) {
+                            if (file_exists($this->presenter->context->params['wwwDir'] . $thumb_dir . $filetype . '.png')) {
                                             $dir_array[ $name ]['icon'] =  $filetype . '.png';
                                             if (($filetype == 'jpg') or ($filetype == 'png') or ($filetype == 'gif') or ($filetype == 'jpeg') or ($filetype == 'bmp')) {
                                                 $dir_array[ $name ]['create_thumb'] =  True;

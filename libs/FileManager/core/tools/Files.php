@@ -288,7 +288,7 @@ class Files extends FileManager
                 $info['modificated'] = date("F d Y H:i:s", filemtime($path));
                 $info['permissions'] = $this->get_file_mod($path);
                 
-                if (file_exists(WWW_DIR . $thumb_dir . "large/" .strtolower($info['type']) . ".png"))
+                if (file_exists($this->presenter->context->params['wwwDir'] . $thumb_dir . "large/" .strtolower($info['type']) . ".png"))
                     $info["icon"] =  $thumb_dir . "large/" . $info['type'] . ".png";
                 else 
                     $info["icon"] =  $thumb_dir . "large/icon.png";

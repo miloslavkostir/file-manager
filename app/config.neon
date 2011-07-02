@@ -12,14 +12,15 @@ common:
 		# default_charset: "UTF-8"
 
 	services:
-		authenticator:
-			factory: ["@userModel", getAuthenticatorService]
-
 		robotLoader:
 			run: true
 
 		userModel:
 			class: UserModel
+
+		authenticator:
+			factory: [@userModel, createAuthenticatorService]
+
 	database:
 		driver: sqlite
 		database: %appDir%/models/data.db

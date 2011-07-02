@@ -4,7 +4,7 @@ use Nette\Object;
 
 class UserModel extends Object
 {
-	public function getAuthenticatorService()
+	public function createAuthenticatorService()
 	{
 		return new Authenticator($this->getUsers());
 	}

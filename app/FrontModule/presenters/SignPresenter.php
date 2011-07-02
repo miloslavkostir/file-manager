@@ -39,7 +39,7 @@ class SignPresenter extends BasePresenter
 
 		$form->addSubmit('send', 'Sign in');
 
-		$form->onSubmit[] = callback($this, 'signInFormSubmitted');
+		$form->onSuccess[] = callback($this, 'signInFormSubmitted');
 		return $form;
 	}
 
@@ -49,11 +49,6 @@ class SignPresenter extends BasePresenter
 	{
 		try {
 			$values = $form->getValues();
-			if ($values->remember) {
-				$this->getUser()->setExpiration('+ 14 days', FALSE);
-			} else {
-				$this->getUser()->setExpiration('+ 20 minutes', TRUE);
-			}
 			$this->getUser()->login($values->username, $values->password);
 			$this->redirect('Homepage:');
 

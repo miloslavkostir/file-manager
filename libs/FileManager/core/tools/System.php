@@ -14,7 +14,7 @@ class System extends FileManager
      */
     public function getActualDir()
     {
-        return $this->presenter->context->session->getNamespace('file-manager')->actualdir;
+        return $this->presenter->context->session->getSection('file-manager')->actualdir;
     }
 
     /**
@@ -24,7 +24,7 @@ class System extends FileManager
      */
     public function setActualDir($dir)
     {
-        $this->presenter->context->session->getNamespace('file-manager')->actualdir = $dir;
+        $this->presenter->context->session->getSection('file-manager')->actualdir = $dir;
     }
 
     /**

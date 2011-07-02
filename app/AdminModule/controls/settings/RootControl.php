@@ -56,7 +56,7 @@ class RootControl extends \Nette\Application\UI\Control
                     ->setRequired('Please enter the path.');
 
             $form->addSubmit('save', 'Save')->setAttribute('class', 'default');
-            $form->onSubmit[] = callback($this, 'addRootFormSubmitted');
+            $form->onSuccess[] = callback($this, 'addRootFormSubmitted');
 
             $form->addProtection('Please submit this form again (security token has expired).');
             return $form;
@@ -70,7 +70,7 @@ class RootControl extends \Nette\Application\UI\Control
             $form->addHidden('id')
                     ->setRequired('Unknown record.');
             $form->addSubmit('save', 'Save')->setAttribute('class', 'default');
-            $form->onSubmit[] = callback($this, 'editRootFormSubmitted');
+            $form->onSuccess[] = callback($this, 'editRootFormSubmitted');
 
             $form->addProtection('Please submit this form again (security token has expired).');
             return $form;

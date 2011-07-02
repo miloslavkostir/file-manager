@@ -68,14 +68,14 @@ $(document).ready(function() {
                     <div class="fm-alert-message ui-state-highlight ui-corner-all">
                     <p>
                     <span style="float: left; style="margin-right: 0.3em;" class="ui-icon ui-icon-info"></span>
-                {/if}
-            {/if}
+                {/}
+            {/}
                     {$flash->message}
                     <span class="ui-icon ui-icon-closethick" style="cursor: pointer; float: right;" title="{_'Close message'}"></span>
                 </p>
             </div>
-{/foreach}
-{/snippet}
+{/}
+{/}
 
 
 <div class="file-manager">
@@ -85,7 +85,7 @@ $(document).ready(function() {
             <li class="fm-location">
             {snippet adressbar}
                     {control navigation}                    
-            {/snippet}
+            {/}
             </li>
             
             <li class="fm-refresh">
@@ -93,13 +93,13 @@ $(document).ready(function() {
                 <a href="{link refreshContent!}" title="{_'Refresh content'}" class="fm-ajax">
                     <div class="fm-refresh-icon"></div>
                 </a>
-            {/snippet}
+            {/}
             </li>
             
             <li class="fm-filter">
             {snippet filter}
                 {control filter}
-            {/snippet}
+            {/}
             </li>
 
         </ul>
@@ -127,8 +127,8 @@ $(document).ready(function() {
             {snippet clipboard}
                 {ifset $clipboard}
                     {control clipboard}
-                {/ifset}
-            {/snippet}
+                {/}
+            {/}
             </li>
 
             <li style="float: right;">
@@ -136,7 +136,7 @@ $(document).ready(function() {
             </li>
 
         </ul>
-        {/snippet}
+        {/}
     </div>
 
 
@@ -145,7 +145,7 @@ $(document).ready(function() {
             <div class="fm-treeview">
             {snippet treeview}
                 {control treeview}
-            {/snippet}
+            {/}
             </div>
 
 
@@ -154,13 +154,13 @@ $(document).ready(function() {
                 <div n:ifset="$plugin">
                     {control $plugin}
                 </div>
-            {/snippet}
+            {/}
 
             {snippet content}
                 {ifset $content}
                     {control content}
-                {/ifset}
-            {/snippet}
+                {/}
+            {/}
             </div>
             
     </div>
@@ -171,11 +171,11 @@ $(document).ready(function() {
     <div n:ifset="$fileinfo">
         {control fileInfo}
     </div>
-    {/snippet}
+    {/}
 
     {snippet diskusage}
         {control diskUsage}
-    {/snippet}
+    {/}
     </div>
 
 </div>

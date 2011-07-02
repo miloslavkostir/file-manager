@@ -14,14 +14,14 @@ class ViewSelector extends FileManager
 
     public function render()
     {
-        $namespace = $this->presenter->context->session->getNamespace('file-manager');
+        $session = $this->presenter->context->session->getSection('file-manager');
 
         $template = $this->template;
         $template->setFile(__DIR__ . '/ViewSelector.latte');
         $template->setTranslator(parent::getParent()->getTranslator());
 
         $this['changeViewForm']->setDefaults(array(
-                    'view' => $namespace->view
+                    'view' => $session->view
         ));
 
         $template->render();
@@ -42,7 +42,7 @@ class ViewSelector extends FileManager
         $form->getElementPrototype()->class('fm-ajax');
         $form->addSelect('view', NULL, $items);
 
-        $form->onSubmit[] = array($this, 'ChangeViewFormSubmitted');
+        $form->onSuccess[] = array($this, 'ChangeViewFormSubmitted');
 
         return $form;
     }
@@ -50,8 +50,8 @@ class ViewSelector extends FileManager
     public function ChangeViewFormSubmitted($form)
     {
         $val = $form->values;
-        $namespace = $this->presenter->context->session->getNamespace('file-manager');
-        $namespace->view = $val['view'];
+        $session = $this->presenter->context->session->getSection('file-manager');
+        $session->view = $val['view'];
         parent::getParent()->handleShowContent($this['system']->getActualDir());
     }
 }

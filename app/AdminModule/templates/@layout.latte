@@ -15,7 +15,7 @@
         <script type="text/javascript" src="{$basePath}/js/jquery.nette.js"></script>
         <script type="text/javascript" src="{$basePath}/js/jquery.ajaxform.js"></script>
 
-	{block head}{/block}
+	{block head}{/}
 </head>
 <body>
     <div n:foreach="$flashes as $flash" class="flash {$flash->type}">{$flash->message}</div>

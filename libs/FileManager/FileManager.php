@@ -123,16 +123,16 @@ class FileManager extends Nette\Application\UI\Control
         if (!@is_writable($this->config['uploadroot'] . $this->config['uploadpath']))
              throw new Exception ("Upload dir " . $this->config['uploadroot'] . $this->config['uploadpath'] . " must be writable!");
 
-        if(!@is_dir(WWW_DIR . $this->config['resource_dir']))
+        if(!@is_dir($this->presenter->context->params['wwwDir'] . $this->config['resource_dir']))
              throw new Exception ("Resource dir " . $this->config['resource_dir'] . " doesn't exist! Application can not be loaded!");
 
-        $namespace = $this->presenter->context->session->getNamespace('file-manager');
+        $session = $this->presenter->context->session->getSection('file-manager');
 
-        $clipboard = $namespace->clipboard;
+        $clipboard = $session->clipboard;
         if (!empty($clipboard))
-            $template->clipboard = $namespace->clipboard;
+            $template->clipboard = $session->clipboard;
 
-        if (empty($namespace->actualdir))
+        if (empty($session->actualdir))
             $this->handleShowContent($this->getRootname());        
 
         $plugins = $this->plugins;

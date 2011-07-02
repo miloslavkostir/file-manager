@@ -38,7 +38,7 @@ class Navigation extends FileManager
         $form->getElementPrototype()->class('fm-ajax');
         $form->addText('location');
         $form->addHidden('actualdir');
-        $form->onSubmit[] = array($this, 'LocationFormSubmitted');
+        $form->onSuccess[] = array($this, 'LocationFormSubmitted');
 
         return $form;
     }

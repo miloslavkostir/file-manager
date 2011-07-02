@@ -1,39 +1,37 @@
 <?php
 
-/**
- * My Application bootstrap file.
- */
-
-
 use Nette\Diagnostics\Debugger,
 	Nette\Application\Routers\Route,
-        Nette\Application\Routers\RouteList;
+        Nette\Application\Routers\RouteList,
+        Nette\Application\Routers\SimpleRouter;
 
 
 // Load Nette Framework
-// this allows load Nette Framework classes automatically so that
-// you don't have to litter your code with 'require' statements
-require LIBS_DIR . '/Nette/Nette/loader.php';
+$params['libsDir'] = __DIR__ . '/../libs';
+require $params['libsDir'] . '/Nette/Nette/loader.php';
 
 
-// Enable Nette\Debugger for error visualisation & logging
+// Enable Nette Debugger for error visualisation & logging
+Debugger::$logDirectory = __DIR__ . '/../log';
 Debugger::$strictMode = TRUE;
 Debugger::enable();
 
-
+// Load configuration from config.neon file
 $configurator = new Nette\Configurator;
-$configurator->loadConfig(__DIR__ . '/config.neon');
+$configurator->container->params += $params;
+$configurator->container->params['tempDir'] = __DIR__ . '/../temp';
+$container = $configurator->loadConfig(__DIR__ . '/config.neon');
 
 
-$application = $configurator->container->application;
-$application->errorPresenter = 'Error';
-//$application->catchExceptions = TRUE;
+// Setup Dibi connection
+dibi::connect($container->params['database']);
 
-dibi::connect($configurator->container->params->database);
 
-// Setup router
-$application->onStartup[] = function() use ($application) {
-	$router = $application->getRouter();
+
+// Setup router using mod_rewrite detection
+if (function_exists('apache_get_modules') && in_array('mod_rewrite', apache_get_modules())) {
+
+        $router = $container->router;
 
         $admin = $router[] = new RouteList('Admin');
         $admin[] = new Route('index.php', 'Overview:', Route::ONE_WAY);
@@ -42,17 +40,14 @@ $application->onStartup[] = function() use ($application) {
         $front = $router[] = new RouteList('Front');
         $front[] = new Route('index.php', 'Homepage:', Route::ONE_WAY);
         $front[] = new Route('<presenter>/<action>[/<id>]', 'Homepage:');
-};
+
+} else {
+	$container->router = new SimpleRouter('Front:Homepage:');
+}
 
 
-// Run the application!
+// Configure and run the application!
+$application = $container->application;
+//$application->catchExceptions = TRUE;
+$application->errorPresenter = 'Error';
 $application->run();
-
-/**
- * create PO language files
- * https://github.com/karelklima/gettext-extractor
- */
-//$ge = new NetteGettextExtractor('extractor.log');
-//$ge->setupForms()->setupDataGrid();
-//$ge->scan(LIBS_DIR . "/FileManager");
-//$ge->save(LIBS_DIR . '/FileManager/locale/FileManager.en.po');

@@ -1,24 +1,20 @@
 <?php
 
-use Nette\Object,
-	Nette\Security as NS;
+use Nette\Security as NS;
 
 
 /**
  * Users authenticator.
  */
-class Authenticator extends Object implements NS\IAuthenticator
+class Authenticator extends Nette\Object implements NS\IAuthenticator
 {
 	/** @var DibiFluent */
 	private $users;
-
 
 	public function __construct(DibiFluent $users)
 	{
 		$this->users = $users;
 	}
-
-
 
 	/**
 	 * Performs an authentication
@@ -44,8 +40,6 @@ class Authenticator extends Object implements NS\IAuthenticator
 		return new NS\Identity($row->id, NULL, $row->toArray());
 	}
 
-
-
 	/**
 	 * Computes salted password hash.
 	 * @param  string
@@ -55,5 +49,4 @@ class Authenticator extends Object implements NS\IAuthenticator
 	{
 		return md5($password);
 	}
-
 }

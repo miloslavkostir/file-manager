@@ -13,17 +13,24 @@ class Caching extends FileManager
     public function __construct()
     {
         parent::__construct();
+        $this->monitor('Nette\Application\UI\Presenter');
+    }
 
-        $cacheDir = TEMP_DIR . '/cache/file-manager';
+    protected function attached($presenter)
+    {
+        if ($presenter instanceof Nette\Application\UI\Presenter) {
+                $cacheDir = $this->presenter->context->params['tempDir'] . '/cache/file-manager';
 
-        if(!is_dir($cacheDir)) {
-            $oldumask = umask(0);
-            mkdir($cacheDir, 0777);
-            umask($oldumask);
+                if(!is_dir($cacheDir)) {
+                    $oldumask = umask(0);
+                    mkdir($cacheDir, 0777);
+                    umask($oldumask);
+                }
+
+                $storage = new FileStorage($cacheDir, new FileJournal($cacheDir));
+                $this->cache = new Cache($storage);
         }
-
-        $storage = new FileStorage($cacheDir, new FileJournal($cacheDir));
-        $this->cache = new Cache($storage);
+        parent::attached($presenter);
     }
 
     /**

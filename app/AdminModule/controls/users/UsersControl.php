@@ -76,7 +76,7 @@ class UsersControl extends \Nette\Application\UI\Control
             $form->addCheckbox('imagemagick', 'Imagemagick');
 
             $form->addSubmit('save', 'Save')->setAttribute('class', 'default');
-            $form->onSubmit[] = callback($this, 'addUserFormSubmitted');
+            $form->onSuccess[] = callback($this, 'addUserFormSubmitted');
 
             $form->addProtection('Please submit this form again (security token has expired).');
             return $form;
@@ -111,7 +111,7 @@ class UsersControl extends \Nette\Application\UI\Control
                     ->setRequired('Unknown record.');
 
             $form->addSubmit('save', 'Save')->setAttribute('class', 'default');
-            $form->onSubmit[] = callback($this, 'editUserFormSubmitted');
+            $form->onSuccess[] = callback($this, 'editUserFormSubmitted');
 
             $form->addProtection('Please submit this form again (security token has expired).');
             return $form;

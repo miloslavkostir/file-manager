@@ -38,7 +38,7 @@ class NewFolder extends FileManager
                 ->addRule(Form::FILLED, 'You must fill name of new folder.');
         $form->addHidden('actualdir');
         $form->addSubmit('send', 'Create');
-        $form->onSubmit[] = array($this, 'NewFolderFormSubmitted');
+        $form->onSuccess[] = array($this, 'NewFolderFormSubmitted');
 
         return $form;
     }
