@@ -129,7 +129,7 @@ class FileManager extends Nette\Application\UI\Control
         $namespace = $this->presenter->context->session->getNamespace('file-manager');
 
         $clipboard = $namespace->clipboard;
-        if (!empty($clipboard ))
+        if (!empty($clipboard))
             $template->clipboard = $namespace->clipboard;
 
         if (empty($namespace->actualdir))

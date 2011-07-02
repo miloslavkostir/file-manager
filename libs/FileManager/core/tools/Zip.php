@@ -1,9 +1,14 @@
 <?php
 
+use Nette\Utils\Finder;
+
 class Zip extends FileManager
 {
     /** @var string */
     protected $tempDir;
+
+    /** @var integer */
+    protected $expiration = 600;
 
     function __construct()
     {
@@ -29,6 +34,8 @@ class Zip extends FileManager
      */
     function addFiles($actualdir, $files)
     {
+        $this->cleanUp();
+
         $zip = new ZipArchive;
         $tempName = $this->getTempName();
         $zipPath = $this->tempDir . '/' . $tempName;
@@ -54,6 +61,18 @@ class Zip extends FileManager
                 return $tempName;
          } else
                 throw new Exception ("Can not create ZIP archive '$zipPath' from '$actualdir'.");
+    }
+
+    function cleanUp()
+    {
+        $files = Finder::findFiles('*.zip')->in($this->tempDir);
+
+        foreach ($files as $file) {
+            $cTime = $file->getCTime();
+            $odds = time() - $cTime;
+            if ($odds > $this->expiration)
+                unlink($file->getPathName());
+        }
     }
 
     /**
