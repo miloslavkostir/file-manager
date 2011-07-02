@@ -332,7 +332,7 @@ class Files extends FileManager
             } elseif ($iterate === true) {
                     $info['dirCount']++;                    
                     foreach (Finder::find('*')->from($filepath)->exclude(parent::getParent()->thumb . '*') as $item) {
-                                       $info['size'] += $item->getSize();
+                                       $info['size'] += $this['files']->getFileSize($item->getPathName());
                                        if ($item->isDir())
                                            $info['dirCount']++;
                                        else
@@ -378,7 +378,7 @@ class Files extends FileManager
         $info['size'] = 0;
         $info['count'] = 0;
         foreach (Finder::findFiles('*')->from($path)->exclude(parent::getParent()->thumb . '*') as $file) {
-                           $info['size'] += $file->getSize();
+                           $info['size'] += $this['files']->getFileSize($file->getPathName());
                            $info['count']++;
         }
         return $info;

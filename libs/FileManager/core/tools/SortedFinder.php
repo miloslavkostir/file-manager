@@ -47,7 +47,8 @@ class SortedFinder extends Finder
                 break;
             case 'size':
                 $this->order = function($f1, $f2) {
-                    return $f2->getSize() - $f1->getSize();
+                    $files = new Files;
+                    return $files->getFileSize($f2->getPathName()) - $files->getFileSize($f1->getPathName());
                 };
                 break;
             default:

@@ -16,7 +16,7 @@ class Tools extends FileManager
     {
         $size = 0;
         foreach (Finder::findFiles('*')->from($this->config['uploadroot'] . $this->config['uploadpath']) as $file) {
-                           $size += $file->getSize();
+                           $size += $this['files']->getFileSize($file->getPathName());
         }
         return $size;
     }

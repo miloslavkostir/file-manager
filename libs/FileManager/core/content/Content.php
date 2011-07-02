@@ -457,7 +457,7 @@ class Content extends FileManager
                     if ( !is_dir($file->getPath() . '/' . $name)  ) {
 
                             $dir_array[ $name ]['type'] = 'file';
-                            $dir_array[ $name ]['size'] =  $file->getSize();
+                            $dir_array[ $name ]['size'] =  $this['files']->getFileSize($file->getPathName());
                             $filetype = strtolower(pathinfo($name, PATHINFO_EXTENSION));
                             $dir_array[ $name ]['filetype'] = $filetype;
                             if (file_exists($this->presenter->context->params['wwwDir'] . $thumb_dir . $filetype . '.png')) {
