@@ -59,17 +59,17 @@ class Files extends FileManager
                     $dirinfo = $this->getFolderInfo(realpath($actualpath . $filename));
                     if ($disksize['spaceleft'] < $dirinfo['size'])
                                     return false;
-                    else {                        
+                    else {
                                     if ($this->isSubFolder($actualpath, $targetpath, $filename) == false) {                                        
                                         $this->copyFolder($actualpath . $filename, $targetpath . $this->checkDuplName($targetpath, $filename));
                                         return true;
                                     } else
                                         return false;
-                    }                
+                    }
             } else {
                     $filesize = $this->getFileSize($actualpath . $filename);
                     if ($disksize['spaceleft'] >= $filesize) {
-                            copy($actualpath . $filename, $targetpath . $this->checkDuplName($targetpath, $filename));
+                            $this->copyFile($actualpath . $filename, $targetpath . $this->checkDuplName($targetpath, $filename));
                             return true;
                     } else
                             return false;
@@ -77,6 +77,27 @@ class Files extends FileManager
 
         } else
             return false;
+    }
+
+    /**
+     * Copy file (chunked)
+     * @param string $src (absolute path)
+     * @param string $dest (absolute path)
+     * @return integer bytes written
+     */
+    function copyFile($src, $dest)
+    {
+        # 1 meg at a time, you can adjust this.
+        $buffer_size = 1048576; 
+        $ret = 0;
+        $fin = fopen($src, "rb");
+        $fout = fopen($dest, "w");
+        while(!feof($fin)) {
+            $ret += fwrite($fout, fread($fin, $buffer_size));
+        }
+        fclose($fin);
+        fclose($fout);
+        return $ret; # return number of bytes written
     }
 
     /**
@@ -91,14 +112,14 @@ class Files extends FileManager
             mkdir($dst);
             umask($oldumask);
 
-            while(false !== ( $file = readdir($dir)) ) {                
+            while (false !== ( $file = readdir($dir)) ) {
                 if ( ( $file != '.' ) && ( $file != '..' ) ) {
 
                         if ( is_dir($src . '/' . $file) ) {
                                 if (strpos( '11' . $file, parent::getParent()->thumb) != 2 )  // exclude thumb folders
                                     $this->copyFolder($src . '/' . $file, $dst . '/' . $file);
                         } else
-                                copy($src . '/' . $file, $dst . '/' . $file);
+                                $this->copyFile($src . '/' . $file, $dst . '/' . $file);
 
                 }
             }
