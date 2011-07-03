@@ -47,7 +47,7 @@ class FileManager extends Nette\Application\UI\Control
 
         if ($this->config['cache'] == True) {
             $this['caching']->deleteItem(NULL, array('tags' => 'treeview'));
-            $this['caching']->deleteItem(array('content', realpath($this->getAbsolutePath($actualdir))));
+            $this['caching']->deleteItem(array('content', $this['tools']->getRealPath($this->getAbsolutePath($actualdir))));
         }
 
         $this->handleShowContent($actualdir);

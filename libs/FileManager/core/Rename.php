@@ -80,7 +80,7 @@ class Rename extends FileManager
                         );
         else {
 
-                        if (is_dir( realpath($path . $values['orig_filename']) )) {
+                        if (is_dir( $this['tools']->getRealPath($path . $values['orig_filename']) )) {
                                 $new_filename = $this['files']->safe_foldername($values['new_filename']);
 
                                 if ($actualdir == parent::getParent()->getRootname())
@@ -93,7 +93,7 @@ class Rename extends FileManager
                                     $this['files']->deleteFolder($thumb_path);
 
                                 if ($this->config['cache'] == True) {
-                                    $this['caching']->deleteItem(array('content', realpath($path)));
+                                    $this['caching']->deleteItem(array('content', $this['tools']->getRealPath($path)));
                                     $this['caching']->deleteItemsRecursive($path . $values['orig_filename']);
                                 }
                         } else {
@@ -103,7 +103,7 @@ class Rename extends FileManager
                                 $new_filename = $this['files']->safe_filename($values['new_filename']);
 
                                 if ($this->config['cache'] == True)
-                                    $this['caching']->deleteItem(array('content', realpath($path)));
+                                    $this['caching']->deleteItem(array('content', $this['tools']->getRealPath($path)));
                         }
 
                         if (rename($path . $values['orig_filename'], $path . $new_filename)) {

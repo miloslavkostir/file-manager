@@ -12,6 +12,24 @@ class Tools extends FileManager
         parent::__construct();
     }
 
+    /**
+     * Repair (back)slashes according to OS
+     * @param string $path
+     * @return string 
+     */
+    function getRealPath($path)
+    {
+        if (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN')
+            $path = str_replace('/', '\\', $path);
+        else
+            $path = str_replace('\\', '/', $path);
+
+        if (realpath($path))
+            return $path;
+        else
+            throw new \Nette\InvalidArgumentException("Invalid path $path given!");
+    }
+
     public function getUsedSize()
     {
         $size = 0;

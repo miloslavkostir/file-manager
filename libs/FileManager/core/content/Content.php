@@ -235,7 +235,7 @@ class Content extends FileManager
         $session = $this->presenter->context->session->getSection('file-manager');
         $session->order = $key;
         $actualdir = $this['system']->getActualDir();
-        $absPath = realpath(parent::getParent()->getAbsolutePath($actualdir));
+        $absPath = $this['tools']->getRealPath(parent::getParent()->getAbsolutePath($actualdir));
 
         if ($this->config['cache'] == True)
             $this['caching']->deleteItem(array('content', $absPath));
@@ -498,7 +498,7 @@ class Content extends FileManager
     {
         if ($this->config['cache'] == True) {
 
-            $absDir = realpath(parent::getParent()->getAbsolutePath($actualdir));
+            $absDir = $this['tools']->getRealPath(parent::getParent()->getAbsolutePath($actualdir));
             $cacheData = $this['caching']->getItem(array('content',  $absDir));
 
             if (empty($cacheData)) {

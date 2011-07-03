@@ -90,7 +90,7 @@ class NewFolder extends FileManager
                                                         );
 
                                                         if ($this->config['cache'] == True) {
-                                                            $this['caching']->deleteItem(array('content', realpath(parent::getParent()->getAbsolutePath($values['actualdir']))));
+                                                            $this['caching']->deleteItem(array('content', $this['tools']->getRealPath(parent::getParent()->getAbsolutePath($values['actualdir']))));
                                                             $this['caching']->deleteItem(NULL, array('tags' => 'treeview'));
                                                         }
 

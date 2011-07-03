@@ -87,7 +87,7 @@ class Treeview extends FileManager
     {
         if ($this->config['cache'] == True) {
 
-            $path = realpath($this->config['uploadroot'] . $this->config['uploadpath']);
+            $path = $this['tools']->getRealPath($this->config['uploadroot'] . $this->config['uploadpath']);
 
             $cacheData = $this['caching']->getItem($path);
 

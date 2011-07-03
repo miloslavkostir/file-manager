@@ -61,11 +61,11 @@ class Caching extends FileManager
                 ->exclude('*' . parent::getParent()->thumb);
 
         foreach ( $dirs as $dir ) {
-            $key = realpath($dir->getPathName());
+            $key = $this['tools']->getRealPath($dir->getPathName());
             unset($cache[array('content', $key)]);
         }
 
-        unset($cache[array('content', realpath($absDir))]);
+        unset($cache[array('content', $this['tools']->getRealPath($absDir))]);
         $this->deleteItem(NULL, array('tags' => 'treeview'));
     }
 

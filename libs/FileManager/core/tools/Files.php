@@ -47,13 +47,13 @@ class Files extends FileManager
             $disksize = $this['tools']->diskSizeInfo();
 
             if ($this->config['cache'] == True)
-                $this['caching']->deleteItem(array('content', realpath($targetpath)));
+                $this['caching']->deleteItem(array('content', $this['tools']->getRealPath($targetpath)));
 
             if (is_dir($actualpath . $filename)) {
 
                     if ($this->config['cache'] == True) {
                         $this['caching']->deleteItem(NULL, array('tags' => 'treeview'));
-                        $this['caching']->deleteItem(array('content', realpath($targetpath)));
+                        $this['caching']->deleteItem(array('content', $this['tools']->getRealPath($targetpath)));
                     }
 
                     $dirinfo = $this->getFolderInfo(realpath($actualpath . $filename));
@@ -139,7 +139,7 @@ class Files extends FileManager
         $state = false;
         
         foreach (Finder::findDirectories('*')->from(realpath($actualpath . $filename)) as $folder) {          
-            if ($folder->getRealPath() == realpath($targetpath) )
+            if ($folder->getRealPath() == $this['tools']->getRealPath($targetpath) )
                     $state = true;
                         
         }
@@ -582,7 +582,7 @@ class Files extends FileManager
                 // delete source file
                 if (unlink($path . $filename)) {
                     if ($this->config['cache'] == True)
-                        $this['caching']->deleteItem(array('content', realpath($path)));
+                        $this['caching']->deleteItem(array('content', $this['tools']->getRealPath($path)));
                     return true;
                 } else
                     return false;
