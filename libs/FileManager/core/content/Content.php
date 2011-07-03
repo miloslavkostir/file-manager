@@ -235,6 +235,10 @@ class Content extends FileManager
         $session = $this->presenter->context->session->getSection('file-manager');
         $session->order = $key;
         $actualdir = $this['system']->getActualDir();
+        $absPath = realpath(parent::getParent()->getAbsolutePath($actualdir));
+
+        if ($this->config['cache'] == True)
+            $this['caching']->deleteItem(array('content', $absPath));
 
         parent::getParent()->handleShowContent($actualdir);
     }
@@ -488,7 +492,7 @@ class Content extends FileManager
      * @param string $mask
      * @param string $view
      * @param string $order
-     * @return array 
+     * @return array
      */
     public function loadData($actualdir, $mask, $view, $order)
     {
