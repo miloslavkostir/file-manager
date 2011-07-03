@@ -83,7 +83,7 @@ class Files extends FileManager
      * Copy folder recursively
      * @param  string  actual dir (absolute path)
      * @param  string  target dir (absolute path)
-     */    
+     */
     function copyFolder($src, $dst)
     {
             $dir = opendir($src);
@@ -155,38 +155,45 @@ class Files extends FileManager
     public function move($actualdir, $targetdir, $filename)
     {
         $actualpath = parent::getParent()->getAbsolutePath($actualdir);
+        $targetpath = parent::getParent()->getAbsolutePath($targetdir);
 
         if ($actualdir == $targetdir)
                 return false;
         else {
                 if (is_dir($actualpath . $filename)) {
-                        if ($this->moveFolder($actualdir, $targetdir, $filename))
-                                return true;
-                        else
+                        if ($this->isSubFolder($actualpath, $targetpath, $filename))
+                                return false;
+                        elseif ($this->moveFolder($actualpath, $targetpath, $filename)) {
+
+                                if ($this->config['cache'] == True)
+                                    $this['caching']->deleteItemsRecursive($actualpath . $filename);
+
+                                if ($this->deleteFolder($actualpath . $filename))
+                                        return true;
+                                else
+                                        return false;
+
+                        } else
                                 return false;
                 } else {
-                        if ($this->moveFile($actualdir, $targetdir, $filename))
+                        if ($this->moveFile($actualpath, $targetpath, $filename))
                                 return true;
                         else
                                 return false;
-                }        
+                }
         }
     }
-    
+
     /**
      * Move file
-     * @param  string  actual folder (relative path)
-     * @param  string  target folder (relative path)
+     * @param  string  actual folder (absolute path)
+     * @param  string  target folder (absolute path)
      * @param  string  filename
      * @return bool
      */    
-    public function moveFile($actualdir, $targetdir, $filename)
+    public function moveFile($actualpath, $targetpath, $filename)
     {
-        $actualpath = parent::getParent()->getAbsolutePath($actualdir);
-        $targetpath = parent::getParent()->getAbsolutePath($targetdir);
-        
-        if (copy($actualpath . $filename, $targetpath . $this->checkDuplName($targetpath, $filename))) {
-            $this->deleteFile($actualdir, $filename);
+        if (rename($actualpath . $filename, $targetpath . $this->checkDuplName($targetpath, $filename))) {
             $this['clipboard']->clearClipboard();
             return true;
         } else
@@ -195,22 +202,32 @@ class Files extends FileManager
     
     /**
      * Move folder
-     * @param  string  actual folder (relative path)
-     * @param  string  target folder (relative path)
-     * @param  string  filename
+     * @param  string  from (absolute path)
+     * @param  string  to (absolute path)
+     * @param  string  what
      * @return bool
      */    
-    public function moveFolder($actualdir, $targetdir, $filename)
+    public function moveFolder($actualPath, $targetPath, $filename)
     {
-        $actualpath = parent::getParent()->getAbsolutePath($actualdir);
-        
-        if ($this->copy($actualdir, $targetdir, $filename)) {
-            if ($this->delete($actualdir, $filename))
-                return true;
-            else
+        if(!is_dir($targetPath . $filename)) {
+            $oldumask = umask(0);
+            mkdir($targetPath . $filename, 0777);
+            umask($oldumask);
+        }
+
+        $files = Finder::find('*')
+                    ->in($actualPath . $filename)
+                    ->exclude(parent::getParent()->thumb . '*');
+
+        foreach ($files as $file) {
+
+            if ($file->isDir())
+                $this->moveFolder($file->getPath() . '/', $targetPath . $filename . '/', $file->getFilename());
+            elseif (!rename($file->getPathName(), $targetPath . $filename . '/' . $file->getFileName()))
                 return false;
-        } else
-            return false;
+        }
+
+        return true;
     }
 
     function get_file_mod($path)
