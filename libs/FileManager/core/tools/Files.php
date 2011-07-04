@@ -186,8 +186,11 @@ class Files extends FileManager
                                 return false;
                         elseif ($this->moveFolder($actualpath, $targetpath, $filename)) {
 
-                                if ($this->config['cache'] == True)
+                                if ($this->config['cache'] == True) {
                                     $this['caching']->deleteItemsRecursive($actualpath . $filename);
+                                    $this['caching']->deleteItem(array('content', $this['tools']->getRealPath($actualpath)));
+                                    $this['caching']->deleteItem(array('content', $this['tools']->getRealPath($targetpath)));
+                                }
 
                                 if ($this->deleteFolder($actualpath . $filename))
                                         return true;
@@ -197,9 +200,15 @@ class Files extends FileManager
                         } else
                                 return false;
                 } else {
-                        if ($this->moveFile($actualpath, $targetpath, $filename))
+                        if ($this->moveFile($actualpath, $targetpath, $filename)) {
+
+                                if ($this->config['cache'] == True) {
+                                    $this['caching']->deleteItem(array('content', $this['tools']->getRealPath($actualpath)));
+                                    $this['caching']->deleteItem(array('content', $this['tools']->getRealPath($targetpath)));
+                                }
+
                                 return true;
-                        else
+                        } else
                                 return false;
                 }
         }
@@ -227,7 +236,7 @@ class Files extends FileManager
      * @param  string  to (absolute path)
      * @param  string  what
      * @return bool
-     */    
+     */
     public function moveFolder($actualPath, $targetPath, $filename)
     {
         if(!is_dir($targetPath . $filename)) {

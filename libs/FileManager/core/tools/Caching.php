@@ -58,7 +58,7 @@ class Caching extends FileManager
 
         $dirs = Finder::findDirectories('*')
                 ->from($absDir)
-                ->exclude('*' . parent::getParent()->thumb);
+                ->exclude(parent::getParent()->thumb . '*');
 
         foreach ( $dirs as $dir ) {
             $key = $this['tools']->getRealPath($dir->getPathName());

@@ -19,15 +19,26 @@ class Tools extends FileManager
      */
     function getRealPath($path)
     {
-        if (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN')
+        $os = strtoupper(substr(PHP_OS, 0, 3));
+
+        if ($os === 'WIN')
             $path = str_replace('/', '\\', $path);
         else
             $path = str_replace('\\', '/', $path);
 
-        if (realpath($path))
-            return $path;
-        else
-            throw new \Nette\InvalidArgumentException("Invalid path $path given!");
+
+        if (realpath($path)) {
+                $path = realpath($path);
+                if (is_dir($path)) {
+                    if ($os === 'WIN' && substr($path, -1) <> '\\')
+                            $path .= '\\';
+                    if ($os <> 'WIN' && substr($path, -1) <> '/')
+                            $path .= '/';
+                }
+
+                return $path;
+        } else
+                throw new \Nette\InvalidArgumentException("Invalid path $path given!");
     }
 
     public function getUsedSize()
