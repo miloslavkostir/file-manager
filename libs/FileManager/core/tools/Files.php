@@ -311,7 +311,7 @@ class Files extends FileManager
     {
             $thumb_dir = $this->config['resource_dir'] . 'img/icons/';
             $uploadpath = $this->config['uploadpath'];
-            $rootname = $this->getRootName();
+            $rootname = $this['tools']->getRootName();
             $uploadroot = $this->config['uploadroot'];
 
             $path = $this['tools']->getAbsolutePath($actualdir) . $filename;
