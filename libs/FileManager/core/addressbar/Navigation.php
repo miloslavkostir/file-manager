@@ -12,7 +12,7 @@ class Navigation extends FileManager
     public function render()
     {
         $actualdir = $this['system']->getActualDir();
-        $rootname = parent::getParent()->getRootname();
+        $rootname = $this['tools']->getRootName();
 
         $template = $this->template;
         $template->setFile(__DIR__ . '/Navigation.latte');
@@ -32,7 +32,7 @@ class Navigation extends FileManager
 
     public function createComponentLocationForm()
     {
-        $translator = parent::getParent()->getTranslator();
+        $translator = $this['system']->getTranslator();
         $form = new Form;
         $form->setTranslator($translator);
         $form->getElementPrototype()->class('fm-ajax');
@@ -46,12 +46,12 @@ class Navigation extends FileManager
     public function LocationFormSubmitted($form)
     {
         $val = $form->values;
-        $path = parent::getParent()->getAbsolutePath($val['location']);
+        $path = $this['tools']->getAbsolutePath($val['location']);
 
         if (file_exists($path))
             parent::getParent()->handleShowContent($val['location']);
         else {
-            $translator = parent::getParent()->getTranslator();
+            $translator = $this['system']->getTranslator();
             parent::getParent()->flashMessage(
                 $translator->translate('Directory does not exists.'),
                 'warning'
@@ -63,7 +63,7 @@ class Navigation extends FileManager
     public function getNav($actualdir)
     {
         $var = array();
-        $rootname = parent::getParent()->getRootname();
+        $rootname = $this['tools']->getRootName();
         if ($actualdir === $rootname)
                 $var[] = array(
                         "name" => $rootname,

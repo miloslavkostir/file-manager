@@ -27,7 +27,7 @@ class Clipboard extends FileManager
 
     public function handlePasteFromClipboard()
     {
-        $translator =  parent::getParent()->getTranslator();
+        $translator =  $this['system']->getTranslator();
         $session = $this->presenter->context->session->getSection('file-manager');
         $actualdir = $this['system']->getActualDir();
 
@@ -85,7 +85,7 @@ class Clipboard extends FileManager
 
     public function handleRemoveFromClipboard($actualdir, $filename)
     {
-        $translator = parent::getParent()->getTranslator();
+        $translator = $this['system']->getTranslator();
         $session = $this->presenter->context->session->getSection('file-manager');
         $path = $actualdir.$filename;
 
@@ -104,11 +104,11 @@ class Clipboard extends FileManager
     {
         $template = $this->template;
         $template->setFile(__DIR__ . '/Clipboard.latte');
-        $template->setTranslator(parent::getParent()->getTranslator());
+        $template->setTranslator($this['system']->getTranslator());
 
         $session = $this->presenter->context->session->getSection('file-manager');
         $template->clipboard = $session->clipboard;
-        $template->rootname = parent::getParent()->getRootname();
+        $template->rootname = $this['tools']->getRootName();
 
         $template->render();
     }

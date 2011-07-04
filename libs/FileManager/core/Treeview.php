@@ -21,7 +21,7 @@ class Treeview extends FileManager
     {
         $template = $this->template;
         $template->setFile(__DIR__ . '/Treeview.latte');
-        $template->setTranslator(parent::getParent()->getTranslator());
+        $template->setTranslator($this['system']->getTranslator());
         $template->treeview = $this->loadData();
         $template->render();
     }
@@ -32,7 +32,7 @@ class Treeview extends FileManager
             foreach ($dirs as $key => $value) {
                     $html .= '<li>
                                 <span class="folder fm-droppable" id="'.$superior . '/' . $key.'/'.'">
-                                    <a href="' . parent::getParent()->link('showContent', $superior . '/' . $key.'/').'" class="treeview-folder fm-ajax" title="'.parent::getParent()->getRootname().$superior.'/'.$key.'/">'
+                                    <a href="' . parent::getParent()->link('showContent', $superior . '/' . $key.'/').'" class="treeview-folder fm-ajax" title="'.$this['tools']->getRootName().$superior.'/'.$key.'/">'
                                         . $key . '
                                     </a>
                                 </span>';
@@ -66,7 +66,7 @@ class Treeview extends FileManager
     {
         $dirs = $this->getDirTree($this->config['uploadroot'] . $this->config['uploadpath']);
 
-        $rootname = parent::getParent()->getRootname();
+        $rootname = $this['tools']->getRootName();
 
         return '<ul class="filetree" style="display: block;">
                     <span class="fm-droppable folder-root" id="' . $rootname . '">

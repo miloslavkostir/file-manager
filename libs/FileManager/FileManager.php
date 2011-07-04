@@ -47,7 +47,7 @@ class FileManager extends Nette\Application\UI\Control
 
         if ($this->config['cache'] == True) {
             $this['caching']->deleteItem(NULL, array('tags' => 'treeview'));
-            $this['caching']->deleteItem(array('content', $this['tools']->getRealPath($this->getAbsolutePath($actualdir))));
+            $this['caching']->deleteItem(array('content', $this['tools']->getRealPath($this['tools']->getAbsolutePath($actualdir))));
         }
 
         $this->handleShowContent($actualdir);
@@ -69,7 +69,7 @@ class FileManager extends Nette\Application\UI\Control
                     'fileinfo'
                 ));
         } else {
-                $translator = $this->getTranslator();
+                $translator = $this['system']->getTranslator();
                 $this->flashMessage(    // TODO message is missing in main template
                     $translator->translate('Plugin not found!'),
                     'warning'
@@ -115,7 +115,7 @@ class FileManager extends Nette\Application\UI\Control
     {
         $template = $this->template;
         $template->setFile(__DIR__ . '/FileManager.latte');
-        $template->setTranslator($this->getTranslator());
+        $template->setTranslator($this['system']->getTranslator());
 
         if (!function_exists("exec"))
              throw new Exception ("Missing exec function! Application can not be loaded!");
@@ -136,7 +136,7 @@ class FileManager extends Nette\Application\UI\Control
             $template->clipboard = $session->clipboard;
 
         if (empty($session->actualdir))
-            $this->handleShowContent($this->getRootname());
+            $this->handleShowContent($this['tools']->getRootname());
 
         $plugins = $this->plugins;
 
@@ -160,33 +160,10 @@ class FileManager extends Nette\Application\UI\Control
         $template->render();
     }
 
-    protected function getRootname()
-    {
-        return array_pop((explode("/", trim($this->config['uploadpath'],"/"))));
-    }
-
-    protected function getAbsolutePath($actualdir)
-    {
-        if ($actualdir == $this->getRootname())
-            return $this->config['uploadroot'] . $this->config['uploadpath'];
-        else
-            return $this->config['uploadroot'] . substr($this->config['uploadpath'], 0, -1) . $actualdir;
-    }
-
     protected function refreshSnippets($snippets)
     {
         foreach ($snippets as $snippet)
             $this->invalidateControl($snippet);
-    }
-
-    public function getTranslator()
-    {
-        $lang = __DIR__ . '/lang/' . $this->config["lang"] . '.mo';
-        if (file_exists($lang)) {
-            $transl = new GettextTranslator($lang);
-            return $transl;
-        } else
-            throw new Exception("Language file $lang does not exists!");
     }
 
     /**

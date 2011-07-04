@@ -39,8 +39,8 @@ class Files extends FileManager
      */
     function copy($actualdir, $targetdir, $filename)
     {
-        $actualpath = parent::getParent()->getAbsolutePath($actualdir);
-        $targetpath = parent::getParent()->getAbsolutePath($targetdir);
+        $actualpath = $this['tools']->getAbsolutePath($actualdir);
+        $targetpath = $this['tools']->getAbsolutePath($targetdir);
        
         if (is_writable($targetpath)) {
 
@@ -157,8 +157,8 @@ class Files extends FileManager
      */    
     public function move($actualdir, $targetdir, $filename)
     {
-        $actualpath = parent::getParent()->getAbsolutePath($actualdir);
-        $targetpath = parent::getParent()->getAbsolutePath($targetdir);
+        $actualpath = $this['tools']->getAbsolutePath($actualdir);
+        $targetpath = $this['tools']->getAbsolutePath($targetdir);
 
         if ($actualdir == $targetdir)
                 return false;
@@ -314,7 +314,7 @@ class Files extends FileManager
             $rootname = $this->getRootName();
             $uploadroot = $this->config['uploadroot'];
 
-            $path = parent::getParent()->getAbsolutePath($actualdir) . $filename;
+            $path = $this['tools']->getAbsolutePath($actualdir) . $filename;
 
             $info = array();
 
@@ -358,7 +358,7 @@ class Files extends FileManager
      */
     function getFilesInfo($dir, $files, $iterate = false)
     {
-        $path = parent::getParent()->getAbsolutePath($dir);
+        $path = $this['tools']->getAbsolutePath($dir);
         $info = array(
             'size' => 0,
             'dirCount' => 0,
@@ -560,7 +560,7 @@ class Files extends FileManager
      */
     function delete($dir, $file = "")
     {
-        $absDir = parent::getParent()->getAbsolutePath($dir);
+        $absDir = $this['tools']->getAbsolutePath($dir);
 
         if (is_dir($absDir . $file)) {
 
@@ -589,7 +589,7 @@ class Files extends FileManager
      */
     function deleteFile($actualdir, $filename)
     {
-        $path = parent::getParent()->getAbsolutePath($actualdir);
+        $path = $this['tools']->getAbsolutePath($actualdir);
 
         if (is_writable($path)) {
                 $cache_file =  $this->createThumbName($actualdir, $filename);
@@ -665,7 +665,7 @@ class Files extends FileManager
     {
         $result = array();
         $uploadpath = $this->config['uploadpath'];
-        $rootname = parent::getParent()->getRootName();
+        $rootname = $this['tools']->getRootName();
         $uploadroot = $this->config['uploadroot'];
 
         $thumb_folder = $this->createThumbFolder($actualdir);
@@ -691,7 +691,7 @@ class Files extends FileManager
     function createThumbFolder($actualdir)
     {
         $uploadpath = $this->config['uploadpath'];
-        $rootname = parent::getParent()->getRootName();
+        $rootname = $this['tools']->getRootName();
         $uploadroot = $this->config['uploadroot'];
         
         $foldername = parent::getParent()->thumb . md5($actualdir);

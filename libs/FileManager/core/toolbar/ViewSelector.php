@@ -18,7 +18,7 @@ class ViewSelector extends FileManager
 
         $template = $this->template;
         $template->setFile(__DIR__ . '/ViewSelector.latte');
-        $template->setTranslator(parent::getParent()->getTranslator());
+        $template->setTranslator($this['system']->getTranslator());
 
         $this['changeViewForm']->setDefaults(array(
                     'view' => $session->view
@@ -29,7 +29,7 @@ class ViewSelector extends FileManager
 
     public function createComponentChangeViewForm()
     {
-        $translator = parent::getParent()->getTranslator();
+        $translator = $this['system']->getTranslator();
 
         $items = array(
             'large' => $translator->translate('Large images'),

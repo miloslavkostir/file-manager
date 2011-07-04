@@ -18,7 +18,7 @@ class NewFolder extends FileManager
 
         $template = $this->template;
         $template->setFile(__DIR__ . '/NewFolder.latte');
-        $template->setTranslator(parent::getParent()->getTranslator());
+        $template->setTranslator($this['system']->getTranslator());
         $template->actualdir = $actualdir;
 
         $this['newFolderForm']->setDefaults(array(
@@ -30,7 +30,7 @@ class NewFolder extends FileManager
 
     public function  createComponentNewFolderForm()
     {
-        $translator = parent::getParent()->getTranslator();
+        $translator = $this['system']->getTranslator();
         $form = new Form;
         $form->setTranslator($translator);
         $form->getElementPrototype()->class('fm-ajax');
@@ -45,7 +45,7 @@ class NewFolder extends FileManager
 
     public function NewFolderFormSubmitted($form)
     {
-        $translator = parent::getParent()->getTranslator();
+        $translator = $this['system']->getTranslator();
         $values = $form->getValues();
 
         if ($this->config['readonly'] == True)
@@ -59,7 +59,7 @@ class NewFolder extends FileManager
 
                                         $foldername = $this['files']->safe_foldername($values['foldername']);
 
-                                        if ($values['actualdir'] == parent::getParent()->getRootname()) {
+                                        if ($values['actualdir'] == $this['tools']->getRootName()) {
                                             $target_dir = $this->config['uploadroot'] . $this->config['uploadpath'] . $foldername;
                                             $actualdir = "/" . $foldername . "/";
                                         }
@@ -90,7 +90,7 @@ class NewFolder extends FileManager
                                                         );
 
                                                         if ($this->config['cache'] == True) {
-                                                            $this['caching']->deleteItem(array('content', $this['tools']->getRealPath(parent::getParent()->getAbsolutePath($values['actualdir']))));
+                                                            $this['caching']->deleteItem(array('content', $this['tools']->getRealPath($this['tools']->getAbsolutePath($values['actualdir']))));
                                                             $this['caching']->deleteItem(NULL, array('tags' => 'treeview'));
                                                         }
 

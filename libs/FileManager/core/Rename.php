@@ -19,7 +19,7 @@ class Rename extends FileManager
     {
         $template = $this->template;
         $template->setFile(__DIR__ . '/Rename.latte');
-        $template->setTranslator(parent::getParent()->getTranslator());
+        $template->setTranslator($this['system']->getTranslator());
         $template->origFile = $this->files;
 
         $this['renameForm']->setDefaults(array(
@@ -32,7 +32,7 @@ class Rename extends FileManager
 
     public function createComponentRenameForm()
     {
-        $translator = parent::getParent()->getTranslator();
+        $translator = $this['system']->getTranslator();
         $form = new Form;
         $form->setTranslator($translator);
         $form->getElementPrototype()->class('fm-ajax');
@@ -47,10 +47,10 @@ class Rename extends FileManager
 
     public function RenameFormSubmitted($form)
     {
-        $translator = parent::getParent()->getTranslator();
+        $translator = $this['system']->getTranslator();
         $values = $form->getValues();
         $actualdir = $this['system']->getActualDir();
-        $path = parent::getParent()->getAbsolutePath($actualdir);
+        $path = $this['tools']->getAbsolutePath($actualdir);
 
         if ($this->config['readonly'] == True)
 
@@ -83,7 +83,7 @@ class Rename extends FileManager
                         if (is_dir( $this['tools']->getRealPath($path . $values['orig_filename']) )) {
                                 $new_filename = $this['files']->safe_foldername($values['new_filename']);
 
-                                if ($actualdir == parent::getParent()->getRootname())
+                                if ($actualdir == $this['tools']->getRootName())
                                     $thumb_folder = '/' . $values['orig_filename'] . '/';
                                 else
                                     $thumb_folder = $actualdir . $values['orig_filename'] . '/' ;

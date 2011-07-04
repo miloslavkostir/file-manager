@@ -2,6 +2,9 @@
 
 class System extends FileManager
 {
+    /** @var array */
+    public $config;
+
     public function __construct()
     {
         parent::__construct();
@@ -39,5 +42,14 @@ class System extends FileManager
         }
 
         return false;
+    }
+    public function getTranslator()
+    {
+        $lang = __DIR__ . '/../../lang/' . $this->config["lang"] . '.mo';
+        if (file_exists($lang)) {
+            $transl = new GettextTranslator($lang);
+            return $transl;
+        } else
+            throw new Exception("Language file $lang does not exists!");
     }
 }

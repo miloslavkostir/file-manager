@@ -14,7 +14,7 @@ class DiskUsage extends FileManager
     {
         $template = $this->template;
         $template->setFile(__DIR__ . '/DiskUsage.latte');
-        $template->setTranslator(parent::getParent()->getTranslator());
+        $template->setTranslator($this['system']->getTranslator());
         $template->sizeinfo = $this['tools']->diskSizeInfo();
         $template->render();
     }

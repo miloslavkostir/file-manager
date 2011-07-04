@@ -27,7 +27,7 @@ class Content extends FileManager
     public function handleShowMultiFileInfo($files = "")
     {
         $actualdir = $this['system']->getActualDir();
-        $translator = parent::getParent()->getTranslator();
+        $translator = $this['system']->getTranslator();
 
         // if sended by AJAX
         if (empty($files))
@@ -71,7 +71,7 @@ class Content extends FileManager
     {
         $session = $this->presenter->context->session->getSection('file-manager');
         $actualdir = $this['system']->getActualDir();
-        $translator = parent::getParent()->getTranslator();
+        $translator = $this['system']->getTranslator();
 
         // if sended by AJAX
         if (empty($files))
@@ -119,7 +119,7 @@ class Content extends FileManager
     {
         $session = $this->presenter->context->session->getSection('file-manager');
         $actualdir = $this['system']->getActualDir();
-        $translator = parent::getParent()->getTranslator();
+        $translator = $this['system']->getTranslator();
 
         // if sended by AJAX
         if (empty($files))
@@ -146,7 +146,7 @@ class Content extends FileManager
     public function handleDelete($filename = "")
     {
         $actualdir = $this['system']->getActualDir();
-        $translator = parent::getParent()->getTranslator();
+        $translator = $this['system']->getTranslator();
 
         // if sended by AJAX
         if (empty($filename))
@@ -178,7 +178,7 @@ class Content extends FileManager
     public function handleMultiDelete($files = "")
     {
         $actualdir = $this['system']->getActualDir();
-        $translator = parent::getParent()->getTranslator();
+        $translator = $this['system']->getTranslator();
 
         // if sended by AJAX
         if (empty($files))
@@ -235,7 +235,7 @@ class Content extends FileManager
         $session = $this->presenter->context->session->getSection('file-manager');
         $session->order = $key;
         $actualdir = $this['system']->getActualDir();
-        $absPath = $this['tools']->getRealPath(parent::getParent()->getAbsolutePath($actualdir));
+        $absPath = $this['tools']->getRealPath($this['tools']->getAbsolutePath($actualdir));
 
         if ($this->config['cache'] == True)
             $this['caching']->deleteItem(array('content', $absPath));
@@ -261,7 +261,7 @@ class Content extends FileManager
             $filename = $this->presenter->context->httpRequest->getQuery('filename');
 
         if ($this['tools']->validPath($actualdir, $filename)) {
-            $path = parent::getParent()->getAbsolutePath($actualdir) . $filename;
+            $path = $this['tools']->getAbsolutePath($actualdir) . $filename;
             $this->presenter->sendResponse(new FileResponse($path, NULL, NULL));
         }
     }
@@ -295,7 +295,7 @@ class Content extends FileManager
     {
         $session = $this->presenter->context->session->getSection('file-manager');
         $actualdir = $session->actualdir;
-        $translator = parent::getParent()->getTranslator();
+        $translator = $this['system']->getTranslator();
         $request = $this->presenter->context->httpRequest;
 
         // if sended by AJAX
@@ -334,7 +334,7 @@ class Content extends FileManager
 
     public function handleShowThumb($dir, $file)
     {
-        $path = parent::getParent()->getAbsolutePath($dir) . $file;
+        $path = $this['tools']->getAbsolutePath($dir) . $file;
 
         $cache_file =  $this['files']->createThumbName($dir, $file);
 
@@ -363,7 +363,7 @@ class Content extends FileManager
 
     public function render()
     {
-        $translator = parent::getParent()->getTranslator();
+        $translator = $this['system']->getTranslator();
         $session = $this->presenter->context->session->getSection('file-manager');
         $actualdir = $session->actualdir;
 
@@ -401,7 +401,7 @@ class Content extends FileManager
 
         $template->files = $this->loadData($actualdir, $mask, $view, $order);
         $template->actualdir = $actualdir;
-        $template->rootname = parent::getParent()->getRootname();
+        $template->rootname = $this['tools']->getRootName();
         $template->thumb_dir = $this->config['resource_dir'] . 'img/icons/' . $view . '/';
 
         if (!empty($plugins)) {
@@ -439,10 +439,10 @@ class Content extends FileManager
         }
 
         $uploadpath = $this->config['uploadpath'];
-        $rootname = parent::getParent()->getRootName();
+        $rootname = $this['tools']->getRootName();
         $uploadroot = $this->config['uploadroot'];
 
-        $absolutePath = parent::getParent()->getAbsolutePath($actualdir);
+        $absolutePath = $this['tools']->getAbsolutePath($actualdir);
 
         $dir_array = array();
 
@@ -498,7 +498,7 @@ class Content extends FileManager
     {
         if ($this->config['cache'] == True) {
 
-            $absDir = $this['tools']->getRealPath(parent::getParent()->getAbsolutePath($actualdir));
+            $absDir = $this['tools']->getRealPath($this['tools']->getAbsolutePath($actualdir));
             $cacheData = $this['caching']->getItem(array('content',  $absDir));
 
             if (empty($cacheData)) {

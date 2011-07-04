@@ -41,7 +41,7 @@ class Zip extends FileManager
 
         if ($zip->open($zipPath, ZipArchive::CREATE) === true) {
 
-                $path = parent::getParent()->getAbsolutePath($actualdir);
+                $path = $this['tools']->getAbsolutePath($actualdir);
 
                 foreach ($files as $file) {
                     $name = $file;

@@ -13,6 +13,19 @@ class Tools extends FileManager
     }
 
     /**
+     * Get absolute path from relative path
+     * @param string $actualdir
+     * @return string
+     */
+    function getAbsolutePath($actualdir)
+    {
+        if ($actualdir == $this->getRootname())
+            return $this->config['uploadroot'] . $this->config['uploadpath'];
+        else
+            return $this->config['uploadroot'] . substr($this->config['uploadpath'], 0, -1) . $actualdir;
+    }
+
+    /**
      * Repair (back)slashes according to OS
      * @param string $path
      * @return string
@@ -39,6 +52,15 @@ class Tools extends FileManager
                 return $path;
         } else
                 throw new \Nette\InvalidArgumentException("Invalid path $path given!");
+    }
+
+    /**
+     * Get root folder name
+     * @return string
+     */
+    function getRootname()
+    {
+        return array_pop((explode("/", trim($this->config['uploadpath'],"/"))));
     }
 
     /**
@@ -87,7 +109,7 @@ class Tools extends FileManager
      */
     public function validPath($dir, $file = NULL)
     {
-        $path = parent::getParent()->getAbsolutePath($dir);
+        $path = $this['tools']->getAbsolutePath($dir);
 
         if (!empty($file))
             $path .= $file;
@@ -95,7 +117,7 @@ class Tools extends FileManager
         if (file_exists($path))
             return True;
         else {
-            $translator = parent::getParent()->getTranslator();
+            $translator = $this['system']->getTranslator();
             parent::getParent()->flashMessage(
                 $translator->translate('Target path %s not found!', $dir),
                 'warning'

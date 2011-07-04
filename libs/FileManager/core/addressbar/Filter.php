@@ -18,7 +18,7 @@ class Filter extends FileManager
 
         $template = $this->template;
         $template->setFile(__DIR__ . '/Filter.latte');
-        $template->setTranslator(parent::getParent()->getTranslator());
+        $template->setTranslator($this['system']->getTranslator());
 
         $this['filterForm']->setDefaults(array(
                     'phrase' => $session->mask
@@ -29,7 +29,7 @@ class Filter extends FileManager
 
     public function createComponentFilterForm()
     {
-        $translator = parent::getParent()->getTranslator();
+        $translator = $this['system']->getTranslator();
         $form = new Form;
         $form->setTranslator($translator);
         $form->getElementPrototype()->class('fm-ajax');
