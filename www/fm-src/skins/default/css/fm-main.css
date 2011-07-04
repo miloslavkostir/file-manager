@@ -163,9 +163,6 @@
 .file-manager .fm-body #fm-files-details .fm-thumb { border-style: none; }
 
 
-.file-manager .fm-body .fm-upload #fm-uploader { margin-left: 10px; margin-right: 10px; }
-
-
 .file-manager .fm-info-bar { width: 100%; height: 155px; background: url('../img/details_back_top.gif') repeat-x scroll left top #F1F5FB; margin: 0px; }
 .file-manager .fm-info-bar #snippet-fileManager-fileinfo { float: left; }
 .file-manager .fm-info-bar #snippet-fileManager-diskusage { float: right; }
