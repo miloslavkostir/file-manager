@@ -1,7 +1,7 @@
+{var $robots = noindex}
 <!DOCTYPE html>
 <html>
 <head>
-
         <link type="text/css" href="{$basePath}/css/jqueryui/ui-lightness/jquery-ui-1.8.14.custom.css" rel="stylesheet" />
 
         <script type="text/javascript" src="http://code.jquery.com/jquery-1.6.2.min.js"></script>
@@ -24,10 +24,24 @@
         {block head}{/block}
 </head>
 <body>
-    <div style="margin: 0 auto; border: 1px solid #CCCCCC;">
-        <p id="logged-in" n:if="$user->loggedIn" style="text-align: right; padding: 5px; margin: 0 auto; background-color: #000000; font-size: 80%; color: #ffffff; font-family: Trebuchet MS,Tahoma,Verdana,Arial,sans-serif;">
-            Signed in as {$user->identity->real_name} | <a n:href="Sign:out">Sign out</a>
-        </p>
+    <div style="width: auto; margin: 0 auto;" class="ui-widget ui-widget-content ui-corner-all">
+
+        <div style="float: left;"></div>
+        <div style="float: right; font-size: 75%; font-family: Trebuchet MS,Tahoma,Verdana,Arial,sans-serif;">
+            {if $user->loggedIn}
+                    <div style="float: left; margin: 5px;">
+                        Signed in as <u>{$user->identity->real_name}</u> |
+                    </div>
+                    <div style="float: right; margin: 5px;">
+                        {form signOutForm}
+                            {input signout}
+                        {/}
+                    </div>
+                    <div style="clear: both;"></div>
+            {/}
+        </div>
+        <div style="clear: both;"></div>
+
         {include #content}
     </div>
 </body>

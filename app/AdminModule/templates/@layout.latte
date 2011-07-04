@@ -1,3 +1,4 @@
+{var $robots = noindex}
 <!DOCTYPE html>
 <html>
 <head>
@@ -14,17 +15,57 @@
 	<script type="text/javascript" src="{$basePath}/js/netteForms.js"></script>
         <script type="text/javascript" src="{$basePath}/js/jquery.nette.js"></script>
         <script type="text/javascript" src="{$basePath}/js/jquery.ajaxform.js"></script>
+        <script type="text/javascript">
+        $(document).ready(function() {
+            $('div.flash-message').fadeIn('slow')
+                    .animate({ opacity: 1.0 }, 10000)
+                    .fadeOut('slow', function() {
+                      $(this).remove();
+                    });
 
+            $('div.flash-message').delegate('span.ui-icon-closethick', 'click', function() {
+                $('div.flash-message').remove();
+            });
+        });
+        </script>
+        <style type="text/css">
+            body { width: 750px; margin: 0 auto; font-size: 78%; font-family: Trebuchet MS,Tahoma,Verdana,Arial,sans-serif; }
+        </style>
 	{block head}{/}
 </head>
 <body>
-    <div n:foreach="$flashes as $flash" class="flash {$flash->type}">{$flash->message}</div>
 
-    <div class="ui-tabs ui-widget ui-widget-content ui-corner-all" style="font-size: 80%; width: 750px; margin: 0 auto; font-family: Trebuchet MS,Tahoma,Verdana,Arial,sans-serif;">
+    {if !empty($flashes)}
+    <div class="flash-message ui-state-highlight ui-corner-all" style="padding: 0 0.7em;">
+        <p>
+            {foreach $flashes as $flash}
+            <span class="ui-icon ui-icon-info" style="float: left; margin-right: 0.3em;"></span>
+                {$flash->message}
+            <span class="ui-icon ui-icon-closethick" title="Close message" style="cursor: pointer; float: right;"></span>
+            {/}
+        </p>
+    </div>
+    {/}
 
-        <p id="logged-in" n:if="$user->loggedIn" style="text-align: right;">
-            Signed in as '{$user->identity->real_name}' | <a n:href="Sign:out">Sign out</a>
-        </p>        
+    <div class="ui-tabs ui-widget ui-widget-content ui-corner-all" style="min-height: 500px;">
+
+        <div style="width: auto;">
+                <div style="float: left;"></div>
+                <div style="float: right; font-family: Trebuchet MS,Tahoma,Verdana,Arial,sans-serif;">
+                    {if $user->loggedIn}
+                            <div style="float: left;">
+                                Signed in as <u>{$user->identity->real_name}</u> |
+                            </div>
+                            <div style="float: right;">
+                                {form signOutForm}
+                                    {input signout}
+                                {/}
+                            </div>
+                            <div style="clear: both;"></div>
+                    {/}
+                </div>
+                <div style="clear: both;"></div>
+        </div>
 
         <ul class="ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all">
             <li class="ui-state-default ui-corner-top">
@@ -49,6 +90,8 @@
         <div class="ui-tabs-panel ui-widget-content ui-corner-bottom">
                 {include #content}
         </div>
+
+
     </div>
 </body>
 </html>

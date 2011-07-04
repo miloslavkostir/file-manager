@@ -1,5 +1,28 @@
 {var $robots = noindex}
+<!DOCTYPE html>
+<html>
+<head>
+        <link type="text/css" href="{$basePath}/css/jqueryui/ui-lightness/jquery-ui-1.8.14.custom.css" rel="stylesheet" />
 
-<h1>Sign in</h1>
+        <script type="text/javascript" src="http://code.jquery.com/jquery-1.6.2.min.js"></script>
+        <script type="text/javascript" src="{$basePath}/js/jquery-ui-1.8.14.custom.min.js"></script>
 
-{control signInForm}
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+	<meta name="description" content="Sign in">
+	<script>
+	$(function() {
+		$( "#dialog-modal" ).dialog({
+			title: 'Sign in',
+                        modal: true,
+                        closeOnEscape: false,
+                        resizable: false
+		});
+	});
+	</script>
+</head>
+<body>
+    <div id="dialog-modal" style="width: 750px; margin: 0 auto; font-size: 80%;">
+        {control signInForm}
+    </div>
+</body>
+</html>
