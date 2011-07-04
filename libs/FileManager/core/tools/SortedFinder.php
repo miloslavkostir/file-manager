@@ -3,9 +3,8 @@
 /**
  * THX pracj3am
  * http://forum.nette.org/cs/5331-2010-09-15-trida-nette-finder-pro-prochazeni-adresarovou-strukturou
+ * Workaround for missing sort method in Nette Finder
  *
- * TODO workaround for missing sort method in Nette Finder
- * 
  */
 
 use Nette\Utils\Finder;

@@ -35,7 +35,6 @@ class Caching extends FileManager
 
     /**
      * Delete single item from cache
-     * 
      * @param mixed $key
      * @param array $conds (optional)
      */
@@ -49,7 +48,6 @@ class Caching extends FileManager
 
     /**
      * Delete items from cache with recursion
-     * 
      * @param string $absDir
      */
     public function deleteItemsRecursive($absDir)
@@ -71,7 +69,6 @@ class Caching extends FileManager
 
     /**
      * Get data from cache storage
-     * 
      * @param mixed $key
      * @return mixed
      */
@@ -87,7 +84,6 @@ class Caching extends FileManager
 
     /**
      * Save data to cache storage
-     * 
      * @param mixed $key
      * @param mixed $value
      * @param array $options

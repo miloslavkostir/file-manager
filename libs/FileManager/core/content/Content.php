@@ -14,7 +14,7 @@ class Content extends FileManager
     {
         parent::__construct();
     }
-    
+
     public function handleShowFileInfo($filename = "")
     {
         // if sended by AJAX
@@ -23,28 +23,28 @@ class Content extends FileManager
 
         parent::getParent()->handleShowFileInfo($filename);
     }
-    
+
     public function handleShowMultiFileInfo($files = "")
     {
         $actualdir = $this['system']->getActualDir();
         $translator = parent::getParent()->getTranslator();
-        
+
         // if sended by AJAX
         if (empty($files))
             $files = $this->presenter->context->httpRequest->getPost('files');
-        
+
         if (is_array($files)) {
                 $info = $this['files']->getFilesInfo($actualdir, $files, true);
                 $this->presenter->payload->result = 'success';
                 $this->presenter->payload->size = DefaultHelpers::bytes($info['size']);
                 $this->presenter->payload->dirCount = $info['dirCount'];
-                $this->presenter->payload->fileCount = $info['fileCount'];                
+                $this->presenter->payload->fileCount = $info['fileCount'];
                 $this->presenter->sendPayload();
         } else
                 parent::getParent()->flashMessage(
                         $translator->translate("Incorrect input type data. Must be an array!"),
                         'error'
-                );            
+                );
     }
 
     public function handleCopyToClipboard($filename = "")
@@ -66,17 +66,17 @@ class Content extends FileManager
             $this->handleShowContent($actualdir);
         }
     }
-    
+
     public function handleMultiCopyToClipboard($files = "")
     {
         $session = $this->presenter->context->session->getSection('file-manager');
         $actualdir = $this['system']->getActualDir();
         $translator = parent::getParent()->getTranslator();
-        
+
         // if sended by AJAX
         if (empty($files))
             $files = $this->presenter->context->httpRequest->getPost('files');
-        
+
         if (is_array($files)) {
 
                 foreach($files as $file) {
@@ -91,7 +91,7 @@ class Content extends FileManager
                         $translator->translate("Incorrect input type data. Must be an array!"),
                         'error'
                 );
-        
+
         parent::getParent()->refreshSnippets(array('clipboard'));
     }
 
@@ -103,7 +103,7 @@ class Content extends FileManager
 
         $session = $this->presenter->context->session->getSection('file-manager');
         $actualdir = $this['system']->getActualDir();
-        
+
         if ($this['tools']->validPath($actualdir, $filename)) {
             $session->clipboard[$actualdir.$filename] = array(
                 'action' => 'cut',
@@ -120,11 +120,11 @@ class Content extends FileManager
         $session = $this->presenter->context->session->getSection('file-manager');
         $actualdir = $this['system']->getActualDir();
         $translator = parent::getParent()->getTranslator();
-        
+
         // if sended by AJAX
         if (empty($files))
             $files = $this->presenter->context->httpRequest->getPost('files');
-        
+
         if (is_array($files)) {
 
                 foreach($files as $file) {
@@ -139,9 +139,9 @@ class Content extends FileManager
                         $translator->translate("Incorrect input type data. Must be an array!"),
                         'error'
                 );
-        
+
         parent::getParent()->refreshSnippets(array('clipboard'));
-    }    
+    }
 
     public function handleDelete($filename = "")
     {
@@ -169,12 +169,12 @@ class Content extends FileManager
                                     $translator->translate('An error occured!'),
                                     'error'
                             );
-                        
+
         }
-        
+
         $this->handleShowContent($actualdir);
     }
-    
+
     public function handleMultiDelete($files = "")
     {
         $actualdir = $this['system']->getActualDir();
@@ -189,7 +189,7 @@ class Content extends FileManager
                                 $translator->translate("File manager is in read-only mode"),
                                 'warning'
                         );
-        else {            
+        else {
                         if (is_array($files)) {
                                 foreach($files as $file) {
                                             if ($this['files']->delete($actualdir, $file))
@@ -208,7 +208,7 @@ class Content extends FileManager
                                         $translator->translate("Incorrect input type data. Must be an array!"),
                                         'error'
                                 );
-                        
+
                         $this->handleShowContent($actualdir);
         }
     }
@@ -255,7 +255,7 @@ class Content extends FileManager
     public function handleDownloadFile($filename = "")
     {
         $actualdir = $this['system']->getActualDir();
-        
+
         // if sended by AJAX
         if (empty($filename))
             $filename = $this->presenter->context->httpRequest->getQuery('filename');
@@ -280,7 +280,7 @@ class Content extends FileManager
 
     public function handleGoToParent()
     {
-        $actualdir = $this['system']->getActualDir();      
+        $actualdir = $this['system']->getActualDir();
         $parent = dirname($actualdir);
 
         if ($parent == '\\' || $parent == '.')
@@ -294,29 +294,29 @@ class Content extends FileManager
     public function handleMove($targetdir = "", $filename = "")
     {
         $session = $this->presenter->context->session->getSection('file-manager');
-        $actualdir = $session->actualdir;        
+        $actualdir = $session->actualdir;
         $translator = parent::getParent()->getTranslator();
         $request = $this->presenter->context->httpRequest;
-        
+
         // if sended by AJAX
         if (empty($targetdir))
-            $targetdir = $request->getQuery('targetdir');            
-        if (empty($filename))            
-            $filename = $request->getQuery('filename');        
-        
+            $targetdir = $request->getQuery('targetdir');
+        if (empty($filename))
+            $filename = $request->getQuery('filename');
+
         if ($this->config['readonly'] == True)
                         parent::getParent()->flashMessage(
                                 $translator->translate("File manager is in read-only mode!"),
                                 'warning'
                         );
         else {
-            
+
                 if ($this['files']->move($actualdir, $targetdir, $filename)) {
                         $this->presenter->payload->result = 'success';
                         parent::getParent()->flashMessage(
                                 $translator->translate('Successfuly moved.'),
                                 'info'
-                        );                        
+                        );
                         parent::getParent()->handleShowContent($targetdir);
                 } else {
                         parent::getParent()->flashMessage(
@@ -344,7 +344,7 @@ class Content extends FileManager
         } else {
                     $disksize = $this['tools']->diskSizeInfo();
                     if ($disksize['spaceleft'] > 2 ) {
-                        
+
                             if ( $this->config['imagemagick'] == True ) {
                                 @exec('convert -version', $results, $status);
                                 if (class_exists('\Nette\ImageMagick') && !$status)
@@ -422,7 +422,7 @@ class Content extends FileManager
     /**
      * Load directory content
      * TODO Nette Finder does not support mask for folders
-     * 
+     *
      * @param string $actualdir
      * @param string $mask
      * @param string $view

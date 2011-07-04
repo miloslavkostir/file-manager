@@ -112,7 +112,7 @@ class Rename extends FileManager
                                         $translator->translate("File/folder name successfully changed."),
                                         'info'
                                 );
-                                
+
                                 $this['clipboard']->clearClipboard();
                         } else
                                 parent::getParent()->flashMessage(
@@ -121,7 +121,7 @@ class Rename extends FileManager
                                 );
 
         }
-        
+
         parent::getParent()->handleShowContent($actualdir);
     }
 }

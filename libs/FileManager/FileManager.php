@@ -136,7 +136,7 @@ class FileManager extends Nette\Application\UI\Control
             $template->clipboard = $session->clipboard;
 
         if (empty($session->actualdir))
-            $this->handleShowContent($this->getRootname());        
+            $this->handleShowContent($this->getRootname());
 
         $plugins = $this->plugins;
 

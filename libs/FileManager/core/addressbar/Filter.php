@@ -23,7 +23,7 @@ class Filter extends FileManager
         $this['filterForm']->setDefaults(array(
                     'phrase' => $session->mask
         ));
-        
+
         $template->render();
     }
 

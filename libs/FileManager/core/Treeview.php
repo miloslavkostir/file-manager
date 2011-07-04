@@ -6,7 +6,7 @@ class Treeview extends FileManager
 {
     /** @var array */
     public $config;
-    
+
     public function __construct()
     {
         parent::__construct();
@@ -67,7 +67,7 @@ class Treeview extends FileManager
         $dirs = $this->getDirTree($this->config['uploadroot'] . $this->config['uploadpath']);
 
         $rootname = parent::getParent()->getRootname();
-        
+
         return '<ul class="filetree" style="display: block;">
                     <span class="fm-droppable folder-root" id="' . $rootname . '">
                         <a href="' . parent::getParent()->link('showContent', $rootname ).'" class="fm-ajax treeview-folder" title="' . $rootname . '">'

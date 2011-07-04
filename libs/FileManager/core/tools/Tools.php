@@ -6,7 +6,7 @@ class Tools extends FileManager
 {
     /** @var array */
     public $config;
-    
+
     public function __construct()
     {
         parent::__construct();
@@ -15,7 +15,7 @@ class Tools extends FileManager
     /**
      * Repair (back)slashes according to OS
      * @param string $path
-     * @return string 
+     * @return string
      */
     function getRealPath($path)
     {
@@ -41,6 +41,10 @@ class Tools extends FileManager
                 throw new \Nette\InvalidArgumentException("Invalid path $path given!");
     }
 
+    /**
+     * Get used disk space
+     * @return integer bytes
+     */
     public function getUsedSize()
     {
         $size = 0;
@@ -50,6 +54,10 @@ class Tools extends FileManager
         return $size;
     }
 
+    /**
+     * Get details about used disk size
+     * @return array
+     */
     public function diskSizeInfo()
     {
         $info = array();
@@ -71,6 +79,12 @@ class Tools extends FileManager
         return $info;
     }
 
+    /**
+     * Check if realtive path is valid
+     * @param string $dir
+     * @param string $file (optional)
+     * @return bool
+     */
     public function validPath($dir, $file = NULL)
     {
         $path = parent::getParent()->getAbsolutePath($dir);

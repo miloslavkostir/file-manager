@@ -16,9 +16,8 @@ class Plugins extends FileManager
     }
 
     /**
-     * Get plugins with options
-     * 
-     * @return array 
+     * Get plugins
+     * @return array
      */
     function loadPlugins()
     {
@@ -45,7 +44,6 @@ class Plugins extends FileManager
 
     /**
      * Get classes from PHP code
-     * 
      * @param string $php_code
      * @return array
      */
@@ -62,6 +60,7 @@ class Plugins extends FileManager
             $classes[] = $class_name;
         }
       }
+
       return $classes;
     }
 }

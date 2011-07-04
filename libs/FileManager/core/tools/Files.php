@@ -87,17 +87,19 @@ class Files extends FileManager
      */
     function copyFile($src, $dest)
     {
-        # 1 meg at a time, you can adjust this.
-        $buffer_size = 1048576; 
+        $buffer_size = 1048576;
         $ret = 0;
         $fin = fopen($src, "rb");
         $fout = fopen($dest, "w");
+
         while(!feof($fin)) {
             $ret += fwrite($fout, fread($fin, $buffer_size));
         }
+
         fclose($fin);
         fclose($fout);
-        return $ret; # return number of bytes written
+
+        return $ret;
     }
 
     /**
@@ -146,26 +148,6 @@ class Files extends FileManager
         return $state;
     }
 
-    function isThumb($path)
-    {
-        $checkname = substr_count(strtolower($path), parent::getParent()->thumb);
-        $checkname_pos = strpos(strtolower($path), parent::getParent()->thumb);
-        if ( ($checkname > 0) and ($checkname_pos == 0))
-            return True;
-        else
-            return False;
-    }
-
-    function isThumbDir($name)
-    {
-        $checkname = substr_count(strtolower($name), parent::getParent()->thumb);
-        $checkname_pos = strpos(strtolower($name), parent::getParent()->thumb);
-        if ( ($checkname > 0) and ($checkname_pos == 0))
-            return True;
-        else
-            return False;
-    }
-    
     /**
      * Move file or folder
      * @param  string  actual folder (relative path)
@@ -221,7 +203,7 @@ class Files extends FileManager
      * @param  string  filename
      * @return bool
      */    
-    public function moveFile($actualpath, $targetpath, $filename)
+    function moveFile($actualpath, $targetpath, $filename)
     {
         if (rename($actualpath . $filename, $targetpath . $this->checkDuplName($targetpath, $filename))) {
             $this['clipboard']->clearClipboard();
@@ -237,7 +219,7 @@ class Files extends FileManager
      * @param  string  what
      * @return bool
      */
-    public function moveFolder($actualPath, $targetPath, $filename)
+    function moveFolder($actualPath, $targetPath, $filename)
     {
         if(!is_dir($targetPath . $filename)) {
             $oldumask = umask(0);
@@ -260,6 +242,11 @@ class Files extends FileManager
         return true;
     }
 
+    /**
+     * Get permissions
+     * @param string $path
+     * @return string
+     */
     function get_file_mod($path)
     {
         $perms = fileperms($path);
@@ -313,7 +300,13 @@ class Files extends FileManager
 
         return $info;
     }
-    
+
+    /**
+     * Get file details
+     * @param string $actualdir
+     * @param string $filename
+     * @return array
+     */
     function fileDetails($actualdir, $filename)
     {
             $thumb_dir = $this->config['resource_dir'] . 'img/icons/';
@@ -355,14 +348,15 @@ class Files extends FileManager
             
             return $info;
     }
-    
-    /*
-     * $files   @array
-     * $dir     @string - absolutepath
-     * $iterate @bool   - include subdirectories
+
+    /**
+     * Get info about files
+     * @param string $dir
+     * @param array $files
+     * @param bool $iterate
      * @return array
      */
-    public function getFilesInfo($dir, $files, $iterate = false)
+    function getFilesInfo($dir, $files, $iterate = false)
     {
         $path = parent::getParent()->getAbsolutePath($dir);
         $info = array(
@@ -419,7 +413,7 @@ class Files extends FileManager
 		return false;
     }
 
-    public function getFolderInfo($path)
+    function getFolderInfo($path)
     {
         $info = array();
         $info['size'] = 0;
@@ -431,6 +425,11 @@ class Files extends FileManager
         return $info;
     }
 
+    /**
+     * Remove file name diacritic
+     * @param string $string
+     * @return string
+     */
     function remove_diacritic($string)
     {
         $charset = Array(
@@ -523,18 +522,28 @@ class Files extends FileManager
         return strtr($string, $charset);
     }
 
+    /**
+     * Get safe folder name
+     * @param string $name
+     * @return string
+     */
     function safe_foldername($name) {
         $except = array('\\', '/', ':', '*', '?', '"', '<', '>', '|');
         $name = str_replace($except, '', $name);
 
-        if (substr($name, 0) == ".")    // folder name can not start with .
+        if (substr($name, 0) == ".")
                 $name = "";
-        elseif (str_replace(array('.', ' '), '', $name) == "")  // because of this: .. .
+        elseif (str_replace(array('.', ' '), '', $name) == "")  # because of this: .. .
                 $name = "";
 
         return $this->remove_diacritic($name);
     }
 
+    /**
+     * Get safe file name
+     * @param string $name
+     * @return string
+     */
     function safe_filename($name)
     {
         $except = array('\\', '/', ':', '*', '?', '"', '<', '>', '|');
@@ -549,7 +558,7 @@ class Files extends FileManager
      * @param  string  filename - optional
      * @return bool
      */
-    public function delete($dir, $file = "")
+    function delete($dir, $file = "")
     {
         $absDir = parent::getParent()->getAbsolutePath($dir);
 
@@ -571,7 +580,7 @@ class Files extends FileManager
                     return false;
         }
     }
-    
+
     /**
      * Delete file
      * @param  string  relative folder path
@@ -599,14 +608,14 @@ class Files extends FileManager
         } else
                 return false;
     }    
-    
+
     /**
      * Delete folder recursively
+     * TODO use Finder
+     * thx O S http://php.net/manual/en/function.rmdir.php
      * @param string aboslute path
      * @param-optional bool only clear direcotry content if true
      * @return bool
-     * thx O S http://php.net/manual/en/function.rmdir.php
-     * 
      */
     function deleteFolder($directory, $empty = false)
     {
@@ -646,6 +655,12 @@ class Files extends FileManager
         }
     }
 
+    /**
+     * Get name for thumb file & create thumb folder if not exists
+     * @param string $actualdir
+     * @param string $filename
+     * @return array
+     */
     function createThumbName($actualdir, $filename)
     {
         $result = array();
@@ -668,6 +683,11 @@ class Files extends FileManager
         return $result;
     }
 
+    /**
+     * Create thumb folder if not exists
+     * @param string $actualdir
+     * @return string
+     */
     function createThumbFolder($actualdir)
     {
         $uploadpath = $this->config['uploadpath'];
@@ -681,7 +701,7 @@ class Files extends FileManager
         else
             $path = substr($uploadpath, 0, -1) . $actualdir;
         
-        if (!@is_dir($uploadroot . $path . $foldername)) {
+        if (!is_dir($uploadroot . $path . $foldername)) {
             $oldumask = umask(0);
             mkdir($uploadroot . $path . $foldername, 0777);
             umask($oldumask);

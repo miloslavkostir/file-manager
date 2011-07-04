@@ -26,7 +26,6 @@ class Zip extends FileManager
 
     /**
      * Zip files from list
-     * 
      * @param string $actualdir
      * @param array $files
      * @param string $archive_name
@@ -63,6 +62,9 @@ class Zip extends FileManager
                 throw new Exception ("Can not create ZIP archive '$zipPath' from '$actualdir'.");
     }
 
+    /**
+     * Clean old downloads in temp
+     */
     function cleanUp()
     {
         $files = Finder::findFiles('*.zip')->in($this->tempDir);
@@ -76,7 +78,7 @@ class Zip extends FileManager
     }
 
     /**
-     *
+     * Get temporary file name
      * @return string
      */
     function getTempName()
@@ -85,7 +87,7 @@ class Zip extends FileManager
     }
 
     /**
-     *
+     * Get path to temp dir for downloads
      * @return string
      */
     function getTempDir()

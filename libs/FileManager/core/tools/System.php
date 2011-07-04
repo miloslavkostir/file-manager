@@ -9,7 +9,6 @@ class System extends FileManager
 
     /**
      * Get actual relative dir path
-     * 
      * @return string
      */
     public function getActualDir()
@@ -19,7 +18,6 @@ class System extends FileManager
 
     /**
      * Set actual relative dir path
-     * 
      * @param string $dir
      */
     public function setActualDir($dir)
@@ -29,7 +27,6 @@ class System extends FileManager
 
     /**
      * Check if string is name of valid plugin
-     * 
      * @param array $plugins
      * @param string $name
      * @return bool

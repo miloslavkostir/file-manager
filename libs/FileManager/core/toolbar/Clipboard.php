@@ -20,7 +20,7 @@ class Clipboard extends FileManager
 
     public function handleClearClipboard()
     {
-        $session = $this->presenter->context->session->getSection('file-manager');        
+        $session = $this->presenter->context->session->getSection('file-manager');
         $this->clearClipboard();
         parent::getParent()->handleShowContent($session->actualdir);
     }
@@ -30,7 +30,7 @@ class Clipboard extends FileManager
         $translator =  parent::getParent()->getTranslator();
         $session = $this->presenter->context->session->getSection('file-manager');
         $actualdir = $this['system']->getActualDir();
-        
+
         if ($this['tools']->validPath($actualdir)) {
                     if ($this->config['readonly'] == True)
                                     parent::getParent()->flashMessage(
@@ -56,8 +56,8 @@ class Clipboard extends FileManager
                                                                     parent::getParent()->flashMessage(
                                                                             $translator->translate("An error occured!"),
                                                                             'error'
-                                                                    );                                                                
-                                                            
+                                                                    );
+
                                             } elseif ($val['action'] == 'cut') {
 
                                                             if ($this['files']->move($val['actualdir'], $actualdir, $val['filename']))
@@ -69,13 +69,13 @@ class Clipboard extends FileManager
                                                                     parent::getParent()->flashMessage(
                                                                             $translator->translate("An error occured!"),
                                                                             'error'
-                                                                    );                                                                    
+                                                                    );
 
                                             } else
                                                             parent::getParent()->flashMessage(
                                                                     $translator->translate("Unknown action!"),
                                                                     'error'
-                                                            );                                                
+                                                            );
                                     }
 
                                     $this->handleClearClipboard();
@@ -109,7 +109,7 @@ class Clipboard extends FileManager
         $session = $this->presenter->context->session->getSection('file-manager');
         $template->clipboard = $session->clipboard;
         $template->rootname = parent::getParent()->getRootname();
-        
+
         $template->render();
     }
 }

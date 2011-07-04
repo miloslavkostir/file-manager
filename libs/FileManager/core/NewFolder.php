@@ -68,7 +68,7 @@ class NewFolder extends FileManager
                                             $actualdir = $values['actualdir']  . $foldername . "/";
                                         }
 
-                                        if ($foldername == "") {                                                       
+                                        if ($foldername == "") {
                                                         parent::getParent()->flashMessage(
                                                             $translator->translate('Folder name can not be used. Illegal chars used') . ' \ / : * ? " < > | ..',
                                                             'warning'
@@ -108,7 +108,7 @@ class NewFolder extends FileManager
                                         }
                             }
         }
-        
+
         parent::getParent()->handleShowContent($values['actualdir']);
     }
 }
