@@ -120,13 +120,13 @@ class FileManager extends Nette\Application\UI\Control
         if (!function_exists("exec"))
              throw new Exception ("Missing exec function! Application can not be loaded!");
 
-        if(!@is_dir($this->config['uploadroot'] . $this->config['uploadpath']))
+        if(!is_dir($this->config['uploadroot'] . $this->config['uploadpath']))
              throw new Exception ("Upload dir ".$this->config['uploadpath']." doesn't exist! Application can not be loaded!");
 
-        if (!@is_writable($this->config['uploadroot'] . $this->config['uploadpath']))
+        if (!is_writable($this->config['uploadroot'] . $this->config['uploadpath']))
              throw new Exception ("Upload dir " . $this->config['uploadroot'] . $this->config['uploadpath'] . " must be writable!");
 
-        if(!@is_dir($this->presenter->context->params['wwwDir'] . $this->config['resource_dir']))
+        if(!is_dir($this->presenter->context->params['wwwDir'] . $this->config['resource_dir']))
              throw new Exception ("Resource dir " . $this->config['resource_dir'] . " doesn't exist! Application can not be loaded!");
 
         $session = $this->presenter->context->session->getSection('file-manager');

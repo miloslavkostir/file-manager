@@ -9,7 +9,7 @@ class Plugins extends FileManager
     {
         $pluginDir = __DIR__ . '/../../plugins/';
 
-        if (@is_dir($pluginDir))
+        if (is_dir($pluginDir))
             $this->pluginDir = $pluginDir;
         else
             throw new Exception("Plugin directory $pluginDir does not exists!");

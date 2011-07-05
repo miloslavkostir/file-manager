@@ -647,7 +647,7 @@ class Files extends FileManager
             closedir($directoryHandle);
 
             if($empty == false) {
-                if(!@rmdir($directory))
+                if(!rmdir($directory))
                     return false;
             }
 
@@ -693,20 +693,20 @@ class Files extends FileManager
         $uploadpath = $this->config['uploadpath'];
         $rootname = $this['tools']->getRootName();
         $uploadroot = $this->config['uploadroot'];
-        
+
         $foldername = parent::getParent()->thumb . md5($actualdir);
-        
+
         if ($actualdir == $rootname)
-            $path = $uploadpath ;
+            $path = $uploadpath;
         else
             $path = substr($uploadpath, 0, -1) . $actualdir;
-        
+
         if (!is_dir($uploadroot . $path . $foldername)) {
             $oldumask = umask(0);
             mkdir($uploadroot . $path . $foldername, 0777);
             umask($oldumask);
         }
-        
+
         return $foldername;
     }
 }

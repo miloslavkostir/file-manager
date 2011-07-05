@@ -346,7 +346,7 @@ class Content extends FileManager
                     if ($disksize['spaceleft'] > 2 ) {
 
                             if ( $this->config['imagemagick'] == True ) {
-                                @exec('convert -version', $results, $status);
+                                exec('convert -version', $results, $status);
                                 if (class_exists('\Nette\ImageMagick') && !$status)
                                     $image = new \Nette\ImageMagick($path);
                                 else
