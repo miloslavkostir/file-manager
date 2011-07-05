@@ -60,7 +60,16 @@ class Tools extends FileManager
      */
     function getRootname()
     {
-        return array_pop((explode("/", trim($this->config['uploadpath'],"/"))));
+        $path = $this->config['uploadpath'];
+        $first = substr($path, 0, 1);
+        $last = substr($path, -1, 1);
+
+        if ( ($first === '/' || $first === '\\') && ($last === '/' || $last === '\\'))
+            $path = substr($path, 1, strlen($path) - 2);
+        else
+            throw new \Nette\InvalidArgumentException("Invalid upload path '$path' given! Correct path starts & ends with \ (Windows) or / (Unix).");
+
+        return $path;
     }
 
     /**
