@@ -43,6 +43,7 @@ class System extends FileManager
 
         return false;
     }
+
     public function getTranslator()
     {
         $lang = __DIR__ . '/../../lang/' . $this->config["lang"] . '.mo';
