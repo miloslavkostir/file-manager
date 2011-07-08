@@ -14,7 +14,8 @@ require $params['libsDir'] . '/Nette/Nette/loader.php';
 // Enable Nette Debugger for error visualisation & logging
 Debugger::$logDirectory = __DIR__ . '/../log';
 Debugger::$strictMode = TRUE;
-Debugger::enable();
+Debugger::enable(Debugger::PRODUCTION);
+Debugger::enable(Debugger::DEVELOPMENT);
 
 // Load configuration from config.neon file
 $configurator = new Nette\Configurator;

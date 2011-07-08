@@ -40,20 +40,27 @@ class HomepagePresenter extends BasePresenter
         public function  createComponentFileManager()
         {
             $conf = $this->umodel->getUser($this->user->id);
-            $conf = $conf[0];
+            if ($conf) {
 
-            $root = $this->smodel->getRoot($conf->uploadroot);           
+                    $conf = $conf[0];
+                    $root = $this->smodel->getRoot($conf->uploadroot);           
 
-            $fm = new \FileManager;
-            $fm->config['cache'] = $conf->cache;
-            $fm->config['uploadroot'] = $root[0]->path;
-            $fm->config['uploadpath'] = $conf->uploadpath;
-            $fm->config['readonly'] = $conf->readonly;
-            $fm->config['quota'] = $conf->quota;
-            $fm->config['quota_limit'] = $conf->quota_limit;
-            $fm->config['imagemagick'] = $conf->imagemagick;
-            $fm->config['lang'] = $conf->lang;
+                    if ($root) {
 
-            return $fm;
+                            $fm = new \FileManager;
+                            $fm->config['cache'] = $conf->cache;
+                            $fm->config['uploadroot'] = $root[0]->path;
+                            $fm->config['uploadpath'] = $conf->uploadpath;
+                            $fm->config['readonly'] = $conf->readonly;
+                            $fm->config['quota'] = $conf->quota;
+                            $fm->config['quota_limit'] = $conf->quota_limit;
+                            $fm->config['imagemagick'] = $conf->imagemagick;
+                            $fm->config['lang'] = $conf->lang;
+
+                            return $fm;
+                    } else
+                            throw new \Nette\InvalidArgumentException("Upload root not defined!");
+            } else
+                    throw new \Nette\InvalidArgumentException("User not found!");
         }
 }
