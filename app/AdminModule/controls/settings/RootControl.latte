@@ -20,13 +20,35 @@
                             Add root
                         </a>
                     </div>
-                    {ifset $action}
+                    <div style="clear: both;"></div>
+
+                    <div n:ifset="$action" class="ui-widget-header ui-corner-top" style="margin: 0 auto;">
                         {if $action == 'edit'}
-                            {control editRootForm}
+                            Edit root path
+                            <div class="ui-widget-content ui-corner-bottom">
+                            {form editRootForm}
+                                <ul style="list-style: none outside none;">
+                                    <li style="float: left;">Path: {input path}</li>
+                                    <li style="float: left;">{control folderSelector 'frmeditRootForm-path'}</li>
+                                    <li style="float: left;">{input save}</li>
+                                </ul>
+                                <div style="clear: both;"></div>
+                            {/form}
+                            </div>
                         {elseif $action == 'add'}
-                            {control addRootForm}
-                        {/}
-                    {/}
+                            Add root path
+                            <div class="ui-widget-content ui-corner-bottom">
+                            {form addRootForm}
+                                <ul style="list-style: none outside none;">
+                                    <li style="float: left;">Path: {input path}</li>
+                                    <li style="float: left;">{control folderSelector 'frmaddRootForm-path'}</li>
+                                    <li style="float: left;">{input save}</li>
+                                </ul>
+                                <div style="clear: both;"></div>
+                            {/form}
+                            </div>
+                        {/if}
+                    </div>
                 </td>
             </tr>
     </tbody>

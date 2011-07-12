@@ -65,7 +65,7 @@ class RootControl extends \Nette\Application\UI\Control
     protected function createComponentEditRootForm()
     {
             $form = new Form;
-            $form->addText('path', 'Path:')
+            $form->addText('path')
                     ->setRequired('Please enter the path.');
             $form->addHidden('id')
                     ->setRequired('Unknown record.');
@@ -87,4 +87,10 @@ class RootControl extends \Nette\Application\UI\Control
         $this->model->updateRoot($form->values['id'], $form->values);
         $this->presenter->flashMessage('Root has been updated.');
     }
+
+    protected function createComponentFolderSelector()
+    {
+        $fs = new \FolderSelector($_SERVER['DOCUMENT_ROOT']);
+        return $fs;
+    }    
 }

@@ -1,0 +1,91 @@
+<div id="open-folder-selector" class="ui-state-default ui-corner-all" style="width: 24px; height: 16px; margin: 2px; padding: 2px 0;" title="Browse folders">
+    <span class="ui-icon ui-icon-folder-collapsed" style="margin: 0 auto;"></span>
+</div>
+
+<div n:ifset="$root" id="folder-selector" class="hide">
+
+    <div id="folder-selector-list" class="ui-state-default ui-corner-all">
+        {!$root}
+    </div>
+
+</div>
+
+    <style type="text/css">
+        .hide { display: none; }
+        #open-folder-selector { cursor: pointer; }
+        #folder-selector-list { margin: 0 auto; width: 275px; height: 237px; overflow: auto; }
+        #folder-selector-list ul { list-style: none outside none; }
+        #folder-selector ul li .ui-icon { float: left; }
+        #folder-selector ul li .folder-selector-link { font-size: 13px; }
+        span.folder-selector-link { cursor: pointer; padding: 1px; }
+    </style>
+
+    <script>
+    $(document).ready(function() {
+
+        $("#folder-selector").removeClass("hide");
+
+        $("#open-folder-selector").click(function(){
+                $("#folder-selector").dialog("open");
+        });
+
+        $("#folder-selector").dialog({
+                open: function(e, ui) {
+                    var id = "#" + {$inputID};
+                    if (!$(id).length) {
+                        alert("Error! Missing target field with ID '"+id+"'.")
+                        $(this).dialog("close");
+                    };
+                },
+                autoOpen: false,
+                width: "300",
+                height: "350",
+                resizable: false,
+                modal: true,
+                title: "Choose folder",
+                buttons: {
+                        "OK": function() {
+                                var path = $("#folder-selector span.ui-state-hover").attr("id");
+                                if (path) {
+                                    $("#" + {$inputID}).val(path);
+                                    $(this).dialog("close");
+                                } else
+                                    alert("You must select some folder!");
+                        },
+                        Cancel: function() {
+                                $(this).dialog("close");
+                        }
+                }
+        }).disableSelection();
+
+        $("#folder-selector").delegate("span", "click", function (e) {
+            $(this).toggle(
+                function () {
+                    $("#folder-selector span").removeClass("ui-state-hover");
+                    $(this).addClass("ui-state-hover");
+                },
+                function () {
+                    $(this).removeClass("ui-state-hover");
+                }                
+            );
+        });
+
+        $("#folder-selector").delegate("span", "dblclick", function (e) {
+            var elem = $(this);
+            $("#folder-selector span").removeClass("ui-state-hover");
+
+            if (elem.hasClass("expanded")) {
+                    elem.removeClass("expanded");
+                    elem.nextAll("ul").remove();
+            } else {
+                    $.post({link showSubTree!}, { path : $(this).attr("id") }, function (payload) {
+                        $.nette.success(payload);
+                        $(payload.subtree).insertAfter(elem);
+                    });
+                    elem.addClass("expanded");
+                    $(this).addClass("ui-state-hover");
+            }
+        }); 
+
+    }); 
+    </script>
