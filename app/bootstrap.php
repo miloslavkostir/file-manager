@@ -8,7 +8,7 @@ use Nette\Diagnostics\Debugger,
 
 // Load Nette Framework
 $params['libsDir'] = __DIR__ . '/../libs';
-require $params['libsDir'] . '/Nette/Nette/loader.php';
+require $params['libsDir'] . '/Nette/nette.min.php';
 
 
 // Enable Nette Debugger for error visualisation & logging
