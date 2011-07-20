@@ -59,13 +59,11 @@ class UsersControl extends \Nette\Application\UI\Control
             $form = new Form;
             $form->addText('username', 'Username:')
                     ->setRequired('Please enter username.');
-            $form->addText('password', 'Password:');
+            $form->addPassword('password', 'Password:');
             $form->addText('real_name', 'Real name:')
                     ->setRequired('Please enter real name.');
-            $form->addSelect('uploadroot', 'Upload root:', $roots)
-                    ->setRequired('Please select upload root.');
-            $form->addText('uploadpath', 'Upload path:')
-                    ->setRequired('Please enter upload path.');
+            $form->addSelect('uploadroot', 'Upload root:', $roots);
+            $form->addText('uploadpath', 'Upload path:');
             $form->addText('lang', 'Language:');
             $form->addText('quota_limit', 'Quota limit:');
             $form->addSelect('role', 'Role:', $roles)
@@ -74,11 +72,16 @@ class UsersControl extends \Nette\Application\UI\Control
             $form->addCheckbox('cache', 'Cache');
             $form->addCheckbox('quota', 'Quota');
             $form->addCheckbox('imagemagick', 'Imagemagick');
+            $form->addCheckbox('has_share', 'Shares enabled');
 
             $form->addSubmit('save', 'Save')->setAttribute('class', 'default');
             $form->onSuccess[] = callback($this, 'addUserFormSubmitted');
 
             $form->addProtection('Please submit this form again (security token has expired).');
+
+            $form['uploadroot']->addConditionOn($form['has_share'], Form::EQUAL, TRUE)->addRule(Form::FILLED, "Please set item '%label'");
+            $form['uploadpath']->addConditionOn($form['has_share'], Form::EQUAL, TRUE)->addRule(Form::FILLED, "Please set item '%label'");
+
             return $form;
     }
 
@@ -94,10 +97,8 @@ class UsersControl extends \Nette\Application\UI\Control
                     ->setRequired('Please enter username.');
             $form->addText('real_name', 'Real name:')
                     ->setRequired('Please enter real name.');
-            $form->addSelect('uploadroot', 'Upload root:', $roots)
-                    ->setRequired('Please select upload root.');
-            $form->addText('uploadpath', 'Upload path:')
-                    ->setRequired('Please enter upload path.');
+            $form->addSelect('uploadroot', 'Upload root:', $roots);
+            $form->addText('uploadpath', 'Upload path:');
             $form->addText('lang', 'Language:');
             $form->addText('quota_limit', 'Quota limit:');
             $form->addSelect('role', 'Role:', $roles)
@@ -106,6 +107,7 @@ class UsersControl extends \Nette\Application\UI\Control
             $form->addCheckbox('cache', 'Cache');
             $form->addCheckbox('quota', 'Quota');
             $form->addCheckbox('imagemagick', 'Imagemagick');
+            $form->addCheckbox('has_share', 'Shares enabled');
 
             $form->addHidden('id')
                     ->setRequired('Unknown record.');
@@ -114,6 +116,10 @@ class UsersControl extends \Nette\Application\UI\Control
             $form->onSuccess[] = callback($this, 'editUserFormSubmitted');
 
             $form->addProtection('Please submit this form again (security token has expired).');
+
+            $form['uploadroot']->addConditionOn($form['has_share'], Form::EQUAL, TRUE)->addRule(Form::FILLED, "Please set item '%label'");
+            $form['uploadpath']->addConditionOn($form['has_share'], Form::EQUAL, TRUE)->addRule(Form::FILLED, "Please set item '%label'");
+
             return $form;
     }
 

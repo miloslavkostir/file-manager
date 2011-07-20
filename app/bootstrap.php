@@ -15,7 +15,7 @@ require $params['libsDir'] . '/Nette/Nette/loader.php';
 Debugger::$logDirectory = __DIR__ . '/../log';
 Debugger::$strictMode = TRUE;
 Debugger::enable(Debugger::PRODUCTION);
-Debugger::enable(Debugger::DEVELOPMENT);
+//Debugger::enable(Debugger::DEVELOPMENT);
 
 // Load configuration from config.neon file
 $configurator = new Nette\Configurator;
@@ -49,6 +49,6 @@ if (function_exists('apache_get_modules') && in_array('mod_rewrite', apache_get_
 
 // Configure and run the application!
 $application = $container->application;
-//$application->catchExceptions = TRUE;
+$application->catchExceptions = TRUE;
 $application->errorPresenter = 'Error';
 $application->run();
