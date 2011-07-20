@@ -54,11 +54,10 @@ class RootControl extends \Nette\Application\UI\Control
             $form = new Form;
             $form->addText('path', 'Path:')
                     ->setRequired('Please enter the path.');
-
-            $form->addSubmit('save', 'Save')->setAttribute('class', 'default');
-            $form->onSuccess[] = callback($this, 'addRootFormSubmitted');
-
+            $form->addSubmit('save', 'Save')
+                    ->setAttribute('class', 'ui-button ui-button-text-only ui-widget ui-state-default ui-corner-all');
             $form->addProtection('Please submit this form again (security token has expired).');
+            $form->onSuccess[] = callback($this, 'addRootFormSubmitted');
             return $form;
     }
 
@@ -69,10 +68,10 @@ class RootControl extends \Nette\Application\UI\Control
                     ->setRequired('Please enter the path.');
             $form->addHidden('id')
                     ->setRequired('Unknown record.');
-            $form->addSubmit('save', 'Save')->setAttribute('class', 'default');
-            $form->onSuccess[] = callback($this, 'editRootFormSubmitted');
-
+            $form->addSubmit('save', 'Save')->setAttribute('class', 'default')
+                    ->setAttribute('class', 'ui-button ui-button-text-only ui-widget ui-state-default ui-corner-all');
             $form->addProtection('Please submit this form again (security token has expired).');
+            $form->onSuccess[] = callback($this, 'editRootFormSubmitted');
             return $form;
     }
 
@@ -90,7 +89,7 @@ class RootControl extends \Nette\Application\UI\Control
 
     protected function createComponentFolderSelector()
     {
-        $fs = new \FolderSelector($_SERVER['DOCUMENT_ROOT']);
+        $fs = new \PathSelector($_SERVER['DOCUMENT_ROOT'], true);
         return $fs;
     }    
 }

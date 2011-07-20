@@ -24,10 +24,25 @@
                     </div>
                     {ifset $action}
                         {if $action == 'edit'}
+                            <script type="text/javascript">
+                                var title = "Edit",
+                                    formID = "#frm-users-editUserForm";
+                            </script>
                             {control editUserForm}
                         {elseif $action == 'add'}
+                            <script type="text/javascript">
+                                var title = "Add",
+                                    formID = "#frm-users-addUserForm";
+                            </script>
                             {control addUserForm}
                         {/}
+                        <script type="text/javascript">
+                            $(formID).dialog({
+                                title: title,
+                                modal: true,
+                                resizable: false
+                            });
+                        </script>
                     {/}
                 </td>
             </tr>

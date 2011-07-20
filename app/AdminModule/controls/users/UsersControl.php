@@ -73,14 +73,16 @@ class UsersControl extends \Nette\Application\UI\Control
             $form->addCheckbox('quota', 'Quota');
             $form->addCheckbox('imagemagick', 'Imagemagick');
             $form->addCheckbox('has_share', 'Shares enabled');
-
-            $form->addSubmit('save', 'Save')->setAttribute('class', 'default');
-            $form->onSuccess[] = callback($this, 'addUserFormSubmitted');
-
+            $form->addSubmit('save', 'Save')
+                    ->setAttribute('class', 'ui-button ui-button-text-only ui-widget ui-state-default ui-corner-all');
             $form->addProtection('Please submit this form again (security token has expired).');
 
-            $form['uploadroot']->addConditionOn($form['has_share'], Form::EQUAL, TRUE)->addRule(Form::FILLED, "Please set item '%label'");
-            $form['uploadpath']->addConditionOn($form['has_share'], Form::EQUAL, TRUE)->addRule(Form::FILLED, "Please set item '%label'");
+            $form->onSuccess[] = callback($this, 'addUserFormSubmitted');
+
+            $form['uploadroot']->addConditionOn($form['has_share'], Form::EQUAL, TRUE)
+                    ->addRule(Form::FILLED, "Please set item '%label'");
+            $form['uploadpath']->addConditionOn($form['has_share'], Form::EQUAL, TRUE)
+                    ->addRule(Form::FILLED, "Please set item '%label'");
 
             return $form;
     }
@@ -108,17 +110,18 @@ class UsersControl extends \Nette\Application\UI\Control
             $form->addCheckbox('quota', 'Quota');
             $form->addCheckbox('imagemagick', 'Imagemagick');
             $form->addCheckbox('has_share', 'Shares enabled');
-
             $form->addHidden('id')
                     ->setRequired('Unknown record.');
-
-            $form->addSubmit('save', 'Save')->setAttribute('class', 'default');
-            $form->onSuccess[] = callback($this, 'editUserFormSubmitted');
-
+            $form->addSubmit('save', 'Save')->setAttribute('class', 'default')
+                    ->setAttribute('class', 'ui-button ui-button-text-only ui-widget ui-state-default ui-corner-all');
             $form->addProtection('Please submit this form again (security token has expired).');
 
-            $form['uploadroot']->addConditionOn($form['has_share'], Form::EQUAL, TRUE)->addRule(Form::FILLED, "Please set item '%label'");
-            $form['uploadpath']->addConditionOn($form['has_share'], Form::EQUAL, TRUE)->addRule(Form::FILLED, "Please set item '%label'");
+            $form->onSuccess[] = callback($this, 'editUserFormSubmitted');
+
+            $form['uploadroot']->addConditionOn($form['has_share'], Form::EQUAL, TRUE)
+                    ->addRule(Form::FILLED, "Please set item '%label'");
+            $form['uploadpath']->addConditionOn($form['has_share'], Form::EQUAL, TRUE)
+                    ->addRule(Form::FILLED, "Please set item '%label'");
 
             return $form;
     }

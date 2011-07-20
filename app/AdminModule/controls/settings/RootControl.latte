@@ -1,4 +1,4 @@
-<table class="ui-widget ui-widget-content">
+<table class="ui-widget ui-widget-content" style="width: 100%;">
     <thead>
             <tr class="ui-widget-header ">
                     <th>Path</th>
@@ -20,35 +20,42 @@
                             Add root
                         </a>
                     </div>
-                    <div style="clear: both;"></div>
 
-                    <div n:ifset="$action" class="ui-widget-header ui-corner-top" style="margin: 0 auto;">
+                    {ifset $action}
                         {if $action == 'edit'}
-                            Edit root path
-                            <div class="ui-widget-content ui-corner-bottom">
-                            {form editRootForm}
-                                <ul style="list-style: none outside none;">
-                                    <li style="float: left;">Path: {input path}</li>
-                                    <li style="float: left;">{control folderSelector 'frmeditRootForm-path'}</li>
-                                    <li style="float: left;">{input save}</li>
-                                </ul>
-                                <div style="clear: both;"></div>
-                            {/form}
-                            </div>
+                                <script type="text/javascript">
+                                    var title = "Edit",
+                                        formID = "#frm-root-editRootForm";
+                                </script>
+                                {form editRootForm}
+                                    <ul style="list-style: none outside none;">
+                                        <li style="float: left;">Path: {input path}</li>
+                                        <li style="float: left;">{control folderSelector 'frmeditRootForm-path'}</li>
+                                        <li style="float: left;">{input save}</li>
+                                    </ul>
+                                {/form}
                         {elseif $action == 'add'}
-                            Add root path
-                            <div class="ui-widget-content ui-corner-bottom">
-                            {form addRootForm}
-                                <ul style="list-style: none outside none;">
-                                    <li style="float: left;">Path: {input path}</li>
-                                    <li style="float: left;">{control folderSelector 'frmaddRootForm-path'}</li>
-                                    <li style="float: left;">{input save}</li>
-                                </ul>
-                                <div style="clear: both;"></div>
-                            {/form}
-                            </div>
+                                <script type="text/javascript">
+                                    var title = "Add",
+                                        formID = "#frm-root-addRootForm";
+                                </script>
+                                {form addRootForm}
+                                    <ul style="list-style: none outside none;">
+                                        <li style="float: left;">Path: {input path}</li>
+                                        <li style="float: left;">{control folderSelector 'frmaddRootForm-path'}</li>
+                                    </ul>
+                                    {input save}
+                                {/form}
                         {/if}
-                    </div>
+                        <script type="text/javascript">
+                            $(formID).dialog({
+                                title: title,
+                                modal: true,
+                                resizable: false
+                            });
+                        </script>
+                    {/ifset}
+
                 </td>
             </tr>
     </tbody>
