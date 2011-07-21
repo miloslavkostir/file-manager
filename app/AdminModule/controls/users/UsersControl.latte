@@ -11,39 +11,212 @@
                     <td>{$user->real_name}</td>
                     <td>{$user->username}</td>
                     <td>
-                            <a n:href="edit!, $user->id">Edit</a>
-                            <a n:href="delete!, $user->id">Delete</a>
+                        <ul class="icons">
+                            <li class="ui-state-default ui-corner-all">
+                                <a n:href="edit!, $user->id" class="ajax" title="Edit">
+                                    <span class="ui-icon ui-icon-pencil"></span>
+                                </a>
+                            </li>
+                            <li class="ui-state-default ui-corner-all">
+                                <a n:href="delete!, $user->id" title="Delete">
+                                    <span class="ui-icon ui-icon-trash"></span>
+                                </a>
+                            </li>
+                        </ul>
                     </td>
             </tr>
             <tr>
-                <td colspan="2">
+                <td colspan="3">
                     <div class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only">
-                        <a n:href="add!" class="ui-button-text">
+                        <a n:href="add!" class="ui-button-text ajax">
                             Add user
                         </a>
                     </div>
+                    {snippet action}
                     {ifset $action}
+                        <script type="text/javascript">
+                            $('#snippet-users-action').dialog('open');
+                            $('#form-accordion').accordion();
+                        </script>
                         {if $action == 'edit'}
                             <script type="text/javascript">
-                                var title = "Edit",
-                                    formID = "#frm-users-editUserForm";
+                                $('#snippet-users-action').dialog({ title: 'Edit user' });
                             </script>
-                            {control editUserForm}
+                            {form editUserForm}
+                            <div id="form-accordion">
+                                <h3><a href="#">User</a></h3>
+                                <div>
+                                    <table>
+                                        <tr>
+                                            <td>{label username /}</td>
+                                            <td>{input username}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>{label real_name /}</td>
+                                            <td>{input real_name}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>{label lang /}</td>
+                                            <td>{input lang}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>{label role /}</td>
+                                            <td>{input role}</td>
+                                        </tr>
+                                    </table>
+                                </div>
+                                <h3><a href="#">Shares</a></h3>
+                                <div>
+                                    <table>
+                                        <tr>
+                                            <td>{label has_share /}</td>
+                                            <td>{input has_share}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>{label uploadroot /}</td>
+                                            <td>{input uploadroot}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>{label uploadpath /}</td>
+                                            <td>{input uploadpath}</td>
+                                        </tr>
+                                    </table>
+                                </div>
+                                <h3><a href="#">Quota</a></h3>
+                                <div>
+                                    <table>
+                                        <tr>
+                                            <td>{label quota /}</td>
+                                            <td>{input quota}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>{label quota_limit /}</td>
+                                            <td>{input quota_limit}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>{label uploadpath /}</td>
+                                            <td>{input uploadpath}</td>
+                                        </tr>
+                                    </table>
+                                </div>
+                                <h3><a href="#">Other</a></h3>
+                                <div>
+                                    <table>
+                                        <tr>
+                                            <td>{label cache /}</td>
+                                            <td>{input cache}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>{label imagemagick /}</td>
+                                            <td>{input imagemagick}</td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </div>
+
+                            <div class="ui-dialog-buttonpane ui-widget-content ui-helper-clearfix">
+                                <div class="ui-dialog-buttonset">
+                                    {input save}
+                                </div>
+                            </div>
+                            {/form}
                         {elseif $action == 'add'}
                             <script type="text/javascript">
-                                var title = "Add",
-                                    formID = "#frm-users-addUserForm";
+                                $('#snippet-users-action').dialog({ title: 'Add user' });;
                             </script>
-                            {control addUserForm}
-                        {/}
-                        <script type="text/javascript">
-                            $(formID).dialog({
-                                title: title,
-                                modal: true,
-                                resizable: false
-                            });
-                        </script>
-                    {/}
+                            {form addUserForm}
+                            <div id="form-accordion">
+                                <h3><a href="#">User</a></h3>
+                                <div>
+                                    <table>
+                                        <tr>
+                                            <td>{label username /}</td>
+                                            <td>{input username}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>{label password /}</td>
+                                            <td>{input password}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>{label real_name /}</td>
+                                            <td>{input real_name}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>{label lang /}</td>
+                                            <td>{input lang}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>{label role /}</td>
+                                            <td>{input role}</td>
+                                        </tr>
+                                    </table>
+                                </div>
+                                <h3><a href="#">Shares</a></h3>
+                                <div>
+                                    <table>
+                                        <tr>
+                                            <td>{label has_share /}</td>
+                                            <td>{input has_share}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>{label uploadroot /}</td>
+                                            <td>{input uploadroot}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>{label uploadpath /}</td>
+                                            <td>{input uploadpath}</td>
+                                        </tr>
+                                    </table>
+                                </div>
+                                <h3><a href="#">Quota</a></h3>
+                                <div>
+                                    <table>
+                                        <tr>
+                                            <td>{label quota /}</td>
+                                            <td>{input quota}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>{label quota_limit /}</td>
+                                            <td>{input quota_limit}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>{label uploadpath /}</td>
+                                            <td>{input uploadpath}</td>
+                                        </tr>
+                                    </table>
+                                </div>
+                                <h3><a href="#">Other</a></h3>
+                                <div>
+                                    <table>
+                                        <tr>
+                                            <td>{label cache /}</td>
+                                            <td>{input cache}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>{label imagemagick /}</td>
+                                            <td>{input imagemagick}</td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </div>
+
+                            <div class="ui-dialog-buttonpane ui-widget-content ui-helper-clearfix">
+                                <div class="ui-dialog-buttonset">
+                                    {input save}
+                                </div>
+                            </div>
+                            {/form}
+                        {/if}
+                    {/ifset}
+                    {/snippet}
+                    <script type="text/javascript">
+                        $('#snippet-users-action').dialog({
+                            autoOpen: false,
+                            resizable: false,
+                            modal: true,
+                            width: 'auto'
+                        });
+                    </script>
                 </td>
             </tr>
     </tbody>

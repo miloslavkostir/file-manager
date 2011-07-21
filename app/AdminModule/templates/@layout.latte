@@ -17,6 +17,14 @@
         <script type="text/javascript" src="{$basePath}/js/jquery.ajaxform.js"></script>
         <script type="text/javascript">
         $(document).ready(function() {
+            $('<div id="ajax-spinner"></div>').appendTo("body").ajaxStop(function () {
+                $(this).hide().css({
+                    position: 'fixed',
+                    left: '50%',
+                    top: '50%'
+                });
+            }).hide();
+
             $('div.flash-message').fadeIn('slow')
                     .animate({ opacity: 1.0 }, 10000)
                     .fadeOut('slow', function() {
@@ -26,46 +34,84 @@
             $('div.flash-message').delegate('span.ui-icon-closethick', 'click', function() {
                 $('div.flash-message').remove();
             });
+
+            $('body').delegate('a.ajax', 'click', function(event) {
+                event.preventDefault();
+                $.getJSON(this.href);
+                $('#ajax-spinner').show().css({
+                    position: 'absolute',
+                    left: event.pageX + 20,
+                    top: event.pageY + 40
+                });
+            });
+
+            $('body').delegate('.ui-button', 'hover', function() {
+                $(this).toggleClass('ui-state-hover');
+            });
         });
         </script>
         <style type="text/css">
             body { width: 750px; margin: 0 auto; font-size: 78%; font-family: Trebuchet MS,Tahoma,Verdana,Arial,sans-serif; }
+            #ajax-spinner {
+                position:fixed;
+                left: 50%;
+                top: 50%;
+                margin: -15px 0 0 -15px;
+                background: white url('{$basePath}/img/spinner.gif') no-repeat 50% 50%;
+                padding: 13px;
+                border: 1px solid #000000;
+                font-size: 0;
+            }
+            #frmsignOutForm-signout {
+                margin: 2px;
+            }
+            ul.icons {
+                margin: 0;
+                padding: 0;
+            }
+            ul.icons li {
+                cursor: pointer;
+                float: left;
+                list-style: none outside none;
+                margin: 2px;
+                padding: 4px 0;
+                position: relative;
+            }
+            ul.icons li span.ui-icon {
+                float: left;
+                margin: 0 4px;
+            }
         </style>
 	{block head}{/}
 </head>
 <body>
 
-    {if !empty($flashes)}
-    <div class="flash-message ui-state-highlight ui-corner-all" style="padding: 0 0.7em;">
-        <p>
-            {foreach $flashes as $flash}
-            <span class="ui-icon ui-icon-info" style="float: left; margin-right: 0.3em;"></span>
-                {$flash->message}
-            <span class="ui-icon ui-icon-closethick" title="Close message" style="cursor: pointer; float: right;"></span>
-            {/}
-        </p>
-    </div>
-    {/}
+    <div class="ui-tabs ui-widget ui-widget-content ui-corner-all" style="min-height: 500px; margin: 10px 0;">
 
-    <div class="ui-tabs ui-widget ui-widget-content ui-corner-all" style="min-height: 500px;">
-
-        <div style="width: auto;">
-                <div style="float: left;"></div>
-                <div style="float: right; font-family: Trebuchet MS,Tahoma,Verdana,Arial,sans-serif;">
-                    {if $user->loggedIn}
-                            <div style="float: left;">
-                                Signed in as <u>{$user->identity->real_name}</u> |
-                            </div>
-                            <div style="float: right;">
-                                {form signOutForm}
-                                    {input signout}
-                                {/}
-                            </div>
-                            <div style="clear: both;"></div>
-                    {/}
-                </div>
-                <div style="clear: both;"></div>
+        {if !empty($flashes)}
+        <div class="flash-message ui-state-highlight ui-corner-all" style="padding: 0 0.7em;">
+            <p>
+                {foreach $flashes as $flash}
+                <span class="ui-icon ui-icon-info" style="float: left; margin-right: 0.3em;"></span>
+                    {$flash->message}
+                <span class="ui-icon ui-icon-closethick" title="Close message" style="cursor: pointer; float: right;"></span>
+                {/}
+            </p>
         </div>
+        {/}
+
+        <ul n:if="$user->loggedIn" style="width: auto; height: 40px; margin: 0; list-style: none outside none;" class="ui-state-highlight ui-corner-all">
+            <li style="float: right; line-height: 40px;">
+                {form signOutForm}
+                    {input signout}
+                {/}
+            </li>
+            <li style="float: right; line-height: 40px;">
+                Signed in as <u>{$user->identity->real_name}</u> |
+            </li>
+        </ul>
+
+        <div style="clear: both;"></div>
 
         <ul class="ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all">
             <li class="ui-state-default ui-corner-top">

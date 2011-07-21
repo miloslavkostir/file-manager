@@ -9,53 +9,79 @@
             <tr n:foreach="$roots as $root">
                     <td>{$root->path}</td>
                     <td>
-                            <a n:href="edit!, $root->id">Edit</a>
-                            <a n:href="delete!, $root->id">Delete</a>
+                        <ul class="icons">
+                            <li class="ui-state-default ui-corner-all">
+                                <a n:href="edit!, $root->id" class="ajax" title="Edit">
+                                    <span class="ui-icon ui-icon-pencil"></span>
+                                </a>
+                            </li>
+                            <li class="ui-state-default ui-corner-all">
+                                <a n:href="delete!, $root->id" title="Delete">
+                                    <span class="ui-icon ui-icon-trash"></span>
+                                </a>
+                            </li>
+                        </ul>
                     </td>
             </tr>
             <tr>
                 <td colspan="2">
                     <div class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only">
-                        <a n:href="add!" class="ui-button-text">
+                        <a n:href="add!" class="ui-button-text ajax">
                             Add root
                         </a>
                     </div>
 
+                    {snippet action}
                     {ifset $action}
                         {if $action == 'edit'}
                                 <script type="text/javascript">
-                                    var title = "Edit",
-                                        formID = "#frm-root-editRootForm";
+                                    $('#snippet-root-action').dialog('open');
+                                    $('#snippet-root-action').dialog({ title: 'Edit' });
                                 </script>
                                 {form editRootForm}
-                                    <ul style="list-style: none outside none;">
-                                        <li style="float: left;">Path: {input path}</li>
-                                        <li style="float: left;">{control folderSelector 'frmeditRootForm-path'}</li>
-                                        <li style="float: left;">{input save}</li>
-                                    </ul>
+                                    <table>
+                                        <tr>
+                                            <td>Path:</td>
+                                            <td>{input path}</td>
+                                            <td>{control folderSelector 'frmeditRootForm-path'}</td>
+                                        </tr>
+                                    </table>
+                                    <div class="ui-dialog-buttonpane ui-widget-content ui-helper-clearfix">
+                                        <div class="ui-dialog-buttonset">
+                                            {input save}
+                                        </div>
+                                    </div>
                                 {/form}
                         {elseif $action == 'add'}
                                 <script type="text/javascript">
-                                    var title = "Add",
-                                        formID = "#frm-root-addRootForm";
+                                    $('#snippet-root-action').dialog('open');
+                                    $('#snippet-root-action').dialog({ title: 'Add' });
                                 </script>
                                 {form addRootForm}
-                                    <ul style="list-style: none outside none;">
-                                        <li style="float: left;">Path: {input path}</li>
-                                        <li style="float: left;">{control folderSelector 'frmaddRootForm-path'}</li>
-                                    </ul>
-                                    {input save}
+                                    <table>
+                                        <tr>
+                                            <td>Path:</td>
+                                            <td>{input path}</td>
+                                            <td>{control folderSelector 'frmaddRootForm-path'}</td>
+                                        </tr>
+                                    </table>
+                                    <div class="ui-dialog-buttonpane ui-widget-content ui-helper-clearfix">
+                                        <div class="ui-dialog-buttonset">
+                                            {input save}
+                                        </div>
+                                    </div>
                                 {/form}
                         {/if}
-                        <script type="text/javascript">
-                            $(formID).dialog({
-                                title: title,
-                                modal: true,
-                                resizable: false
-                            });
-                        </script>
                     {/ifset}
-
+                    {/snippet}
+                    <script type="text/javascript">
+                        $('#snippet-root-action').dialog({
+                            autoOpen: false,
+                            modal: true,
+                            resizable: false,
+                            width: 'auto'
+                        });
+                    </script>
                 </td>
             </tr>
     </tbody>

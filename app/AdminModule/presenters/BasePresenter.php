@@ -22,7 +22,8 @@ abstract class BasePresenter extends \BasePresenter
 	{
 		$form = new \Nette\Application\UI\Form;
 
-		$form->addSubmit('signout', 'Sign out');
+		$form->addSubmit('signout', 'Sign out')
+                        ->setAttribute('class', 'ui-button ui-button-text-only ui-widget ui-state-default ui-corner-all');
 
 		$form->onSuccess[] = callback($this, 'signOutFormSubmitted');
 		return $form;
