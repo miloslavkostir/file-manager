@@ -1,30 +1,40 @@
 <?php
 
 use Nette\Application\UI\Form,
-	Nette\Application as NA;
+	Nette\Application as NA,
+        Nette\Application\UI\Presenter;
 
 class UsersControl extends \Nette\Application\UI\Control
 {
     /** @var Model */
     private $model;
 
+    /** @var Identity */
+    private $user;
+
     public function __construct()
     {
         parent::__construct();
         $this->model = new \UserModel;
+        $this->monitor('Presenter');
+    }
+
+    protected function attached($presenter)
+    {
+        if ($presenter instanceof Presenter)
+            $this->user = $this->presenter->user;
+        parent::attached($presenter);
     }
 
     public function handleDelete($id)
     {
         $user = $this->model->getUser($id);
 
-        if (empty($user))
+        if (empty($user) || $this->user->id == $id)
                 throw new NA\BadRequestException('Record not found');
-        else {
-                $this->model->deleteUser($id);
-                $this->presenter->flashMessage('User has been deleted.');
-        }
 
+        $this->model->deleteUser($id);
+        $this->presenter->flashMessage('User has been deleted.');
         $this->presenter->redirect('this');
     }
 
@@ -42,9 +52,9 @@ class UsersControl extends \Nette\Application\UI\Control
         $this->template->action = 'edit';
         $row = $this->model->getUser($id);
 
-        if (!$row[0]) {
+        if (!$row[0] || $this->user->id == $id)
                 throw new NA\BadRequestException('Record not found');
-        }
+
         $this['editUserForm']->setDefaults($row[0]);
 
         if ($this->presenter->isAjax())
@@ -57,7 +67,7 @@ class UsersControl extends \Nette\Application\UI\Control
     {
         $template = $this->template;
         $template->setFile(__DIR__ . '/UsersControl.latte');
-        $template->users = $this->model->getUsers();
+        $template->users = $this->model->getUsers()->where('id <> %i', $this->user->id);
         $template->render();
     }
 
@@ -147,7 +157,12 @@ class UsersControl extends \Nette\Application\UI\Control
 
     public function editUserFormSubmitted(Form $form)
     {
-        $this->model->updateUser($form->values['id'], $form->values);
+        $id = $form->values['id'];
+
+        if ($this->user->id == $id)
+                throw new NA\BadRequestException('Can not edit logged user.');
+
+        $this->model->updateUser($id, $form->values);
         $this->presenter->flashMessage('User has been updated.');
         $this->presenter->redirect('this');
     }
