@@ -14,61 +14,65 @@ class UsersControl extends \Nette\Application\UI\Control
 
     public function __construct()
     {
-        parent::__construct();
-        $this->model = new \UserModel;
-        $this->monitor('Presenter');
+            parent::__construct();
+            $this->model = new \UserModel;
+            $this->monitor('Presenter');
     }
 
     protected function attached($presenter)
     {
-        if ($presenter instanceof Presenter)
-            $this->user = $this->presenter->user;
-        parent::attached($presenter);
+            if ($presenter instanceof Presenter)
+                $this->user = $this->presenter->user;
+            parent::attached($presenter);
     }
 
     public function handleDelete($id)
     {
-        $user = $this->model->getUser($id);
+            $user = $this->model->getUser($id);
 
-        if (empty($user) || $this->user->id == $id)
-                throw new NA\BadRequestException('Record not found');
+            if (empty($user) || $this->user->id == $id)
+                    throw new NA\BadRequestException('Record not found');
 
-        $this->model->deleteUser($id);
-        $this->presenter->flashMessage('User has been deleted.');
-        $this->presenter->redirect('this');
+            $this->model->deleteUser($id);
+            $this->presenter->flashMessage('User has been deleted.');
+            $this->presenter->redirect('this');
     }
 
     public function handleAdd()
     {
-        $this->template->action = 'add';
-        if ($this->presenter->isAjax())
-                $this->invalidateControl('action');
-        else
-                $this->presenter->redirect('this');
+            $this->template->action = 'add';
+            if ($this->presenter->isAjax())
+                    $this->invalidateControl('action');
+            else
+                    $this->presenter->redirect('this');
     }
 
     public function handleEdit($id)
     {
-        $this->template->action = 'edit';
-        $row = $this->model->getUser($id);
+            $this->template->action = 'edit';
+            $row = $this->model->getUser($id);
 
-        if (!$row[0] || $this->user->id == $id)
-                throw new NA\BadRequestException('Record not found');
+            if (!$row[0] || $this->user->id == $id)
+                    throw new NA\BadRequestException('Record not found');
 
-        $this['editUserForm']->setDefaults($row[0]);
+            $this['editUserForm']->setDefaults($row[0]);
 
-        if ($this->presenter->isAjax())
-                $this->invalidateControl('action');
-        else
-                $this->presenter->redirect('this');
+            if ($this->presenter->isAjax())
+                    $this->invalidateControl('action');
+            else
+                    $this->presenter->redirect('this');
     }
 
     public function render()
     {
-        $template = $this->template;
-        $template->setFile(__DIR__ . '/UsersControl.latte');
-        $template->users = $this->model->getUsers()->where('id <> %i', $this->user->id);
-        $template->render();
+            $template = $this->template;
+            $template->setFile(__DIR__ . '/UsersControl.latte');
+            $datasource = $this->model->getUsers()
+                                ->where('id <> %i', $this->user->id)
+                                ->toDataSource();
+            $this['paginator']->paginator->itemCount = $datasource->count();
+            $template->users = $datasource->applyLimit($this['paginator']->paginator->itemsPerPage, $this['paginator']->paginator->offset)->fetchAll();
+            $template->render();
     }
 
     protected function createComponentAddUserForm()
@@ -150,20 +154,27 @@ class UsersControl extends \Nette\Application\UI\Control
 
     public function addUserFormSubmitted(Form $form)
     {
-        $this->model->addUser($form->values);
-        $this->presenter->flashMessage('User has been added.');
-        $this->presenter->redirect('this');
+            $this->model->addUser($form->values);
+            $this->presenter->flashMessage('User has been added.');
+            $this->presenter->redirect('this');
     }
 
     public function editUserFormSubmitted(Form $form)
     {
-        $id = $form->values['id'];
+            $id = $form->values['id'];
 
-        if ($this->user->id == $id)
-                throw new NA\BadRequestException('Can not edit logged user.');
+            if ($this->user->id == $id)
+                    throw new NA\BadRequestException('Can not edit logged user.');
 
-        $this->model->updateUser($id, $form->values);
-        $this->presenter->flashMessage('User has been updated.');
-        $this->presenter->redirect('this');
+            $this->model->updateUser($id, $form->values);
+            $this->presenter->flashMessage('User has been updated.');
+            $this->presenter->redirect('this');
+    }
+
+    public function createComponentPaginator()
+    {
+            $vp = new \VisualPaginator;
+            $vp->paginator->itemsPerPage = 10;
+            return $vp;
     }
 }
