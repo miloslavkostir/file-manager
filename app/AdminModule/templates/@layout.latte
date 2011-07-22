@@ -46,6 +46,19 @@
                 return false;
             });
 
+            $('body').delegate('a.ajax-delete', 'click', function(event) {
+                event.preventDefault();
+                if (confirm('Are you sure?')) {
+                    $.getJSON(this.href);
+                    $('#ajax-spinner').show().css({
+                        position: 'absolute',
+                        left: event.pageX + 20,
+                        top: event.pageY + 40
+                    });
+                }
+                return false;
+            });
+
             $('body').delegate('.ui-button', 'hover', function() {
                 $(this).toggleClass('ui-state-hover');
             });
