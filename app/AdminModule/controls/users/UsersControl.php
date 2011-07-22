@@ -185,7 +185,7 @@ class UsersControl extends \Nette\Application\UI\Control
     public function createComponentPaginator()
     {
             $vp = new \VisualPaginator;
-            $vp->paginator->itemsPerPage = 2;
+            $vp->paginator->itemsPerPage = 10;
             return $vp;
     }
 }
