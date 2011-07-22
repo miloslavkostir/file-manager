@@ -35,7 +35,7 @@
                 $('div.flash-message').remove();
             });
 
-            $('body').delegate('a.ajax', 'click', function(event) {
+            $('body').delegate('a.ajax, .paginator a', 'click', function(event) {
                 event.preventDefault();
                 $.getJSON(this.href);
                 $('#ajax-spinner').show().css({
@@ -43,6 +43,7 @@
                     left: event.pageX + 20,
                     top: event.pageY + 40
                 });
+                return false;
             });
 
             $('body').delegate('.ui-button', 'hover', function() {

@@ -1,3 +1,4 @@
+{snippet roots}
 <table class="ui-widget ui-widget-content" style="width: 100%;">
     <thead>
             <tr class="ui-widget-header ">
@@ -26,6 +27,7 @@
             <tr>
                 <td colspan="2">{control paginator}</td>
             </tr>
+            
             <tr>
                 <td colspan="2">
                     <div class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only">
@@ -38,54 +40,53 @@
                     {ifset $action}
                         {if $action == 'edit'}
                                 <script type="text/javascript">
-                                    $('#snippet-root-action').dialog('open');
-                                    $('#snippet-root-action').dialog({ title: 'Edit' });
+                                    $('#snippet-root-action').dialog({
+                                        modal: true,
+                                        resizable: false,
+                                        width: 'auto',
+                                        title: 'Edit'
+                                    });
                                 </script>
                                 {form editRootForm}
                                     <table>
                                         <tr>
                                             <td>Path:</td>
                                             <td>{input path}</td>
-                                            <td>{control folderSelector 'frmeditRootForm-path'}</td>
+                                            <td>{control pathSelector 'frmeditRootForm-path'}</td>
+                                        </tr>
+                                        <tr>
+                                            <td></td>
+                                            <td colspan="2">{input save}</td>
                                         </tr>
                                     </table>
-                                    <div class="ui-dialog-buttonpane ui-widget-content ui-helper-clearfix">
-                                        <div class="ui-dialog-buttonset">
-                                            {input save}
-                                        </div>
-                                    </div>
                                 {/form}
                         {elseif $action == 'add'}
                                 <script type="text/javascript">
-                                    $('#snippet-root-action').dialog('open');
-                                    $('#snippet-root-action').dialog({ title: 'Add' });
+                                    $('#snippet-root-action').dialog({
+                                        modal: true,
+                                        resizable: false,
+                                        width: 'auto',
+                                        title: 'Add'
+                                    });
                                 </script>
                                 {form addRootForm}
                                     <table>
                                         <tr>
                                             <td>Path:</td>
                                             <td>{input path}</td>
-                                            <td>{control folderSelector 'frmaddRootForm-path'}</td>
+                                            <td>{control pathSelector 'frmaddRootForm-path'}</td>
+                                        </tr>
+                                        <tr>
+                                            <td></td>
+                                            <td colspan="2">{input save}</td>
                                         </tr>
                                     </table>
-                                    <div class="ui-dialog-buttonpane ui-widget-content ui-helper-clearfix">
-                                        <div class="ui-dialog-buttonset">
-                                            {input save}
-                                        </div>
-                                    </div>
                                 {/form}
                         {/if}
                     {/ifset}
                     {/snippet}
-                    <script type="text/javascript">
-                        $('#snippet-root-action').dialog({
-                            autoOpen: false,
-                            modal: true,
-                            resizable: false,
-                            width: 'auto'
-                        });
-                    </script>
                 </td>
             </tr>
     </tbody>
 </table>
+{/snippet}

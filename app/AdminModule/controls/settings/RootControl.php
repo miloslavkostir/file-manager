@@ -1,7 +1,8 @@
 <?php
 
 use Nette\Application\UI\Form,
-	Nette\Application as NA;
+	Nette\Application as NA,
+        Nette\Application\UI\Presenter;
 
 class RootControl extends \Nette\Application\UI\Control
 {
@@ -12,6 +13,14 @@ class RootControl extends \Nette\Application\UI\Control
     {
             parent::__construct();
             $this->model = new \SettingsModel;
+            $this->monitor('Presenter');
+    }
+
+    protected function attached($presenter)
+    {
+            if ($presenter instanceof Presenter)
+                $this->invalidateControl('roots');
+            parent::attached($presenter);
     }
 
     public function handleDelete($id)
@@ -25,7 +34,8 @@ class RootControl extends \Nette\Application\UI\Control
                     $this->presenter->flashMessage('Root has been deleted.');
             }
 
-            $this->presenter->redirect('this');
+            if (!$this->presenter->isAjax())
+                    $this->presenter->redirect('this');
     }
 
     public function handleAdd()
@@ -59,7 +69,7 @@ class RootControl extends \Nette\Application\UI\Control
             $template->setFile(__DIR__ . '/RootControl.latte');
             $datasource = $this->model->getRoots()->toDataSource();
             $this['paginator']->paginator->itemCount = $datasource->count();
-            $template->roots = $datasource->applyLimit($this['paginator']->paginator->itemsPerPage, $this['paginator']->paginator->offset)->fetchAll();
+            $template->roots = $datasource->applyLimit($this['paginator']->paginator->itemsPerPage, $this['paginator']->paginator->offset);
             $template->render();
     }
 
@@ -93,19 +103,21 @@ class RootControl extends \Nette\Application\UI\Control
     {
             $this->model->addRoot($form->values);
             $this->presenter->flashMessage('Root has been added.');
-            $this->presenter->redirect('this');
+            if (!$this->presenter->isAjax())
+                    $this->presenter->redirect('this');
     }
 
     public function editRootFormSubmitted(Form $form)
     {
             $this->model->updateRoot($form->values['id'], $form->values);
             $this->presenter->flashMessage('Root has been updated.');
-            $this->presenter->redirect('this');
+            if (!$this->presenter->isAjax())
+                    $this->presenter->redirect('this');
     }
 
-    protected function createComponentFolderSelector()
+    protected function createComponentPathSelector()
     {
-            $fs = new \PathSelector($_SERVER['DOCUMENT_ROOT'], true);
+            $fs = new \PathSelector($_SERVER['DOCUMENT_ROOT']);
             return $fs;
     }
 

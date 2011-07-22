@@ -21,8 +21,10 @@ class UsersControl extends \Nette\Application\UI\Control
 
     protected function attached($presenter)
     {
-            if ($presenter instanceof Presenter)
+            if ($presenter instanceof Presenter) {
                 $this->user = $this->presenter->user;
+                $this->invalidateControl('users');
+            }
             parent::attached($presenter);
     }
 
@@ -35,7 +37,10 @@ class UsersControl extends \Nette\Application\UI\Control
 
             $this->model->deleteUser($id);
             $this->presenter->flashMessage('User has been deleted.');
-            $this->presenter->redirect('this');
+            if ($this->presenter->isAjax())
+                    $this->invalidateControl('users');
+            else
+                    $this->presenter->redirect('this');
     }
 
     public function handleAdd()
@@ -156,7 +161,10 @@ class UsersControl extends \Nette\Application\UI\Control
     {
             $this->model->addUser($form->values);
             $this->presenter->flashMessage('User has been added.');
-            $this->presenter->redirect('this');
+            if ($this->presenter->isAjax())
+                    $this->invalidateControl('users');
+            else
+                    $this->presenter->redirect('this');
     }
 
     public function editUserFormSubmitted(Form $form)
@@ -168,13 +176,16 @@ class UsersControl extends \Nette\Application\UI\Control
 
             $this->model->updateUser($id, $form->values);
             $this->presenter->flashMessage('User has been updated.');
-            $this->presenter->redirect('this');
+            if ($this->presenter->isAjax())
+                    $this->invalidateControl('users');
+            else
+                    $this->presenter->redirect('this');
     }
 
     public function createComponentPaginator()
     {
             $vp = new \VisualPaginator;
-            $vp->paginator->itemsPerPage = 10;
+            $vp->paginator->itemsPerPage = 2;
             return $vp;
     }
 }

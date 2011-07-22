@@ -1,3 +1,4 @@
+{snippet users}
 <table class="ui-widget ui-widget-content" style="width: 100%;">
     <thead>
             <tr class="ui-widget-header ">
@@ -43,7 +44,11 @@
                         </script>
                         {if $action == 'edit'}
                             <script type="text/javascript">
-                                $('#snippet-users-action').dialog({ title: 'Edit user' });
+                                $('#snippet-users-action').dialog({
+                                    modal: true,
+                                    width: 'auto',
+                                    title: 'Edit user'
+                                });
                             </script>
                             {form editUserForm}
                             <div id="form-accordion">
@@ -117,15 +122,18 @@
                                 </div>
                             </div>
 
-                            <div class="ui-dialog-buttonpane ui-widget-content ui-helper-clearfix">
-                                <div class="ui-dialog-buttonset">
-                                    {input save}
-                                </div>
+                            <div style="margin: 10px 0 10px; float: right;">
+                                {input save}
                             </div>
+
                             {/form}
                         {elseif $action == 'add'}
                             <script type="text/javascript">
-                                $('#snippet-users-action').dialog({ title: 'Add user' });;
+                                $('#snippet-users-action').dialog({
+                                    modal: true,
+                                    width: 'auto',
+                                    title: 'Add user'
+                                });
                             </script>
                             {form addUserForm}
                             <div id="form-accordion">
@@ -203,24 +211,16 @@
                                 </div>
                             </div>
 
-                            <div class="ui-dialog-buttonpane ui-widget-content ui-helper-clearfix">
-                                <div class="ui-dialog-buttonset">
-                                    {input save}
-                                </div>
+                            <div style="margin: 10px 0 10px; float: right;">
+                                {input save}
                             </div>
+
                             {/form}
                         {/if}
                     {/ifset}
                     {/snippet}
-                    <script type="text/javascript">
-                        $('#snippet-users-action').dialog({
-                            autoOpen: false,
-                            resizable: false,
-                            modal: true,
-                            width: 'auto'
-                        });
-                    </script>
                 </td>
             </tr>
     </tbody>
 </table>
+{/snippet}

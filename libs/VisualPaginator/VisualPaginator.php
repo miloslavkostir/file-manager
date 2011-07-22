@@ -32,7 +32,7 @@ class VisualPaginator extends Control
 	private $paginator;
 
 	/** @persistent */
-	public $page = 1;
+	public $page;
 
 
 
