@@ -42,4 +42,18 @@ class UserModel extends Object
                     ->where('id = %d', $id)
                     ->execute();
         }
+
+        /**
+         * Check if username exist
+         * @param string $username
+         * @return bool
+         */
+        public function usernameExist($username)
+        {
+            $user = $this->getUsers()->where('username = %s', $username)->fetchAll();
+            if (!empty($user))
+                return true;
+            else
+                return false;
+        }
 }

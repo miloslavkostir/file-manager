@@ -84,10 +84,15 @@ class ProfileControl extends \Nette\Application\UI\Control
     {
 
             $form = $button->form;
+            $values = $form->values;
 
             if ($form['save']->submittedBy) {
-                    $this->model->updateUser($this->profile->id, $form->values);
-                    $this->presenter->flashMessage('Your profile has been updated.');
+                    if ($this->model->usernameExist($values['username']))
+                            $this->presenter->flashMessage('Username ' . $values['username'] . ' already exist.', 'warning');
+                    else {
+                            $this->model->updateUser($this->profile->id, $values);
+                            $this->presenter->flashMessage('Your profile has been updated.');
+                    }
             } elseif ($form['cancel']->submittedBy) {
                     $this->presenter->redirect('Settings:');
             } elseif ($form['delete']->submittedBy) {

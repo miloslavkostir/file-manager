@@ -159,27 +159,43 @@ class UsersControl extends \Nette\Application\UI\Control
 
     public function addUserFormSubmitted(Form $form)
     {
-            $this->model->addUser($form->values);
-            $this->presenter->flashMessage('User has been added.');
-            if ($this->presenter->isAjax())
-                    $this->invalidateControl('users');
-            else
-                    $this->presenter->redirect('this');
+            $values = $form->values;
+
+            if ($this->model->usernameExist($values['username']))
+                    $this->presenter->flashMessage('Username ' . $values['username'] . ' already exist.', 'warning');
+            else {
+                    $this->model->addUser($values);
+                    $this->presenter->flashMessage('User has been added.');
+                    if ($this->presenter->isAjax())
+                            $this->invalidateControl('users');
+                    else
+                            $this->presenter->redirect('this');
+            }
     }
 
     public function editUserFormSubmitted(Form $form)
     {
-            $id = $form->values['id'];
+            $values = $form->values;
+            $id = $values['id'];
 
             if ($this->user->id == $id)
                     throw new NA\BadRequestException('Can not edit logged user.');
 
-            $this->model->updateUser($id, $form->values);
-            $this->presenter->flashMessage('User has been updated.');
-            if ($this->presenter->isAjax())
-                    $this->invalidateControl('users');
-            else
-                    $this->presenter->redirect('this');
+            if ($this->model->usernameExist($values['username']))
+                    $this->presenter->flashMessage('Username ' . $values['username'] . ' already exist.', 'warning');
+            else {
+                    $this->model->updateUser($id, $values);
+                    $this->presenter->flashMessage('User has been updated.');
+                    if ($this->presenter->isAjax())
+                            $this->invalidateControl('users');
+                    else
+                            $this->presenter->redirect('this');
+            }
+    }
+
+    function checkUsername($username)
+    {
+            
     }
 
     public function createComponentPaginator()
