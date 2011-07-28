@@ -28,9 +28,15 @@ class SettingsPresenter extends BasePresenter
 			$this->redirect('Sign:');
 	}
 
-        protected function createComponentRoot()
+        protected function createComponentRoots()
         {
-            $root = new \RootControl;
-            return $root;
+                $root = new \RootControl;
+                return $root;
         }
+
+	protected function createComponentProfile()
+	{
+		$profile = new \ProfileControl;
+		return $profile;
+	}
 }

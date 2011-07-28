@@ -38,10 +38,6 @@
                     </div>
                     {snippet action}
                     {ifset $action}
-                        <script type="text/javascript">
-                            $('#snippet-users-action').dialog('open');
-                            $('#form-accordion').accordion();
-                        </script>
                         {if $action == 'edit'}
                             <script type="text/javascript">
                                 $('#snippet-users-action').dialog({
@@ -49,9 +45,10 @@
                                     width: 'auto',
                                     title: 'Edit user'
                                 });
+                                $( ".accordion" ).accordion();
                             </script>
                             {form editUserForm}
-                            <div id="form-accordion">
+                            <div class="accordion">
                                 <h3><a href="#">User</a></h3>
                                 <div>
                                     <table>
@@ -134,9 +131,10 @@
                                     width: 'auto',
                                     title: 'Add user'
                                 });
+                                $( ".accordion" ).accordion();
                             </script>
                             {form addUserForm}
-                            <div id="form-accordion">
+                            <div class="accordion">
                                 <h3><a href="#">User</a></h3>
                                 <div>
                                     <table>

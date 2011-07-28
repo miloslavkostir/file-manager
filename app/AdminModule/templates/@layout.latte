@@ -109,19 +109,19 @@
                 <span class="ui-icon ui-icon-info" style="float: left; margin-right: 0.3em;"></span>
                     {$flash->message}
                 <span class="ui-icon ui-icon-closethick" title="Close message" style="cursor: pointer; float: right;"></span>
-                {/}
+                {/foreach}
             </p>
         </div>
-        {/}
+        {/if}
 
         <ul n:if="$user->loggedIn" style="width: auto; height: 40px; margin: 0; list-style: none outside none;" class="ui-state-highlight ui-corner-all">
             <li style="float: right; line-height: 40px;">
-                {form signOutForm}
-                    {input signout}
-                {/}
+                <form action="{plink Sign:out}">
+                    <input class="ui-button ui-button-text-only ui-widget ui-state-default ui-corner-all" type="submit" value="Sign out">
+                </form>
             </li>
             <li style="float: right; line-height: 40px;">
-                Signed in as <u>{$user->identity->real_name}</u> |
+                Signed in as <a n:href="Settings:">{$user->identity->real_name}</a>&nbsp;
             </li>
         </ul>
 

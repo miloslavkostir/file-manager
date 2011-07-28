@@ -16,13 +16,13 @@
                     </h3>
                     <div>
                         <ul>
-                            <li><a n:href="roots">Edit</a></li>
+                            <li>Edit</li>
                         </ul>
                     </div>
             </div>
         </td>
         <td>
-
+                {control roots}
         </td>
     </tr>
 
@@ -43,7 +43,7 @@
 </style>
 <script type="text/javascript">
 $(document).ready(function() {
-    $("#settings-menu").accordion();
+    $("#settings-menu").accordion({ active: 1 });
 });
 </script>
 {/block}

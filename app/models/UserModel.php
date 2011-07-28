@@ -11,7 +11,8 @@ class UserModel extends Object
 
         public function addUser($args)
         {
-            $args['password'] = md5($args['password']);
+            $authenticator = new \Authenticator($this->getUsers());
+            $args['password'] = $authenticator->calculateHash($args['password']);
             dibi::insert('users', $args)->execute();
         }
 
