@@ -193,11 +193,6 @@ class UsersControl extends \Nette\Application\UI\Control
             }
     }
 
-    function checkUsername($username)
-    {
-            
-    }
-
     public function createComponentPaginator()
     {
             $vp = new \VisualPaginator;
