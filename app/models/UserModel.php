@@ -18,12 +18,12 @@ class UserModel extends Object
 
         public function deleteUser($id)
         {
-            dibi::delete('users')->where('id = %d', $id)->execute();
+            dibi::delete('users')->where('id = %i', $id)->execute();
         }
 
         public function getUser($id)
         {
-            return $this->getUsers()->where('id = %d', $id)->limit('1')->fetchAll();
+            return $this->getUsers()->where('id = %i', $id)->limit('1')->fetchAll();
         }
 
         public function getUsers()
@@ -39,7 +39,7 @@ class UserModel extends Object
         public function updateUser($id, $args)
         {
             dibi::update('users', $args)
-                    ->where('id = %d', $id)
+                    ->where('id = %i', $id)
                     ->execute();
         }
 

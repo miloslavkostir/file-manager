@@ -11,7 +11,7 @@ class SettingsModel extends Object
 
         public function deleteRoot($id)
         {
-            dibi::delete('uploadroots')->where('id = %d', $id)->execute();
+            dibi::delete('uploadroots')->where('id = %i', $id)->execute();
         }
 
         public function getRoots()
@@ -21,13 +21,13 @@ class SettingsModel extends Object
 
         public function getRoot($id)
         {
-            return $this->getRoots()->where('id = %d', $id)->limit('1')->fetchAll();
+            return $this->getRoots()->where('id = %i', $id)->limit('1')->fetchAll();
         }
 
         public function updateRoot($id, $args)
         {
             dibi::update('uploadroots', $args)
-                    ->where('id = %d', $id)
+                    ->where('id = %i', $id)
                     ->execute();
         }
 }
