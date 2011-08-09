@@ -11,20 +11,27 @@ common:
 		# zlib.output_compression: yes
 		# default_charset: "UTF-8"
 
+	database:
+		driver: sqlite
+		database: %appDir%/storage/database.db
+		profiler: true
+
+	models:
+
 	services:
 		robotLoader:
 			run: true
-
+		database:
+			class: DibiConnection
+			arguments: [%database%]
+		modelLoader:
+			class: ModelLoader
+			arguments: [@container]
 		userModel:
 			class: UserModel
-
+			arguments: ["@container"]
 		authenticator:
 			factory: [@userModel, createAuthenticatorService]
-
-	database:
-		driver: sqlite
-		database: %appDir%/models/data.db
-		profiler: true
 
 production < common:
 

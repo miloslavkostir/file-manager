@@ -20,11 +20,9 @@ namespace FrontModule;
 
 class HomepagePresenter extends BasePresenter
 {
-        /** @var User Model */
-        private $umodel;
-
-        /** @var Settings Model */
-        private $smodel;
+        /** @var Model */
+        private $users,
+                $settings;
 
 	protected function startup()
 	{
@@ -32,14 +30,15 @@ class HomepagePresenter extends BasePresenter
 
 		if (!$this->user->isLoggedIn())
 			$this->redirect('Sign:');
+                else
 
-                $this->umodel = new \UserModel;
-                $this->smodel = new \SettingsModel;
+                $this->users = $this->models->UserModel;
+                $this->settings = $this->models->SettingsModel;
 	}
 
         public function  createComponentFileManager()
         {
-            $conf = $this->umodel->getUser($this->user->id);
+            $conf = $this->users->getUser($this->user->id);
 
             if (!$conf)
                     throw new \Nette\InvalidArgumentException("User not found!");
@@ -48,7 +47,7 @@ class HomepagePresenter extends BasePresenter
             if ($conf->has_share <> true)
                     throw new \Nette\Application\ForbiddenRequestException ("User is not allowed to have a share!", 403);
 
-            $root = $this->smodel->getRoot($conf->uploadroot);           
+            $root = $this->settings->getRoot($conf->uploadroot);           
             if (!$root)
                     throw new \Nette\InvalidArgumentException("Upload root not defined!");
 

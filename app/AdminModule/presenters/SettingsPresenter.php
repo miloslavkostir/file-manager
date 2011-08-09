@@ -6,17 +6,12 @@ use Nette\Application\UI\Form;
 
 class SettingsPresenter extends BasePresenter
 {
-        /** @var Model */
-        private $model;
-
 	protected function startup()
 	{
 		parent::startup();
 
 		if (!$this->user->isLoggedIn())
 			$this->redirect('Sign:');
-                else
-                        $this->model = new \UserModel;
 	}
 
         protected function createComponentRoots()
@@ -52,7 +47,7 @@ class SettingsPresenter extends BasePresenter
         public function changePassFormSubmitted(Form $form)
         {
                 $values = $form->values;
-                $this->model->changePassword($this->user->id, $values['password2']);
+                $this->models->UserModel->changePassword($this->user->id, $values['password2']);
                 if ($values["logout"])
                     $this->redirect("Sign:out");
                 else {

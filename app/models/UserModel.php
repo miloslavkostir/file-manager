@@ -1,8 +1,6 @@
 <?php
 
-use Nette\Object;
-
-class UserModel extends Object
+class UserModel extends BaseModel
 {
 	public function createAuthenticatorService()
 	{
@@ -13,12 +11,12 @@ class UserModel extends Object
         {
             $authenticator = new \Authenticator($this->getUsers());
             $args['password'] = $authenticator->calculateHash($args['password']);
-            dibi::insert('users', $args)->execute();
+            $this->getDatabase()->insert('users', $args)->execute();
         }
 
         public function deleteUser($id)
         {
-            dibi::delete('users')->where('id = %i', $id)->execute();
+            $this->getDatabase()->delete('users')->where('id = %i', $id)->execute();
         }
 
         public function getUser($id)
@@ -28,17 +26,17 @@ class UserModel extends Object
 
         public function getUsers()
         {
-            return dibi::select('*')->from('users');
+            return $this->getDatabase()->select('*')->from('users');
         }
 
         public function getRoles()
         {
-            return dibi::select('*')->from('roles');
+            return $this->getDatabase()->select('*')->from('roles');
         }
 
         public function updateUser($id, $args)
         {
-            dibi::update('users', $args)
+            $this->getDatabase()->update('users', $args)
                     ->where('id = %i', $id)
                     ->execute();
         }
@@ -48,7 +46,7 @@ class UserModel extends Object
             $authenticator = new \Authenticator($this->getUsers());
             $args = array('password' => $authenticator->calculateHash($pass));
 
-            dibi::update('users', $args)
+            $this->getDatabase()->update('users', $args)
                     ->where('id = %i', $id)
                     ->execute();
         }

@@ -7,7 +7,8 @@ use Nette\Application\UI\Form,
 class ProfileControl extends \Nette\Application\UI\Control
 {
     /** @var Model */
-    private $model;
+    private $users,
+            $settings;
 
     /** @var Identity */
     private $profile;
@@ -15,14 +16,16 @@ class ProfileControl extends \Nette\Application\UI\Control
     public function __construct()
     {
             parent::__construct();
-            $this->model = new \UserModel;
             $this->monitor('Presenter');
     }
 
     protected function attached($presenter)
     {
-            if ($presenter instanceof Presenter)
+            if ($presenter instanceof Presenter) {
                     $this->profile = $this->presenter->user;
+                    $this->users = $this->presenter->models->UserModel;
+                    $this->settings = $this->presenter->models->SettingsModel;
+            }
             parent::attached($presenter);
     }
 
@@ -30,7 +33,7 @@ class ProfileControl extends \Nette\Application\UI\Control
     {
             $template = $this->template;
             $template->setFile(__DIR__ . '/Profile.latte');
-            $profile = $this->model->getUser($this->profile->id);
+            $profile = $this->users->getUser($this->profile->id);
             if (!$profile[0])
                     throw new NA\BadRequestException('Record not found');
             $this['profileForm']->setDefaults($profile[0]);
@@ -39,10 +42,8 @@ class ProfileControl extends \Nette\Application\UI\Control
 
     protected function createComponentProfileForm()
     {
-            $roles = $this->model->getRoles()->fetchPairs();
-
-            $model = new \SettingsModel;
-            $roots = $model->getRoots()->fetchPairs();
+            $roles = $this->users->getRoles()->fetchPairs();
+            $roots = $this->settings->getRoots()->fetchPairs();
 
             $form = new Form;
             $form->addText('username', 'Username:')
@@ -82,21 +83,20 @@ class ProfileControl extends \Nette\Application\UI\Control
 
     public function profileFormSubmitted(Nette\Forms\Controls\SubmitButton $button)
     {
-
             $form = $button->form;
             $values = $form->values;
 
             if ($form['save']->submittedBy) {
-                    if ($this->model->usernameExist($values['username'], $this->profile->id))
+                    if ($this->users->usernameExist($values['username'], $this->profile->id))
                             $this->presenter->flashMessage('Username ' . $values['username'] . ' already exist.', 'warning');
                     else {
-                            $this->model->updateUser($this->profile->id, $values);
+                            $this->users->updateUser($this->profile->id, $values);
                             $this->presenter->flashMessage('Your profile has been updated.');
                     }
             } elseif ($form['cancel']->submittedBy) {
                     $this->presenter->redirect('Settings:');
             } elseif ($form['delete']->submittedBy) {
-                    $this->model->deleteUser($this->profile->id);
+                    $this->users->deleteUser($this->profile->id);
                     $this->presenter->user->logOut();
                     $this->presenter->redirect('Sign:');
             }

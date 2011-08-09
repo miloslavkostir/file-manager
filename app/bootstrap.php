@@ -24,11 +24,6 @@ $configurator->container->params['tempDir'] = __DIR__ . '/../temp';
 $container = $configurator->loadConfig(__DIR__ . '/config.neon');
 
 
-// Setup Dibi connection
-dibi::connect($container->params['database']);
-
-
-
 // Setup router using mod_rewrite detection
 if (function_exists('apache_get_modules') && in_array('mod_rewrite', apache_get_modules())) {
 

@@ -1,22 +1,20 @@
 <?php
 
-use Nette\Object;
-
-class SettingsModel extends Object
+class SettingsModel extends BaseModel
 {
         public function addRoot($args)
         {
-            dibi::insert('uploadroots', $args)->execute();
+            $this->getDatabase()->insert('uploadroots', $args)->execute();
         }
 
         public function deleteRoot($id)
         {
-            dibi::delete('uploadroots')->where('id = %i', $id)->execute();
+            $this->getDatabase()->delete('uploadroots')->where('id = %i', $id)->execute();
         }
 
         public function getRoots()
         {
-            return dibi::select('*')->from('uploadroots');
+            return $this->getDatabase()->select('*')->from('uploadroots');
         }
 
         public function getRoot($id)
@@ -26,7 +24,7 @@ class SettingsModel extends Object
 
         public function updateRoot($id, $args)
         {
-            dibi::update('uploadroots', $args)
+            $this->getDatabase()->update('uploadroots', $args)
                     ->where('id = %i', $id)
                     ->execute();
         }

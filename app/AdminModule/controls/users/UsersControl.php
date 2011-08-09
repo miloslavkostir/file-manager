@@ -7,7 +7,8 @@ use Nette\Application\UI\Form,
 class UsersControl extends \Nette\Application\UI\Control
 {
     /** @var Model */
-    private $model;
+    private $users,
+            $settings;
 
     /** @var Identity */
     private $user;
@@ -15,7 +16,6 @@ class UsersControl extends \Nette\Application\UI\Control
     public function __construct()
     {
             parent::__construct();
-            $this->model = new \UserModel;
             $this->monitor('Presenter');
     }
 
@@ -23,6 +23,8 @@ class UsersControl extends \Nette\Application\UI\Control
     {
             if ($presenter instanceof Presenter) {
                 $this->user = $this->presenter->user;
+                $this->users = $this->presenter->models->UserModel;
+                $this->settings = $this->presenter->models->SettingsModel;
                 $this->invalidateControl('users');
             }
             parent::attached($presenter);
@@ -30,12 +32,12 @@ class UsersControl extends \Nette\Application\UI\Control
 
     public function handleDelete($id)
     {
-            $user = $this->model->getUser($id);
+            $user = $this->users->getUser($id);
 
             if (empty($user) || $this->user->id == $id)
                     throw new NA\BadRequestException('Record not found');
 
-            $this->model->deleteUser($id);
+            $this->users->deleteUser($id);
             $this->presenter->flashMessage('User has been deleted.');
             if ($this->presenter->isAjax())
                     $this->invalidateControl('users');
@@ -55,7 +57,7 @@ class UsersControl extends \Nette\Application\UI\Control
     public function handleEdit($id)
     {
             $this->template->action = 'edit';
-            $row = $this->model->getUser($id);
+            $row = $this->users->getUser($id);
 
             if (!$row[0] || $this->user->id == $id)
                     throw new NA\BadRequestException('Record not found');
@@ -72,7 +74,7 @@ class UsersControl extends \Nette\Application\UI\Control
     {
             $template = $this->template;
             $template->setFile(__DIR__ . '/UsersControl.latte');
-            $datasource = $this->model->getUsers()
+            $datasource = $this->users->getUsers()
                                 ->where('id <> %i', $this->user->id)
                                 ->toDataSource();
             $this['paginator']->paginator->itemCount = $datasource->count();
@@ -82,10 +84,8 @@ class UsersControl extends \Nette\Application\UI\Control
 
     protected function createComponentAddUserForm()
     {
-            $roles = $this->model->getRoles()->fetchPairs();
-
-            $model = new \SettingsModel;
-            $roots = $model->getRoots()->fetchPairs();
+            $roles = $this->users->getRoles()->fetchPairs();
+            $roots = $this->settings->getRoots()->fetchPairs();
 
             $form = new Form;
             $form->addText('username', 'Username')
@@ -120,10 +120,8 @@ class UsersControl extends \Nette\Application\UI\Control
 
     protected function createComponentEditUserForm()
     {
-            $roles = $this->model->getRoles()->fetchPairs();
-
-            $model = new \SettingsModel;
-            $roots = $model->getRoots()->fetchPairs();
+            $roles = $this->users->getRoles()->fetchPairs();
+            $roots = $this->settings->getRoots()->fetchPairs();
 
             $form = new Form;
             $form->addText('username', 'Username:')
@@ -161,10 +159,10 @@ class UsersControl extends \Nette\Application\UI\Control
     {
             $values = $form->values;
 
-            if ($this->model->usernameExist($values['username']))
+            if ($this->users->usernameExist($values['username']))
                     $this->presenter->flashMessage('Username ' . $values['username'] . ' already exist.', 'warning');
             else {
-                    $this->model->addUser($values);
+                    $this->users->addUser($values);
                     $this->presenter->flashMessage('User has been added.');
                     if ($this->presenter->isAjax())
                             $this->invalidateControl('users');
@@ -181,10 +179,10 @@ class UsersControl extends \Nette\Application\UI\Control
             if ($this->user->id == $id)
                     throw new NA\BadRequestException('Can not edit logged user.');
 
-            if ($this->model->usernameExist($values['username'], $id))
+            if ($this->users->usernameExist($values['username'], $id))
                     $this->presenter->flashMessage('Username ' . $values['username'] . ' already exist.', 'warning');
             else {
-                    $this->model->updateUser($id, $values);
+                    $this->users->updateUser($id, $values);
                     $this->presenter->flashMessage('User has been updated.');
                     if ($this->presenter->isAjax())
                             $this->invalidateControl('users');
