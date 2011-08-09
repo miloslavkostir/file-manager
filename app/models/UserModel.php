@@ -43,6 +43,16 @@ class UserModel extends Object
                     ->execute();
         }
 
+        public function changePassword($id, $pass)
+        {
+            $authenticator = new \Authenticator($this->getUsers());
+            $args = array('password' => $authenticator->calculateHash($pass));
+
+            dibi::update('users', $args)
+                    ->where('id = %i', $id)
+                    ->execute();
+        }
+
         /**
          * Check if username exist
          * @param string $username
