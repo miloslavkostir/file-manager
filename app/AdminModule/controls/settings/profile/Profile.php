@@ -87,7 +87,7 @@ class ProfileControl extends \Nette\Application\UI\Control
             $values = $form->values;
 
             if ($form['save']->submittedBy) {
-                    if ($this->model->usernameExist($values['username']))
+                    if ($this->model->usernameExist($values['username'], $this->profile->id))
                             $this->presenter->flashMessage('Username ' . $values['username'] . ' already exist.', 'warning');
                     else {
                             $this->model->updateUser($this->profile->id, $values);

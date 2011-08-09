@@ -181,7 +181,7 @@ class UsersControl extends \Nette\Application\UI\Control
             if ($this->user->id == $id)
                     throw new NA\BadRequestException('Can not edit logged user.');
 
-            if ($this->model->usernameExist($values['username']))
+            if ($this->model->usernameExist($values['username'], $id))
                     $this->presenter->flashMessage('Username ' . $values['username'] . ' already exist.', 'warning');
             else {
                     $this->model->updateUser($id, $values);

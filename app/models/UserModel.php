@@ -46,11 +46,16 @@ class UserModel extends Object
         /**
          * Check if username exist
          * @param string $username
+         * @param integer (optional) current user id; default is 0
          * @return bool
          */
-        public function usernameExist($username)
+        public function usernameExist($username, $id = 0)
         {
-            $user = $this->getUsers()->where('username = %s', $username)->fetchAll();
+            $user = $this->getUsers()
+                    ->where('username = %s', $username)
+                    ->and('id <> %i', $id)
+                    ->fetchAll();
+
             if (!empty($user))
                 return true;
             else
