@@ -96,9 +96,14 @@ class ProfileControl extends \Nette\Application\UI\Control
             } elseif ($form['cancel']->submittedBy) {
                     $this->presenter->redirect('Settings:');
             } elseif ($form['delete']->submittedBy) {
-                    $this->users->deleteUser($this->profile->id);
-                    $this->presenter->user->logOut();
-                    $this->presenter->redirect('Sign:');
+                    if (count($this->users->getUsers()) < 2) {
+                            $this->presenter->flashMessage('Can not delete last profile', 'warning');
+                            $this->presenter->redirect('this');
+                    } else {
+                            $this->users->deleteUser($this->profile->id);
+                            $this->presenter->user->logOut();
+                            $this->presenter->redirect('Sign:');
+                    }
             }
     }
 }
