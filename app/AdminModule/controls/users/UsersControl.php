@@ -84,7 +84,7 @@ class UsersControl extends \Nette\Application\UI\Control
 
     protected function createComponentAddUserForm()
     {
-            $roles = $this->users->getRoles()->fetchPairs();
+            $roles = $this->presenter->context->authorizator->roles;
             $roots = $this->settings->getRoots()->fetchPairs();
 
             $form = new Form;
@@ -120,7 +120,7 @@ class UsersControl extends \Nette\Application\UI\Control
 
     protected function createComponentEditUserForm()
     {
-            $roles = $this->users->getRoles()->fetchPairs();
+            $roles = $this->presenter->context->authorizator->roles;
             $roots = $this->settings->getRoots()->fetchPairs();
 
             $form = new Form;

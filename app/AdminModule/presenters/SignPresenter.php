@@ -27,12 +27,17 @@ class SignPresenter extends BasePresenter
 	{
 		try {
 			$values = $form->getValues();
-			if ($values->remember) {
+			if ($values->remember)
 				$this->getUser()->setExpiration('+ 14 days', FALSE);
-			} else {
+			else
 				$this->getUser()->setExpiration('+ 20 minutes', TRUE);
-			}
+
 			$this->getUser()->login($values->username, $values->password);
+
+                        $module = preg_replace("#:?[a-zA-Z_0-9]+$#", "", $this->getName());
+                        if (!$this->user->isAllowed($module))
+                            throw new NS\AuthenticationException("User '$values->username' is not allowed to enter here.");
+
 			$this->redirect('Overview:');
 
 		} catch (NS\AuthenticationException $e) {

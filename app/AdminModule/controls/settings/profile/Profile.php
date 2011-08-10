@@ -42,7 +42,7 @@ class ProfileControl extends \Nette\Application\UI\Control
 
     protected function createComponentProfileForm()
     {
-            $roles = $this->users->getRoles()->fetchPairs();
+            $roles = $this->presenter->context->authorizator->roles;
             $roots = $this->settings->getRoots()->fetchPairs();
 
             $form = new Form;

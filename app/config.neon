@@ -30,6 +30,8 @@ common:
 		userModel:
 			class: UserModel
 			arguments: ["@container"]
+		authorizator:
+			class: Acl
 		authenticator:
 			factory: [@userModel, createAuthenticatorService]
 
