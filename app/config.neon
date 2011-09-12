@@ -29,7 +29,7 @@ common:
 			arguments: [@container]
 		userModel:
 			class: UserModel
-			arguments: ["@container"]
+			arguments: [@container]
 		authorizator:
 			class: Acl
 		authenticator:

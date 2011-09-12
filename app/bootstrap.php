@@ -15,7 +15,6 @@ require $params['libsDir'] . '/Nette/nette.min.php';
 Debugger::$logDirectory = __DIR__ . '/../log';
 Debugger::$strictMode = TRUE;
 Debugger::enable(Debugger::PRODUCTION);
-//Debugger::enable(Debugger::DEVELOPMENT);
 
 // Load configuration from config.neon file
 $configurator = new Nette\Configurator;
@@ -27,15 +26,17 @@ $container = $configurator->loadConfig(__DIR__ . '/config.neon');
 // Setup router using mod_rewrite detection
 if (function_exists('apache_get_modules') && in_array('mod_rewrite', apache_get_modules())) {
 
-        $router = $container->router;
+	$container->router = $router = new RouteList;
+	$router[] = new Route('index.php', 'Front:Homepage:', Route::ONE_WAY);
 
-        $admin = $router[] = new RouteList('Admin');
-        $admin[] = new Route('index.php', 'Overview:', Route::ONE_WAY);
-        $admin[] = new Route('admin/<presenter>/<action>[/<id>]', 'Overview:');
+	$router[] = $install = new RouteList('Install');
+	$install[] = new Route('install/<presenter>/<action>', 'Homepage:');
 
-        $front = $router[] = new RouteList('Front');
-        $front[] = new Route('index.php', 'Homepage:', Route::ONE_WAY);
-        $front[] = new Route('<presenter>/<action>[/<id>]', 'Homepage:');
+	$router[] = $admin = new RouteList('Admin');
+	$admin[] = new Route('admin/<presenter>/<action>', 'Overview:');
+
+	$router[] = $front = new RouteList('Front');
+	$front[] = new Route('<presenter>/<action>[/<id>]', 'Homepage:');
 
 } else {
 	$container->router = new SimpleRouter('Front:Homepage:');
