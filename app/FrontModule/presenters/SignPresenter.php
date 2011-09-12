@@ -1,12 +1,5 @@
 <?php
 
-/**
- * My Application
- *
- * @copyright  Copyright (c) 2010 John Doe
- * @package    MyApplication
- */
-
 namespace FrontModule;
 
 use Nette\Application\UI\Form,
@@ -40,11 +33,12 @@ class SignPresenter extends BasePresenter
 		try {
 			$values = $form->getValues();
 			$this->getUser()->login($values->username, $values->password);
-			if ($values->remember) {
+
+			if ($values->remember)
 				$this->getUser()->setExpiration('+ 14 days', FALSE);
-			} else {
+			else
 				$this->getUser()->setExpiration('+ 20 minutes', TRUE);
-			}
+
 			$this->redirect('Homepage:');
 
 		} catch (NS\AuthenticationException $e) {

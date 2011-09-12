@@ -1,21 +1,5 @@
 <?php
 
-/**
- * NetFileMan
- *
- * @copyright  Copyright (c) 2011 Bauer01
- * @package    NeFileMan
- */
-
-
-
-/**
- * Homepage presenter.
- *
- * @author     Bauer01
- * @package    NeFileMan
- */
-
 namespace FrontModule;
 
 class HomepagePresenter extends BasePresenter
