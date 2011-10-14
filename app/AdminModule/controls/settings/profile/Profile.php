@@ -92,6 +92,7 @@ class ProfileControl extends \Nette\Application\UI\Control
                     else {
                             $this->users->updateUser($this->profile->id, $values);
                             $this->presenter->flashMessage('Your profile has been updated.');
+                            $this->presenter->redirect('Settings:');
                     }
             } elseif ($form['cancel']->submittedBy) {
                     $this->presenter->redirect('Settings:');
