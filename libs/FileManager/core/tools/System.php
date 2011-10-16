@@ -48,7 +48,7 @@ class System extends FileManager
     {
         $lang = __DIR__ . '/../../lang/' . $this->config["lang"] . '.mo';
         if (file_exists($lang)) {
-            $transl = new GettextTranslator($lang);
+            $transl = new \GettextTranslator($lang);
             return $transl;
         } else
             throw new Exception("Language file $lang does not exists!");
