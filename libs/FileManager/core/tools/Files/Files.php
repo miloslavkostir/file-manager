@@ -1,6 +1,7 @@
 <?php
 
-use Nette\Utils\Finder;
+use Nette\Utils\Finder,
+        Nette\Diagnostics\Debugger;
 
 class Files extends FileManager
 {
@@ -389,28 +390,34 @@ class Files extends FileManager
      * Get File size for files > 2 GB
      * http://php.net/manual/en/function.filesize.php
      * @param string $file
-     * @return integer
+     * @return integer | false
      */
-    function getFileSize($file)
+    function getFileSize($path)
     {
-		// filesize using exec
-		if (function_exists("exec")) {
-			$escapedPath = escapeshellarg($file);
+        $filesize = new \Netfileman\Filesize();
 
-			if (strtoupper(substr(PHP_OS, 0, 3)) == 'WIN') { // Windows
-				// Try using the NT substition modifier %~z
-				$size = trim(exec("for %F in ($escapedPath) do @echo %~zF"));
-			}else{ // other OS
-				// If the platform is not Windows, use the stat command (should work for *nix and MacOS)
-				$size = trim(exec("stat -c%s $escapedPath"));
-			}
+        $return = $filesize->sizeCurl($path);
+        if ($return)
+                return $return;
 
-			// If the return is not blank, not zero, and is number
-			if ($size AND ctype_digit($size)) {
-				return (string) $size;
-			}
-		}
-		return false;
+        $return = $filesize->sizeNativeSeek($path);
+        if ($return)
+                return $return;
+
+        $return = $filesize->sizeCom($path);
+        if ($return)
+                return $return;
+
+        $return = $filesize->sizeExec($path);
+        if ($return)
+                return $return;
+
+        $return = $filesize->sizeNativeRead($path);
+        if ($return)
+                return $return;
+
+        Debugger::log("File size error at file $path.", Debugger::WARNING);
+        return false;
     }
 
     function getFolderInfo($path)

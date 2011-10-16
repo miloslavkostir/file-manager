@@ -15,9 +15,6 @@ class Loader extends FileManager
         $uploadPath = $this->config['uploadroot'] . $this->config['uploadpath'];
         $resDir = $this->presenter->context->params['wwwDir'] . $this->config['resource_dir'];
 
-        if (!function_exists("exec"))
-             throw new Exception ("Missing exec function!");
-
         if(!is_dir($uploadPath))
              throw new Exception ("Upload path $uploadPath doesn't exist!");
 

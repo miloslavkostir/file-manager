@@ -345,14 +345,20 @@ class Content extends FileManager
                     $disksize = $this['tools']->diskSizeInfo();
                     if ($disksize['spaceleft'] > 2 ) {
 
-                            if ( $this->config['imagemagick'] == True ) {
-                                exec('convert -version', $results, $status);
-                                if (class_exists('\Nette\ImageMagick') && !$status)
+                            $status = true;
+                            if (function_exists('exec'))
+                                    exec('convert -version', $results, $status);
+
+                            if (class_exists('\Nette\ImageMagick') && !$status) {
                                     $image = new \Nette\ImageMagick($path);
-                                else
-                                    throw new Exception('Missing ImageMagick!');
+                            } elseif (class_exists('Imagick')) {
+                                    $thumb = new Imagick($path);
+                                    $thumb->resizeImage(90, 0, Imagick::FILTER_LANCZOS, 1);
+                                    $thumb->writeImage($cache_file['path']);
+                                    $thumb->destroy();
+                                    $image = Image::fromFile($path);
                             } else
-                                $image = Image::fromFile($path);
+                                    $image = Image::fromFile($path);
 
                             $image->resize(96, NULL);
                             $image->save($cache_file['path'], 80);
