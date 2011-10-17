@@ -1,6 +1,8 @@
 <?php
 
-class FileManager extends Nette\Application\UI\Control
+namespace Netfileman;
+
+class FileManager extends \Nette\Application\UI\Control
 {
     const NAME = "File Manager";
 
@@ -162,12 +164,13 @@ class FileManager extends Nette\Application\UI\Control
     protected function createComponent($name)
     {
             if ( !method_exists($this, 'createComponent'.$name) ) {
-                    if ( class_exists($name) ) {
-                            $class = new $name();
-                            $class->config = $this->config;
-                            return $class;
+                    $class = __NAMESPACE__ . "\\$name";
+                    if ( class_exists($class) ) {
+                            $comp = new $class();
+                            $comp->config = $this->config;
+                            return $comp;
                     } else
-                            throw new Exception('Can not create component ' . $name . '. Required class not found.');
+                            throw new \Exception("Can not create component '$name'. Required class '$class' not found.");
             } else
                     return parent::createComponent($name);
     }

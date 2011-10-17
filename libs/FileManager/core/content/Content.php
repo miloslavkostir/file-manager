@@ -1,5 +1,7 @@
 <?php
 
+namespace Netfileman;
+
 use Nette\Application\Responses\FileResponse;
 use Nette\Image;
 use Nette\Utils\Finder;
@@ -440,7 +442,7 @@ class Content extends FileManager
         $thumb_dir = $this->config['resource_dir'] . 'img/icons/' . $view . '/';
 
         if (!file_exists($this->presenter->context->params['wwwDir'] . $thumb_dir)) {
-            throw new Exception("Missing folder with icons for " . $view . " view");
+            throw new \Exception("Missing folder with icons for " . $view . " view");
             exit;
         }
 

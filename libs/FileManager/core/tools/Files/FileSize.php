@@ -1,6 +1,6 @@
 <?php
 
-namespace Netfileman;
+namespace Netfileman\Files;
 
 class Filesize
 {
@@ -15,7 +15,7 @@ class Filesize
 		elseif (function_exists("gmp_add"))
 			self::$mathLib = self::MATH_GMP;
 		else
-			throw new Exception("You must have installed one of there mathematical libraries: BC Math or GMP!");
+			throw new \Exception("You must have installed one of there mathematical libraries: BC Math or GMP!");
         }
 
 	/**

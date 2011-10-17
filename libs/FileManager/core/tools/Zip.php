@@ -1,5 +1,7 @@
 <?php
 
+namespace Netfileman;
+
 use Nette\Utils\Finder;
 
 class Zip extends FileManager
@@ -17,7 +19,7 @@ class Zip extends FileManager
         if (!file_exists($tempDir)) {
                 $oldumask = umask(0);
                 if (!mkdir($tempDir, 0777))
-                    throw new Exception("Can not create temp dir $tempDir");
+                    throw new \Exception("Can not create temp dir $tempDir");
                 umask($oldumask);
                 $this->tempDir = $tempDir;
         } else

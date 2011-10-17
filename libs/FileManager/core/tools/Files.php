@@ -1,5 +1,7 @@
 <?php
 
+namespace Netfileman;
+
 use Nette\Utils\Finder,
         Nette\Diagnostics\Debugger;
 
@@ -387,14 +389,13 @@ class Files extends FileManager
     }
 
     /**
-     * Get File size for files > 2 GB
-     * http://php.net/manual/en/function.filesize.php
-     * @param string $file
+     * Get file size for files > 2 GB
+     * @param string
      * @return integer | false
      */
     function getFileSize($path)
     {
-        $filesize = new \Netfileman\Filesize();
+        $filesize = new Files\Filesize;
 
         $return = $filesize->sizeCurl($path);
         if ($return)

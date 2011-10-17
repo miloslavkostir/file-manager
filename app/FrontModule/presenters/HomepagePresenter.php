@@ -35,7 +35,7 @@ class HomepagePresenter extends BasePresenter
             if (!$root)
                     throw new \Nette\InvalidArgumentException("Upload root not defined!");
 
-            $fm = new \FileManager;
+            $fm = new \Netfileman\FileManager;
             $fm->config['cache'] = $conf->cache;
             $fm->config['uploadroot'] = $root[0]->path;
             $fm->config['uploadpath'] = $conf->uploadpath;

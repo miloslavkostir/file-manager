@@ -1,5 +1,7 @@
 <?php
 
+namespace Netfileman;
+
 use Nette\Caching\Cache,
         Nette\Caching\Storages\FileJournal,
         Nette\Caching\Storages\FileStorage,
@@ -13,12 +15,12 @@ class Caching extends FileManager
     public function __construct()
     {
         parent::__construct();
-        $this->monitor('Nette\Application\UI\Presenter');
+        $this->monitor('\Nette\Application\UI\Presenter');
     }
 
     protected function attached($presenter)
     {
-        if ($presenter instanceof Nette\Application\UI\Presenter) {
+        if ($presenter instanceof \Nette\Application\UI\Presenter) {
                 $cacheDir = $this->presenter->context->params['tempDir'] . '/cache/file-manager';
 
                 if(!is_dir($cacheDir)) {

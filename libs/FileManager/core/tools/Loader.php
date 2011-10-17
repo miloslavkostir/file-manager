@@ -1,5 +1,7 @@
 <?php
 
+namespace Netfileman;
+
 class Loader extends FileManager
 {
     /** @var array */

@@ -7,6 +7,8 @@
  *
  */
 
+namespace Netfileman;
+
 use Nette\Utils\Finder;
 
 class SortedFinder extends Finder

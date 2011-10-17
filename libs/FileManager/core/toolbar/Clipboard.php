@@ -1,5 +1,7 @@
 <?php
 
+namespace Netfileman;
+
 use Nette\Utils\Finder;
 
 class Clipboard extends FileManager

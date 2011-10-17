@@ -1,5 +1,7 @@
 <?php
 
+namespace Netfileman;
+
 class Plugins extends FileManager
 {
     /** @var string */
@@ -12,7 +14,7 @@ class Plugins extends FileManager
         if (is_dir($pluginDir))
             $this->pluginDir = $pluginDir;
         else
-            throw new Exception("Plugin directory $pluginDir does not exists!");
+            throw new \Exception("Plugin directory $pluginDir does not exists!");
     }
 
     /**
@@ -21,7 +23,7 @@ class Plugins extends FileManager
      */
     function loadPlugins()
     {
-        $files = Nette\Utils\Finder::findFiles('*.php')
+        $files = \Nette\Utils\Finder::findFiles('*.php')
                     ->from($this->pluginDir);
 
         $plugins = array();

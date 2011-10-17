@@ -1,5 +1,7 @@
 <?php
 
+namespace Netfileman;
+
 class FileInfo extends FileManager
 {
     /** @var array */

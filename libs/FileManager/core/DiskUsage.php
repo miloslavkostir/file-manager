@@ -1,5 +1,7 @@
 <?php
 
+namespace Netfileman;
+
 class DiskUsage extends FileManager
 {
     /** @var array */

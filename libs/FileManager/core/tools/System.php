@@ -1,5 +1,7 @@
 <?php
 
+namespace Netfileman;
+
 class System extends FileManager
 {
     /** @var array */
@@ -51,6 +53,6 @@ class System extends FileManager
             $transl = new \GettextTranslator($lang);
             return $transl;
         } else
-            throw new Exception("Language file $lang does not exists!");
+            throw new \Exception("Language file $lang does not exists!");
     }
 }

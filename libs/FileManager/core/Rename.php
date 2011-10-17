@@ -1,5 +1,7 @@
 <?php
 
+namespace Netfileman;
+
 use Nette\Application\UI\Form;
 
 class Rename extends FileManager
