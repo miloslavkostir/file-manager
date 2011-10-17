@@ -59,7 +59,6 @@ class ProfileControl extends \Nette\Application\UI\Control
             $form->addCheckbox('readonly', 'Read-only');
             $form->addCheckbox('cache', 'Cache');
             $form->addCheckbox('quota', 'Quota');
-            $form->addCheckbox('imagemagick', 'Imagemagick');
             $form->addCheckbox('has_share', 'Shares enabled');
             $form->addProtection('Please submit this form again (security token has expired).');
 

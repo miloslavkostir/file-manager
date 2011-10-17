@@ -102,7 +102,6 @@ class UsersControl extends \Nette\Application\UI\Control
             $form->addCheckbox('readonly', 'Read-only');
             $form->addCheckbox('cache', 'Enable cache');
             $form->addCheckbox('quota', 'Quota');
-            $form->addCheckbox('imagemagick', 'Imagemagick');
             $form->addCheckbox('has_share', 'Sharing');
             $form->addSubmit('save', 'Save')
                     ->setAttribute('class', 'ui-button ui-button-text-only ui-widget ui-state-default ui-corner-all');
@@ -137,7 +136,6 @@ class UsersControl extends \Nette\Application\UI\Control
             $form->addCheckbox('readonly', 'Read-only');
             $form->addCheckbox('cache', 'Cache');
             $form->addCheckbox('quota', 'Quota');
-            $form->addCheckbox('imagemagick', 'Imagemagick');
             $form->addCheckbox('has_share', 'Shares enabled');
             $form->addHidden('id')
                     ->setRequired('Unknown record.');

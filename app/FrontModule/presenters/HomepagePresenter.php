@@ -42,7 +42,6 @@ class HomepagePresenter extends BasePresenter
             $fm->config['readonly'] = $conf->readonly;
             $fm->config['quota'] = $conf->quota;
             $fm->config['quota_limit'] = $conf->quota_limit;
-            $fm->config['imagemagick'] = $conf->imagemagick;
             $fm->config['lang'] = $conf->lang;
 
             return $fm;

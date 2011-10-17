@@ -13,12 +13,11 @@ CREATE TABLE [users] (
 [quota] BOOLEAN  NULL,
 [readonly] BOOLEAN  NULL,
 [cache] BOOLEAN  NULL,
-[imagemagick] BOOLEAN  NULL,
 [has_share] BOOLEAN  NULL
 );
 
-INSERT INTO 'users' ('id','username','password','role','real_name','uploadroot','uploadpath','lang','quota_limit','quota','readonly','cache','imagemagick','has_share') VALUES
-('1','root','63a9f0ea7bb98050796b649e85481845','admin','Root','','','en','','','','N','N','N');
+INSERT INTO 'users' ('id','username','password','role','real_name','uploadroot','uploadpath','lang','quota_limit','quota','readonly','cache','has_share') VALUES
+('1','root','63a9f0ea7bb98050796b649e85481845','admin','Root','','','en','','','','N','N');
 
 CREATE TABLE [uploadroots] (
 [id] INTEGER  NOT NULL PRIMARY KEY,

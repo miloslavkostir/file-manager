@@ -22,7 +22,6 @@ class FileManager extends Nette\Application\UI\Control
         'resource_dir' => '/fm-src/',
         'quota' => False,
         'quota_limit' => 20,
-        'imagemagick' => False,
         'lang' => 'en'
     );
 
