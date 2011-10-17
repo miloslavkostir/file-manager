@@ -20,6 +20,7 @@ Debugger::enable(Debugger::PRODUCTION);
 $configurator = new Nette\Configurator;
 $configurator->container->params += $params;
 $configurator->container->params['tempDir'] = __DIR__ . '/../temp';
+$configurator->container->getService('robotLoader'); // fix http://forum.nette.org/en/932-trouble-with-installation#p4000
 $container = $configurator->loadConfig(__DIR__ . '/config.neon');
 
 

@@ -19,8 +19,6 @@ common:
 	models:
 
 	services:
-		robotLoader:
-			run: true
 		database:
 			class: DibiConnection
 			arguments: [%database%]
