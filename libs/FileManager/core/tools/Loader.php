@@ -15,7 +15,7 @@ class Loader extends FileManager
     function check()
     {
         $uploadPath = $this->config['uploadroot'] . $this->config['uploadpath'];
-        $resDir = WWW_DIR . $this->config['resource_dir'];
+        $resDir = $this->presenter->context->params['wwwDir'] . $this->config['resource_dir'];
 
         if(!is_dir($uploadPath))
              throw new Exception ("Upload path $uploadPath doesn't exist!");

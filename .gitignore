@@ -1,4 +1,9 @@
-
 /nbproject
-/libs/Nette/Nette
+/libs/Nette
+/libs/dibi
 /www/data
+/temp/_Nette.Configurator
+/temp/_Nette.FileTemplate
+/temp/_Nette.RobotLoader
+/temp/sessions
+/log
