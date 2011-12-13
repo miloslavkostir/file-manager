@@ -16,10 +16,15 @@ CREATE TABLE [users] (
 [has_share] BOOLEAN  NULL
 );
 
+BEGIN; 
 INSERT INTO 'users' ('id','username','password','role','real_name','uploadroot','uploadpath','lang','quota_limit','quota','readonly','cache','has_share') VALUES
-('1','root','63a9f0ea7bb98050796b649e85481845','admin','Root','','','en','','','','N','N');
-
-CREATE TABLE [uploadroots] (
+('1','root','e0af111c48834d9870489e5c11ce3bf5','admin','Root','1','/root/','en','','','','1','1');
+COMMIT;CREATE TABLE [uploadroots] (
 [id] INTEGER  NOT NULL PRIMARY KEY,
 [path] TEXT  NULL
 );
+
+BEGIN; 
+INSERT INTO 'uploadroots' ('id','path') VALUES
+('1','C:/wamp/www\testing\NetFileMan\data');
+COMMIT;

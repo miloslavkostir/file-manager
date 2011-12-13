@@ -441,7 +441,7 @@ class Content extends FileManager
     {
         $thumb_dir = $this->config['resource_dir'] . 'img/icons/' . $view . '/';
 
-        if (!file_exists($this->presenter->context->params['wwwDir'] . $thumb_dir)) {
+        if (!file_exists(WWW_DIR . $thumb_dir)) {
             throw new \Exception("Missing folder with icons for " . $view . " view");
             exit;
         }
@@ -472,7 +472,7 @@ class Content extends FileManager
                             $dir_array[ $name ]['size'] =  $this['files']->getFileSize($file->getPathName());
                             $filetype = strtolower(pathinfo($name, PATHINFO_EXTENSION));
                             $dir_array[ $name ]['filetype'] = $filetype;
-                            if (file_exists($this->presenter->context->params['wwwDir'] . $thumb_dir . $filetype . '.png')) {
+                            if (file_exists(WWW_DIR . $thumb_dir . $filetype . '.png')) {
                                             $dir_array[ $name ]['icon'] =  $filetype . '.png';
                                             if (($filetype == 'jpg') or ($filetype == 'png') or ($filetype == 'gif') or ($filetype == 'jpeg') or ($filetype == 'bmp')) {
                                                 $dir_array[ $name ]['create_thumb'] =  True;

@@ -5,18 +5,17 @@
 # http://nette.org/security-warning
 #
 common:
+	parameters:
+		database:
+			driver: sqlite
+			database: %appDir%/storage/database.db
+			profiler: true
+		models:
+
 	php: # PHP configuration
-		# date.timezone: Europe/Prague
+		date.timezone: Europe/Prague
 		session.save_path: "%tempDir%/sessions"
 		# zlib.output_compression: yes
-		# default_charset: "UTF-8"
-
-	database:
-		driver: sqlite
-		database: %appDir%/storage/database.db
-		profiler: true
-
-	models:
 
 	services:
 		database:

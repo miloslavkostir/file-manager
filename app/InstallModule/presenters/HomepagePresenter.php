@@ -2,7 +2,7 @@
 
 namespace InstallModule;
 
-use \Nette\Config\NeonAdapter,
+use \Nette\Config\Loader,
         \Nette\Diagnostics\Debugger;
 
 class HomepagePresenter extends BasePresenter
@@ -13,7 +13,8 @@ class HomepagePresenter extends BasePresenter
 	protected function startup()
 	{
 		parent::startup();
-                $this->progress = NeonAdapter::load($this->context->params["appDir"] . "/storage/install.neon");
+                $loader = new Loader;
+                $this->progress = $loader->load(APP_DIR . "/storage/install.neon");
                 if ($this->progress['finished'] == true)
                     $this->redirect(':Admin:Overview:');
 	}
@@ -25,7 +26,7 @@ class HomepagePresenter extends BasePresenter
                 elseif ($this->progress['errors'] == true)
                     throw new \Nette\Application\ApplicationException("An error occured during the install.");
                 else {
-                    $storage = $this->context->params["appDir"] . "/storage/";
+                    $storage = APP_DIR . "/storage/";
                     $db = $storage . "database.db";
                     $sql = $storage . "default.sql";
 
@@ -38,7 +39,8 @@ class HomepagePresenter extends BasePresenter
 
                     $this->progress['finished'] = true;
 
-                    NeonAdapter::save($this->progress, $this->context->params["appDir"] . "/storage/install.neon");
+                    $loader = new Loader;
+                    $loader->save($this->progress, APP_DIR . "/storage/install.neon");
                     Debugger::log("Installation successfully finished");
 
                     $this->template->import = $import;
@@ -65,6 +67,7 @@ class HomepagePresenter extends BasePresenter
                 else
                     $this->progress['requirements'] = true;
 
-                NeonAdapter::save($this->progress, $this->context->params["appDir"] . "/storage/install.neon");
+                $loader = new Loader;
+                $loader->save($this->progress, APP_DIR . "/storage/install.neon");
         }
 }

@@ -6,22 +6,35 @@ use Nette\Diagnostics\Debugger,
         Nette\Application\Routers\SimpleRouter;
 
 
-// Load Nette Framework
-$params['libsDir'] = __DIR__ . '/../libs';
-require $params['libsDir'] . '/Nette/nette.min.php';
+require LIBS_DIR . '/Nette/nette.min.php';
 
 
 // Enable Nette Debugger for error visualisation & logging
 Debugger::$logDirectory = __DIR__ . '/../log';
 Debugger::$strictMode = TRUE;
-Debugger::enable(Debugger::PRODUCTION);
+Debugger::enable(Debugger::DEVELOPMENT);
+
 
 // Load configuration from config.neon file
-$configurator = new Nette\Configurator;
-$configurator->container->params += $params;
-$configurator->container->params['tempDir'] = __DIR__ . '/../temp';
-$configurator->container->getService('robotLoader'); // fix http://forum.nette.org/en/932-trouble-with-installation#p4000
-$container = $configurator->loadConfig(__DIR__ . '/config.neon');
+$configurator = new Nette\Config\Configurator;
+$configurator->setCacheDirectory(__DIR__ . '/../temp');
+
+
+// Enable RobotLoader - this will load all classes automatically
+$configurator->createRobotLoader()
+	->addDirectory(APP_DIR)
+	->addDirectory(LIBS_DIR)
+	->register();
+
+
+// Create Dependency Injection container from config.neon file
+$container = $configurator->loadConfig(__DIR__ . '/config/config.neon');
+
+
+// Opens already started session
+if ($container->session->exists()) {
+	$container->session->start();
+}
 
 
 // Setup router using mod_rewrite detection
