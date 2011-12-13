@@ -2,6 +2,8 @@
 
 namespace Netfileman;
 
+use Nette\Application\ApplicationException;
+
 class Loader extends FileManager
 {
     /** @var array */
@@ -15,15 +17,15 @@ class Loader extends FileManager
     function check()
     {
         $uploadPath = $this->config['uploadroot'] . $this->config['uploadpath'];
-        $resDir = $this->presenter->context->params['wwwDir'] . $this->config['resource_dir'];
+        $resDir = WWW_DIR . $this->config['resource_dir'];
 
         if(!is_dir($uploadPath))
-             throw new Exception ("Upload path $uploadPath doesn't exist!");
+             throw new ApplicationException("Upload path $uploadPath doesn't exist!");
 
         if (!is_writable($uploadPath))
-             throw new Exception ("Upload path $uploadPath must be writable!");
+             throw new ApplicationException("Upload path $uploadPath must be writable!");
 
         if(!is_dir($uploadPath))
-             throw new Exception ("Resource path $uploadPath doesn't exist!");
+             throw new ApplicationException("Resource path $uploadPath doesn't exist!");
     }
 }
