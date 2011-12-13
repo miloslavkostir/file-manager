@@ -14,7 +14,7 @@ class Zip extends FileManager
 
     function __construct()
     {
-        $tempDir = $this->presenter->context->params['tempDir'] . '/cache/file-manager/downloads';
+        $tempDir = $this->presenter->context->parameters['tempDir'] . '/cache/file-manager/downloads';
 
         if (!file_exists($tempDir)) {
                 $oldumask = umask(0);

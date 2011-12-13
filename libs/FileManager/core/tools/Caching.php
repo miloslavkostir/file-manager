@@ -21,7 +21,7 @@ class Caching extends FileManager
     protected function attached($presenter)
     {
         if ($presenter instanceof \Nette\Application\UI\Presenter) {
-                $cacheDir = $this->presenter->context->params['tempDir'] . '/cache/file-manager';
+                $cacheDir = $this->presenter->context->parameters['tempDir'] . '/file-manager';
 
                 if(!is_dir($cacheDir)) {
                     $oldumask = umask(0);
