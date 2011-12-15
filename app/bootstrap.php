@@ -12,7 +12,7 @@ require LIBS_DIR . '/Nette/nette.min.php';
 // Enable Nette Debugger for error visualisation & logging
 Debugger::$logDirectory = __DIR__ . '/../log';
 Debugger::$strictMode = TRUE;
-Debugger::enable(Debugger::DEVELOPMENT);
+Debugger::enable(Debugger::PRODUCTION);
 
 
 // Load configuration from config.neon file

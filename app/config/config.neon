@@ -6,6 +6,7 @@
 #
 common:
 	parameters:
+		confDir: %appDir%/config
 		database:
 			driver: sqlite
 			database: %appDir%/storage/database.db
@@ -13,24 +14,21 @@ common:
 		models:
 
 	php: # PHP configuration
-		date.timezone: Europe/Prague
-		session.save_path: "%tempDir%/sessions"
+		# date.timezone: Europe/Prague
+		# session.save_path: "%tempDir%/sessions"
 		# zlib.output_compression: yes
 
 	services:
 		database:
-			class: DibiConnection
-			arguments: [%database%]
+			class: DibiConnection(%database%)
 		modelLoader:
-			class: ModelLoader
-			arguments: [@container]
+			class: ModelLoader(@container)
 		userModel:
-			class: UserModel
-			arguments: [@container]
+			class: UserModel(@container)
 		authorizator:
 			class: Acl
 		authenticator:
-			factory: [@userModel, createAuthenticatorService]
+			factory: @userModel::createAuthenticatorService
 
 production < common:
 

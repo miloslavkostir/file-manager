@@ -14,9 +14,9 @@ class HomepagePresenter extends BasePresenter
 	{
 		parent::startup();
                 $loader = new Loader;
-                $this->progress = $loader->load(APP_DIR . "/storage/install.neon");
-                if ($this->progress['finished'] == true)
-                    $this->redirect(':Admin:Overview:');
+                $this->progress = $loader->load($this->context->parameters["confDir"] . "/install.neon");
+                if ($this->progress["finished"])
+                    $this->redirect(":Admin:Overview:");
 	}
 
         public function renderFinish()
@@ -40,7 +40,7 @@ class HomepagePresenter extends BasePresenter
                     $this->progress['finished'] = true;
 
                     $loader = new Loader;
-                    $loader->save($this->progress, APP_DIR . "/storage/install.neon");
+                    $loader->save($this->progress, $this->context->parameters["confDir"] . "/install.neon");
                     Debugger::log("Installation successfully finished");
 
                     $this->template->import = $import;
@@ -68,6 +68,6 @@ class HomepagePresenter extends BasePresenter
                     $this->progress['requirements'] = true;
 
                 $loader = new Loader;
-                $loader->save($this->progress, APP_DIR . "/storage/install.neon");
+                $loader->save($this->progress, $this->context->parameters["confDir"] . "/install.neon");
         }
 }
