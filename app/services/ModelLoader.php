@@ -21,7 +21,7 @@ final class ModelLoader
         $modelContainer->addService('database', $container->database);
         $modelContainer->addService('cacheStorage', $container->cacheStorage);
         $modelContainer->addService('session', $container->session);
-        $modelContainer->params = $container->parameters['models'];
+        $modelContainer->parameters = $container->parameters;
         $modelContainer->freeze();
         $this->modelContainer = $modelContainer;
     }
