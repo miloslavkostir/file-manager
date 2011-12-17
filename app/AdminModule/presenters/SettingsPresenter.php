@@ -20,6 +20,61 @@ class SettingsPresenter extends BasePresenter
                     throw new \Nette\Application\ForbiddenRequestException();
 	}
 
+        public function handleDelete($file)
+        {
+                if ($this->models->BackupModel->delete($file))
+                    $this->flashMessage("Backup was deleted seccessfuly.", "info");
+                else {
+                    $this->flashMessage("An error occured during backup deleting.", "error");
+                    \Nette\Diagnostics\Debugger::log("Can not delete backup '$file'.", "error");
+                }
+
+                if ($this->isAjax())
+                    $this->invalidateControl("backup");
+                else
+                    $this->redirect("this");
+        }
+
+        public function handleBackup()
+        {
+                $this->models->BackupModel->save();
+                $this->flashMessage("Backup was finished seccessfuly.", "info");
+                if ($this->isAjax())
+                    $this->invalidateControl("backup");
+                else
+                    $this->redirect("this");
+        }
+
+        public function handleRestore($file)
+        {
+                if ($this->models->BackupModel->restore($file))
+                    $this->flashMessage("Backup was restored successfuly.", "info");
+                else
+                    $this->flashMessage("An error occured during backup restore.", "error");
+
+                if ($this->isAjax())
+                    $this->invalidateControl("backup");
+                else
+                    $this->redirect("this");
+        }
+
+        public function handleDownload($file)
+        {
+                $path = $this->models->BackupModel->getFile($file);
+
+                if (file_exists($path))
+                    $this->sendResponse(new \Nette\Application\Responses\FileResponse($path, NULL, NULL));
+                else {
+                    $this->flashMessage("File '$file' does not exist.", "warning");
+                    $this->redirect("this");
+                }
+        }
+
+        public function renderBackup()
+        {
+                $this->template->items = $this->models->BackupModel->load();
+        }
+
         protected function createComponentRoots()
         {
                 $root = new \RootControl;

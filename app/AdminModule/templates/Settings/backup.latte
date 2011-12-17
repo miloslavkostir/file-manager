@@ -1,0 +1,122 @@
+{block #content}
+
+{snippet backup}
+<table style="width: 100%;">
+    <tr>
+        <td style="vertical-align: top;">
+            <div id="settings-menu" style="width: 200px;">
+                    <h3>
+                            <a href="#">My profile</a>
+                    </h3>
+                    <div>
+                        <ul>
+                            <li><a n:href="profile">Edit</a></li>
+                        </ul>
+                    </div>
+                    <h3>
+                            <a href="#">Upload roots</a>
+                    </h3>
+                    <div>
+                        <ul>
+                            <li><a n:href="roots">Edit</a></li>
+                        </ul>
+                    </div>
+                    <h3>
+                            <a href="#">Server</a>
+                    </h3>
+                    <div>
+                        <ul>
+                            <li>Backup</li>
+                        </ul>
+                    </div>
+            </div>
+        </td>
+        <td>
+            <table class="ui-widget ui-widget-content" style="width: 100%;">
+                <thead>
+                        <tr class="ui-widget-header ">
+                            <th>Time</th>
+                            <th>Filename</th>
+                            <th></th>
+                        </tr>
+                </thead>
+                <tbody>
+                        <tr n:foreach="$items as $item">
+                            <td>{$item->getCTime()|date:'%H:%M:%S - %d.%m.%Y'}</td>
+                            <td>{$item->getFilename()}</td>
+                            <td>
+                                <ul class="icons">
+                                    <li class="ui-state-default ui-corner-all">
+                                        <a n:href="download!, $item->getFilename()" class="ui-button-text" title="Download">
+                                            <span class="ui-icon ui-icon-arrowthickstop-1-s"></span>
+                                        </a>
+                                    </li>
+                                    <li class="ui-state-default ui-corner-all">
+                                        <a n:href="restore!, $item->getFilename()" class="ui-button-text ajax-delete" title="Restore">
+                                            <span class="ui-icon ui-icon-arrowreturnthick-1-w"></span>
+                                        </a>
+                                    </li>
+                                    <li class="ui-state-default ui-corner-all">
+                                        <a n:href="delete!, $item->getFilename()" class="ui-button-text ajax-delete" title="Delete">
+                                            <span class="ui-icon ui-icon-trash"></span>
+                                        </a>
+                                    </li>
+                                </ul>
+                                <div class="clear"></div>
+                        </tr>
+                        <tr>
+                            <td colspan="3">
+                                <div class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only">
+                                    <a n:href="backup!" class="ui-button-text ajax">
+                                        Backup now
+                                    </a>
+                                </div>
+                            </td>
+                        </tr>
+                </tbody>
+            </table>
+        </td>
+    </tr>
+</table>
+<script type="text/javascript">
+$(document).ready(function() {
+    $("#settings-menu").accordion({ active: 2 });
+});
+</script>
+{/snippet}
+{/block}
+
+{block #head}
+<style type="text/css">
+    table {
+        border-collapse: collapse;
+    }
+
+    table td, table th {
+        border: 1px solid #EEEEEE;
+        padding: 0.6em 10px;
+    }
+
+    #settings-menu ul { list-style: none outside none; }
+
+    ul.icons {
+        margin: 0;
+        padding: 0;
+    }
+    ul.icons li {
+        cursor: pointer;
+        float: left;
+        list-style: none outside none;
+        margin: 2px;
+        padding: 4px 0;
+        position: relative;
+    }
+    ul.icons li span.ui-icon {
+        float: left;
+        margin: 0 4px;
+    }
+    .clear {
+        clear: both;
+    }
+</style>
+{/block}
