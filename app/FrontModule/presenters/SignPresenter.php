@@ -17,8 +17,7 @@ class SignPresenter extends BasePresenter
 		$form->addText('username', 'Username:')
 			->setRequired('Please provide a username.');
 
-		$form->addPassword('password', 'Password:')
-			->setRequired('Please provide a password.');
+		$form->addPassword('password', 'Password:');
 
 		$form->addCheckbox('remember', 'Remember this computer');
 
