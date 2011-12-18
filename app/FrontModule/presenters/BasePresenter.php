@@ -7,9 +7,7 @@ abstract class BasePresenter extends \BasePresenter
 	protected function startup()
 	{
 		parent::startup();
-                $loader = new \Nette\Config\Loader;
-                $progress = $loader->load($this->context->parameters["confDir"] . "/install.neon");
-                if (!$progress['finished'])
+                if (!$this->context->parameters["install"]["finished"])
                     $this->redirect(':Install:Homepage:');
 	}
 

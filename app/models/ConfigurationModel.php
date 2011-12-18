@@ -1,13 +1,14 @@
 <?php
 
-use Nette\Config\Loader;
+use Nette\Config\Loader,
+        Nette\Caching\Cache;
 
 class ConfigurationModel extends BaseModel
 {
         public function load()
         {
                 $loader = new Loader;
-                $config = $loader->load($this->context->parameters["confDir"] . "/custom.neon");
+                $config = $loader->load($this->context->parameters["configDir"] . "custom.neon");
                 return $this->filter($config);
         }
 
@@ -20,10 +21,10 @@ class ConfigurationModel extends BaseModel
         public function save($values)
         {
                 $loader = new Loader;
-                $config = $loader->load($this->context->parameters["confDir"] . "/custom.neon");
+                $config = $loader->load($this->context->parameters["configDir"] . "custom.neon");
 
                 $config["parameters"]["security"]["salt"] = $values;
-                $loader->save($config, $this->context->parameters["confDir"] . "/custom.neon");
-                $this->context->cacheStorage->clean(array(\Nette\Caching\Cache::ALL => TRUE));
+                $loader->save($config, $this->context->parameters["configDir"] . "custom.neon");
+                $this->context->cacheStorage->clean(array(Cache::ALL => TRUE));
         }
 }

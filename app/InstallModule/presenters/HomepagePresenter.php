@@ -2,19 +2,23 @@
 
 namespace InstallModule;
 
-use \Nette\Config\Loader,
-        \Nette\Diagnostics\Debugger;
+use Nette\Config\Loader,
+        Nette\Application as NA,
+        Nette\Caching\Cache;
 
 class HomepagePresenter extends BasePresenter
 {
         /** @var array */
         private $progress;
 
+        /** @var string */
+        private $customNeon;
+
 	protected function startup()
 	{
 		parent::startup();
-                $loader = new Loader;
-                $this->progress = $loader->load($this->context->parameters["confDir"] . "/install.neon");
+                $this->customNeon = $this->context->parameters["configDir"] . "custom.neon";
+                $this->progress = $this->context->parameters["install"];
                 if ($this->progress["finished"])
                     $this->redirect(":Admin:Overview:");
 	}
@@ -22,28 +26,24 @@ class HomepagePresenter extends BasePresenter
         public function renderFinish()
         {
                 if (!$this->progress['requirements'])
-                    throw new \Nette\Application\ForbiddenRequestException("Your server does not meet minimum requirements");
+                    throw new NA\ForbiddenRequestException("Your server does not meet minimum requirements");
                 elseif ($this->progress['errors'] == true)
-                    throw new \Nette\Application\ApplicationException("An error occured during the install.");
+                    throw new NA\ApplicationException("An error occured during the install.");
                 else {
-                    $storage = APP_DIR . "/storage/";
+                    $storage = $this->context->parameters["storageDir"];
                     $db = $storage . "database.db";
                     $sql = $storage . "default.sql";
 
-                    $model = new InstallModel;
+                    $model = new InstallModel($this->context);
                     $model->createDB($db);
-                    Debugger::log("Database '$db' created");
 
                     $import = $model->importDB($db, $sql);
-                    Debugger::log("SQL dump '$sql' imported");
-
-                    $this->progress['finished'] = true;
-
-                    $loader = new Loader;
-                    $loader->save($this->progress, $this->context->parameters["confDir"] . "/install.neon");
-                    Debugger::log("Installation successfully finished");
-
                     $this->template->import = $import;
+
+
+                    $this->progress["finished"] = true;
+
+                    $this->saveProgress();
 
                     $fp = fopen($sql, "r");
                     $this->template->sql = fread($fp, filesize($sql));
@@ -53,7 +53,7 @@ class HomepagePresenter extends BasePresenter
 
         public function renderRequirements()
         {
-                $model = new RequirementsModel();
+                $model = new RequirementsModel($this->context);
                 $requirements = $model->check();
                 $this->template->status = $requirements;
 
@@ -62,12 +62,18 @@ class HomepagePresenter extends BasePresenter
                         $errors = true;
                 }
 
-                if (isset($errors))
-                    $this->progress['requirements'] = false;
-                else
+                if (!isset($errors))
                     $this->progress['requirements'] = true;
+                
+                $this->saveProgress();
+        }
 
+        function saveProgress()
+        {
                 $loader = new Loader;
-                $loader->save($this->progress, $this->context->parameters["confDir"] . "/install.neon");
+                $config = $loader->load($this->customNeon);
+                $config["parameters"]["install"] = $this->progress;
+                $loader->save($config, $this->customNeon);
+                $this->context->cacheStorage->clean(array(Cache::ALL => true));
         }
 }
