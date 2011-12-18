@@ -75,6 +75,11 @@ class SettingsPresenter extends BasePresenter
                 $this->template->items = $this->models->BackupModel->load();
         }
 
+        public function renderConfiguration()
+        {
+                $this["configurationForm"]["security"]->setDefaults($this->models->ConfigurationModel->load());
+        }
+
         protected function createComponentRoots()
         {
                 $root = new \RootControl;
@@ -103,15 +108,26 @@ class SettingsPresenter extends BasePresenter
                 return $form;
         }
 
-        public function changePassFormSubmitted(Form $form)
+        protected function createComponentConfigurationForm()
         {
-                $values = $form->values;
-                $this->models->UserModel->changePassword($this->user->id, $values['password2']);
-                if ($values["logout"])
-                    $this->redirect("Sign:out");
-                else {
-                    $this->flashMessage("Password was changed", "info");
-                    $this->redirect("this");
-                }
+                $form = new Form;
+                $sub1 = $form->addContainer("security");
+                $sub1->addText("salt", "Salt hash");
+                $sub1->addText("salt2", "Confirm salt hash")
+                        ->addRule(Form::EQUAL, "Salt hashes are not the same", $sub1["salt"]);
+                $form->addSubmit("save", "Save")
+                        ->setAttribute("class", "ui-button ui-button-text-only ui-widget ui-state-default ui-corner-all");
+                $form->addProtection("Please submit this form again (security token has expired).");
+
+                $form->onSuccess[] = callback($this, "configurationFormSubmitted");
+
+                return $form;
+        }
+
+        public function configurationFormSubmitted(Form $form)
+        {
+                $this->models->ConfigurationModel->save($form->values->security->salt);
+                $this->flashMessage("Configuration was changed", "info");
+                $this->redirect("this");
         }
 }

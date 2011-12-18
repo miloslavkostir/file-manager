@@ -21,8 +21,10 @@ class OverviewPresenter extends BasePresenter
         public function renderDefault()
         {
                 $messages = array();
+
                 if (!$this->context->parameters["security"]["salt"])
-                    $messages[] = "Salt hash is not set. You can setup this in <strong>app/config/config.neon</strong>.";
+                    $messages[] = "Salt hash is not set. We recommend you set up your secret hash in <a href='" . $this->link('Settings:configuration') . "'>server configuration</a> at first.";
+
                 if ($messages)
                     $this->template->messages = $messages;
         }

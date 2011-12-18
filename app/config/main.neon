@@ -5,16 +5,8 @@
 # http://nette.org/security-warning
 #
 common:
-	parameters:
-		confDir: %appDir%/config
-		backupDir: %appDir%/storage/backup
-		database:
-			driver: sqlite
-			database: %appDir%/storage/database.db
-			profiler: true
-		security:
-			salt:
-		models:
+	includes:
+		- custom.neon
 
 	php: # PHP configuration
 		# date.timezone: Europe/Prague
@@ -31,10 +23,8 @@ common:
 		authorizator:
 			class: Acl
 		authenticator:
-			factory: @userModel::createAuthenticatorService()
+			factory: @userModel::createAuthenticatorService
 
 production < common:
 
 development < common:
-
-console < common:

@@ -1,0 +1,125 @@
+{block #content}
+
+{snippet backup}
+<table style="width: 100%;">
+    <tr>
+        <td style="vertical-align: top;">
+            <div id="settings-menu" style="width: 200px;">
+                    <h3>
+                            <a href="#">My profile</a>
+                    </h3>
+                    <div>
+                        <ul>
+                            <li><a n:href="profile">Edit</a></li>
+                        </ul>
+                    </div>
+                    <h3>
+                            <a href="#">Upload roots</a>
+                    </h3>
+                    <div>
+                        <ul>
+                            <li><a n:href="roots">Edit</a></li>
+                        </ul>
+                    </div>
+                    <h3>
+                            <a href="#">Server</a>
+                    </h3>
+                    <div>
+                        <ul>
+                            <li><a n:href="backup">Backup</a></li>
+                            <li>Configuration</li>
+                        </ul>
+                    </div>
+            </div>
+        </td>
+        <td>
+            {form configurationForm}
+            <table class="ui-widget ui-widget-content" style="width: 100%;">
+                <tr class="ui-widget-header">
+                    <th>Security</th>
+                </tr>
+                <tr>
+                    <td>
+                        <table>
+                            <tr>
+                                <td>{label security-salt /}</td>
+                                <td>{input security-salt}</td>
+                            </tr>
+                            <tr>
+                                <td>{label security-salt2 /}</td>
+                                <td>{input security-salt2}</td>
+                            </tr>
+                            <tr>
+                                <td colspan="2">
+                                    <div class="ui-state-highlight ui-corner-all" style="padding: 0 0.7em;">
+                                            <p>
+                                                <span class="ui-icon ui-icon-info" style="float: left; margin-right: 0.3em;"></span>
+                                                <strong>Warning!</strong> Existing users will not be able to log in with their old credentials. New password must be generated.
+                                            </p>
+                                    </div>
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <ul class="errors" n:if="$form->hasErrors()">
+                            <li n:foreach="$form->errors as $error">{$error}</li>
+                        </ul>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <div style="margin: 10px 0 10px; float: right;">
+                            {input save}
+                        </div>
+                    </td>
+                </tr>
+            </table>
+            {/form}
+        </td>
+    </tr>
+</table>
+<script type="text/javascript">
+$(document).ready(function() {
+    $("#settings-menu").accordion({ active: 2 });
+});
+</script>
+{/snippet}
+{/block}
+
+{block #head}
+<style type="text/css">
+    table {
+        border-collapse: collapse;
+    }
+
+    table td, table th {
+        border: 1px solid #EEEEEE;
+        padding: 0.6em 10px;
+    }
+
+    #settings-menu ul { list-style: none outside none; }
+
+    ul.icons {
+        margin: 0;
+        padding: 0;
+    }
+    ul.icons li {
+        cursor: pointer;
+        float: left;
+        list-style: none outside none;
+        margin: 2px;
+        padding: 4px 0;
+        position: relative;
+    }
+    ul.icons li span.ui-icon {
+        float: left;
+        margin: 0 4px;
+    }
+    .clear {
+        clear: both;
+    }
+</style>
+{/block}
