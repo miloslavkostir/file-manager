@@ -17,4 +17,13 @@ class OverviewPresenter extends BasePresenter
                 if (!$user->isAllowed($module))
                     throw new \Nette\Application\ForbiddenRequestException();
 	}
+
+        public function renderDefault()
+        {
+                $messages = array();
+                if (!$this->context->parameters["security"]["salt"])
+                    $messages[] = "Salt hash is not set. You can setup this in <strong>app/config/config.neon</strong>.";
+                if ($messages)
+                    $this->template->messages = $messages;
+        }
 }

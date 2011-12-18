@@ -11,9 +11,13 @@ class Authenticator extends Nette\Object implements NS\IAuthenticator
 	/** @var DibiFluent */
 	private $users;
 
-	public function __construct(DibiFluent $users)
+        /** @var string */
+        private $salt;
+
+	public function __construct(DibiFluent $users, $salt)
 	{
 		$this->users = $users;
+                $this->salt = $salt;
 	}
 
 	/**
@@ -44,6 +48,9 @@ class Authenticator extends Nette\Object implements NS\IAuthenticator
 	 */
 	public function calculateHash($password)
 	{
-		return md5($password);
+                if (!$password)
+                    return "";
+                else
+                    return sha1($password . $this->salt);
 	}
 }

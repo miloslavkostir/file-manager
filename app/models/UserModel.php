@@ -2,15 +2,15 @@
 
 class UserModel extends BaseModel
 {
+        /** @return Authenticator */
 	public function createAuthenticatorService()
 	{
-		return new Authenticator($this->getUsers());
+		return new Authenticator($this->getUsers(), $this->context->parameters["security"]["salt"]);
 	}
 
         public function addUser($args)
         {
-            $authenticator = new \Authenticator($this->getUsers());
-            $args['password'] = $authenticator->calculateHash($args['password']);
+            $args["password"] = $this->createAuthenticatorService()->calculateHash($args["password"]);
             $this->getDatabase()->insert('users', $args)->execute();
         }
 
@@ -43,8 +43,7 @@ class UserModel extends BaseModel
 
         public function changePassword($id, $pass)
         {
-            $authenticator = new \Authenticator($this->getUsers());
-            $args = array('password' => $authenticator->calculateHash($pass));
+            $args = array('password' => $this->createAuthenticatorService()->calculateHash($pass));
 
             $this->getDatabase()->update('users', $args)
                     ->where('id = %i', $id)

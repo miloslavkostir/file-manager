@@ -12,6 +12,8 @@ common:
 			driver: sqlite
 			database: %appDir%/storage/database.db
 			profiler: true
+		security:
+			salt:
 		models:
 
 	php: # PHP configuration
@@ -29,7 +31,7 @@ common:
 		authorizator:
 			class: Acl
 		authenticator:
-			factory: @userModel::createAuthenticatorService
+			factory: @userModel::createAuthenticatorService()
 
 production < common:
 
