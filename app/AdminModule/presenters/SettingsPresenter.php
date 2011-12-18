@@ -108,6 +108,18 @@ class SettingsPresenter extends BasePresenter
                 return $form;
         }
 
+        public function changePassFormSubmitted(Form $form)
+        {
+                $values = $form->values;
+                $this->models->UserModel->changePassword($this->user->id, $values['password2']);
+                if ($values["logout"])
+                    $this->redirect("Sign:out");
+                else {
+                    $this->flashMessage("Password was changed", "info");
+                    $this->redirect("this");
+                }
+        }
+
         protected function createComponentConfigurationForm()
         {
                 $form = new Form;
