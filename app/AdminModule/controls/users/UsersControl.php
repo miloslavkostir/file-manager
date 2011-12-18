@@ -91,6 +91,8 @@ class UsersControl extends \Nette\Application\UI\Control
             $form->addText('username', 'Username')
                     ->setRequired("Please set item '%label'");
             $form->addPassword('password', 'Password');
+            $form->addPassword("password2", "Confirm password")
+                    ->addRule(Form::EQUAL, "Passwords are not the same", $form["password"]);
             $form->addText('real_name', 'Real name')
                     ->setRequired("Please set item '%label'");
             $form->addSelect('uploadroot', 'Upload root', $roots);
@@ -156,6 +158,7 @@ class UsersControl extends \Nette\Application\UI\Control
     public function addUserFormSubmitted(Form $form)
     {
             $values = $form->values;
+            unset($values->password2);
 
             if ($this->users->usernameExist($values['username']))
                     $this->presenter->flashMessage('Username ' . $values['username'] . ' already exist.', 'warning');

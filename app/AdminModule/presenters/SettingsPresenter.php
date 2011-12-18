@@ -90,10 +90,8 @@ class SettingsPresenter extends BasePresenter
         protected function createComponentChangePassForm()
         {
                 $form = new Form;
-                $form->addPassword('password1', 'New password')
-                        ->setRequired("Please set item '%label'");
-                $form->addPassword('password2', 'Confirm password')
-                        ->addRule(Form::FILLED, "Please set item '%label'")
+                $form->addPassword('password1', 'New password');
+                $form->addPassword('password2', 'Confirm password')                        
                         ->addRule(Form::EQUAL, "Passwords are not the same", $form["password1"]);
                 $form->addCheckBox('logout', "Logout after password change");
                 $form->addSubmit('save', 'Save')
