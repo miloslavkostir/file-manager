@@ -21,6 +21,7 @@
                             <li><a n:href="roots">Edit</a></li>
                         </ul>
                     </div>
+                    {if $user->isAllowed("server_settings")}
                     <h3>
                             <a href="#">Server</a>
                     </h3>
@@ -30,6 +31,7 @@
                             <li><a n:href="configuration">Configuration</a></li>
                         </ul>
                     </div>
+                    {/if}
             </div>
         </td>
         <td>

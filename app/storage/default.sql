@@ -17,7 +17,7 @@ CREATE TABLE [users] (
 );
 
 INSERT INTO 'users' ('id','username','password','role','real_name','uploadroot','uploadpath','lang','quota_limit','quota','readonly','cache','has_share') VALUES
-('1','root','','admin','Root','','','en','','','','N','N');
+('1','root','','root','Root','','','en','','','','N','N');
 
 CREATE TABLE [uploadroots] (
 [id] INTEGER  NOT NULL PRIMARY KEY,

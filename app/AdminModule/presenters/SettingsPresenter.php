@@ -22,6 +22,9 @@ class SettingsPresenter extends BasePresenter
 
         public function handleDelete($file)
         {
+                if (!$this->user->isAllowed("server_settings"))
+                    throw new \Nette\Application\ForbiddenRequestException();
+
                 if ($this->models->BackupModel->delete($file))
                     $this->flashMessage("Backup was deleted seccessfuly.", "info");
                 else {
@@ -37,6 +40,9 @@ class SettingsPresenter extends BasePresenter
 
         public function handleBackup()
         {
+                if (!$this->user->isAllowed("server_settings"))
+                    throw new \Nette\Application\ForbiddenRequestException();
+
                 $this->models->BackupModel->save();
                 $this->flashMessage("Backup was finished seccessfuly.", "info");
                 if ($this->isAjax())
@@ -47,6 +53,9 @@ class SettingsPresenter extends BasePresenter
 
         public function handleRestore($file)
         {
+                if (!$this->user->isAllowed("server_settings"))
+                    throw new \Nette\Application\ForbiddenRequestException();
+
                 if ($this->models->BackupModel->restore($file))
                     $this->flashMessage("Backup was restored successfuly.", "info");
                 else
@@ -60,6 +69,9 @@ class SettingsPresenter extends BasePresenter
 
         public function handleDownload($file)
         {
+                if (!$this->user->isAllowed("server_settings"))
+                    throw new \Nette\Application\ForbiddenRequestException();
+
                 $path = $this->models->BackupModel->getFile($file);
 
                 if (file_exists($path))
@@ -72,11 +84,17 @@ class SettingsPresenter extends BasePresenter
 
         public function renderBackup()
         {
+                if (!$this->user->isAllowed("server_settings"))
+                    throw new \Nette\Application\ForbiddenRequestException();
+
                 $this->template->items = $this->models->BackupModel->load();
         }
 
         public function renderConfiguration()
         {
+                if (!$this->user->isAllowed("server_settings"))
+                    throw new \Nette\Application\ForbiddenRequestException();
+
                 $this["configurationForm"]["security"]->setDefaults($this->models->ConfigurationModel->load());
         }
 
@@ -138,6 +156,9 @@ class SettingsPresenter extends BasePresenter
 
         public function configurationFormSubmitted(Form $form)
         {
+                if (!$this->user->isAllowed("server_settings"))
+                    throw new \Nette\Application\ForbiddenRequestException();
+
                 $this->models->ConfigurationModel->save($form->values->security->salt);
                 $this->flashMessage("Configuration was changed", "info");
                 $this->redirect("this");

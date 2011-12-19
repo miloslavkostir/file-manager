@@ -6,17 +6,21 @@ class Acl extends Permission implements \Nette\Security\IAuthorizator
 {
         /** @var array */
         public $roles = array(
-            'admin' => 'Administrator',
-            'user' => 'User'
+                "user" => "User",
+                "admin" => "Administrator",
+                "root" => "Root"
         );
 
         public function __construct()
         {
-                $this->addRole('user');
-                $this->addRole('admin');
+                foreach ($this->roles as $role => $key) {
+                    $this->addRole($role);
+                }
 
-                $this->addResource('Admin');
+                $this->addResource("Admin");    // Access to admin module
+                $this->addResource("server_settings");   // Access to server settings
 
-                $this->allow('admin', Permission::ALL, Permission::ALL);
+                $this->allow("root", Permission::ALL, Permission::ALL);
+                $this->allow("admin", "Admin");
         }
 }
