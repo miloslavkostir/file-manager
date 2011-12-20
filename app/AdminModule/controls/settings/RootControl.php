@@ -28,7 +28,7 @@ class RootControl extends \Nette\Application\UI\Control
     {
             $root = $this->settings->getRoot($id);
 
-            if (empty($root))
+            if (!$root)
                     throw new NA\BadRequestException('Record not found');
             else {
                     $this->settings->deleteRoot($id);
@@ -53,10 +53,10 @@ class RootControl extends \Nette\Application\UI\Control
             $this->template->action = 'edit';
             $row = $this->settings->getRoot($id);
 
-            if (!$row[0]) {
+            if (!$row) {
                     throw new NA\BadRequestException('Record not found');
             }
-            $this['editRootForm']->setDefaults($row[0]);
+            $this['editRootForm']->setDefaults($row);
 
             if ($this->presenter->isAjax())
                     $this->invalidateControl('action');

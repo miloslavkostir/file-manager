@@ -21,7 +21,7 @@ class UserModel extends BaseModel
 
         public function getUser($id)
         {
-            return $this->getUsers()->where('id = %i', $id)->limit('1')->fetchAll();
+            return $this->getUsers()->where("id = %i", $id)->fetch();
         }
 
         public function getUsers()

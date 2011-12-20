@@ -34,9 +34,9 @@ class ProfileControl extends \Nette\Application\UI\Control
             $template = $this->template;
             $template->setFile(__DIR__ . '/Profile.latte');
             $profile = $this->users->getUser($this->profile->id);
-            if (!$profile[0])
+            if (!$profile)
                     throw new NA\BadRequestException('Record not found');
-            $this['profileForm']->setDefaults($profile[0]);
+            $this["profileForm"]->setDefaults($profile);
             $template->render();
     }
 

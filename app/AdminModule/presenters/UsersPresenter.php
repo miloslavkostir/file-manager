@@ -62,7 +62,7 @@ class UsersPresenter extends BasePresenter
 
                 if ($row || $this->user->id <> $id) {
                     $this->template->action = "edit";
-                    $this["editUserForm"]->setDefaults($row[0]);
+                    $this["editUserForm"]->setDefaults($row);
                 }
                     $this->flashMessage("Record not found", "warning");
 

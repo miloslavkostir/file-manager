@@ -19,7 +19,7 @@ class SettingsModel extends BaseModel
 
         public function getRoot($id)
         {
-            return $this->getRoots()->where('id = %i', $id)->limit('1')->fetchAll();
+            return $this->getRoots()->where("id = %i", $id)->fetch();
         }
 
         public function updateRoot($id, $args)
