@@ -1,5 +1,216 @@
 {block #content}
-    {control users}
+{snippet users}
+<table class="ui-widget ui-widget-content" style="width: 100%;">
+    <thead>
+            <tr class="ui-widget-header ">
+                    <th>Name</th>
+                    <th>Username</th>
+                    <th></th>
+            </tr>
+    </thead>
+    <tbody>
+            <tr n:foreach="$users as $user">
+                    <td>{$user->real_name}</td>
+                    <td>{$user->username}</td>
+                    <td>
+                        <ul class="icons">
+                            <li class="ui-state-default ui-corner-all">
+                                <a n:href="edit!, $user->id" class="ajax" title="Edit">
+                                    <span class="ui-icon ui-icon-pencil"></span>
+                                </a>
+                            </li>
+                            <li class="ui-state-default ui-corner-all">
+                                <a n:href="delete!, $user->id" class="ajax-delete" title="Delete">
+                                    <span class="ui-icon ui-icon-trash"></span>
+                                </a>
+                            </li>
+                        </ul>
+                    </td>
+            </tr>
+            <tr>
+                <td colspan="3">{control paginator}</td>
+            </tr>
+            <tr>
+                <td colspan="3">
+                    <div class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only">
+                        <a n:href="add!" class="ui-button-text ajax">
+                            Add user
+                        </a>
+                    </div>
+                    {snippet action}
+                    {ifset $action}
+                        {if $action == 'edit'}
+                            <script type="text/javascript">
+                                $('#snippet--action').dialog({
+                                    modal: true,
+                                    width: 'auto',
+                                    title: 'Edit user'
+                                });
+                                $( ".accordion" ).accordion();
+                            </script>
+                            {form editUserForm}
+                            <div class="accordion">
+                                <h3><a href="#">User</a></h3>
+                                <div>
+                                    <table>
+                                        <tr>
+                                            <td>{label username /}</td>
+                                            <td>{input username}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>{label real_name /}</td>
+                                            <td>{input real_name}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>{label lang /}</td>
+                                            <td>{input lang}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>{label role /}</td>
+                                            <td>{input role}</td>
+                                        </tr>
+                                    </table>
+                                </div>
+                                <h3><a href="#">Shares</a></h3>
+                                <div>
+                                    <table>
+                                        <tr>
+                                            <td>{label has_share /}</td>
+                                            <td>{input has_share}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>{label uploadroot /}</td>
+                                            <td>{input uploadroot}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>{label uploadpath /}</td>
+                                            <td>{input uploadpath}</td>
+                                        </tr>
+                                    </table>
+                                </div>
+                                <h3><a href="#">Quota</a></h3>
+                                <div>
+                                    <table>
+                                        <tr>
+                                            <td>{label quota /}</td>
+                                            <td>{input quota}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>{label quota_limit /}</td>
+                                            <td>{input quota_limit}</td>
+                                        </tr>
+                                    </table>
+                                </div>
+                                <h3><a href="#">Other</a></h3>
+                                <div>
+                                    <table>
+                                        <tr>
+                                            <td>{label cache /}</td>
+                                            <td>{input cache}</td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </div>
+
+                            <div style="margin: 10px 0 10px; float: right;">
+                                {input save}
+                            </div>
+
+                            {/form}
+                        {elseif $action == "add"}
+                            <script type="text/javascript">
+                                $("#snippet--action").dialog({
+                                    modal: true,
+                                    width: 'auto',
+                                    title: 'Add user'
+                                });
+                                $(".accordion").accordion();
+                            </script>
+                            {form addUserForm}
+                            <div class="accordion">
+                                <h3><a href="#">User</a></h3>
+                                <div>
+                                    <table>
+                                        <tr>
+                                            <td>{label username /}</td>
+                                            <td>{input username}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>{label password /}</td>
+                                            <td>{input password}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>{label password2 /}</td>
+                                            <td>{input password2}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>{label real_name /}</td>
+                                            <td>{input real_name}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>{label lang /}</td>
+                                            <td>{input lang}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>{label role /}</td>
+                                            <td>{input role}</td>
+                                        </tr>
+                                    </table>
+                                </div>
+                                <h3><a href="#">Shares</a></h3>
+                                <div>
+                                    <table>
+                                        <tr>
+                                            <td>{label has_share /}</td>
+                                            <td>{input has_share}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>{label uploadroot /}</td>
+                                            <td>{input uploadroot}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>{label uploadpath /}</td>
+                                            <td>{input uploadpath}</td>
+                                        </tr>
+                                    </table>
+                                </div>
+                                <h3><a href="#">Quota</a></h3>
+                                <div>
+                                    <table>
+                                        <tr>
+                                            <td>{label quota /}</td>
+                                            <td>{input quota}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>{label quota_limit /}</td>
+                                            <td>{input quota_limit}</td>
+                                        </tr>
+                                    </table>
+                                </div>
+                                <h3><a href="#">Other</a></h3>
+                                <div>
+                                    <table>
+                                        <tr>
+                                            <td>{label cache /}</td>
+                                            <td>{input cache}</td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </div>
+
+                            <div style="margin: 10px 0 10px; float: right;">
+                                {input save}
+                            </div>
+
+                            {/form}
+                        {/if}
+                    {/ifset}
+                    {/snippet}
+                </td>
+            </tr>
+    </tbody>
+</table>
+{/snippet}
 {/block}
 
 {block #head}
@@ -15,5 +226,4 @@
         text-align: left;
     }
 </style>
-
 {/block}
