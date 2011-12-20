@@ -30,7 +30,7 @@ class SignPresenter extends BasePresenter
 	public function signInFormSubmitted($form)
 	{
 		try {
-			$values = $form->getValues();
+			$values = $form->values;
 			$this->getUser()->login($values->username, $values->password);
 
 			if ($values->remember)

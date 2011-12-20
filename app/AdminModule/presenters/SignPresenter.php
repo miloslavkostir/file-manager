@@ -26,7 +26,7 @@ class SignPresenter extends BasePresenter
 	public function signInFormSubmitted($form)
 	{
 		try {
-			$values = $form->getValues();
+			$values = $form->values;
 			if ($values->remember)
 				$this->getUser()->setExpiration('+ 14 days', FALSE);
 			else
