@@ -34,6 +34,13 @@ class UserModel extends BaseModel
             return $this->getDatabase()->select('*')->from('roles');
         }
 
+        public function resetPassword($id)
+        {
+            $this->getDatabase()->update("users", array("password" => ""))
+                    ->where("id = %i", $id)
+                    ->execute();
+        }
+
         public function updateUser($id, $args)
         {
             $this->getDatabase()->update('users', $args)

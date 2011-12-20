@@ -45,6 +45,17 @@ class UsersPresenter extends BasePresenter
                         $this->redirect("this");
         }
 
+        public function handleResetPassword($id)
+        {
+                $this->models->UserModel->resetPassword($id);
+                $this->flashMessage("User password was reseted.", "info");
+
+                if ($this->isAjax())
+                        $this->invalidateControl("users");
+                else
+                        $this->redirect("this");
+        }
+
         public function handleEdit($id)
         {
                 $row = $this->models->UserModel->getUser($id);
