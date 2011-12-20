@@ -24,6 +24,10 @@ class OverviewPresenter extends BasePresenter
 
                 if (!$this->context->parameters["security"]["salt"])
                     $messages[] = "Salt hash is not set. We recommend you set up your secret hash in <a href='" . $this->link('Settings:configuration') . "'>server configuration</a> at first.";
+                
+                $password = $this->models->UserModel->getUser($this->user->id);
+                if (!$password[0]->password)
+                    $messages[] = "Your profile is not secured, because you have empty password. You can setup a new password <a href='" . $this->link('Settings:profile') . "'>here</a>.";
 
                 if ($messages)
                     $this->template->messages = $messages;
