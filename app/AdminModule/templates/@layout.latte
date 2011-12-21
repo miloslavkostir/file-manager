@@ -25,16 +25,6 @@
                 });
             }).hide();
 
-            $('div.flash-message').fadeIn('slow')
-                    .animate({ opacity: 1.0 }, 10000)
-                    .fadeOut('slow', function() {
-                      $(this).remove();
-                    });
-
-            $('div.flash-message').delegate('span.ui-icon-closethick', 'click', function() {
-                $('div.flash-message').remove();
-            });
-
             $('body').delegate('a.ajax, .paginator a', 'click', function(event) {
                 event.preventDefault();
                 $.getJSON(this.href);
@@ -96,14 +86,14 @@
                 margin: 0 4px;
             }
         </style>
-	{block head}{/}
+	{block head}{/block}
 </head>
 <body>
 
     <div class="ui-tabs ui-widget ui-widget-content ui-corner-all" style="min-height: 500px; margin: 10px 0;">
 
-        {if !empty($flashes)}
-        <div class="flash-message ui-state-highlight ui-corner-all" style="padding: 0 0.7em;">
+        {snippet flashMessages}
+        <div n:if="$flashes" class="flash-message ui-state-highlight ui-corner-all" style="padding: 0 0.7em;">
             <p>
                 {foreach $flashes as $flash}
                 <span class="ui-icon ui-icon-info" style="float: left; margin-right: 0.3em;"></span>
@@ -111,8 +101,21 @@
                 <span class="ui-icon ui-icon-closethick" title="Close message" style="cursor: pointer; float: right;"></span>
                 {/foreach}
             </p>
+            <script type="text/javascript">
+            $(document).ready(function() {
+                $("div.flash-message").fadeIn("slow")
+                        .animate({ opacity: 1.0 }, 10000)
+                        .fadeOut('slow', function() {
+                          $(this).remove();
+                        });
+
+                $("div.flash-message").delegate("span.ui-icon-closethick", "click", function() {
+                    $("div.flash-message").remove();
+                });
+            });
+            </script>
         </div>
-        {/if}
+        {/snippet}
 
         <ul n:if="$user->loggedIn" style="width: auto; height: 40px; margin: 0; list-style: none outside none;" class="ui-state-highlight ui-corner-all">
             <li style="float: right; line-height: 40px;">
