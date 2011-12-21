@@ -2,7 +2,8 @@
 
 namespace AdminModule;
 
-use Nette\Application\UI\Form;
+use Nette\Application\UI\Form,
+        Nette\Application as NA;
 
 class SettingsPresenter extends BasePresenter
 {
@@ -17,13 +18,13 @@ class SettingsPresenter extends BasePresenter
 
                 $module = preg_replace("#:?[a-zA-Z_0-9]+$#", "", $this->getName());
                 if (!$user->isAllowed($module))
-                    throw new \Nette\Application\ForbiddenRequestException();
+                    throw new NA\ForbiddenRequestException();
 	}
 
         public function handleDelete($file)
         {
                 if (!$this->user->isAllowed("server_settings"))
-                    throw new \Nette\Application\ForbiddenRequestException();
+                    throw new NA\ForbiddenRequestException();
 
                 if ($this->models->BackupModel->delete($file))
                     $this->flashMessage("Backup was deleted seccessfuly.", "info");
@@ -41,7 +42,7 @@ class SettingsPresenter extends BasePresenter
         public function handleBackup()
         {
                 if (!$this->user->isAllowed("server_settings"))
-                    throw new \Nette\Application\ForbiddenRequestException();
+                    throw new NA\ForbiddenRequestException();
 
                 $this->models->BackupModel->save();
                 $this->flashMessage("Backup was finished seccessfuly.", "info");
@@ -54,7 +55,7 @@ class SettingsPresenter extends BasePresenter
         public function handleRestore($file)
         {
                 if (!$this->user->isAllowed("server_settings"))
-                    throw new \Nette\Application\ForbiddenRequestException();
+                    throw new NA\ForbiddenRequestException();
 
                 if ($this->models->BackupModel->restore($file))
                     $this->flashMessage("Backup was restored successfuly.", "info");
@@ -70,12 +71,12 @@ class SettingsPresenter extends BasePresenter
         public function handleDownload($file)
         {
                 if (!$this->user->isAllowed("server_settings"))
-                    throw new \Nette\Application\ForbiddenRequestException();
+                    throw new NA\ForbiddenRequestException();
 
                 $path = $this->models->BackupModel->getFile($file);
 
                 if (file_exists($path))
-                    $this->sendResponse(new \Nette\Application\Responses\FileResponse($path, NULL, NULL));
+                    $this->sendResponse(new NA\Responses\FileResponse($path, NULL, NULL));
                 else {
                     $this->flashMessage("File '$file' does not exist.", "warning");
                     $this->redirect("this");
@@ -85,7 +86,7 @@ class SettingsPresenter extends BasePresenter
         public function renderBackup()
         {
                 if (!$this->user->isAllowed("server_settings"))
-                    throw new \Nette\Application\ForbiddenRequestException();
+                    throw new NA\ForbiddenRequestException();
 
                 $this->template->items = $this->models->BackupModel->load();
         }
@@ -93,7 +94,7 @@ class SettingsPresenter extends BasePresenter
         public function renderConfiguration()
         {
                 if (!$this->user->isAllowed("server_settings"))
-                    throw new \Nette\Application\ForbiddenRequestException();
+                    throw new NA\ForbiddenRequestException();
 
                 $this["configurationForm"]["security"]->setDefaults($this->models->ConfigurationModel->load());
         }
@@ -157,7 +158,7 @@ class SettingsPresenter extends BasePresenter
         public function configurationFormSubmitted(Form $form)
         {
                 if (!$this->user->isAllowed("server_settings"))
-                    throw new \Nette\Application\ForbiddenRequestException();
+                    throw new NA\ForbiddenRequestException();
 
                 $this->models->ConfigurationModel->save($form->values->security->salt);
                 $this->flashMessage("Configuration was changed", "info");
