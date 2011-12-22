@@ -1,0 +1,26 @@
+{var $robots = noindex}
+<!DOCTYPE html>
+<html>
+<head>
+        <link type="text/css" href="{$basePath}/css/ui-lightness/jquery-ui-1.8.16.custom.css" rel="stylesheet" />
+
+        <script type="text/javascript" src="http://code.jquery.com/jquery-1.6.2.min.js"></script>
+        <script type="text/javascript" src="{$basePath}/js/jquery-ui-1.8.16.custom.min.js"></script>
+
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+	<meta name="description" content="Sign in">
+	<script>
+	$(function() {
+		$( "#dialog-modal" ).dialog({
+			title: 'Sign in',
+                        modal: true,
+                        closeOnEscape: false,
+                        resizable: false
+		});
+	});
+	</script>
+</head>
+<body>
+    {include #content}
+</body>
+</html>
