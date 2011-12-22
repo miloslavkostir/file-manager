@@ -20,7 +20,7 @@ class HomepagePresenter extends BasePresenter
                 $this->customNeon = $this->context->parameters["configDir"] . "custom.neon";
                 $this->progress = $this->context->parameters["install"];
                 if ($this->progress["finished"])
-                    $this->redirect(":Admin:Overview:");
+                    $this->redirect(":Admin:Dashboard:");
 	}
 
         public function renderFinish()

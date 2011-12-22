@@ -83,6 +83,12 @@ class SettingsPresenter extends BasePresenter
                 }
         }
 
+        public function beforeRender()
+        {
+                if ($this->hasFlashSession())
+                    $this->invalidateControl("flashMessages");
+        }
+
         public function renderBackup()
         {
                 if (!$this->user->isAllowed("server_settings"))
@@ -103,40 +109,6 @@ class SettingsPresenter extends BasePresenter
         {
                 $root = new \RootControl;
                 return $root;
-        }
-
-	protected function createComponentProfile()
-	{
-		$profile = new \ProfileControl;
-		return $profile;
-	}
-
-        protected function createComponentChangePassForm()
-        {
-                $form = new Form;
-                $form->addPassword('password1', 'New password');
-                $form->addPassword('password2', 'Confirm password')                        
-                        ->addRule(Form::EQUAL, "Passwords are not the same", $form["password1"]);
-                $form->addCheckBox('logout', "Logout after password change");
-                $form->addSubmit('save', 'Save')
-                        ->setAttribute('class', 'ui-button ui-button-text-only ui-widget ui-state-default ui-corner-all');
-                $form->addProtection('Please submit this form again (security token has expired).');
-
-                $form->onSuccess[] = callback($this, 'changePassFormSubmitted');
-
-                return $form;
-        }
-
-        public function changePassFormSubmitted(Form $form)
-        {
-                $values = $form->values;
-                $this->models->UserModel->changePassword($this->user->id, $values['password2']);
-                if ($values["logout"])
-                    $this->redirect("Sign:out");
-                else {
-                    $this->flashMessage("Password was changed", "info");
-                    $this->redirect("this");
-                }
         }
 
         protected function createComponentConfigurationForm()

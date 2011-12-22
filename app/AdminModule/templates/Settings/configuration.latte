@@ -1,36 +1,9 @@
 {block #content}
 
-{snippet backup}
 <table style="width: 100%;">
     <tr>
         <td style="vertical-align: top;">
-            <div id="settings-menu" style="width: 200px;">
-                    <h3>
-                            <a href="#">My profile</a>
-                    </h3>
-                    <div>
-                        <ul>
-                            <li><a n:href="profile">Edit</a></li>
-                        </ul>
-                    </div>
-                    <h3>
-                            <a href="#">Upload roots</a>
-                    </h3>
-                    <div>
-                        <ul>
-                            <li><a n:href="roots">Edit</a></li>
-                        </ul>
-                    </div>
-                    <h3>
-                            <a href="#">Server</a>
-                    </h3>
-                    <div>
-                        <ul>
-                            <li><a n:href="backup">Backup</a></li>
-                            <li>Configuration</li>
-                        </ul>
-                    </div>
-            </div>
+            {include "menu.latte", level => 1}
         </td>
         <td>
             {form configurationForm}
@@ -81,12 +54,6 @@
         </td>
     </tr>
 </table>
-<script type="text/javascript">
-$(document).ready(function() {
-    $("#settings-menu").accordion({ active: 2 });
-});
-</script>
-{/snippet}
 {/block}
 
 {block #head}

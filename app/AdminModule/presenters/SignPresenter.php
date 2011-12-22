@@ -38,7 +38,7 @@ class SignPresenter extends BasePresenter
                         if (!$this->user->isAllowed($module))
                             throw new NS\AuthenticationException("User '$values->username' is not allowed to enter here.");
 
-			$this->redirect('Overview:');
+			$this->redirect("Dashboard:");
 
 		} catch (NS\AuthenticationException $e) {
 			$form->addError($e->getMessage());

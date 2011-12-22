@@ -48,7 +48,7 @@ if (function_exists('apache_get_modules') && in_array('mod_rewrite', apache_get_
 	$install[] = new Route('install/<presenter>/<action>', 'Homepage:');
 
 	$router[] = $admin = new RouteList('Admin');
-	$admin[] = new Route('admin/<presenter>/<action>', 'Overview:');
+	$admin[] = new Route('admin/<presenter>/<action>', 'Dashboard:');
 
 	$router[] = $front = new RouteList('Front');
 	$front[] = new Route('<presenter>/<action>[/<id>]', 'Homepage:');

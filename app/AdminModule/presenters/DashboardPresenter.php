@@ -2,7 +2,7 @@
 
 namespace AdminModule;
 
-class OverviewPresenter extends BasePresenter
+class DashboardPresenter extends BasePresenter
 {
 	protected function startup()
 	{
@@ -26,7 +26,7 @@ class OverviewPresenter extends BasePresenter
                     $messages[] = "Salt hash is not set. We recommend you set up your secret hash in <a href='" . $this->link('Settings:configuration') . "'>server configuration</a> at first.";
 
                 if (!$this->models->UserModel->getUser($this->user->id)->password)
-                    $messages[] = "Your profile is not secured, because you have empty password. You can setup a new password <a href='" . $this->link('Settings:profile') . "'>here</a>.";
+                    $messages[] = "Your profile is not secured, because you have empty password. You can setup a new password <a href='" . $this->link('Profile:') . "'>here</a>.";
 
                 if ($messages)
                     $this->template->messages = $messages;

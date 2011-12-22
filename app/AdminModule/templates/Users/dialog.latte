@@ -1,0 +1,157 @@
+{if $action == "edit"}
+    {form editUserForm}
+
+    <ul class="ui-state-error" n:if="$form->hasErrors()">
+            <li n:foreach="$form->errors as $error">{$error}</li>
+    </ul>
+
+    <div class="accordion">
+        <h3><a href="#">User</a></h3>
+        <div>
+            <table>
+                <tr>
+                    <td>{label username /}</td>
+                    <td>{input username}</td>
+                </tr>
+                <tr>
+                    <td>{label real_name /}</td>
+                    <td>{input real_name}</td>
+                </tr>
+                <tr>
+                    <td>{label lang /}</td>
+                    <td>{input lang}</td>
+                </tr>
+                <tr>
+                    <td>{label role /}</td>
+                    <td>{input role}</td>
+                </tr>
+            </table>
+        </div>
+        <h3><a href="#">Shares</a></h3>
+        <div>
+            <table>
+                <tr>
+                    <td>{label has_share /}</td>
+                    <td>{input has_share}</td>
+                </tr>
+                <tr>
+                    <td>{label uploadroot /}</td>
+                    <td>{input uploadroot}</td>
+                </tr>
+                <tr>
+                    <td>{label uploadpath /}</td>
+                    <td>{input uploadpath}</td>
+                </tr>
+            </table>
+        </div>
+        <h3><a href="#">Quota</a></h3>
+        <div>
+            <table>
+                <tr>
+                    <td>{label quota /}</td>
+                    <td>{input quota}</td>
+                </tr>
+                <tr>
+                    <td>{label quota_limit /}</td>
+                    <td>{input quota_limit}</td>
+                </tr>
+            </table>
+        </div>
+        <h3><a href="#">Other</a></h3>
+        <div>
+            <table>
+                <tr>
+                    <td>{label cache /}</td>
+                    <td>{input cache}</td>
+                </tr>
+            </table>
+        </div>
+    </div>
+
+    <div style="margin: 10px 0 10px; float: right;">
+        {input save}
+    </div>
+
+    {/form}
+{elseif $action == "add"}
+    {form addUserForm}
+    <ul class="ui-state-error" n:if="$form->hasErrors()">
+            <li n:foreach="$form->errors as $error">{$error}</li>
+    </ul>
+    <div class="accordion">
+        <h3><a href="#">User</a></h3>
+        <div>
+            <table>
+                <tr>
+                    <td>{label username /}</td>
+                    <td>{input username}</td>
+                </tr>
+                <tr>
+                    <td>{label password /}</td>
+                    <td>{input password}</td>
+                </tr>
+                <tr>
+                    <td>{label password2 /}</td>
+                    <td>{input password2}</td>
+                </tr>
+                <tr>
+                    <td>{label real_name /}</td>
+                    <td>{input real_name}</td>
+                </tr>
+                <tr>
+                    <td>{label lang /}</td>
+                    <td>{input lang}</td>
+                </tr>
+                <tr>
+                    <td>{label role /}</td>
+                    <td>{input role}</td>
+                </tr>
+            </table>
+        </div>
+        <h3><a href="#">Shares</a></h3>
+        <div>
+            <table>
+                <tr>
+                    <td>{label has_share /}</td>
+                    <td>{input has_share}</td>
+                </tr>
+                <tr>
+                    <td>{label uploadroot /}</td>
+                    <td>{input uploadroot}</td>
+                </tr>
+                <tr>
+                    <td>{label uploadpath /}</td>
+                    <td>{input uploadpath}</td>
+                </tr>
+            </table>
+        </div>
+        <h3><a href="#">Quota</a></h3>
+        <div>
+            <table>
+                <tr>
+                    <td>{label quota /}</td>
+                    <td>{input quota}</td>
+                </tr>
+                <tr>
+                    <td>{label quota_limit /}</td>
+                    <td>{input quota_limit}</td>
+                </tr>
+            </table>
+        </div>
+        <h3><a href="#">Other</a></h3>
+        <div>
+            <table>
+                <tr>
+                    <td>{label cache /}</td>
+                    <td>{input cache}</td>
+                </tr>
+            </table>
+        </div>
+    </div>
+
+    <div style="margin: 10px 0 10px; float: right;">
+        {input save}
+    </div>
+
+    {/form}
+{/if}

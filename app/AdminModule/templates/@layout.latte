@@ -8,10 +8,10 @@
 
         <title>NetFileMan - Administration</title>
 
-        <link type="text/css" href="{$basePath}/css/ui-lightness/jquery-ui-1.8.15.custom.css" rel="stylesheet" />
+        <link type="text/css" href="{$basePath}/css/ui-lightness/jquery-ui-1.8.16.custom.css" rel="stylesheet" />
 
         <script type="text/javascript" src="http://code.jquery.com/jquery-1.6.2.min.js"></script>
-        <script type="text/javascript" src="{$basePath}/js/jquery-ui-1.8.15.custom.min.js"></script>
+        <script type="text/javascript" src="{$basePath}/js/jquery-ui-1.8.16.custom.min.js"></script>
 	<script type="text/javascript" src="{$basePath}/js/netteForms.js"></script>
         <script type="text/javascript" src="{$basePath}/js/jquery.nette.js"></script>
         <script type="text/javascript" src="{$basePath}/js/jquery.ajaxform.js"></script>
@@ -124,7 +124,7 @@
                 </form>
             </li>
             <li style="float: right; line-height: 40px;">
-                Signed in as <a n:href="Settings:profile">{$user->identity->real_name}</a>&nbsp;
+                Signed in as <strong>{$user->identity->real_name}</strong> | <a n:href="Profile:">My profile</a>&nbsp
             </li>
         </ul>
 
@@ -132,8 +132,8 @@
 
         <ul class="ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all">
             <li class="ui-state-default ui-corner-top">
-                <a n:href="Overview:" title="Overview">
-                    Overview
+                <a n:href="Dashboard:" title="Dashboard">
+                    Dashboard
                 </a>
             </li>
 
