@@ -18,7 +18,7 @@ class Acl extends Permission implements \Nette\Security\IAuthorizator
                 }
 
                 $this->addResource("Admin");    // Access to admin module
-                $this->addResource("server_settings");   // Access to server settings
+                $this->addResource("Root");     // Access to root profile and server settings
 
                 $this->allow("root", Permission::ALL, Permission::ALL);
                 $this->allow("admin", "Admin");

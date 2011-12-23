@@ -25,6 +25,9 @@ class UsersPresenter extends BasePresenter
                 $model = $this->models->UserModel;
                 $user = $model->getUser($id);
 
+                if ($user->role == "root" && !$this->user->isAllowed("Root"))
+                    throw new NA\ForbiddenRequestException();
+
                 if ($user && $this->user->id != $id) {
                     $model->deleteUser($id);
                     $this->flashMessage("User has been deleted.");
@@ -42,7 +45,13 @@ class UsersPresenter extends BasePresenter
 
         public function handleResetPassword($id)
         {
-                $this->models->UserModel->resetPassword($id);
+                $model = $this->models->UserModel;
+                $user = $model->getUser($id);
+
+                if ($user->role == "root" && !$this->user->isAllowed("Root"))
+                    throw new NA\ForbiddenRequestException();
+
+                $model->resetPassword($id);
                 $this->flashMessage("User password has been reseted.", "info");
 
                 if (!$this->isAjax())
@@ -51,11 +60,15 @@ class UsersPresenter extends BasePresenter
 
         public function handleEdit($id)
         {
-                $row = $this->models->UserModel->getUser($id);
+                $model = $this->models->UserModel;
+                $user = $model->getUser($id);
 
-                if ($row && $this->user->id != $id) {
+                if ($user->role == "root" && !$this->user->isAllowed("Root"))
+                    throw new NA\ForbiddenRequestException();
+
+                if ($user && $this->user->id != $id) {
                     $this->template->action = "edit";
-                    $this["editUserForm"]->setDefaults($row);
+                    $this["editUserForm"]->setDefaults($user);
                 } else
                     $this->flashMessage("Record not found", "warning");
 
@@ -74,9 +87,13 @@ class UsersPresenter extends BasePresenter
 
         public function renderDefault()
         {
-                $datasource = $this->models->UserModel->getUsers()
-                                    ->where("id <> %i", $this->user->id)
-                                    ->toDataSource();
+                $model = $this->models->UserModel->getUsers()
+                            ->where("id <> %i", $this->user->id);
+
+                if (!$this->user->isAllowed("Root"))
+                    $model->and("role <> 'root'");
+
+                $datasource = $model->toDataSource();
                 $this["paginator"]->paginator->itemCount = $datasource->count();
                 $this->template->users = $datasource->applyLimit($this["paginator"]->paginator->itemsPerPage, $this["paginator"]->paginator->offset)->fetchAll();
         }
@@ -85,6 +102,9 @@ class UsersPresenter extends BasePresenter
         {
                 $roles = $this->context->authorizator->roles;
                 $roots = $this->models->SettingsModel->getRoots()->fetchPairs();
+
+                if (!$this->user->isAllowed("Root"))
+                    unset($roles["root"]);
 
                 $form = new Form;
                 $form->getElementPrototype()->class("ajax dialog");
@@ -124,6 +144,9 @@ class UsersPresenter extends BasePresenter
                 $roles = $this->context->authorizator->roles;
                 $roots = $this->models->SettingsModel->getRoots()->fetchPairs();
 
+                if (!$this->user->isAllowed("Root"))
+                    unset($roles["root"]);
+
                 $form = new Form;
                 $form->getElementPrototype()->class("ajax dialog");
                 $form->addText("username", "Username:")
@@ -157,8 +180,12 @@ class UsersPresenter extends BasePresenter
 
         public function addUserFormSubmitted(Form $form)
         {
-                $model = $this->models->UserModel;
                 $values = $form->values;
+
+                if ($values->role == "root" && !$this->user->isAllowed("Root"))
+                    throw new NA\ForbiddenRequestException();
+
+                $model = $this->models->UserModel;
                 unset($values->password2);
 
                 if ($model->usernameExist($values["username"]))
@@ -178,19 +205,22 @@ class UsersPresenter extends BasePresenter
                 $values = $form->values;
                 $model = $this->models->UserModel;
 
+                if ($values->role == "root" && !$this->user->isAllowed("Root"))
+                    throw new NA\ForbiddenRequestException();
+
                 if ($this->user->id == $values->id)
-                        $this->flashMessage("Can not edit logged user.", "warning");
+                    throw new NA\ForbiddenRequestException();
                 else {
-                        if ($model->usernameExist($values->username, $values->id))
-                                $this->flashMessage("Username " . $values->username . " already exist.", "warning");
-                        else {
-                                $model->updateUser($values->id, $values);
-                                $this->flashMessage("User has been updated.");
-                                if ($this->isAjax())
-                                        $this->invalidateControl("users");
-                                else
-                                        $this->redirect("this");
-                        }
+                    if ($model->usernameExist($values->username, $values->id))
+                            $this->flashMessage("Username " . $values->username . " already exist.", "warning");
+                    else {
+                            $model->updateUser($values->id, $values);
+                            $this->flashMessage("User has been updated.");
+                            if ($this->isAjax())
+                                    $this->invalidateControl("users");
+                            else
+                                    $this->redirect("this");
+                    }
                 }
         }
 

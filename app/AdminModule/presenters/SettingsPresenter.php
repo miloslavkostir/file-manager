@@ -23,7 +23,7 @@ class SettingsPresenter extends BasePresenter
 
         public function handleDelete($file)
         {
-                if (!$this->user->isAllowed("server_settings"))
+                if (!$this->user->isAllowed("Root"))
                     throw new NA\ForbiddenRequestException();
 
                 if ($this->models->BackupModel->delete($file))
@@ -41,7 +41,7 @@ class SettingsPresenter extends BasePresenter
 
         public function handleBackup()
         {
-                if (!$this->user->isAllowed("server_settings"))
+                if (!$this->user->isAllowed("Root"))
                     throw new NA\ForbiddenRequestException();
 
                 $this->models->BackupModel->save();
@@ -54,7 +54,7 @@ class SettingsPresenter extends BasePresenter
 
         public function handleRestore($file)
         {
-                if (!$this->user->isAllowed("server_settings"))
+                if (!$this->user->isAllowed("Root"))
                     throw new NA\ForbiddenRequestException();
 
                 if ($this->models->BackupModel->restore($file))
@@ -70,7 +70,7 @@ class SettingsPresenter extends BasePresenter
 
         public function handleDownload($file)
         {
-                if (!$this->user->isAllowed("server_settings"))
+                if (!$this->user->isAllowed("Root"))
                     throw new NA\ForbiddenRequestException();
 
                 $path = $this->models->BackupModel->getFile($file);
@@ -91,7 +91,7 @@ class SettingsPresenter extends BasePresenter
 
         public function renderBackup()
         {
-                if (!$this->user->isAllowed("server_settings"))
+                if (!$this->user->isAllowed("Root"))
                     throw new NA\ForbiddenRequestException();
 
                 $this->template->items = $this->models->BackupModel->load();
@@ -99,7 +99,7 @@ class SettingsPresenter extends BasePresenter
 
         public function renderConfiguration()
         {
-                if (!$this->user->isAllowed("server_settings"))
+                if (!$this->user->isAllowed("Root"))
                     throw new NA\ForbiddenRequestException();
 
                 $this["configurationForm"]["security"]->setDefaults($this->models->ConfigurationModel->load());
@@ -129,7 +129,7 @@ class SettingsPresenter extends BasePresenter
 
         public function configurationFormSubmitted(Form $form)
         {
-                if (!$this->user->isAllowed("server_settings"))
+                if (!$this->user->isAllowed("Root"))
                     throw new NA\ForbiddenRequestException();
 
                 $this->models->ConfigurationModel->save($form->values->security->salt);

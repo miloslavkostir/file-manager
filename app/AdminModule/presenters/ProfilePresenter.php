@@ -68,6 +68,9 @@ class ProfilePresenter extends BasePresenter
                 $roles = $this->context->authorizator->roles;
                 $roots = $this->models->SettingsModel->getRoots()->fetchPairs();
 
+                if (!$this->user->isAllowed("Root"))
+                    unset($roles["root"]);
+
                 $form = new Form;
                 $form->addText("username", "Username:")
                         ->setRequired("Please set item '%label'");
@@ -108,6 +111,9 @@ class ProfilePresenter extends BasePresenter
                 $model = $this->models->UserModel;
                 $form = $button->form;
                 $values = $form->values;
+
+                if ($values->role == "root" && !$this->user->isAllowed("Root"))
+                    throw new NA\ForbiddenRequestException();
 
                 if ($form["save"]->submittedBy) {
                         if ($model->usernameExist($values["username"], $this->user->id))

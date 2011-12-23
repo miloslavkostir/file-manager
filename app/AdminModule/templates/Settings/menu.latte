@@ -15,7 +15,7 @@ $(document).ready(function() {
                 <li><a n:href="roots" n:class="$presenter->isLinkCurrent('Settings:roots') ? current">Edit</a></li>
             </ul>
         </div>
-        {if $user->isAllowed("server_settings")}
+        {if $user->isAllowed("Root")}
         <h3>
                 <a href="#">Server</a>
         </h3>
