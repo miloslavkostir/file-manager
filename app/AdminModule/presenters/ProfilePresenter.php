@@ -12,9 +12,13 @@ class ProfilePresenter extends BasePresenter
 		parent::startup();
 
                 $user = $this->user;
+                if (!$user->isLoggedIn()) {
 
-		if (!$user->isLoggedIn())
-			$this->redirect("Sign:");
+			if ($user->logoutReason === \Nette\Http\User::INACTIVITY)
+				$this->flashMessage("You have been signed out due to inactivity. Please sign in again.");
+			$backlink = $this->application->storeRequest();
+                        $this->redirect("Sign:", array("backlink" => $backlink));
+                }
 
                 $module = preg_replace("#:?[a-zA-Z_0-9]+$#", "", $this->getName());
                 if (!$user->isAllowed($module))

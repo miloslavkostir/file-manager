@@ -21,7 +21,8 @@ class SignPresenter extends BasePresenter
 
 		$form->addCheckbox('remember', 'Remember this computer');
 
-		$form->addSubmit('send', 'Sign in');
+		$form->addSubmit('send', 'Sign in')
+                        ->setAttribute("class", "ui-button ui-button-text-only ui-widget ui-state-default ui-corner-all");
 
 		$form->onSuccess[] = callback($this, 'signInFormSubmitted');
 		return $form;

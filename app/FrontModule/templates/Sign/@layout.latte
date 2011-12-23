@@ -6,16 +6,20 @@
 
         <script type="text/javascript" src="http://code.jquery.com/jquery-1.6.2.min.js"></script>
         <script type="text/javascript" src="{$basePath}/js/jquery-ui-1.8.16.custom.min.js"></script>
-
-	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-	<meta name="description" content="Sign in">
+        <title>NetFileMan Administration - Log in</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<meta name="description" content="Sign in" />
 	<script>
 	$(function() {
-		$( "#dialog-modal" ).dialog({
-			title: 'Sign in',
+		$(".dialog").dialog({
+			title: "Sign in",
                         modal: true,
                         closeOnEscape: false,
-                        resizable: false
+                        resizable: false,
+                        width: "auto",
+                        open: function(event, ui) {
+                            $(".ui-dialog-titlebar-close").hide();
+                        }
 		});
 	});
 	</script>

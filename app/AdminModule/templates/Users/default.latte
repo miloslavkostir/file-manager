@@ -6,11 +6,12 @@
     {include "dialog.latte", action => $action}
 </div>
 
-<table class="ui-widget ui-widget-content" style="width: 100%;">
+<table class="ui-widget ui-widget-content">
     <thead>
-            <tr class="ui-widget-header ">
+            <tr class="ui-widget-header">
                     <th>Name</th>
                     <th>Username</th>
+                    <th>Role</th>
                     <th></th>
             </tr>
     </thead>
@@ -18,6 +19,7 @@
             <tr n:foreach="$users as $user">
                     <td>{$user->real_name}</td>
                     <td>{$user->username}</td>
+                    <td>{$user->role}</td>
                     <td>
                         <ul class="icons">
                             <li class="ui-state-default ui-corner-all">
@@ -93,6 +95,7 @@ $(function () {
     table {
         border-collapse: collapse;
         margin: 1em 0;
+        width: 100%;
     }
 
     table td, table th {

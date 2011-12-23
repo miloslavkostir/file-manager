@@ -8,8 +8,14 @@ class HomepagePresenter extends BasePresenter
 	{
 		parent::startup();
 
-		if (!$this->user->isLoggedIn())
-			$this->redirect('Sign:');
+                $user = $this->user;
+                if (!$user->isLoggedIn()) {
+
+			if ($user->logoutReason === \Nette\Http\User::INACTIVITY)
+				$this->flashMessage("You have been signed out due to inactivity. Please sign in again.");
+			$backlink = $this->application->storeRequest();
+                        $this->redirect("Sign:", array("backlink" => $backlink));
+                }
 	}
 
         public function  createComponentFileManager()

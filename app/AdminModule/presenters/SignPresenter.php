@@ -7,6 +7,9 @@ use Nette\Application\UI\Form,
 
 class SignPresenter extends BasePresenter
 {
+	/** @persistent */
+        public $backlink;
+
 	protected function createComponentSignInForm()
 	{
 		$form = new Form;
@@ -17,7 +20,8 @@ class SignPresenter extends BasePresenter
 
 		$form->addCheckbox('remember', 'Remember this computer');
 
-		$form->addSubmit('send', 'Sign in');
+		$form->addSubmit('send', 'Sign in')
+                        ->setAttribute("class", "ui-button ui-button-text-only ui-widget ui-state-default ui-corner-all");
 
 		$form->onSuccess[] = callback($this, 'signInFormSubmitted');
 		return $form;
@@ -30,7 +34,7 @@ class SignPresenter extends BasePresenter
 			if ($values->remember)
 				$this->getUser()->setExpiration('+ 14 days', FALSE);
 			else
-				$this->getUser()->setExpiration('+ 20 minutes', TRUE);
+				$this->getUser()->setExpiration('+ 1 minutes', TRUE);
 
 			$this->getUser()->login($values->username, $values->password);
 
@@ -38,6 +42,7 @@ class SignPresenter extends BasePresenter
                         if (!$this->user->isAllowed($module))
                             throw new NS\AuthenticationException("User '$values->username' is not allowed to enter here.");
 
+			$this->application->restoreRequest($this->backlink);
 			$this->redirect("Dashboard:");
 
 		} catch (NS\AuthenticationException $e) {
