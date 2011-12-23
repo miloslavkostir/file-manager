@@ -38,10 +38,11 @@ class ProfilePresenter extends BasePresenter
         protected function createComponentChangePassForm()
         {
                 $form = new Form;
+                $form->getElementPrototype()->class("ajax");
                 $form->addPassword("password1", "New password");
                 $form->addPassword("password2", "Confirm password")                        
                         ->addRule(Form::EQUAL, "Passwords are not the same", $form["password1"]);
-                $form->addCheckBox("logout", "Logout after password change");
+                $form->addCheckBox("logout", "Logout");
                 $form->addSubmit("save", "Save")
                         ->setAttribute("class", "ui-button ui-button-text-only ui-widget ui-state-default ui-corner-all");
                 $form->addProtection("Please submit this form again (security token has expired).");
@@ -59,7 +60,8 @@ class ProfilePresenter extends BasePresenter
                     $this->redirect("Sign:out");
                 else {
                     $this->flashMessage("Password was changed", "info");
-                    $this->redirect("this");
+                    if (!$this->isAjax())
+                        $this->redirect("this");
                 }
         }
 
@@ -72,6 +74,7 @@ class ProfilePresenter extends BasePresenter
                     unset($roles["root"]);
 
                 $form = new Form;
+                $form->getElementPrototype()->class("ajax");
                 $form->addText("username", "Username:")
                         ->setRequired("Please set item '%label'");
                 $form->addText("real_name", "Real name:")
@@ -121,14 +124,17 @@ class ProfilePresenter extends BasePresenter
                         else {
                                 $model->updateUser($this->user->id, $values);
                                 $this->flashMessage("Your profile has been updated.");
-                                $this->redirect("this");
+                                if (!$this->isAjax())
+                                    $this->redirect("this");
                         }
                 } elseif ($form["cancel"]->submittedBy) {
-                        $this->redirect("this");
+                        if (!$this->isAjax())
+                            $this->redirect("this");
                 } elseif ($form["delete"]->submittedBy) {
                         if (count($model->getUsers()) < 2) {
                                 $this->flashMessage("Can not delete last profile", "warning");
-                                $this->redirect("this");
+                                if (!$this->isAjax())
+                                    $this->redirect("this");
                         } else {
                                 $model->deleteUser($this->user->id);
                                 $this->user->logOut();

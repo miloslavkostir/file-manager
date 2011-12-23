@@ -1,142 +1,47 @@
 {block #content}
-<table style="width: 100%;">
-    <tr>
-        <td style="vertical-align: top;">
-
-            {form profileForm}
-            <table class="ui-widget ui-widget-content" style="width: 100%;">
-                <tr class="ui-widget-header">
-                    <th>My profile</th>
-                </tr>
-                <tr>
-                    <td>
-                        <table>
-                            <tr>
-                                <td>{label username /}</td>
-                                <td>{input username}</td>
-                            </tr>
-                            <tr>
-                                <td>{label real_name /}</td>
-                                <td>{input real_name}</td>
-                            </tr>
-                            <tr>
-                                <td>{label lang /}</td>
-                                <td>{input lang}</td>
-                            </tr>
-                            <tr>
-                                <td>{label role /}</td>
-                                <td>{input role}</td>
-                            </tr>
-                        </table>
-                    </td>
-                </tr>
-                <tr class="ui-widget-header">
-                    <th>Shares</th>
-                </tr>
-                <tr>
-                    <td>
-                        <table>
-                            <tr>
-                                <td>{label has_share /}</td>
-                                <td>{input has_share}</td>
-                            </tr>
-                            <tr>
-                                <td>{label uploadroot /}</td>
-                                <td>{input uploadroot}</td>
-                            </tr>
-                            <tr>
-                                <td>{label uploadpath /}</td>
-                                <td>{input uploadpath}</td>
-                            </tr>
-                        </table>
-                    </td>
-                </tr>
-                <tr class="ui-widget-header">
-                    <th>Quota</th>
-                </tr>
-                <tr>
-                    <td>
-                        <table>
-                            <tr>
-                                <td>{label quota /}</td>
-                                <td>{input quota}</td>
-                            </tr>
-                            <tr>
-                                <td>{label quota_limit /}</td>
-                                <td>{input quota_limit}</td>
-                            </tr>
-                        </table>
-                    </td>
-                </tr>
-                <tr class="ui-widget-header">
-                    <th>Other</th>
-                </tr>
-                <tr>
-                    <td>
-                        <table>
-                            <tr>
-                                <td>{label cache /}</td>
-                                <td>{input cache}</td>
-                            </tr>
-                        </table>
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <div style="margin: 10px 0 10px; float: right;">
-                            {input delete}
-                        </div>
-                        <div style="margin: 10px 0 10px; float: right;">
-                            {input cancel}
-                        </div>
-                        <div style="margin: 10px 0 10px; float: right;">
-                            {input save}
-                        </div>
-                    </td>
-                </tr>
-            </table>
-            {/form}
-
-            {form changePassForm}
-            <table style="width: 100%;">
-                <tr class="ui-widget-header">
-                    <th colspan="2">Change password</th>
-                </tr>
-                <tr>
-                    <td>{label password1 /}</td>
-                    <td>{input password1}</td>
-                </tr>
-                <tr>
-                    <td>{label password2 /}</td>
-                    <td>{input password2}</td>
-                </tr>
-                <tr>
-                    <td></td>
-                    <td>
-                        {input logout}
-                        {label logout /}                                
-                    </td>
-                </tr>
-                <tr>
-                    <td></td>
-                    <td>{input save}</td>
-                </tr>
-            </table>
-            {/form}
-        </td>
-    </tr>
-</table>
+<div class="dialog">
+    {include "profileForm.latte"}
+    {include "passwordForm.latte"}
+</div>
 {/block}
 
 {block #head}
+<script type="text/javascript">
+$(function () {
+
+    $(".dialog").dialog({
+        title: "My profile",
+        modal: true,
+        width: "auto",
+        close: function(event, ui) { 
+            $(this).remove();
+        }
+    });
+
+    $(".dialog").delegate("form.ajax", "submit", function() {
+            $(this).ajaxSubmit();
+            $(".dialog").dialog("close");
+            return false;
+    });
+
+    $(".dialog").delegate("form.ajax :submit", "click", function() {
+            $(this).ajaxSubmit();
+            $(".dialog").dialog("close");
+            return false;
+    });
+
+    $(".accordion").accordion();
+});
+</script>
 <style type="text/css">
     table {
         border-collapse: collapse;
+        margin: 1em 0;
     }
     table td, table th {
         border: 1px solid #EEEEEE;
         padding: 0.6em 10px;
+        text-align: left;
     }
-    #settings-menu ul { list-style: none outside none; }
 </style>
 {/block}
