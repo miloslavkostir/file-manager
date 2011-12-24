@@ -25,9 +25,10 @@ class UsersPresenter extends BasePresenter
                     throw new NA\ForbiddenRequestException();
 	}
 
-        public function handleDelete($id)
+        public function handleDelete($id = 0)
         {
                 $model = $this->models->UserModel;
+                $id = (int) $id;
                 $user = $model->getUser($id);
 
                 if ($user->role == "root" && !$this->user->isAllowed("Root"))
@@ -60,9 +61,10 @@ class UsersPresenter extends BasePresenter
                 $this->template->action = "add";
         }
 
-        public function handleResetPassword($id)
+        public function handleResetPassword($id = 0)
         {
                 $model = $this->models->UserModel;
+                $id = (int) $id;
                 $user = $model->getUser($id);
 
                 if ($user->role == "root" && !$this->user->isAllowed("Root"))
@@ -75,9 +77,10 @@ class UsersPresenter extends BasePresenter
                     $this->redirect("this");             
         }
 
-        public function handleEdit($id)
+        public function handleEdit($id = 0)
         {
                 $model = $this->models->UserModel;
+                $id = (int) $id;
                 $user = $model->getUser($id);
 
                 if ($user->role == "root" && !$this->user->isAllowed("Root"))
@@ -221,6 +224,7 @@ class UsersPresenter extends BasePresenter
         {
                 $values = $form->values;
                 $model = $this->models->UserModel;
+                $values->id = (int) $values->id;
 
                 if ($values->role == "root" && !$this->user->isAllowed("Root"))
                     throw new NA\ForbiddenRequestException();

@@ -24,8 +24,9 @@ class RootControl extends \Nette\Application\UI\Control
             parent::attached($presenter);
     }
 
-    public function handleDelete($id)
+    public function handleDelete($id = 0)
     {
+            $id = (int) $id;
             $root = $this->settings->getRoot($id);
 
             if (!$root)
@@ -48,8 +49,9 @@ class RootControl extends \Nette\Application\UI\Control
                     $this->presenter->redirect('this');
     }
 
-    public function handleEdit($id)
+    public function handleEdit($id = 0)
     {
+            $id = (int) $id;
             $this->template->action = 'edit';
             $row = $this->settings->getRoot($id);
 
@@ -110,7 +112,9 @@ class RootControl extends \Nette\Application\UI\Control
 
     public function editRootFormSubmitted(Form $form)
     {
-            $this->settings->updateRoot($form->values['id'], $form->values);
+            $form->values->id = (int) $form->values->id;
+
+            $this->settings->updateRoot($form->values->id, $form->values);
             $this->presenter->flashMessage('Root has been updated.');
             if (!$this->presenter->isAjax())
                     $this->presenter->redirect('this');
