@@ -43,6 +43,18 @@ class UsersPresenter extends BasePresenter
                     $this->redirect("this");
         }
 
+        public function handleDetails($id = 0)
+        {
+                $id = (int) $id;
+                $model = $this->models->UserModel;
+                $details = $model->getUserDetails($id);
+
+                if ($details)
+                    $this->template->details = $details;
+                else
+                    $this->flashMessage("Record not found", "warning");
+        }
+
         public function handleAdd()
         {
                 $this->template->action = "add";

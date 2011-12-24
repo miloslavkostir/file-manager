@@ -1,0 +1,103 @@
+<h3>{$details->real_name}</h3>
+<table>
+    <tr>
+        <th>Username</th>
+        <td>{$details->username}</td>
+    </tr>
+    <tr>
+        <th>Role</th>
+        <td>{$details->role}</td>
+    </tr>
+    <tr>
+        <th>Language</th>
+        <td>
+            {$details->lang}
+        </td>
+    </tr>
+    <tr>
+        <th>Shares</th>
+        <td>
+            <ul class="icons">
+                <li class="ui-state-default ui-corner-all">
+                    {if $details->has_share}
+                        <span class="ui-icon ui-icon-check"></span>
+                    {else}
+                        <span class="ui-icon ui-icon-close"></span>
+                    {/if}
+                </li>
+            </ul>
+        </td>
+    </tr>
+    {if $details->has_share}
+    <tr>
+        <th>Path</th>
+        <td>
+            {$details->uploadroot . $details->uploadpath}
+        </td>
+    </tr>
+    <tr>
+        <th>Used</th>
+        <td>
+            <strong>Used:</strong> {$details->files["usedsize"]|bytes} /
+            <strong>Free:</strong> {$details->files["spaceleft"]|bytes}
+            <div class="ui-progressbar ui-widget ui-widget-content ui-corner-all">
+                <div style="width: {!$details->files["percentused"]}%;" class="ui-progressbar-value ui-widget-header ui-corner-left"></div>
+             </div>
+        </td>
+    </tr>
+    {/if}
+    <tr>
+        <th>Quota</th>
+        <td>
+            <ul class="icons">
+                <li class="ui-state-default ui-corner-all">
+                    {if $details->quota}
+                        <span class="ui-icon ui-icon-check"></span>
+                    {else}
+                        <span class="ui-icon ui-icon-close"></span>
+                    {/if}
+                </li>
+            </ul>
+        </td>
+    </tr>
+    <tr n:if="$details->quota">
+        <th>Quota limit</th>
+        <td>
+            {if $details->quota_limit}
+                {$details->quota_limit} MB
+            {else}
+                Not set
+            {/if}
+        </td>
+    </tr>
+    <tr>
+        <th>Cache</th>
+        <td>
+            <ul class="icons">
+                <li class="ui-state-default ui-corner-all">
+                    {if $details->cache}
+                        <span class="ui-icon ui-icon-check"></span>
+                    {else}
+                        <span class="ui-icon ui-icon-close"></span>
+                    {/if}
+                </li>
+            </ul>
+        </td>
+    </tr>
+    <tr n:if="!$details->password">
+        <td colspan="2">
+            <div class="ui-state-highlight ui-corner-all" style="margin-top: 20px; padding: 0 .7em;">
+                <p>
+                    <span class="ui-icon ui-icon-info" style="float: left; margin-right: .3em;"></span>
+                    <strong>Warning!</strong>
+                    Password is not set.
+                </p>
+            </div>
+        </td>
+    </tr>
+</table>
+<div class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only">
+    <a n:href="edit!, $details->id" class="ui-button-text ajax">
+        Edit
+    </a>
+</div>

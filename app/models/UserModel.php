@@ -19,6 +19,26 @@ class UserModel extends BaseModel
             $this->getDatabase()->delete('users')->where('id = %i', $id)->execute();
         }
 
+        public function getUserDetails($id)
+        {
+            $user = $this->getUser($id);
+            $root = $this->getDatabase()
+                        ->select("*")
+                        ->from("uploadroots")
+                        ->where("id = %i", $user->uploadroot)
+                        ->fetch();
+
+            if ($root)
+                $user->uploadroot = $root->path;
+
+            $files = new Files;
+            if ($user["has_share"]) {
+                $user["files"] = $files->diskSize($user);
+            }
+
+            return $user;
+        }
+
         public function getUser($id)
         {
             return $this->getUsers()->where("id = %i", $id)->fetch();

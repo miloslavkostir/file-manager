@@ -6,6 +6,10 @@
     {include "dialog.latte", action => $action}
 </div>
 
+<div n:ifset="$details" class="dialog">
+    {include "details.latte"}
+</div>
+
 <table class="ui-widget ui-widget-content">
     <thead>
             <tr class="ui-widget-header">
@@ -22,6 +26,11 @@
                     <td>{$user->role}</td>
                     <td>
                         <ul class="icons">
+                            <li class="ui-state-default ui-corner-all">
+                                <a n:href="details!, $user->id" class="ajax" title="Details">
+                                    <span class="ui-icon ui-icon-info"></span>
+                                </a>
+                            </li>
                             <li class="ui-state-default ui-corner-all">
                                 <a n:href="edit!, $user->id" class="ajax" title="Edit">
                                     <span class="ui-icon ui-icon-pencil"></span>
