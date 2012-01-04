@@ -20,7 +20,7 @@ class Content extends FileManager
     public function handleShowFileInfo($filename = "")
     {
         // if sended by AJAX
-        if (empty($filename))
+        if (!$filename)
             $filename = $this->presenter->context->httpRequest->getQuery('filename');
 
         parent::getParent()->handleShowFileInfo($filename);
@@ -32,7 +32,7 @@ class Content extends FileManager
         $translator = $this['system']->getTranslator();
 
         // if sended by AJAX
-        if (empty($files))
+        if (!$files)
             $files = $this->presenter->context->httpRequest->getPost('files');
 
         if (is_array($files)) {
@@ -52,7 +52,7 @@ class Content extends FileManager
     public function handleCopyToClipboard($filename = "")
     {
         // if sended by AJAX
-        if (empty($filename))
+        if (!$filename)
             $filename = $this->presenter->context->httpRequest->getPost('filename');
 
         $session = $this->presenter->context->session->getSection('file-manager');
@@ -76,7 +76,7 @@ class Content extends FileManager
         $translator = $this['system']->getTranslator();
 
         // if sended by AJAX
-        if (empty($files))
+        if (!$files)
             $files = $this->presenter->context->httpRequest->getPost('files');
 
         if (is_array($files)) {
@@ -100,7 +100,7 @@ class Content extends FileManager
     public function handleCutToClipboard($filename = "")
     {
         // if sended by AJAX
-        if (empty($filename))
+        if (!$filename)
             $filename = $this->presenter->context->httpRequest->getPost('filename');
 
         $session = $this->presenter->context->session->getSection('file-manager');
@@ -124,7 +124,7 @@ class Content extends FileManager
         $translator = $this['system']->getTranslator();
 
         // if sended by AJAX
-        if (empty($files))
+        if (!$files)
             $files = $this->presenter->context->httpRequest->getPost('files');
 
         if (is_array($files)) {
@@ -151,7 +151,7 @@ class Content extends FileManager
         $translator = $this['system']->getTranslator();
 
         // if sended by AJAX
-        if (empty($filename))
+        if (!$filename)
             $filename = $this->presenter->context->httpRequest->getQuery('filename');
 
         if ($this->config['readonly'] == True)
@@ -183,7 +183,7 @@ class Content extends FileManager
         $translator = $this['system']->getTranslator();
 
         // if sended by AJAX
-        if (empty($files))
+        if (!$files)
             $files = $this->presenter->context->httpRequest->getPost('files');
 
         if ($this->config['readonly'] == True)
@@ -220,7 +220,7 @@ class Content extends FileManager
         $actualdir = $this['system']->getActualDir();
 
         // if sended by AJAX
-        if (empty($files))
+        if (!$files)
             $files = $this->presenter->context->httpRequest->getPost('files');
 
         $path = $this['zip']->addFiles($actualdir, $files);
@@ -248,7 +248,7 @@ class Content extends FileManager
     public function handleRunPlugin($plugin, $files = "")
     {
         // if sended by AJAX
-        if (empty($files))
+        if (!$files)
             $files = $this->presenter->context->httpRequest->getPost('files');
 
         parent::getParent()->handleRunPlugin($plugin, $files);
@@ -259,7 +259,7 @@ class Content extends FileManager
         $actualdir = $this['system']->getActualDir();
 
         // if sended by AJAX
-        if (empty($filename))
+        if (!$filename)
             $filename = $this->presenter->context->httpRequest->getQuery('filename');
 
         if ($this['tools']->validPath($actualdir, $filename)) {
@@ -271,7 +271,7 @@ class Content extends FileManager
     public function handleDownloadZip($filename = "")
     {
         // if sended by AJAX
-        if (empty($filename))
+        if (!$filename)
             $filename = $this->presenter->context->httpRequest->getQuery('filename');
 
         $path = $this['zip']->getTempDir() . '/' . $filename;
@@ -301,9 +301,9 @@ class Content extends FileManager
         $request = $this->presenter->context->httpRequest;
 
         // if sended by AJAX
-        if (empty($targetdir))
+        if (!$targetdir)
             $targetdir = $request->getQuery('targetdir');
-        if (empty($filename))
+        if (!$filename)
             $filename = $request->getQuery('filename');
 
         if ($this->config['readonly'] == True)
@@ -384,13 +384,13 @@ class Content extends FileManager
 
         $plugins = parent::getParent()->plugins;
 
-        if (empty($mask))
+        if (!$mask)
             $mask = '*';
 
-        if (empty($order))
+        if (!$order)
             $order = 'type';
 
-        if (!empty($view)) {
+        if ($view) {
             $c_template = __DIR__ . '/' . $view . '.latte';
             if (file_exists($c_template))
                 $template->setFile($c_template);
@@ -412,7 +412,7 @@ class Content extends FileManager
         $template->rootname = $this['tools']->getRootName();
         $template->thumb_dir = $this->config['resource_dir'] . 'img/icons/' . $view . '/';
 
-        if (!empty($plugins)) {
+        if ($plugins) {
             $cotnextPlugins = array();
 
             foreach($plugins as $plugin) {
@@ -420,7 +420,7 @@ class Content extends FileManager
                     $contextPlugins[] = $plugin;
             }
 
-            if (!empty($contextPlugins))
+            if ($contextPlugins)
                 $template->plugins = $contextPlugins;
         }
 
@@ -509,7 +509,7 @@ class Content extends FileManager
             $absDir = $this['tools']->getRealPath($this['tools']->getAbsolutePath($actualdir));
             $cacheData = $this['caching']->getItem(array('content',  $absDir));
 
-            if (empty($cacheData)) {
+            if (!$cacheData) {
                 $output = $this->getDirectoryContent($actualdir, $mask, $view, $order);
                 $this['caching']->saveItem(array('content',  $absDir), $output);
                 return $output;

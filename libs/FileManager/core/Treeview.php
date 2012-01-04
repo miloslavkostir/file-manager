@@ -93,7 +93,7 @@ class Treeview extends FileManager
 
             $cacheData = $this['caching']->getItem($path);
 
-            if (empty($cacheData)) {
+            if (!$cacheData) {
                 $output = $this->generateTreeview();
                 $this['caching']->saveItem($path, $output, array('tags' => array('treeview')));
                 return $output;

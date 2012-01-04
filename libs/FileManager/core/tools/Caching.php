@@ -42,7 +42,7 @@ class Caching extends FileManager
      */
     public function deleteItem($key, $conds = NULL)
     {
-        if (!empty($conds))
+        if ($conds)
             $this->cache->clean($conds);
         else
             unset($this->cache[$key]);

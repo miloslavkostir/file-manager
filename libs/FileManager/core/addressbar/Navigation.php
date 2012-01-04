@@ -19,7 +19,7 @@ class Navigation extends FileManager
         $template = $this->template;
         $template->setFile(__DIR__ . '/Navigation.latte');
 
-        if (empty($actualdir)) {
+        if (!$actualdir) {
             $template->items = $this->getNav($rootname);
         } else
             $template->items = $this->getNav($actualdir);
@@ -75,7 +75,7 @@ class Navigation extends FileManager
                 $nav = explode("/", $actualdir);
                 $path = "/";
                 foreach ($nav as $item) {
-                    if (!empty($item)) {
+                    if ($item) {
                         $path .= $item . "/";
                         $var[] = array(
                             "name" => $item,

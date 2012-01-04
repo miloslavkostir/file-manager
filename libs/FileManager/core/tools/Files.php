@@ -654,7 +654,7 @@ class Files extends FileManager
 
             closedir($directoryHandle);
 
-            if($empty == false) {
+            if(!$empty) {
                 if(!rmdir($directory))
                     return false;
             }
