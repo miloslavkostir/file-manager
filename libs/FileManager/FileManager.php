@@ -123,13 +123,13 @@ class FileManager extends \Nette\Application\UI\Control
         $clipboard = $session->clipboard;
         $plugins = $this->plugins;
 
-        if ($clipboard)
+        if (!empty($clipboard))
             $template->clipboard = $session->clipboard;
 
-        if (!$session->actualdir)
+        if (empty($session->actualdir))
             $this->handleShowContent($this['tools']->getRootname());
 
-        if ($plugins) {
+        if (!empty($plugins)) {
             $toolbarPlugins = array();
 
             foreach($plugins as $plugin) {
@@ -137,7 +137,7 @@ class FileManager extends \Nette\Application\UI\Control
                     $toolbarPlugins[] = $plugin;
             }
 
-            if ($toolbarPlugins)
+            if (!empty($toolbarPlugins))
                 $template->plugins = $toolbarPlugins;
         }
 

@@ -395,6 +395,9 @@ class Files extends FileManager
      */
     function getFileSize($path)
     {
+        if (filesize($path) === 0)
+                return null;
+
         $filesize = new Files\Filesize;
 
         $return = $filesize->sizeCurl($path);
