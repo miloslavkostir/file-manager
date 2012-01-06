@@ -21,7 +21,7 @@ class FileManager extends \Nette\Application\UI\Control
     public $config = array(
         'cache' => True,
         'readonly' => False,
-        'resource_dir' => '/fm-src/',
+        'resource_dir' => '/netfileman/',
         'quota' => False,
         'quota_limit' => 20,
         'lang' => 'en'
@@ -123,13 +123,13 @@ class FileManager extends \Nette\Application\UI\Control
         $clipboard = $session->clipboard;
         $plugins = $this->plugins;
 
-        if (!empty($clipboard))
+        if ($clipboard)
             $template->clipboard = $session->clipboard;
 
-        if (empty($session->actualdir))
+        if (!$session->actualdir)
             $this->handleShowContent($this['tools']->getRootname());
 
-        if (!empty($plugins)) {
+        if ($plugins) {
             $toolbarPlugins = array();
 
             foreach($plugins as $plugin) {
@@ -137,7 +137,7 @@ class FileManager extends \Nette\Application\UI\Control
                     $toolbarPlugins[] = $plugin;
             }
 
-            if (!empty($toolbarPlugins))
+            if ($toolbarPlugins)
                 $template->plugins = $toolbarPlugins;
         }
 

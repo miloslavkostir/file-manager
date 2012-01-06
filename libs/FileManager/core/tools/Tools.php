@@ -122,7 +122,7 @@ class Tools extends FileManager
     {
         $path = $this['tools']->getAbsolutePath($dir);
 
-        if (!empty($file))
+        if ($file)
             $path .= $file;
 
         if (file_exists($path))

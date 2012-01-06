@@ -1,59 +1,6 @@
-<script type="text/javascript">
-$(document).ready(function() {
 
-    $(".file-manager .fm-body").noTextHighlight();
-
-    $(".file-manager").delegate("a.fm-ajax", "click", function (e) {
-        $.getJSON(this.href);
-        $.animateProgress(".file-manager", e);
-        return false;
-    });
-
-    $(".file-manager").delegate("a.fm-ajax-dbl", "dblclick", function (e) {
-        $.getJSON(this.href);
-        $.animateProgress(".file-manager", e);
-        return false;
-    }).delegate("a.fm-ajax-dbl", "click", function (e){
-        return false;
-    });
-
-    $(".file-manager").delegate("form.fm-ajax", "submit", function () {
-        $(this).ajaxSubmit();
-        return false;
-    });
-
-    $(".file-manager").delegate("form.fm-ajax :submit", "click", function () {
-        $(this).ajaxSubmit();
-        return false;
-    });
-
-});
-</script>
 
 {snippet message}
-<script type="text/javascript">
-$(document).ready(function() {
-    $('div.fm-alert-message').fadeIn('slow')
-            .animate({ opacity: 1.0 }, 10000)
-            .fadeOut('slow', function() {
-              $(this).remove();
-            });
-
-    $('div.fm-alert-message span.ui-icon-closethick').hover(
-      function () {
-        $(this).addClass("ui-state-hover");
-      },
-      function () {
-        $(this).removeClass("ui-state-hover");
-      }
-    );
-
-    $('div.fm-alert-message').delegate('span.ui-icon-closethick', 'click', function() {
-        $('div.fm-alert-message').remove();
-    });
-});
-</script>
-
 {foreach $flashes as $flash}
             {if $flash->type == 'error'}
                 <div class="fm-alert-message ui-state-error ui-corner-all">

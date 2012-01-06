@@ -167,8 +167,6 @@
 .file-manager .fm-info-bar #snippet-fileManager-fileinfo { float: left; }
 .file-manager .fm-info-bar #snippet-fileManager-diskusage { float: right; }
 .file-manager .fm-info-bar .fm-disk-usage { list-style: none outside none; margin: 0px; padding: 10px; }
-.file-manager .fm-info-bar .fm-disk-usage li { }
-.file-manager .fm-info-bar .fm-disk-usage #fm-disk-usage-bar { width: 150px; height: 15px; }
 .file-manager .fm-info-bar .fm-disk-usage h2 { color: #006E12; font-size: 20px; font-weight: normal; height:25px; line-height:25px; }
 .file-manager .fm-info-bar ul.fm-file-info { list-style: none outside none; margin: 0; padding: 10px; }
 .file-manager .fm-info-bar li.fm-file-info { float: left; padding: 5px 3px 4px; }

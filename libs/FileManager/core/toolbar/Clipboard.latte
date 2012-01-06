@@ -35,44 +35,12 @@
                 </a>
             </div>
             <div id="fm-clipboard-hide">
-                <a href="#" title="{_'Hide clipboard'}" onclick="return false;">{_'Hide'}</a>
+                <a href="#" title="{_'Hide clipboard'}">{_'Hide'}</a>
             </div>
         </div>
 </div>
 
-<script type="text/javascript">
-$(document).ready(function() {
-   
-    $('.fm-clipboard').css({
-        position: 'absolute',
-        top: $('.fm-toolbar').height()
-    });
-
-    $(".fm-clipboard-item").hover(
-      function () {
-        $(this).addClass("ui-state-hover");
-      },
-      function () {
-        $(this).removeClass("ui-state-hover");
-      }
-    );
-
-    $('#fm-clipboard-hide a').click(function() {
-          $('.fm-clipboard').slideToggle('slow', function() {
-
-          });
-    });
-
-    $('#show-clipboard').click(function() {
-          $('.fm-clipboard').slideToggle('slow', function() {
-
-          });
-    });
-
-});
-</script>
-
-<a href="#" title="{_'Show items in clipboard'}" id="show-clipboard" onclick="return false;" class="fm-toolbar-item">
+<a href="#" title="{_'Show items in clipboard'}" id="show-clipboard" class="fm-toolbar-item">
 <span>
     {_'Clipboard'} ({? echo count($clipboard); })
 </span>
