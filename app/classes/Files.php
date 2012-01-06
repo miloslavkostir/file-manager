@@ -41,6 +41,9 @@ class Files
      */
     public function filesize($path)
     {
+            if (filesize($path) === 0)
+                    return null;
+
             $filesize = new Filesize;
 
             $return = $filesize->sizeCurl($path);
