@@ -8,14 +8,21 @@ class Filesize
 
         const MATH_GMP = "GMP";
 
-        public function __constuct()
+	/**
+	 * Which mathematical library use for mathematical operations
+	 * @var string (on of constants FileSize::MATH_*)
+	 */
+	private static $mathLib;
+
+
+        function __construct()
         {
 		if (function_exists("bcadd"))
 			self::$mathLib = self::MATH_BCMATH;
 		elseif (function_exists("gmp_add"))
 			self::$mathLib = self::MATH_GMP;
 		else
-			throw new \Exception("You must have installed one of there mathematical libraries: BC Math or GMP!");
+			throw new \Nette\Application\ApplicationException("You must have installed at least one of mathematical libraries - BC Math or GMP!");
         }
 
 	/**
@@ -81,7 +88,7 @@ class Filesize
 			} elseif (self::$mathLib == self::MATH_GMP) {
 				$size = gmp_add($size, $readed);
 			} else {
-				throw new InvalidStateException("No mathematical library available");
+				throw new \Nette\InvalidStateException("No mathematical library available");
 			}
 		}
 		if (self::$mathLib == self::MATH_GMP) {
@@ -154,7 +161,7 @@ class Filesize
         {
 		if (class_exists("COM")) {
 			// Use the Windows COM interface
-			$fsobj = new COM('Scripting.FileSystemObject');
+			$fsobj = new \COM('Scripting.FileSystemObject');
 			if (dirname($path) == '.')
 				$path = ((substr(getcwd(), -1) == DIRECTORY_SEPARATOR) ? getcwd() . basename($path) : getcwd() . DIRECTORY_SEPARATOR . basename($path));
 			$f = $fsobj->GetFile($path);
