@@ -44,7 +44,7 @@ class Files
             if (filesize($path) === 0)
                     return null;
 
-            $filesize = new Filesize;
+            $filesize = new Netfileman\Files\Filesize;
 
             $return = $filesize->sizeCurl($path);
             if ($return)
