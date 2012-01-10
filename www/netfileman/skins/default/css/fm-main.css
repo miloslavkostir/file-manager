@@ -1,6 +1,10 @@
 #fm-ajax-spinner { position: fixed; left: 50%; top: 50%; margin: -15px 0 0 -15px; background: white url("../img/spinner.gif") no-repeat 50% 50%; padding: 13px; border: 2px solid #CCC; font-size: 0; z-index: 2; }
 
 .fm-inactive { position: absolute; background-color: #ffffff; opacity: 0.6; filter: alpha(opacity = 60); z-index: 1; }
+.fm-left { float: left; }
+.fm-right { float: right; }
+.fm-hide { display: none; }
+
 
 .file-manager, #snippet-fileManager-message { width: 100%; font-family: 'Segoe UI', 'MS Sans Serif', sans-serif; font-size: 12px; min-width: 450px; z-index: 0; }
 
@@ -10,7 +14,11 @@
 .file-manager hr { background-color: #D6E5F5; border: 0 none; height: 1px; }
 .file-manager ul { list-style-type: none; }
 
-.fm-alert-message { padding: 0pt 0.7em; width: auto; }
+
+#fm-alert-message { padding: 0pt 0.7em; width: auto; }
+#fm-alert-message .fm-left { margin-right: 0.3em; }
+#fm-alert-message .ui-icon-closethick { cursor: pointer; }
+#fm-other-messages { padding: 0pt 0.7em; position: absolute; z-index: 3; }
 
 
 .file-manager .fm-draggable { cursor: pointer; }

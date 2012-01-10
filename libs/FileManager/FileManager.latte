@@ -1,28 +1,29 @@
 
 
 {snippet message}
-{foreach $flashes as $flash}
-            {if $flash->type == 'error'}
-                <div class="fm-alert-message ui-state-error ui-corner-all">
-                <p>
-                <span style="float: left; margin-right: 0.3em;" class="ui-icon ui-icon-circle-close"></span>
-            {else}
-                {if $flash->type == 'warning'}
-                    <div class="fm-alert-message ui-state-highlight ui-corner-all">
-                    <p>
-                    <span style="float: left; margin-right: 0.3em;" class="ui-icon ui-icon-alert"></span>
-                {else}
-                    <div class="fm-alert-message ui-state-highlight ui-corner-all">
-                    <p>
-                    <span style="float: left; style="margin-right: 0.3em;" class="ui-icon ui-icon-info"></span>
-                {/}
-            {/}
-                    {$flash->message}
-                    <span class="ui-icon ui-icon-closethick" style="cursor: pointer; float: right;" title="{_'Close message'}"></span>
-                </p>
-            </div>
-{/}
-{/}
+    {foreach $flashes as $flash}
+        <div n:if="$iterator->last || $flash->type === 'error' || $flash->type === 'warning'" n:class="$flash->type === 'error' ? ui-state-error : ui-state-highlight, ui-corner-all" id="fm-alert-message">
+            <p>
+                <span style="" n:class="$flash->type === 'info' ? ui-icon-info : ui-icon-alert, ui-icon, fm-left"></span>
+                {$flash->message}
+                {if count($flashes) > 1}
+                <a href="#" id="fm-show-messages">
+                    {_'All messages'}
+                </a>
+                &nbsp;({count($flashes)})
+                {/if}
+                <span class="ui-icon ui-icon-closethick fm-right" title="{_'Close'}"></span>
+            </p>
+        </div>
+        {breakIf $flash->type === 'error' || $flash->type === 'warning'}
+    {/foreach}
+    <div n:if="count($flashes) > 1" n:class="$flash->type === 'error' ? ui-state-error : ui-state-highlight, fm-alert-message, ui-corner-bottom, fm-hide" id="fm-other-messages">
+        <p n:foreach="$flashes as $flash">
+            <span style="" n:class="$flash->type === 'info' ? ui-icon-info : ui-icon-alert, ui-icon, fm-left"></span>
+            {$flash->message}
+        </p>
+    </div>
+{/snippet}
 
 
 <div class="file-manager">

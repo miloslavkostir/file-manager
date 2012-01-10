@@ -21,18 +21,22 @@ jQuery(document).ready(function() {
 
 
                 /** Main */
-                $('div.fm-alert-message').fadeIn('slow')
+                $('#fm-alert-message').fadeIn('slow')
                         .animate({opacity: 1.0}, 10000)
                         .fadeOut('slow', function() {
-                          $(this).remove();
+                            $(this).remove();
+                            $("#fm-other-messages").remove();
                         });
 
-                $('div.fm-alert-message span.ui-icon-closethick').hover(function() {
-                        $(this).toggleClass("ui-state-hover");
+
+                $('#fm-alert-message').delegate('.ui-icon-closethick', 'click', function() {
+                        $("#fm-alert-message").remove();
+                        $("#fm-other-messages").remove();
                 });
 
-                $('div.fm-alert-message').delegate('span.ui-icon-closethick', 'click', function() {
-                        $('div.fm-alert-message').remove();
+                $('#fm-alert-message').delegate('#fm-show-messages', 'click', function() {
+                        $("#fm-other-messages").toggleClass("fm-hide");
+                        return false;
                 });
 
 
