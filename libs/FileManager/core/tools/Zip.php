@@ -1,99 +1,103 @@
 <?php
 
-namespace Netfileman;
+namespace Netfileman\Tools;
 
-use Nette\Utils\Finder;
+use Nette\Utils\Finder,
+        Nette\Application\ApplicationException,
+        Nette\Utils\Strings;
 
-class Zip extends FileManager
+class Zip
 {
-    /** @var string */
-    protected $tempDir;
+        /** @var string */
+        private $targetDir;
 
-    /** @var integer */
-    protected $expiration = 600;
+        /** @var string */
+        private $thumb_prefix;
 
-    function __construct()
-    {
-        $tempDir = $this->presenter->context->parameters['tempDir'] . '/cache/file-manager/downloads';
 
-        if (!file_exists($tempDir)) {
-                $oldumask = umask(0);
-                if (!mkdir($tempDir, 0777))
-                    throw new \Exception("Can not create temp dir $tempDir");
-                umask($oldumask);
-                $this->tempDir = $tempDir;
-        } else
-            $this->tempDir = $tempDir;
-    }
+        public function __construct($targetDir, $thumb_prefix)
+        {
+                if (!extension_loaded("zip"))
+                        throw new ApplicationException("PHP ZIP not loaded.");
 
-    /**
-     * Zip files from list
-     * @param string $actualdir
-     * @param array $files
-     * @param string $archive_name
-     * @return string archive name
-     */
-    function addFiles($actualdir, $files)
-    {
-        $this->cleanUp();
 
-        $zip = new ZipArchive;
-        $tempName = $this->getTempName();
-        $zipPath = $this->tempDir . '/' . $tempName;
+                if (!file_exists($targetDir) || !is_dir($targetDir)) {
 
-        if ($zip->open($zipPath, ZipArchive::CREATE) === true) {
-
-                $path = $this['tools']->getAbsolutePath($actualdir);
-
-                foreach ($files as $file) {
-                    $name = $file;
-                    $file = $path . $file;
-
-                    if (is_dir($file)) {
-                        if (!$zip->addEmptyDir($name))
-                            throw new Exception ("Can not add folder '$name' to ZIP archive.");
-                    } else {
-                        if (!$zip->addFile($file, $name))
-                            throw new Exception ("Can not add file '$name' to ZIP archive.");
-                    }
+                        $oldumask = umask(0);
+                        mkdir($targetDir, 0777);
+                        umask($oldumask);
                 }
 
-                $zip->close();
-                return $tempName;
-         } else
-                throw new Exception ("Can not create ZIP archive '$zipPath' from '$actualdir'.");
-    }
-
-    /**
-     * Clean old downloads in temp
-     */
-    function cleanUp()
-    {
-        $files = Finder::findFiles('*.zip')->in($this->tempDir);
-
-        foreach ($files as $file) {
-            $cTime = $file->getCTime();
-            $odds = time() - $cTime;
-            if ($odds > $this->expiration)
-                unlink($file->getPathName());
+                $this->targetDir = $targetDir;
+                $this->thumb_prefix = $thumb_prefix;
         }
-    }
 
-    /**
-     * Get temporary file name
-     * @return string
-     */
-    function getTempName()
-    {
-        return md5(time() . mt_rand(5, 10)) . '.zip';
-    }
 
-    /**
-     * Get path to temp dir for downloads
-     * @return string
-     */
-    function getTempDir()
-    {
-        return $this->tempDir;
-    }
+        /**
+         * Zip files from list
+         * 
+         * @param array $files
+         * @param string $archiveName
+         */
+        public function addFiles($files)
+        {
+                $zip = new \ZipArchive;
+                $name = $this->checkDuplName($this->targetDir, Date("Ymd_H-m-s") . ".zip");
+                $zipPath = "$this->targetDir/$name";
+
+
+                if ($zip->open($zipPath, \ZipArchive::CREATE)) {
+
+                        $path = $this->targetDir;
+                        foreach ($files as $file) {
+
+                                $name = $file;
+                                $file = $path . $file;
+
+                                if (is_dir($file)) {
+
+                                        $iterator = Finder::find("*")
+                                                            ->from($file)
+                                                            ->exclude("$this->thumb_prefix*");
+
+                                        foreach ($iterator as $item) {
+
+                                                $name = substr_replace($item->getPathname(), "", 0, strlen($path));
+                                                if ($item->isFile())
+                                                        $zip->addFile($item->getRealPath(), $name);
+
+                                                if ($item->isDir())
+                                                        $zip->addEmptyDir($name);
+                                        }
+                                } else
+                                        $zip->addFile($file, $name);
+                        }
+
+                        $zip->close();
+                 } else
+                        throw new ApplicationException("Can not create ZIP archive '$zipPath' from '$this->targetDir'.");
+        }
+
+
+        /**
+         * Check if file exists and give alternative name
+         * TODO - this function has duplicity in Netfileman\Files. Please, move this to it's own class
+         * 
+         * @param  string  actual dir (absolute path)
+         * @param  string  filename
+         * @return string
+         */
+        private function checkDuplName($targetpath, $filename)
+        {
+                if (file_exists($targetpath . $filename)) {
+
+                        $i = 1;
+                        while (file_exists($targetpath . $i . "_$filename")) {
+                                $i++;
+                        }
+
+                        return $i . "_$filename";
+                } else
+                        return $filename;        
+        }
 }

@@ -215,21 +215,34 @@ class Content extends FileManager
         }
     }
 
-    public function handleMultiDownload($files = "")
+
+    public function handleZip($files = "")
     {
-        $actualdir = $this['system']->getActualDir();
+            // if sended by AJAX
+            if (!$files)
+                    $files = $this->presenter->context->httpRequest->getPost("files");
 
-        // if sended by AJAX
-        if (!$files)
-            $files = $this->presenter->context->httpRequest->getPost('files');
 
-        $path = $this['zip']->addFiles($actualdir, $files);
+            if ($this->config["readonly"])
+                    parent::getParent()->flashMessage($translator->translate("File manager is in read-only mode"), "warning");
+            else {
 
-        $payload = $this->presenter->payload;
-        $payload->result = 'success';
-        $payload->filename = $path;
+                    $actualdir = $this["system"]->getActualDir();
+                    $actualPath = $this["tools"]->getAbsolutePath($actualdir);
 
-        parent::getParent()->refreshSnippets(array('message'));
+
+                    $zip = new Tools\Zip($actualPath, $this->thumb);
+                    $zip->addFiles($files);
+
+
+                    $key = $this["tools"]->getRealPath($actualPath);
+                    if ($this->config["cache"])
+                            $this["caching"]->deleteItem(array("content", $key));
+            }
+
+
+            parent::getParent()->refreshSnippets(array("message"));
+            $this->handleShowContent($actualdir);
     }
 
     public function handleOrderBy($key)
@@ -268,17 +281,6 @@ class Content extends FileManager
         }
     }
 
-    public function handleDownloadZip($filename = "")
-    {
-        // if sended by AJAX
-        if (!$filename)
-            $filename = $this->presenter->context->httpRequest->getQuery('filename');
-
-        $path = $this['zip']->getTempDir() . '/' . $filename;
-
-        if (file_exists($path))
-            $this->presenter->sendResponse(new FileResponse($path, NULL, NULL));
-    }
 
     public function handleGoToParent()
     {

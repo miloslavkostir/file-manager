@@ -50,12 +50,13 @@
                                         o3 = {},
                                         o4 = {},
                                         o5 = {},
+                                        o6 = {},
                                         {ifset $plugins}
                                             {foreach $plugins as $plugin}
-                                                o{6 + $iterator->getCounter()} = {},
+                                                o{7 + $iterator->getCounter()} = {},
                                             {/}
                                         {/}
-                                        o6 = {};
+                                        o7 = {};
 
                                     $("#fm-small-images ul").unmarkAll("li", "selected");
 
@@ -100,11 +101,17 @@
                                             var filename = $(this).attr("id");
                                             $(this).addClass("selected");
                                             window.location.href={link downloadFile!} + "&filename=" + filename;
-                                    }                                    
+                                    }
+
+                                    o7[{_'Add to ZIP'}] = function(menuItem, menuObject, e) {
+                                            var files = {};
+                                            files[0] = $(this).attr("id");
+                                            $.post({link zip!},  { files: files });
+                                    }
 
                                     {ifset $plugins}
                                         {foreach $plugins as $plugin}
-                                            o{6 + $iterator->getCounter()}[{$plugin['title']}] = function(menuItem, menuObject, e) {
+                                            o{7 + $iterator->getCounter()}[{$plugin['title']}] = function(menuItem, menuObject, e) {
                                                 var filename = $(this).attr("id");
                                                 $(this).addClass("selected");
                                                 $.post({link runPlugin!, $plugin['name']},  { files: filename });
@@ -118,12 +125,13 @@
                                              o3,
                                              o4,
                                              o5,
+                                             o6,
                                              {ifset $plugins}
                                                 {foreach $plugins as $plugin}
-                                                    o{6 + $iterator->getCounter()},
+                                                    o{7 + $iterator->getCounter()},
                                                 {/}
                                              {/}
-                                             o6 ];
+                                             o7 ];
                     } else {
                                     var o1 = {},
                                         o2 = {},
@@ -180,16 +188,12 @@
                                             }
                                     }                                    
 
-                                    o5[{_'Download'}] = function(menuItem, menuObject, e) {
+                                    o5[{_'Add to ZIP'}] = function(menuItem, menuObject, e) {
                                             var files = {};
                                             $.each(selected, function(i) {
                                                 files[i] = $(this).attr("id");
                                             });                                           
-                                            $.post({link multiDownload!},  { files: files }, function (payload) {
-                                                $.nette.success(payload);
-                                                if (payload.result === 'success')
-                                                    window.location.href={link downloadZip!} + "&filename=" + payload.filename;
-                                            });
+                                            $.post({link multiZip!},  { files: files });
                                     }
 
                                     {ifset $plugins}
