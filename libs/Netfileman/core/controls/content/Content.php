@@ -426,7 +426,7 @@ class Content extends Netfileman
         private function getDirectoryContent($actualdir, $mask, $view, $order)
         {
                 $thumb_dir = $this->context->parameters["resource_dir"] . "img/icons/" . $view . "/";
-                if (!file_exists($this->context->parameters["wwwDir"] . $thumb_dir)) {
+                if (!file_exists($this->presenter->context->parameters["wwwDir"] . $thumb_dir)) {
 
                         throw new \Nette\DirectoryNotFoundException("Missing folder with icons for '$view' view");
                         exit;
