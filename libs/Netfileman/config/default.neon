@@ -1,0 +1,7 @@
+parameters:
+	cache: true
+	readonly:
+	resource_dir: /netfileman/
+	quota:
+	quota_limit: 20 # MB
+	lang: en

@@ -1,0 +1,127 @@
+{snippet message}
+    {foreach $flashes as $flash}
+        <div n:if="$iterator->last || $flash->type === 'error' || $flash->type === 'warning'" n:class="$flash->type === 'error' ? ui-state-error : ui-state-highlight, ui-corner-all" id="fm-alert-message">
+            <p>
+                <span style="" n:class="$flash->type === 'info' ? ui-icon-info : ui-icon-alert, ui-icon, fm-left"></span>
+                {$flash->message}
+                {if count($flashes) > 1}
+                <a href="#" id="fm-show-messages">
+                    {_'All messages'}
+                </a>
+                &nbsp;({count($flashes)})
+                {/if}
+                <span class="ui-icon ui-icon-closethick fm-right" title="{_'Close'}"></span>
+            </p>
+        </div>
+        {breakIf $flash->type === 'error' || $flash->type === 'warning'}
+    {/foreach}
+    <div n:if="count($flashes) > 1" n:class="$flash->type === 'error' ? ui-state-error : ui-state-highlight, fm-alert-message, ui-corner-bottom, fm-hide" id="fm-other-messages">
+        <p n:foreach="$flashes as $flash">
+            <span style="" n:class="$flash->type === 'info' ? ui-icon-info : ui-icon-alert, ui-icon, fm-left"></span>
+            {$flash->message}
+        </p>
+    </div>
+{/snippet}
+
+
+<div class="file-manager">
+                
+    <div class="fm-adressbar">
+        <ul>
+            <li class="fm-location">
+                {snippet adressbar}
+                        {control navigation}                    
+                {/snippet}
+            </li>
+            
+            <li class="fm-refresh">
+                {snippet refreshButton}
+                    <a href="{link refreshContent!}" title="{_'Refresh content'}" class="fm-ajax">
+                        <div class="fm-refresh-icon"></div>
+                    </a>
+                {/snippet}
+            </li>
+            
+            <li class="fm-filter">
+                {snippet filter}
+                    {control filter}
+                {/snippet}
+            </li>
+
+        </ul>
+        <div style="clear: both;"></div>
+    </div>
+
+
+    <div class="fm-toolbar">
+        {snippet toolbar}
+            <ul class="fm-toolbar">
+
+                <li>
+                    <a href="{link runPlugin!, 'NewFolder'}" title="{_'Create new folder'}" class="fm-ajax fm-toolbar-item">
+                        <span>{_'New folder'}</span>
+                    </a>
+                </li>
+
+                <li n:ifset="$plugins">
+                    <a n:foreach="$plugins as $plugin" n:href="runPlugin!, $plugin['name']" class="fm-ajax fm-toolbar-item">
+                        <span>{$plugin['title']}</span>
+                    </a>                
+                </li>
+
+                <li>
+                    {snippet clipboard}
+                        {ifset $clipboard}
+                            {control clipboard}
+                        {/ifset}
+                    {/snippet}
+                </li>
+
+                <li style="float: right;">
+                    {control viewSelector}
+                </li>
+
+            </ul>
+        {/snippet}
+    </div>
+
+
+    <div class="fm-body">
+
+            <div class="fm-treeview">
+                {snippet treeview}
+                    {control treeview}
+                {/snippet}
+            </div>
+
+
+            <div class="fm-content">
+                {snippet plugin}
+                    <div n:ifset="$plugin">
+                        {control $plugin}
+                    </div>
+                {/snippet}
+
+                {snippet content}
+                    {ifset $content}
+                        {control content}
+                    {/ifset}
+                {/snippet}
+            </div>
+            
+    </div>
+
+
+    <div class="fm-info-bar">
+        {snippet fileinfo}
+            <div n:ifset="$fileinfo">
+                {control fileInfo}
+            </div>
+        {/snippet}
+
+        {snippet diskusage}
+            {control diskUsage}
+        {/snippet}
+    </div>
+
+</div>

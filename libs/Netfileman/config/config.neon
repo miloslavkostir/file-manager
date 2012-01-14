@@ -1,0 +1,7 @@
+includes:
+	- default.neon
+
+parameters:
+	thumb_prefix: __system_thumb
+	pluginDir: /plugins/
+	langDir: /lang/

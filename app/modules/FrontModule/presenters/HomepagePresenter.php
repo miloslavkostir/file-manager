@@ -2,6 +2,9 @@
 
 namespace FrontModule;
 
+use Nette\InvalidArgumentException;
+
+
 class HomepagePresenter extends BasePresenter
 {
 	protected function startup()
@@ -18,29 +21,31 @@ class HomepagePresenter extends BasePresenter
                 }
 	}
 
-        public function  createComponentFileManager()
+        protected function  createComponentFileManager()
         {
                 $conf = $this->models->UserModel->getUser($this->user->id);
 
                 if (!$conf)
-                        throw new \Nette\InvalidArgumentException("User not found!");
+                        throw new InvalidArgumentException("User not found!");
 
                 if ($conf->has_share <> true)
                         throw new \Nette\Application\ForbiddenRequestException ("User is not allowed to have a share!", 403);
 
                 $root = $this->models->SettingsModel->getRoot($conf->uploadroot);           
                 if (!$root)
-                        throw new \Nette\InvalidArgumentException("Upload root not defined!");
+                        throw new InvalidArgumentException("Upload root not defined!");
 
-                $fm = new \Netfileman\FileManager;
-                $fm->config['cache'] = $conf->cache;
-                $fm->config['uploadroot'] = $root->path;
-                $fm->config['uploadpath'] = $conf->uploadpath;
-                $fm->config['readonly'] = $conf->readonly;
-                $fm->config['quota'] = $conf->quota;
-                $fm->config['quota_limit'] = $conf->quota_limit;
-                $fm->config['lang'] = $conf->lang;
+                $config = array();
+                $config["cache"] = $conf->cache;
+                $config["uploadroot"] = $root->path;
+                $config["uploadpath"] = $conf->uploadpath;
+                $config["readonly"] = $conf->readonly;
+                $config["quota"] = $conf->quota;
+                $config["quota_limit"] = $conf->quota_limit;
+                $config["lang"] = $conf->lang;
 
-                return $fm;
+                $netfileman = new \Netfileman\Netfileman($config);
+
+                return $netfileman;
         }
 }

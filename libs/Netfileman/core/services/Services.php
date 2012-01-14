@@ -1,0 +1,87 @@
+<?php
+
+namespace Netfileman;
+
+use Nette\DI\Container,
+        Nette\Application\ApplicationException;
+
+
+final class Services extends Container
+{
+        /** @var Container */
+        private $container;
+
+
+        public function __construct(Container $container, $userConfig, $rootPath)
+        {
+                $this->container = $container;
+
+                $loader = new \Nette\Config\Loader;
+                $config = $loader->load("$rootPath/config/config.neon");
+                $config["parameters"] = array_merge($config["parameters"], $userConfig);
+                $config["parameters"]["rootPath"] =  $rootPath;
+                $this->parameters = $config["parameters"];
+
+                $this->checkRequirements();
+        }
+
+
+        protected function createServiceCaching()
+        {
+                return new System\Caching($this->container, $this->parameters);
+        }
+
+
+        protected function createServiceTranslator()
+        {
+                $parameters = $this->parameters;
+                $lang = $parameters["rootPath"] . $parameters["langDir"] . $parameters["lang"] . ".mo";
+
+                if (file_exists($lang))
+                        return new \GettextTranslator($lang);
+                else
+                        throw new ApplicationException("Language file $lang does not exists!");
+        }
+
+
+        protected function createServiceSystem()
+        {
+                return new System($this->container->session);
+        }
+
+
+        protected function createServiceTools()
+        {
+                return new System\Tools($this->container, $this->parameters);
+        }
+
+
+        protected function createServiceFiles()
+        {
+                return new System\Files($this->container, $this->parameters);
+        }
+
+
+        protected function createServicePlugins()
+        {
+                $pluginDir = $this->parameters["rootPath"] . $this->parameters["pluginDir"];
+                return new System\Plugins($pluginDir);
+        }
+
+
+        private function checkRequirements()
+        {
+                $config = $this->parameters;
+                $uploadPath = $config["uploadroot"] . $config["uploadpath"];
+                $resDir = $this->container->parameters["tempDir"] . $config["resource_dir"];
+
+                if (!is_dir($uploadPath))
+                         throw new ApplicationException("Upload path '$uploadPath' doesn't exist!");
+
+                if (!is_writable($uploadPath))
+                         throw new ApplicationException("Upload path '$uploadPath' must be writable!");
+
+                if (!is_dir($uploadPath))
+                         throw new ApplicationException("Resource path '$uploadPath' doesn't exist!");
+        }
+}
