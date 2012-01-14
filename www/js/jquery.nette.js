@@ -22,7 +22,7 @@ jQuery.extend({
 		success: function (payload) {
 
                         // empty payload
-			if (payload === null)
+			if (payload === null || payload === undefined)
 				return;
 
 			// redirect
