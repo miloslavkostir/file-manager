@@ -128,8 +128,13 @@ class Netfileman extends UI\Control
                 if ($clipboard)
                         $template->clipboard = $session->clipboard;
 
-//                if (!$session->actualdir) // TODO show actualdir/root on start page
-//                        $this->handleShowContent($this->context->tools->getRootname());
+                if (!$template->content) {
+
+                        if ($session->actualdir)
+                                $template->content = $this->context->system->getActualDir();
+                        else
+                                $template->content = $this->context->tools->getRootname();
+                }
 
                 $plugins = $this->plugins;
                 if ($plugins) {
