@@ -96,7 +96,8 @@ class NewFolder extends Netfileman
                                                     umask($oldumask);
                                             }
                                     }
-                        }
+                        } else
+                                parent::getParent()->flashMessage($translator->translate("Folder %s already does not exist!", $values["actualdir"]), "warning");
                 }
 
                 parent::getParent()->handleShowContent($values['actualdir']);

@@ -56,7 +56,8 @@ class Clipboard extends Netfileman
 
                                 $this->handleClearClipboard();
                         }
-                }
+                } else
+                        parent::getParent()->flashMessage($translator->translate("Dir %s already does not exist!", $actualdir), "warning");
         }
 
 

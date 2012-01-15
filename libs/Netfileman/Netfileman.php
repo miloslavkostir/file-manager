@@ -97,6 +97,10 @@ class Netfileman extends UI\Control
 
                         $this->template->fileinfo = $actualdir;
                         $this["fileInfo"]->filename = $filename;
+                } else {
+
+                        $translator = $this->context->translator;
+                        $this->flashMessage($translator->translate("File %s already does not exist!", $actualdir.$filename), "warning");
                 }
 
                 $this->invalidateControl("fileinfo");
@@ -112,6 +116,10 @@ class Netfileman extends UI\Control
 
                         if ($this->presenter->isAjax())
                                 $this->refreshSnippets();
+                } else {
+
+                        $translator = $this->context->translator;
+                        $this->flashMessage($translator->translate("Folder %s already does not exist!", $actualdir), "warning");
                 }
         }
 

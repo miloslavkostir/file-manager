@@ -146,12 +146,7 @@ class Tools
 
                 if (file_exists($path))
                         return true;
-                else {
-
-                        $translator = $this->container->translator;
-                        parent::getParent()->flashMessage($translator->translate("Target path %s not found!", $dir), "warning");
-                        parent::getParent()->invalidateControl("message");
+                else
                         return false;
-                }
         }
 }

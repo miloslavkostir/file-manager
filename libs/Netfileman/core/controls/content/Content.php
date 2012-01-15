@@ -66,6 +66,9 @@ class Content extends Netfileman
                         );
 
                         $this->handleShowContent($actualdir);
+                } else {
+                        $translator = $this->context->translator;
+                        parent::getParent()->flashMessage($translator->translate("File %s already does not exist!", $actualdir.$filename), "warning");
                 }
         }
 
@@ -155,12 +158,16 @@ class Content extends Netfileman
 
                 if ($this->context->parameters["readonly"])
                         parent::getParent()->flashMessage($translator->translate("File manager is in read-only mode"), "warning");
-                elseif ($this->context->tools->validPath($actualdir, $filename)) {
+                else {
 
-                        if ($this->context->files->delete($actualdir, $filename))
-                            parent::getParent()->flashMessage($translator->translate("Successfuly deleted"), "info");
-                        else
-                            parent::getParent()->flashMessage($translator->translate("An error occured!"), "error");
+                        if ($this->context->tools->validPath($actualdir, $filename)) {
+
+                            if ($this->context->files->delete($actualdir, $filename))
+                                parent::getParent()->flashMessage($translator->translate("Successfuly deleted"), "info");
+                            else
+                                parent::getParent()->flashMessage($translator->translate("An error occured!"), "error");
+                        } else
+                                parent::getParent()->flashMessage($translator->translate("File %s already does not exist!", $actualdir.$filename), "warning");
                 }
 
                 $this->handleShowContent($actualdir);
@@ -260,6 +267,10 @@ class Content extends Netfileman
 
                         $path = $this->context->tools->getAbsolutePath($actualdir) . $filename;
                         $this->presenter->sendResponse(new FileResponse($path, NULL, NULL));
+                } else {
+
+                        $translator = $this->context->translator;
+                        parent::getParent()->flashMessage($translator->translate("File %s already does not exist!", $actualdir.$filename), "warning");
                 }
         }
 
