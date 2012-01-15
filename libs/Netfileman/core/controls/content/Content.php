@@ -437,11 +437,8 @@ class Content extends Netfileman
         private function getDirectoryContent($actualdir, $mask, $view, $order)
         {
                 $thumb_dir = $this->context->parameters["resource_dir"] . "img/icons/" . $view . "/";
-                if (!file_exists($this->presenter->context->parameters["wwwDir"] . $thumb_dir)) {
-
+                if (!file_exists($this->presenter->context->parameters["wwwDir"] . $thumb_dir))
                         throw new \Nette\DirectoryNotFoundException("Missing folder with icons for '$view' view");
-                        exit;
-                }
 
                 $tools = $this->context->tools;
                 $uploadpath = $this->context->parameters["uploadpath"];
@@ -460,7 +457,6 @@ class Content extends Netfileman
 
                         $name = $file->getFilename();
                         $dir_array[$name]["filename"] =  $name;
-                        $dir_array[$name]["actualdir"] =  $actualdir;
                         $dir_array[$name]["modified"] =  $file->getMTime();
 
                         if (!is_dir($file->getPath() . "/$name")) {
