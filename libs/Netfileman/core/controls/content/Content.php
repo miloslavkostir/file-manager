@@ -470,7 +470,7 @@ class Content extends Netfileman
                                 $filetype = strtolower(pathinfo($name, PATHINFO_EXTENSION));
                                 $dir_array[$name]["filetype"] = $filetype;
 
-                                if (file_exists($this->context->parameters["wwwDir"] . $thumb_dir . $filetype . ".png")) {
+                                if (file_exists($this->presenter->context->parameters["wwwDir"] . $thumb_dir . $filetype . ".png")) {
 
                                         $dir_array[$name]["icon"] =  $filetype . ".png";
                                         if (($filetype == "jpg") or ($filetype == "png") or ($filetype == "gif") or ($filetype == "jpeg") or ($filetype == "bmp"))
