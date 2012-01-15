@@ -128,7 +128,7 @@ class Netfileman extends UI\Control
                 if ($clipboard)
                         $template->clipboard = $session->clipboard;
 
-                if (!$template->content) {
+                if (!isset($template->content)) {
 
                         if ($session->actualdir)
                                 $template->content = $this->context->system->getActualDir();
