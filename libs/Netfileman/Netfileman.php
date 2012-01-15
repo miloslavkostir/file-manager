@@ -23,7 +23,7 @@ class Netfileman extends UI\Control
         private $userConfig;
 
 
-        public function __construct(array $userConfig)
+        public function __construct($userConfig = array())
         {
                 parent::__construct();
                 $this->userConfig = $userConfig;

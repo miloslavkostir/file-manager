@@ -1,4 +1,5 @@
 parameters:
+	uploadpath: /data/
 	cache: true
 	readonly:
 	resource_dir: /netfileman/

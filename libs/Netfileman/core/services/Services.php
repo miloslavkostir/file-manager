@@ -14,13 +14,16 @@ final class Services extends Container
 
         public function __construct(Container $container, $userConfig, $rootPath)
         {
-                $this->container = $container;
-
                 $loader = new \Nette\Config\Loader;
                 $config = $loader->load("$rootPath/config/config.neon");
                 $config["parameters"] = array_merge($config["parameters"], $userConfig);
                 $config["parameters"]["rootPath"] =  $rootPath;
+
+                if (!isset($config["parameters"]["uploadroot"]))
+                        $config["parameters"]["uploadroot"] = $rootPath;
+
                 $this->parameters = $config["parameters"];
+                $this->container = $container;
 
                 $this->checkRequirements();
         }
