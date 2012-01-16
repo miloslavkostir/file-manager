@@ -37,6 +37,16 @@ class Netfileman extends UI\Control
 
                         $this->context = new Services($this->presenter->context, $this->userConfig, __DIR__);
                         $this->plugins = $this->context->plugins->loadPlugins();
+
+                        $system = $this->context->system;
+                        $actualdir = $system->getActualdir();
+                        if ($actualdir) {
+
+                                $actualPath = $this->context->tools->getAbsolutePath($actualdir);
+                                if (!file_exists($actualPath) || !is_dir($actualPath))
+                                        $system->setActualdir(null);
+                        }
+
                         $this->refreshSnippets(array("message", "diskusage"));
                 }
 
@@ -139,9 +149,13 @@ class Netfileman extends UI\Control
                 if (!isset($template->content)) {
 
                         if ($session->actualdir)
-                                $template->content = $this->context->system->getActualDir();
-                        else
-                                $template->content = $this->context->tools->getRootname();
+                                $template->content = $session->actualdir;
+                        else {
+
+                                $rootname = $this->context->tools->getRootname();
+                                $template->content = $rootname;
+                                $this->context->system->setActualDir($rootname);
+                        }
                 }
 
                 $plugins = $this->plugins;
