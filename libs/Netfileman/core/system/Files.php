@@ -135,9 +135,7 @@ class Files
         public function copyFolder($src, $dst)
         {
                 $dir = opendir($src);
-                $oldumask = umask(0);
-                mkdir($dst);
-                umask($oldumask);
+                $this->mkdir($dst);
 
                 while (false !== ($file = readdir($dir)) ) {
 
@@ -268,12 +266,8 @@ class Files
          */
         public function moveFolder($actualPath, $targetPath, $filename)
         {
-                if (!is_dir($targetPath . $filename)) {
-
-                        $oldumask = umask(0);
-                        mkdir($targetPath . $filename, 0777);
-                        umask($oldumask);
-                }
+                if (!is_dir($targetPath . $filename))
+                        $this->mkdir($targetPath . $filename);
 
                 $files = Finder::find("*")
                             ->in($actualPath . $filename)
@@ -815,13 +809,26 @@ class Files
                 else
                         $path = substr($uploadpath, 0, -1) . $actualdir;
 
-                if (!is_dir($uploadroot . $path . $foldername)) {
-
-                        $oldumask = umask(0);
-                        mkdir($uploadroot . $path . $foldername, 0777);
-                        umask($oldumask);
-                }
+                if (!is_dir($uploadroot . $path . $foldername))
+                        $this->mkdir($uploadroot . $path . $foldername);
 
                 return $foldername;
+        }
+
+
+        /**
+         * Creates dir
+         * 
+         * @param string $targetPath (absolute)
+         * @return boolean
+         */
+        public function mkdir($targetPath)
+        {
+                $oldumask = umask(0);
+                if (mkdir($targetPath, 0777))
+                        return true;
+                umask($oldumask);
+
+                return false;
         }
 }
