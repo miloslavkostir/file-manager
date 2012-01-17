@@ -3,7 +3,7 @@
 namespace Netfileman;
 
 use Nette\DI\Container,
-        Nette\Application\ApplicationException;
+        Nette\DirectoryNotFoundException;
 
 
 final class Services extends Container
@@ -76,15 +76,18 @@ final class Services extends Container
         {
                 $config = $this->parameters;
                 $uploadPath = $config["uploadroot"] . $config["uploadpath"];
-                $resDir = $this->container->parameters["tempDir"] . $config["resource_dir"];
+                $resDir = $this->container->parameters["wwwDir"] . $config["resource_dir"];
+
+                if (!is_dir($resDir))
+                        throw new DirectoryNotFoundException("Resource dir '$resDir' does not exist!");
 
                 if (!is_dir($uploadPath))
-                         throw new ApplicationException("Upload path '$uploadPath' doesn't exist!");
+                         throw new DirectoryNotFoundException("Upload path '$uploadPath' doesn't exist!");
 
                 if (!is_writable($uploadPath))
-                         throw new ApplicationException("Upload path '$uploadPath' must be writable!");
+                         throw new \Nette\Application\ApplicationException("Upload path '$uploadPath' must be writable!");
 
                 if (!is_dir($uploadPath))
-                         throw new ApplicationException("Resource path '$uploadPath' doesn't exist!");
+                         throw new DirectoryNotFoundException("Resource path '$uploadPath' doesn't exist!");
         }
 }
