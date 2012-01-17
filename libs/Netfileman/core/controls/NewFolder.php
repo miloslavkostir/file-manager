@@ -2,11 +2,7 @@
 
 namespace Netfileman;
 
-use Nette\Application\UI\Form;
 
-/**
- * TODO don't use hidden, actualdir is stored in session
- */
 class NewFolder extends Netfileman
 {
         public function __construct($userConfig)
@@ -17,31 +13,22 @@ class NewFolder extends Netfileman
 
         public function render()
         {
-                $actualdir = $this->context->system->getActualDir();
-
                 $template = $this->template;
                 $template->setFile(__DIR__ . "/NewFolder.latte");
                 $template->setTranslator($this->context->translator);
-                $template->actualdir = $actualdir;
-
-                $this["newFolderForm"]->setDefaults(array("actualdir" => $actualdir));
-
                 $template->render();
         }
 
 
-        public function  createComponentNewFolderForm()
+        protected function  createComponentNewFolderForm()
         {
-                $translator = $this->context->translator;
-
-                $form = new Form;
-                $form->setTranslator($translator);
+                $form = new \Nette\Application\UI\Form;
+                $form->setTranslator($this->context->translator);
                 $form->getElementPrototype()->class("fm-ajax");
-                $form->addText("foldername", "Name of the new folder:")
-                        ->addRule(Form::FILLED, "You must fill name of new folder.");
-                $form->addHidden("actualdir");
+                $form->addText("foldername", "Name:")
+                        ->setRequired("You must fill name of new folder.");
                 $form->addSubmit("send", "Create");
-                $form->onSuccess[] = array($this, "NewFolderFormSubmitted");
+                $form->onSuccess[] = callback($this, "NewFolderFormSubmitted");
 
                 return $form;
         }
@@ -49,57 +36,44 @@ class NewFolder extends Netfileman
 
         public function NewFolderFormSubmitted($form)
         {
+                $values = $form->values;
                 $translator = $this->context->translator;
-                $values = $form->getValues();
+                $actualdir = $this->context->system->getActualDir();
 
                 if ($this->context->parameters["readonly"])
                         parent::getParent()->flashMessage($translator->translate("File manager is in read-only mode"), "warning");
                 else {
 
-                        if ($this->context->tools->validPath($values["actualdir"])) {
+                        if ($this->context->tools->validPath($actualdir)) {
 
-                                    $foldername = $this->context->files->safe_foldername($values["foldername"]);
+                                $foldername = $this->context->files->safe_foldername($values["foldername"]);
+                                if (!$foldername)
+                                        parent::getParent()->flashMessage($translator->translate("Folder name can not be used. Illegal chars used") . ' \ / : * ? " < > | ..', "warning");
+                                else {
 
-                                    if ($values['actualdir'] == $this->context->tools->getRootName()) {
+                                        $target_dir = $this->context->tools->getAbsolutePath($actualdir) . $foldername;
+                                        if (file_exists($target_dir))
+                                                parent::getParent()->flashMessage($translator->translate("Folder name already exist. Try choose another"), "warning");
+                                        else {
 
-                                            $target_dir = $this->context->parameters["uploadroot"] . $this->context->parameters["uploadpath"] . $foldername;
-                                            $actualdir = "/" . $foldername . "/";
-                                    }
-                                    else {
+                                                if ($this->context->tools->mkdir($target_dir)) {
 
-                                            $target_dir = $this->context->parameters['uploadroot'] . substr($this->context->parameters["uploadpath"], 0, -1) . $values['actualdir'] . $foldername;
-                                            $actualdir = $values["actualdir"]  . $foldername . "/";
-                                    }
+                                                        if ($this->context->parameters["cache"]) {
 
-                                    if ($foldername == "")
-                                            parent::getParent()->flashMessage($translator->translate("Folder name can not be used. Illegal chars used") . ' \ / : * ? " < > | ..', "warning");
-                                    else {
+                                                                $caching = $this->context->caching;
+                                                                $caching->deleteItem(NULL, array("tags" => "treeview"));
+                                                        }
 
-                                            if (file_exists($target_dir))
-                                                    parent::getParent()->flashMessage($translator->translate("Folder name already exist. Try choose another"), "warning");
-                                            else {
-                                                    $oldumask = umask(0);
-                                                    if (mkdir($target_dir, 0777)) {
-
-                                                            parent::getParent()->flashMessage($translator->translate("Folder successfully created"), "info");
-
-                                                            if ($this->context->parameters["cache"]) {
-
-                                                                    $caching = $this->context->caching;
-                                                                    $caching->deleteItem(NULL, array("tags" => "treeview"));
-                                                            }
-
-                                                            parent::getParent()->handleShowContent($values["actualdir"]);   //   TODO replace actualdir with redirect to new created folder
-                                                    } else
-                                                            parent::getParent()->flashMessage($translator->translate("An unkonwn error occurred during folder creation"), "info");
-
-                                                    umask($oldumask);
-                                            }
-                                    }
+                                                        parent::getParent()->flashMessage($translator->translate("Folder successfully created"), "info");
+                                                        parent::getParent()->handleShowContent($actualdir);
+                                                } else
+                                                        parent::getParent()->flashMessage($translator->translate("An unkonwn error occurred during folder creation"), "info");
+                                        }
+                                }
                         } else
-                                parent::getParent()->flashMessage($translator->translate("Folder %s already does not exist!", $values["actualdir"]), "warning");
+                                parent::getParent()->flashMessage($translator->translate("Folder %s already does not exist!", $actualdir), "warning");
                 }
 
-                parent::getParent()->handleShowContent($values['actualdir']);
+                parent::getParent()->handleShowContent($actualdir);
         }
 }
