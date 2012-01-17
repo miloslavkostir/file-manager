@@ -101,6 +101,20 @@ jQuery(document).ready(function() {
 
 
 
+                /* Treeview */
+                $(".file-manager .filetree").treeview({
+                    persist: "cookie"
+                });
+
+                $(".file-manager .hitarea").hide();
+
+                $(".file-manager .fm-treeview").hover(function() {
+                        $(".file-manager .hitarea").stop(true, true)
+                        $(".file-manager .hitarea").show('fade');
+                }, function() {
+                        $(".file-manager .hitarea").hide('fade', 700);
+                });
+
         });
 
 
@@ -176,6 +190,20 @@ jQuery(document).ready(function() {
         });
 
 
+
+        /* Treeview */
+        $(".file-manager .filetree").treeview({
+            persist: "cookie"
+        });
+
+        $(".file-manager .hitarea").hide();
+
+        $(".file-manager .fm-treeview").hover(function() {
+                $(".file-manager .hitarea").stop(true, true)
+                $(".file-manager .hitarea").show('fade');
+        }, function() {
+                $(".file-manager .hitarea").hide('fade', 700);
+        });
 
   });
   
