@@ -46,7 +46,7 @@ class NewFolder extends Netfileman
 
                         if ($this->context->tools->validPath($actualdir)) {
 
-                                $foldername = $this->context->files->safe_foldername($values["foldername"]);
+                                $foldername = $this->context->files->safe_foldername($values->foldername);
                                 if (!$foldername)
                                         parent::getParent()->flashMessage($translator->translate("Folder name can not be used. Illegal chars used") . ' \ / : * ? " < > | ..', "warning");
                                 else {
@@ -56,7 +56,7 @@ class NewFolder extends Netfileman
                                                 parent::getParent()->flashMessage($translator->translate("Folder name already exist. Try choose another"), "warning");
                                         else {
 
-                                                if ($this->context->tools->mkdir($target_dir)) {
+                                                if ($this->context->files->mkdir($target_dir)) {
 
                                                         if ($this->context->parameters["cache"]) {
 
