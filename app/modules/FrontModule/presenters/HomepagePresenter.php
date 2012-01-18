@@ -14,7 +14,7 @@ class HomepagePresenter extends BasePresenter
                 $user = $this->user;
                 if (!$user->isLoggedIn()) {
 
-			if ($user->logoutReason === \Nette\Http\User::INACTIVITY)
+			if ($user->logoutReason === \Nette\Security\User::INACTIVITY)
 				$this->flashMessage("You have been signed out due to inactivity. Please sign in again.");
 			$backlink = $this->application->storeRequest();
                         $this->redirect("Sign:", array("backlink" => $backlink));
@@ -24,11 +24,10 @@ class HomepagePresenter extends BasePresenter
         protected function  createComponentFileManager()
         {
                 $conf = $this->models->UserModel->getUser($this->user->id);
-
                 if (!$conf)
                         throw new InvalidArgumentException("User not found!");
 
-                if ($conf->has_share <> true)
+                if (!$conf->has_share)
                         throw new \Nette\Application\ForbiddenRequestException ("User is not allowed to have a share!", 403);
 
                 $root = $this->models->SettingsModel->getRoot($conf->uploadroot);           

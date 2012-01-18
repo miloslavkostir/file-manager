@@ -11,7 +11,7 @@ class DashboardPresenter extends BasePresenter
                 $user = $this->user;
                 if (!$user->isLoggedIn()) {
 
-			if ($user->logoutReason === \Nette\Http\User::INACTIVITY)
+			if ($user->logoutReason === \Nette\Security\User::INACTIVITY)
 				$this->flashMessage("You have been signed out due to inactivity. Please sign in again.");
 			$backlink = $this->application->storeRequest();
                         $this->redirect("Sign:", array("backlink" => $backlink));
