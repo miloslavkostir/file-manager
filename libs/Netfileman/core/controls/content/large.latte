@@ -109,6 +109,7 @@
                                             var files = {};
                                             files[0] = $(this).attr("id");
                                             $.post({link zip!},  { files: files });
+                                            $.animateProgress(".file-manager", e);
                                     }
 
                                     {ifset $plugins}
@@ -195,7 +196,8 @@
                                             $.each(selected, function(i) {
                                                 files[i] = $(this).attr("id");
                                             });                                           
-                                            $.post({link zip!},  { files: files });
+                                            $.post({link zip!}, { files: files });
+                                            $.animateProgress(".file-manager", e);
                                     }
 
                                     {ifset $plugins}
