@@ -44,7 +44,8 @@ class NewFolder extends Netfileman
                         parent::getParent()->flashMessage($translator->translate("File manager is in read-only mode"), "warning");
                 else {
 
-                        if ($this->context->tools->validPath($actualdir)) {
+                        $tools = $this->context->tools;
+                        if ($tools->validPath($actualdir)) {
 
                                 $foldername = $this->context->files->safe_foldername($values->foldername);
                                 if (!$foldername)
@@ -61,6 +62,7 @@ class NewFolder extends Netfileman
                                                         if ($this->context->parameters["cache"]) {
 
                                                                 $caching = $this->context->caching;
+                                                                $caching->deleteItem(array("content", $tools->getRealPath($tools->getAbsolutePath($actualdir))));
                                                                 $caching->deleteItem(NULL, array("tags" => "treeview"));
                                                         }
 
