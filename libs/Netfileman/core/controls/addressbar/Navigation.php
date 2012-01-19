@@ -1,10 +1,10 @@
 <?php
 
-namespace Netfileman;
+namespace Ixtrum;
 
 use Nette\Application\UI\Form;
 
-class Navigation extends Netfileman
+class Navigation extends Ixtrum
 {
     public function __construct($userConfig)
     {

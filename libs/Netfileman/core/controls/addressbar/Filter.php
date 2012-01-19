@@ -1,11 +1,11 @@
 <?php
 
-namespace Netfileman;
+namespace Ixtrum;
 
 use Nette\Application\UI\Form;
 
 
-class Filter extends Netfileman
+class Filter extends Ixtrum
 {
         public function __construct($userConfig)
         {

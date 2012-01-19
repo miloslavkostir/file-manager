@@ -1,14 +1,14 @@
 <?php
 
-namespace Netfileman;
+namespace Ixtrum;
 
 use Nette\DI\Container,
         Nette\Application\UI;
 
 
-class Netfileman extends UI\Control
+class Ixtrum extends UI\Control
 {
-        const NAME = "Netfileman";
+        const NAME = "iXtrum";
 
         const VERSION = "0.5 dev";
 
@@ -137,7 +137,7 @@ class Netfileman extends UI\Control
         public function render()
         {
                 $template = $this->template;
-                $template->setFile(__DIR__ . "/Netfileman.latte");
+                $template->setFile(__DIR__ . "/Ixtrum.latte");
                 $template->setTranslator($this->context->translator);
 
                 $session = $this->presenter->context->session->getSection("file-manager");

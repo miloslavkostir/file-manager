@@ -1,6 +1,6 @@
 <?php
 
-namespace Netfileman\System;
+namespace Ixtrum\System;
 
 class Plugins
 {
@@ -37,7 +37,7 @@ class Plugins
 
                         $php_code = file_get_contents($file->getPathName());
                         $classes = $this->get_php_classes($php_code);
-                        $namespace = "\NetFileman\Plugins\\";
+                        $namespace = "\Ixtrum\Plugins\\";
                         $class = $classes[0];
 
                         $vars = get_class_vars($namespace . $class);

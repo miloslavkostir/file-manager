@@ -1,9 +1,9 @@
 <?php
 
-namespace Netfileman;
+namespace Ixtrum;
 
 
-class NewFolder extends Netfileman
+class NewFolder extends Ixtrum
 {
         public function __construct($userConfig)
         {

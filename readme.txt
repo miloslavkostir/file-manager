@@ -1,4 +1,4 @@
-NetFileMan
+iXtrum
 
 Version: 0.5 dev
 

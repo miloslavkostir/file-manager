@@ -1,6 +1,6 @@
 <?php
 
-namespace Netfileman\System\Files;
+namespace Ixtrum\System\Files;
 
 class Filesize
 {

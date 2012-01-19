@@ -1,10 +1,10 @@
 <?php
 
-namespace Netfileman;
+namespace Ixtrum;
 
 use Nette\Utils\Finder;
 
-class Clipboard extends Netfileman
+class Clipboard extends Ixtrum
 {
         public function __construct($userConfig)
         {

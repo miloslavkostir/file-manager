@@ -2,7 +2,7 @@ parameters:
 	uploadpath: /data/
 	cache: true
 	readonly:
-	resource_dir: /netfileman/
+	resource_dir: /ixtrum/
 	quota:
 	quota_limit: 20 # MB
 	lang: en

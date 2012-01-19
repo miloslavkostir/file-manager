@@ -1,6 +1,6 @@
 <?php
 
-namespace Netfileman\System;
+namespace Ixtrum\System;
 
 use Nette\Utils\Finder,
         Nette\Diagnostics\Debugger,
@@ -249,7 +249,7 @@ class Files
         {
                 if (rename($actualpath . $filename, $targetpath . $this->checkDuplName($targetpath, $filename))) {
 
-                        $system = new \Netfileman\System($this->context, $this->config);
+                        $system = new \Ixtrum\System($this->context, $this->config);
                         $system->clearClipboard();
                         return true;
                 } else

@@ -1,12 +1,12 @@
 <?php
 
-namespace Netfileman;
+namespace Ixtrum;
 
 use Nette\Utils\Finder,
         Nette\DI\Container;
 
 
-class Treeview extends Netfileman
+class Treeview extends Ixtrum
 {
         public function __construct($userConfig)
         {

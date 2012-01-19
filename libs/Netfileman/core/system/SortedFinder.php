@@ -7,7 +7,7 @@
  *
  */
 
-namespace Netfileman;
+namespace Ixtrum;
 
 use Nette\Utils\Finder;
 

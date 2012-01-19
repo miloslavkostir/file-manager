@@ -1,8 +1,8 @@
 <?php
 
-namespace Netfileman;
+namespace Ixtrum;
 
-class DiskUsage extends Netfileman
+class DiskUsage extends Ixtrum
 {
         public function __construct($userConfig)
         {

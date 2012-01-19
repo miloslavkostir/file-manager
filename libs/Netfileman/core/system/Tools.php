@@ -1,6 +1,6 @@
 <?php
 
-namespace Netfileman\System;
+namespace Ixtrum\System;
 
 use Nette\Utils\Finder,
         Nette\InvalidArgumentException,

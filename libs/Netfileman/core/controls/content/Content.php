@@ -1,6 +1,6 @@
 <?php
 
-namespace Netfileman;
+namespace Ixtrum;
 
 use Nette\Image,
         Nette\Utils\Finder,
@@ -8,7 +8,7 @@ use Nette\Image,
         Nette\Application\Responses\FileResponse;
 
 
-class Content extends Netfileman
+class Content extends Ixtrum
 {
         public function __construct($userConfig)
         {

@@ -1,4 +1,4 @@
-/* NetFileMan SQLite 2 dump */ 
+/* ixtrum SQLite 2 dump */ 
 
 CREATE TABLE [users] (
 [id] INTEGER  NOT NULL PRIMARY KEY,

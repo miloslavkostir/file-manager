@@ -1,6 +1,6 @@
 <?php
 
-namespace Netfileman;
+namespace Ixtrum;
 
 use Nette\DI\Container,
         Nette\DirectoryNotFoundException;

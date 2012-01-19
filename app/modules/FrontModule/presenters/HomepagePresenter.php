@@ -43,8 +43,8 @@ class HomepagePresenter extends BasePresenter
                 $config["quota_limit"] = $conf->quota_limit;
                 $config["lang"] = $conf->lang;
 
-                $netfileman = new \Netfileman\Netfileman($config);
+                $ixtrum = new \Ixtrum\Ixtrum($config);
 
-                return $netfileman;
+                return $ixtrum;
         }
 }

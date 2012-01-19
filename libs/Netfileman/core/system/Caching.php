@@ -1,6 +1,6 @@
 <?php
 
-namespace Netfileman\System;
+namespace Ixtrum\System;
 
 use Nette\Caching\Cache,
         Nette\Caching\Storages\FileJournal,

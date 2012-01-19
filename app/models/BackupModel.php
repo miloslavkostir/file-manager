@@ -55,7 +55,7 @@ class BackupModel extends BaseModel
         private function sqlite2(DibiConnection $db)
         {
                 $time = date("l jS \of F Y h:i:s A", time());
-                $output = "-- NetFileMan SQLite 2 dump\n";
+                $output = "-- iXtrum SQLite 2 dump\n";
                 $output .= "-- Generated on $time\n\n";
 
                 $tables = $db->select("name")

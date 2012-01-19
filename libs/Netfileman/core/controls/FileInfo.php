@@ -1,8 +1,8 @@
 <?php
 
-namespace Netfileman;
+namespace Ixtrum;
 
-class FileInfo extends Netfileman
+class FileInfo extends Ixtrum
 {
         /** @var string */
         public $filename;

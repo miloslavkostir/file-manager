@@ -1,10 +1,10 @@
 <?php
 
-namespace Netfileman;
+namespace Ixtrum;
 
 use Nette\Application\UI\Form;
 
-class Rename extends Netfileman
+class Rename extends Ixtrum
 {
         /** @var string */
         public $files;
