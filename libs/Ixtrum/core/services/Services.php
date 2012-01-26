@@ -3,7 +3,8 @@
 namespace Ixtrum;
 
 use Nette\DI\Container,
-        Nette\DirectoryNotFoundException;
+        Nette\DirectoryNotFoundException,
+        Nette\Application\ApplicationException;
 
 
 final class Services extends Container
@@ -85,7 +86,7 @@ final class Services extends Container
                          throw new DirectoryNotFoundException("Upload path '$uploadPath' doesn't exist!");
 
                 if (!is_writable($uploadPath))
-                         throw new \Nette\Application\ApplicationException("Upload path '$uploadPath' must be writable!");
+                         throw new ApplicationException("Upload path '$uploadPath' must be writable!");
 
                 if (!is_dir($uploadPath))
                          throw new DirectoryNotFoundException("Resource path '$uploadPath' doesn't exist!");
