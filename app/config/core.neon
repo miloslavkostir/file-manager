@@ -13,6 +13,15 @@ common:
 		# session.save_path: "%tempDir%/sessions"
 		# zlib.output_compression: yes
 
+	nette: 
+		session:
+			autoStart: smart
+		application:
+			catchExcpetions: true
+			errorPresenter: Error
+		debugger:
+			strictMode: true
+
 	services:
 		database:
 			class: DibiConnection(%database%)

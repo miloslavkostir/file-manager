@@ -7,13 +7,15 @@ parameters:
 	database:
 		driver: sqlite
 		database: %appDir%/storage/database.db
-		profiler: false
-		
+		profiler: true
+
 	security:
 		salt:
 		
-	models: null
+	models:
 	install:
 		finished:
 		errors:
 		requirements:
+		
+	

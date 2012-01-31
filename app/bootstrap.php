@@ -1,7 +1,6 @@
 <?php
 
-use Nette\Diagnostics\Debugger,
-	Nette\Application\Routers\Route,
+use Nette\Application\Routers\Route,
         Nette\Application\Routers\RouteList,
         Nette\Application\Routers\SimpleRouter;
 
@@ -9,15 +8,14 @@ use Nette\Diagnostics\Debugger,
 require LIBS_DIR . '/Nette/nette.min.php';
 
 
-// Enable Nette Debugger for error visualisation & logging
-Debugger::$logDirectory = __DIR__ . '/../log';
-Debugger::$strictMode = TRUE;
-Debugger::enable(Debugger::PRODUCTION);
-
-
-// Load configuration from config.neon file
+// Configure application
 $configurator = new Nette\Config\Configurator;
+$configurator->setProductionMode();
 $configurator->setTempDirectory(__DIR__ . '/../temp');
+
+
+// Enable Nette Debugger for error visualisation & logging
+$configurator->enableDebugger(__DIR__ . '/../log');
 
 
 // Enable RobotLoader - this will load all classes automatically
@@ -28,14 +26,9 @@ $configurator->createRobotLoader()
 
 
 // Create Dependency Injection container from config.neon file
-$container = $configurator->addConfig(__DIR__ . "/config/core.neon");
+$env = $configurator->isProductionMode() ? $configurator::PRODUCTION : $configurator::DEVELOPMENT;
+$configurator->addConfig(__DIR__ . '/config/core.neon', $env);
 $container = $configurator->createContainer();
-
-
-// Opens already started session
-if ($container->session->exists()) {
-	$container->session->start();
-}
 
 
 // Setup router using mod_rewrite detection
@@ -59,7 +52,4 @@ if (function_exists('apache_get_modules') && in_array('mod_rewrite', apache_get_
 
 
 // Configure and run the application!
-$application = $container->application;
-$application->catchExceptions = TRUE;
-$application->errorPresenter = 'Error';
-$application->run();
+$container->application->run();
