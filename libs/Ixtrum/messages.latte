@@ -1,0 +1,24 @@
+{foreach $flashes as $flash}
+    {var $type = $flash->type}
+    <div n:if="$iterator->last || $type === 'error' || $type === 'warning'" n:class="$type === 'error' ? fm-state-error : fm-state-highlight, fm-alert-message">
+        <p>
+            <span style="" n:class="$type === 'info' ? fm-icon-info, $type === 'warning' ? fm-icon-warning, $type === 'error' ?  fm-icon-error, fm-icon, fm-left"></span>
+            {$flash->message}
+            {if count($flashes) > 1}
+            <a href="#" class="fm-show-messages">
+                {_'All messages'}
+            </a>
+            &nbsp;({count($flashes)})
+            {/if}
+            <span class="fm-icon fm-icon-close fm-right" title="{_'Close'}"></span>
+        </p>
+    </div>
+    {breakIf $type === 'error' || $type === 'warning'}
+{/foreach}
+<div n:if="count($flashes) > 1" n:class="$flash->type === 'error' ? fm-state-error : fm-state-highlight, fm-alert-message, fm-hide, fm-other-messages">
+    <p n:foreach="$flashes as $flash">
+        {var $type = $flash->type}
+        <span style="" n:class="$type === 'info' ? fm-icon-info, $type === 'warning' ? fm-icon-warning, $type === 'error' ? fm-icon-error, fm-icon, fm-left"></span>
+        {$flash->message}
+    </p>
+</div>

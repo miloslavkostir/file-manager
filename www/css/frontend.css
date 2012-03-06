@@ -1,0 +1,26 @@
+.left { 
+    float: left
+}
+.right {
+    float: right;
+}
+.clear {
+    clear: both;
+}
+.mainWrapper {
+    width: 100%;
+}
+.headerWrapper {
+    font-size: 75%;
+    font-family: Trebuchet MS,Tahoma,Verdana,Arial,sans-serif;
+}
+.headerWrapper div {
+    margin: 5px;
+}
+iframe {
+    width: 100%;
+    height: 700px;
+    border: none;
+    overflow: hidden;
+    margin: 0;
+}

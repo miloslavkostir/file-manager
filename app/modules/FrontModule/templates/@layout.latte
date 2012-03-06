@@ -2,45 +2,26 @@
 <!DOCTYPE html>
 <html>
 <head>
-        <link type="text/css" href="{$basePath}/css/ui-lightness/jquery-ui-1.8.16.custom.css" rel="stylesheet" />
-
-        <script type="text/javascript" src="http://code.jquery.com/jquery-1.6.2.min.js"></script>
-        <script type="text/javascript" src="{$basePath}/js/jquery-ui-1.8.16.custom.min.js"></script>
-	<script type="text/javascript" src="{$basePath}/js/netteForms.js"></script>
-        <script type="text/javascript" src="{$basePath}/ixtrum/js/jquery.nette.js"></script>
-        <script type="text/javascript" src="{$basePath}/js/jquery.ajaxform.js"></script>
-
-
-        <!-- load CSS -->
-        <link rel="stylesheet" href="{$basePath}/ixtrum/skins/default/css/fm-main.css" type="text/css" />
-        <link rel="stylesheet" href="{$basePath}/ixtrum/skins/default/css/jquery.treeview.css" type="text/css" />
-        <link rel="stylesheet" href="{$basePath}/ixtrum/skins/default/css/jquery.contextmenu.css" type="text/css" />
-
-        <!-- load JS -->
-        <script src="{$basePath}/ixtrum/js/jquery.treeview.js" type="text/javascript"></script>
-        <script src="{$basePath}/ixtrum/js/jquery.cookie.js" type="text/javascript"></script>
-        <script src="{$basePath}/ixtrum/js/jquery.contextmenu.js" type="text/javascript"></script>
-        <script src="{$basePath}/ixtrum/js/core.js" type="text/javascript"></script>
+        <link rel="stylesheet" href="{$basePath}/css/frontend.css" type="text/css" />
         {block head}{/block}
 </head>
 <body>
-    <div style="width: auto; margin: 0 auto;" class="ui-widget ui-widget-content ui-corner-all">
-
-        <div style="float: left;"></div>
-        <div style="float: right; font-size: 75%; font-family: Trebuchet MS,Tahoma,Verdana,Arial,sans-serif;">
+    <div class="mainWrapper">
+        <div class="left"></div>
+        <div class="headerWrapper right">
             {if $user->loggedIn}
-                    <div style="float: left; margin: 5px;">
+                    <div class="left">
                         Signed in as <u>{$user->identity->real_name}</u> |
                     </div>
-                    <div style="float: right; margin: 5px;">
+                    <div class="right">
                         {form signOutForm}
                             {input signout}
-                        {/}
+                        {/form}
                     </div>
-                    <div style="clear: both;"></div>
-            {/}
+                    <div class="clear"></div>
+            {/if}
         </div>
-        <div style="clear: both;"></div>
+        <div class="clear"></div>
 
         {include #content}
     </div>

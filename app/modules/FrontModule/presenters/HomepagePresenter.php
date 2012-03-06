@@ -21,6 +21,11 @@ class HomepagePresenter extends BasePresenter
                 }
 	}
 
+        public function renderFileManager()
+        {
+                $this->getHttpResponse()->setHeader('X-Frame-Options', "SAMEORIGIN");
+        }
+
         protected function  createComponentFileManager()
         {
                 $conf = $this->models->UserModel->getUser($this->user->id);

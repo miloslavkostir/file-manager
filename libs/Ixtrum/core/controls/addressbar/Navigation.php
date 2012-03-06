@@ -11,6 +11,21 @@ class Navigation extends Ixtrum
         parent::__construct($userConfig);
     }
 
+    public function handleRefreshContent()
+    {
+        $actualdir = $this->context->system->getActualDir();
+
+        if ($this->context->parameters["cache"]) {
+
+                $tools = $this->context->tools;
+                $caching = $this->context->caching;
+                $caching->deleteItem(NULL, array("tags" => "treeview"));
+                $caching->deleteItem(array("content", $tools->getRealPath($tools->getAbsolutePath($actualdir))));
+        }
+
+        parent::getParent()->handleShowContent($actualdir);
+    }
+
     public function render()
     {
         $actualdir = $this->context->system->getActualDir();
@@ -18,10 +33,11 @@ class Navigation extends Ixtrum
 
         $template = $this->template;
         $template->setFile(__DIR__ . '/Navigation.latte');
+        $template->setTranslator($this->context->translator);
 
-        if (!$actualdir) {
+        if (!$actualdir)
             $template->items = $this->getNav($rootname);
-        } else
+        else
             $template->items = $this->getNav($actualdir);
 
         $this['locationForm']->setDefaults(array(

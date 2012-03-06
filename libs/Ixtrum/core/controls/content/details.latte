@@ -2,7 +2,7 @@
     {$actualdir}
 </h2>
 
-<a n:if="$actualdir <> $rootname" href="{link goToParent!}" title="{_'Go to parent folder'}" class="fm-ajax fm-link-parent">
+<a n:if="$actualdir <> $rootname" n:href="goToParent!" title="{_'Go to parent folder'}" class="fm-ajax fm-link-parent">
     <h2>[..]</h2>
 </a>
 
@@ -14,10 +14,10 @@
 
     <thead>
         <tr>
-            <th><a href="{link orderBy!, 'name'}" class="fm-ajax">{_'Name'}</a></th>
-            <th><a href="{link orderBy!, 'time'}" class="fm-ajax">{_'Date Modified'}</a></th>
-            <th><a href="{link orderBy!, 'type'}" class="fm-ajax">{_'Type'}</a></th>
-            <th><a href="{link orderBy!, 'size'}" class="fm-ajax">{_'Size'}</a></th>
+            <th><a n:href="orderBy!, 'name'" class="fm-ajax">{_'Name'}</a></th>
+            <th><a n:href="orderBy!, 'time'" class="fm-ajax">{_'Date Modified'}</a></th>
+            <th><a n:href="orderBy!, 'type'" class="fm-ajax">{_'Type'}</a></th>
+            <th><a n:href="orderBy!, 'size'" class="fm-ajax">{_'Size'}</a></th>
         </tr>
     </thead>
     <tbody>
@@ -30,11 +30,11 @@
                             {var $targetpath = '/' . $item['filename'] . '/'}
                         {else}
                             {var $targetpath = $actualdir . $item['filename'] . '/'}
-                        {/}
-                        <a href="{link showContent!, $targetpath}" class="fm-ajax-dbl fm-thumb" title="{_'Open folder'}">
+                        {/if}
+                        <a n:href="showContent!, $targetpath" class="fm-ajax-dbl fm-thumb" title="{_'Open folder'}">
                             <img src="{$basePath . $thumb_dir . $item['icon']}" alt="{$item['filename']}" id="{$targetpath}" class="fm-droppable fm-draggable fm-thumb" />
                         </a>
-                    {/}
+                    {/if}
 
                     {$item['filename']|truncate:100}                                
             </td>
@@ -44,12 +44,12 @@
             <td>
                 {ifset $item['filetype']}
                     {$item['filetype']|upper}
-                {/}
+                {/ifset}
             </td>
             <td>
                 {ifset $item['size']}
                     {$item['size']|bytes}
-                {/}
+                {/ifset}
             </td>
         </tr>
     </tbody>
@@ -77,8 +77,8 @@
                                         {ifset $plugins}
                                             {foreach $plugins as $plugin}
                                                 o{7 + $iterator->getCounter()} = {},
-                                            {/}
-                                        {/}
+                                            {/foreach}
+                                        {/ifset}
                                         o7 = {};
     
                                     $("#fm-small-images tbody").unmarkAll("tr", "selected");
@@ -141,8 +141,8 @@
                                                 $.post({link runPlugin!, $plugin['name']},  { files: filename });
                                                 $.animateProgress(".file-manager", e);
                                             }
-                                        {/}
-                                    {/}
+                                        {/foreach}
+                                    {/ifset}
 
                                     return [ o1,
                                              o2,
@@ -153,8 +153,8 @@
                                              {ifset $plugins}
                                                 {foreach $plugins as $plugin}
                                                     o{7 + $iterator->getCounter()},
-                                                {/}
-                                             {/}
+                                                {/foreach}
+                                             {/ifset}
                                              o7 ];
                     } else {
                                     var o1 = {},
@@ -164,8 +164,8 @@
                                         {ifset $plugins}
                                             {foreach $plugins as $plugin}
                                                 o{5 + $iterator->getCounter()} = {},
-                                            {/}
-                                        {/}
+                                            {/foreach}
+                                        {/ifset}
                                         o5 = {};
                                         
                                     o1[{_'Properties'}] = function(menuItem, menuObject, e) {
@@ -231,8 +231,8 @@
                                                 $.post({link runPlugin!, $plugin['name']},  { files: files });
                                                 $.animateProgress(".file-manager", e);
                                             }
-                                        {/}
-                                    {/}
+                                        {/foreach}
+                                    {/ifset}
                                                                        
                                     return [ o1,
                                              o2,
@@ -241,8 +241,8 @@
                                              {ifset $plugins}
                                                 {foreach $plugins as $plugin}
                                                     o{5 + $iterator->getCounter()},
-                                                {/}
-                                             {/}
+                                                {/foreach}
+                                             {/ifset}
                                              o5 ];
                     }
             }, {
@@ -324,9 +324,9 @@
             });
 
             $(".fm-droppable").droppable({
-                    hoverClass: "ui-state-active",
+                    hoverClass: "fm-state-highlight",
                     drop: function( event, ui ) {
-                        $( this ).addClass( "ui-state-highlight" );
+                        $(this).addClass("fm-state-highlight");
 
                         var actualdir = ui.draggable.attr('id'); // actualdir
                         var filename = ui.draggable.attr('alt'); // filename
@@ -342,7 +342,7 @@
                                 $.animateProgress(".file-manager", event);
                          }
 
-                         $( this ).removeClass( "ui-state-highlight" );
+                         $( this ).removeClass( "fm-state-highlight" );
 
                     }
             });

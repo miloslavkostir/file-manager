@@ -70,6 +70,10 @@ class Treeview extends Ixtrum
         }
 
 
+        /**
+         *
+         *  @serializationVersion 1
+         */
         private function generateTreeview()
         {
                 $dirs = $this->getDirTree($this->context->parameters["uploadroot"] . $this->context->parameters["uploadpath"]);

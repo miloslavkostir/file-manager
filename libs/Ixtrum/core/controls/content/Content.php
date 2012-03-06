@@ -427,7 +427,9 @@ class Content extends Ixtrum
         /**
          * Load directory content
          * TODO Nette Finder does not support mask for folders
-         *
+         * 
+         * @serializationVersion 1
+         * 
          * @param string $actualdir
          * @param string $mask
          * @param string $view

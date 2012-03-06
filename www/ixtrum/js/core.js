@@ -21,21 +21,22 @@ jQuery(document).ready(function() {
 
 
                 /** Main */
-                $('#fm-alert-message').fadeIn('slow')
-                        .animate({opacity: 1.0}, 10000)
+                $('.fm-alert').width($(".file-manager").width());
+                $('.fm-alert').fadeIn('slow')
+                        .animate({opacity: 1.0}, 12000)
                         .fadeOut('slow', function() {
                             $(this).remove();
-                            $("#fm-other-messages").remove();
+                            $(".fm-other-messages").remove();
                         });
 
 
-                $('#fm-alert-message').delegate('.ui-icon-closethick', 'click', function() {
-                        $("#fm-alert-message").remove();
-                        $("#fm-other-messages").remove();
+                $('.fm-alert').delegate('.fm-icon-close', 'click', function() {
+                        $(".fm-alert").remove();
+                        $(".fm-other-messages").remove();
                 });
 
-                $('#fm-alert-message').delegate('#fm-show-messages', 'click', function() {
-                        $("#fm-other-messages").toggleClass("fm-hide");
+                $('.fm-alert').delegate('.fm-show-messages', 'click', function() {
+                        $(".fm-other-messages").toggleClass("fm-hide");
                         return false;
                 });
 
@@ -48,7 +49,7 @@ jQuery(document).ready(function() {
                 });
 
                 $(".fm-clipboard-item").hover(function() {
-                        $(this).toggleClass("ui-state-hover");
+                        $(this).toggleClass("fm-state-hover");
                 });
 
                 $('#fm-clipboard-hide a').click(function() {
@@ -64,25 +65,25 @@ jQuery(document).ready(function() {
 
 
                 /* Filter mask */
-                $("#frmfilterForm-phrase").focus(function(src)
+                $(".fm-filter-form input").focus(function(src)
                 {
                     if ($(this).val() == $(this)[0].title)
                     {
-                        $(this).removeClass("frmfilterForm-phrase-active");
+                        $(this).removeClass("active");
                         $(this).val("");
                     }
                 });
 
-                $("#frmfilterForm-phrase").blur(function()
+                $(".fm-filter-form input").blur(function()
                 {
                     if ($(this).val() == "")
                     {
-                        $(this).addClass("frmfilterForm-phrase-active");
+                        $(this).addClass("active");
                         $(this).val($(this)[0].title);
                     }
                 });
 
-                $("#frmfilterForm-phrase").blur();
+                //$(".fm-filter-form input").blur();
 
 
 
@@ -154,25 +155,25 @@ jQuery(document).ready(function() {
 
 
         /* Filter mask */
-        $("#frmfilterForm-phrase").focus(function(src)
+        $(".fm-filter-form input").focus(function(src)
         {
             if ($(this).val() == $(this)[0].title)
             {
-                $(this).removeClass("frmfilterForm-phrase-active");
+                $(this).removeClass("active");
                 $(this).val("");
             }
         });
 
-        $("#frmfilterForm-phrase").blur(function()
+        $(".fm-filter-form input").blur(function()
         {
             if ($(this).val() == "")
             {
-                $(this).addClass("frmfilterForm-phrase-active");
+                $(this).addClass("active");
                 $(this).val($(this)[0].title);
             }
         });
 
-        $("#frmfilterForm-phrase").blur();
+        $(".fm-filter-form input").blur();
 
 
 
