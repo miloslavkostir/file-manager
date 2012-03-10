@@ -5,9 +5,7 @@
             <span style="" n:class="$type === 'info' ? fm-icon-info, $type === 'warning' ? fm-icon-warning, $type === 'error' ?  fm-icon-error, fm-icon, fm-left"></span>
             {$flash->message}
             {if count($flashes) > 1}
-            <a href="#" class="fm-show-messages">
-                {_'All messages'}
-            </a>
+            <span class="fm-show-messages">{_'More'}</span>
             &nbsp;({count($flashes)})
             {/if}
             <span class="fm-icon fm-icon-close fm-right" title="{_'Close'}"></span>

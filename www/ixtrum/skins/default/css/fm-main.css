@@ -18,7 +18,7 @@
 
 .fm-alert { width: 100%; z-index: 1; position: absolute; }
 .fm-alert .fm-alert-message { padding: 0pt 0.7em; font-weight: normal; }
-.fm-alert .fm-show-messages { text-decoration: underline; }
+.fm-alert .fm-show-messages { text-decoration: underline; cursor: pointer; }
 .fm-alert .fm-alert-message .fm-left { margin-right: 0.3em; }
 .fm-alert .fm-other-messages { padding: 0pt 0.7em; position: absolute; z-index: 3; }
 
@@ -26,8 +26,7 @@
 .fm-draggable { cursor: pointer; }
 .fm-state-highlight { border: 1px solid #fed22f; background: #ffe45c; color: #363636; font-weight: bold; }
 .fm-state-error { border: 1px solid #cd0a0a; background: #be2e17; color: #ffffff; }
-.fm-state-error a { color: #ffffff; }
-.fm-state-error .fm-icon-close { border: 1px solid #ffffff; }
+.fm-state-error .fm-icon-close { border: 1px solid #cd0a0a; }
 
 
 .fm-adressbar { width: auto; background: url(../img/addressbar.png) repeat transparent; }

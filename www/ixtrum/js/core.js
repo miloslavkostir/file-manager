@@ -35,13 +35,6 @@ jQuery(document).ready(function() {
                         $(".fm-other-messages").remove();
                 });
 
-                $('.fm-alert').delegate('.fm-show-messages', 'click', function() {
-                        $(".fm-other-messages").toggleClass("fm-hide");
-                        return false;
-                });
-
-
-
                 /** Clipboard */
                 $('.fm-clipboard').css({
                         position: 'absolute',
@@ -121,6 +114,10 @@ jQuery(document).ready(function() {
 
 
         /** Main */
+        $('.fm-alert').delegate('.fm-show-messages', 'click', function() {
+                $(".fm-other-messages").toggleClass("fm-hide");
+        });
+
         $(".file-manager .fm-body").noTextHighlight();
 
         $(".file-manager").delegate("a.fm-ajax", "click", function(e) {
