@@ -22,13 +22,10 @@ jQuery(document).ready(function() {
 
                 /** Main */
                 $('.fm-alert').width($(".file-manager").width());
-                $('.fm-alert').fadeIn('slow')
-                        .animate({opacity: 1.0}, 12000)
-                        .fadeOut('slow', function() {
-                            $(this).remove();
-                            $(".fm-other-messages").remove();
-                        });
 
+                var mb = $('.fm-alert, fm-other-messages').stop(true, true).fadeIn(); // http://stackoverflow.com/questions/2884221/how-to-start-stop-restart-jquery-animation
+                if(mb.data('delay')) clearTimeout(mb.data('delay'));
+                mb.data('delay', setTimeout(function() { mb.fadeOut(500); }, 10000));
 
                 $('.fm-alert').delegate('.fm-icon-close', 'click', function() {
                         $(".fm-alert").remove();
