@@ -35,26 +35,12 @@ jQuery(document).ready(function() {
                         $(".fm-other-messages").remove();
                 });
 
+
                 /** Clipboard */
                 $('.fm-clipboard').css({
                         position: 'absolute',
                         top: $('.fm-toolbar').height()
                 });
-
-                $(".fm-clipboard-item").hover(function() {
-                        $(this).toggleClass("fm-state-hover");
-                });
-
-                $('#fm-clipboard-hide a').click(function() {
-                        $('.fm-clipboard').slideToggle('slow');
-                        return false;
-                });
-
-                $('#show-clipboard').click(function() {
-                        $('.fm-clipboard').slideToggle('slow');
-                        return false;
-                });
-
 
 
                 /* Filter mask */
@@ -203,6 +189,21 @@ jQuery(document).ready(function() {
                 $(".file-manager .hitarea").hide('fade', 700);
         });
 
+
+        /** Clipboard */
+        $('.fm-clipboard').css({
+                position: 'absolute',
+                top: $('.fm-toolbar').height()
+        });
+
+        $(document).delegate('#fm-clipboard-hide', 'click', function() {
+                $('.fm-clipboard').slideToggle('slow');
+        });
+
+        $(document).delegate('#show-clipboard', 'click', function() {
+                $('.fm-clipboard').slideToggle('slow');
+                return false;
+        });
   });
   
   
