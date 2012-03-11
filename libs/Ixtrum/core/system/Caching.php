@@ -24,7 +24,7 @@ class Caching
         public function __construct(Container $container, array $config)
         {
                 $tempDir = $container->parameters["tempDir"];
-                $cacheDir = "$tempDir/file-manager";
+                $cacheDir = "$tempDir/file-manager/cache";
 
                 if(!is_dir($cacheDir)) {
 
