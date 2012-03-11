@@ -7,7 +7,7 @@ use Nette\DI\Container,
         Nette\Application\ApplicationException;
 
 
-final class Services extends Container
+final class Loader extends Container
 {
         /** @var Container */
         private $container;

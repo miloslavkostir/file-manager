@@ -35,7 +35,7 @@ class Ixtrum extends UI\Control
         {
                 if ($presenter instanceof UI\Presenter) {
 
-                        $this->context = new Services($this->presenter->context, $this->userConfig, __DIR__);
+                        $this->context = new Loader($this->presenter->context, $this->userConfig, __DIR__);
                         $this->plugins = $this->context->plugins->loadPlugins();
 
                         $system = $this->context->system;
