@@ -96,5 +96,16 @@ final class Loader extends Container
 
                 if (!is_dir($uploadPath))
                          throw new DirectoryNotFoundException("Resource path '$uploadPath' doesn't exist!");
+
+                $tempDir = $this->container->parameters["tempDir"] . "/file-manager";
+                if (!is_dir($tempDir)) {
+
+                        $oldumask = umask(0);
+                        mkdir($tempDir, 0777);
+                        umask($oldumask);
+                }
+
+                if (!is_writable($tempDir))
+                         throw new ApplicationException("Temp dir '$tempDir' must be writable!");
         }
 }
