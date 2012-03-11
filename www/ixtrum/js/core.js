@@ -27,11 +27,6 @@ jQuery(document).ready(function() {
                 if(mb.data('delay')) clearTimeout(mb.data('delay'));
                 mb.data('delay', setTimeout(function() { mb.fadeOut(500); }, 10000));
 
-                $('.fm-alert').delegate('.fm-icon-close', 'click', function() {
-                        $(".fm-alert").remove();
-                        $(".fm-other-messages").remove();
-                });
-
 
                 /** Clipboard */
                 $('.fm-clipboard').css({
@@ -50,14 +45,6 @@ jQuery(document).ready(function() {
                 });
 
                 $(".file-manager .hitarea").hide();
-
-                $(".file-manager .fm-treeview").hover(function() {
-                        $(".file-manager .hitarea").stop(true, true)
-                        $(".file-manager .hitarea").show('fade');
-                }, function() {
-                        $(".file-manager .hitarea").hide('fade', 700);
-                });
-
         });
 
 
@@ -66,6 +53,11 @@ jQuery(document).ready(function() {
         $('.fm-alert').delegate('.fm-show-messages', 'click', function() {
                 $(".fm-other-messages").toggleClass("fm-hide");
         });
+
+        $('.fm-alert').delegate('.fm-icon-close', 'click', function() {
+                $(".fm-alert, .fm-other-messages").hide();
+        });
+
 
         $(".file-manager .fm-body").noTextHighlight();
 
@@ -137,11 +129,12 @@ jQuery(document).ready(function() {
 
         $(".file-manager .hitarea").hide();
 
-        $(".file-manager .fm-treeview").hover(function() {
-                $(".file-manager .hitarea").stop(true, true)
-                $(".file-manager .hitarea").show('fade');
-        }, function() {
-                $(".file-manager .hitarea").hide('fade', 700);
+        $(".file-manager").delegate('.fm-treeview', 'hover', function(e) {
+                if( e.type === 'mouseenter' ) {
+                    $(".file-manager .hitarea").stop(true, true)
+                    $(".file-manager .hitarea").show('fade');
+                } else
+                    $(".file-manager .hitarea").hide('fade', 700);
         });
 
 
