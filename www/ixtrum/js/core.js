@@ -44,21 +44,6 @@ jQuery(document).ready(function() {
                 $(".fm-filter-form input").blur();
 
 
-                /* Navigation */
-                $('.fm-navigation').removeClass("inactive");
-
-                $('.fm-location input').focus(function() {
-                        $(".fm-navigation").addClass("inactive");
-                        $(this).addClass("active");
-                });
-
-                $('.fm-location input').blur(function() {
-                        $(this).removeClass("active");
-                        $('.fm-navigation').removeClass("inactive");
-                });
-
-
-
                 /* Treeview */
                 $(".file-manager .filetree").treeview({
                     persist: "cookie"
@@ -134,18 +119,15 @@ jQuery(document).ready(function() {
 
 
         /* Navigation */
-        $('.fm-navigation').removeClass("inactive");
-
-        $('.fm-location input').focus(function() {
-                $(".fm-navigation").addClass("inactive");
+        $('body').delegate('.fm-location input', 'focusin', function() {
+                $(".fm-navigation").hide();
                 $(this).addClass("active");
         });
 
-        $('.fm-location input').blur(function() {
+        $('body').delegate('.fm-location input', 'focusout', function() {
                 $(this).removeClass("active");
-                $('.fm-navigation').removeClass("inactive");
+                $('.fm-navigation').show();
         });
-
 
 
         /* Treeview */
