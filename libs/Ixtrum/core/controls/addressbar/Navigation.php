@@ -4,7 +4,7 @@ namespace Ixtrum;
 
 use Nette\Application\UI\Form;
 
-class Navigation extends Ixtrum
+class Navigation extends FileManager
 {
     public function __construct($userConfig)
     {

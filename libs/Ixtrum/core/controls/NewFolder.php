@@ -3,7 +3,7 @@
 namespace Ixtrum;
 
 
-class NewFolder extends Ixtrum
+class NewFolder extends FileManager
 {
         public function __construct($userConfig)
         {

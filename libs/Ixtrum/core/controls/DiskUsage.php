@@ -2,7 +2,7 @@
 
 namespace Ixtrum;
 
-class DiskUsage extends Ixtrum
+class DiskUsage extends FileManager
 {
         public function __construct($userConfig)
         {

@@ -6,7 +6,7 @@ use Nette\Utils\Finder,
         Nette\DI\Container;
 
 
-class Treeview extends Ixtrum
+class Treeview extends FileManager
 {
         public function __construct($userConfig)
         {

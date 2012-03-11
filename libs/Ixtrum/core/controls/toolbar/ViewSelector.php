@@ -5,7 +5,7 @@ namespace Ixtrum;
 use Nette\Application\UI\Form;
 
 
-class ViewSelector extends Ixtrum
+class ViewSelector extends FileManager
 {
         public function __construct($userConfig)
         {

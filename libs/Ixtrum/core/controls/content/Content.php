@@ -7,7 +7,7 @@ use Nette\Utils\Finder,
         Nette\Application\Responses\FileResponse;
 
 
-class Content extends Ixtrum
+class Content extends FileManager
 {
         public function __construct($userConfig)
         {
@@ -396,7 +396,7 @@ class Content extends Ixtrum
         /**
          * Load directory content
          * TODO Nette Finder does not support mask for folders
-         * TODO initialize global variables first, access to services in foreach can slow down => better performance
+         *
          * @serializationVersion 1
          * 
          * @param string $actualdir

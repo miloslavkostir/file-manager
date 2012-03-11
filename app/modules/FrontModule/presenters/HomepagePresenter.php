@@ -48,7 +48,7 @@ class HomepagePresenter extends BasePresenter
                 $config["quota_limit"] = $conf->quota_limit;
                 $config["lang"] = $conf->lang;
 
-                $ixtrum = new \Ixtrum\Ixtrum($config);
+                $ixtrum = new \Ixtrum\FileManager($config);
 
                 return $ixtrum;
         }

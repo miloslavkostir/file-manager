@@ -6,9 +6,9 @@ use Nette\DI\Container,
         Nette\Application\UI;
 
 
-class Ixtrum extends UI\Control
+class FileManager extends UI\Control
 {
-        const NAME = "iXtrum";
+        const NAME = "iXtrum File Manager";
 
         const VERSION = "0.5 dev";
 
@@ -137,7 +137,7 @@ class Ixtrum extends UI\Control
         public function render()
         {
                 $template = $this->template;
-                $template->setFile(__DIR__ . "/Ixtrum.latte");
+                $template->setFile(__DIR__ . "/FileManager.latte");
                 $template->setTranslator($this->context->translator);
 
                 $session = $this->presenter->context->session->getSection("file-manager");

@@ -4,7 +4,7 @@ namespace Ixtrum;
 
 use Nette\Utils\Finder;
 
-class Clipboard extends Ixtrum
+class Clipboard extends FileManager
 {
         public function __construct($userConfig)
         {

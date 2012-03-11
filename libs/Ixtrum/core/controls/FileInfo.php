@@ -2,7 +2,7 @@
 
 namespace Ixtrum;
 
-class FileInfo extends Ixtrum
+class FileInfo extends FileManager
 {
         /** @var string */
         public $filename;

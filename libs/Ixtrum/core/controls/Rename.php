@@ -4,7 +4,7 @@ namespace Ixtrum;
 
 use Nette\Application\UI\Form;
 
-class Rename extends Ixtrum
+class Rename extends FileManager
 {
         /** @var string */
         public $files;
