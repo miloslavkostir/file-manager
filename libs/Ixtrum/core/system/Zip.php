@@ -12,11 +12,8 @@ class Zip
         /** @var string */
         private $targetDir;
 
-        /** @var string */
-        private $thumb_prefix;
 
-
-        public function __construct($targetDir, $thumb_prefix)
+        public function __construct($targetDir)
         {
                 if (!extension_loaded("zip"))
                         throw new ApplicationException("PHP ZIP not loaded.");
@@ -30,7 +27,6 @@ class Zip
                 }
 
                 $this->targetDir = $targetDir;
-                $this->thumb_prefix = $thumb_prefix;
         }
 
 
@@ -57,10 +53,7 @@ class Zip
 
                                 if (is_dir($file)) {
 
-                                        $iterator = Finder::find("*")
-                                                            ->from($file)
-                                                            ->exclude("$this->thumb_prefix*");
-
+                                        $iterator = Finder::find("*")->from($file);
                                         foreach ($iterator as $item) {
 
                                                 $name = substr_replace($item->getPathname(), "", 0, strlen($path));

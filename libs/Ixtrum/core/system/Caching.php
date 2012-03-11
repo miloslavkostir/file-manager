@@ -62,13 +62,10 @@ class Caching
          */
         public function deleteItemsRecursive($absDir)
         {
-                $dirs = Finder::findDirectories("*")
-                            ->from($absDir)
-                            ->exclude($this->config["thumb_prefix"] . "*");
-
-
+                $dirs = Finder::findDirectories("*")->from($absDir);
                 $cache = $this->cache;
                 $tools = new Tools($this->context, $this->config);
+
                 foreach ($dirs as $dir) {
 
                         $key = $tools->getRealPath($dir->getPathName());

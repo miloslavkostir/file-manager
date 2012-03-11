@@ -58,9 +58,7 @@ class Treeview extends Ixtrum
        private function getDirTree($dir)
        {
                $x = array();
-               $dirs = Finder::findDirectories("*")
-                            ->in($dir)
-                            ->exclude($this->context->parameters["thumb_prefix"] . "*");
+               $dirs = Finder::findDirectories("*")->in($dir);
 
                foreach ($dirs as $dir) {
                        $x[$dir->getFilename()] = $this->getDirTree($dir->getPathName());

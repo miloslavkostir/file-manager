@@ -141,11 +141,9 @@ class Files
 
                         if ( ( $file != "." ) && ( $file != '..' ) ) {
 
-                                if ( is_dir($src . '/' . $file) ) {
-
-                                        if (strpos( '11' . $file, $this->config["thumb_prefix"]) != 2 )  // exclude thumb folders
-                                                $this->copyFolder($src . "/" . $file, $dst . "/" . $file);
-                                } else
+                                if ( is_dir($src . '/' . $file) )
+                                        $this->copyFolder($src . "/" . $file, $dst . "/" . $file);
+                                else
                                         $this->copyFile($src . "/" . $file, $dst . "/" . $file);
 
                         }
@@ -199,6 +197,9 @@ class Files
                 else {
                         if (is_dir($actualpath . $filename)) {
 
+                                $thumbs = new Thumbs($this->context, $this->config);
+                                $thumbs->deleteDirThumbs($actualpath . $filename);
+
                                 if ($this->isSubFolder($actualpath, $targetpath, $filename))
                                         return false;
                                 elseif ($this->moveFolder($actualpath, $targetpath, $filename)) {
@@ -219,6 +220,9 @@ class Files
                                 } else
                                         return false;
                         } else {
+
+                                $thumbs = new Thumbs($this->context, $this->config);
+                                $thumbs->deleteThumb($actualpath. $filename);
 
                                 if ($this->moveFile($actualpath, $targetpath, $filename)) {
 
@@ -249,7 +253,7 @@ class Files
         {
                 if (rename($actualpath . $filename, $targetpath . $this->checkDuplName($targetpath, $filename))) {
 
-                        $system = new \Ixtrum\System($this->context, $this->config);
+                        $system = new \Ixtrum\System($this->context->session);
                         $system->clearClipboard();
                         return true;
                 } else
@@ -269,10 +273,7 @@ class Files
                 if (!is_dir($targetPath . $filename))
                         $this->mkdir($targetPath . $filename);
 
-                $files = Finder::find("*")
-                            ->in($actualPath . $filename)
-                            ->exclude($this->config["thumb_prefix"] . "*");
-
+                $files = Finder::find("*")->in($actualPath . $filename);
                 foreach ($files as $file) {
 
                         if ($file->isDir())
@@ -423,7 +424,7 @@ class Files
                     } elseif ($iterate) {
 
                             $info['dirCount']++;
-                            $items = Finder::find('*')->from($filepath)->exclude($this->config["thumb_prefix"] . "*");
+                            $items = Finder::find('*')->from($filepath);
 
                             foreach ($items as $item) {
 
@@ -489,7 +490,7 @@ class Files
                 $info = array();
                 $info['size'] = 0;
                 $info['count'] = 0;
-                $files = Finder::findFiles('*')->from($path)->exclude($this->config["thumb_prefix"] . "*");
+                $files = Finder::findFiles('*')->from($path);
 
                 foreach ($files as $file) {
 
@@ -654,6 +655,9 @@ class Files
                                 $caching->deleteItemsRecursive($absDir);
                         }
 
+                        $thumbs = new Thumbs($this->context, $this->config);
+                        $thumbs->deleteDirThumbs($absDir . $file);
+
                         if ($this->deleteFolder($absDir . $file))
                                 return true;
                         else
@@ -683,11 +687,9 @@ class Files
 
             if (is_writable($path)) {
 
-                    $cache_file =  $this->createThumbName($actualdir, $filename);
-
                     // delete thumb
-                    if ( file_exists($cache_file["path"]) && is_writable($path . $filename) )
-                           unlink($cache_file["path"]);
+                    $thumbs = new Thumbs($this->context, $this->config);
+                    $thumbs->deleteThumb($path. $filename);
 
                     // delete source file
                     if (@unlink($path . $filename)) {
@@ -752,67 +754,6 @@ class Files
 
                 return true;
             }
-        }
-
-        /**
-         * Get name for thumb file & create thumb folder if not exists
-         * 
-         * @param string $actualdir
-         * @param string $filename
-         * @return array
-         */
-        public function createThumbName($actualdir, $filename)
-        {
-                $result = array();
-
-                $tools = new Tools($this->context, $this->config);
-                $rootname = $tools->getRootName();
-
-                $uploadpath = $this->config["uploadpath"];
-                $uploadroot = $this->config["uploadroot"];
-
-                $thumb_folder = $this->createThumbFolder($actualdir);
-
-                if ($actualdir === $rootname) {
-
-                        $path = $uploadroot . $uploadpath . $filename;
-                        $result["name"] = $this->config["thumb_prefix"] . md5($filename . $this->filesize($path)) . "." . pathinfo($filename, PATHINFO_EXTENSION);
-                        $result["path"] = $uploadroot . $uploadpath . $thumb_folder . "/" . $result["name"];
-                } else {
-
-                        $path = $uploadroot . substr($uploadpath,0,-1) . $actualdir . $filename;            
-                        $result["name"] = $this->config["thumb_prefix"] . md5($filename . $this->filesize($path)) . "." . pathinfo($filename, PATHINFO_EXTENSION);
-                        $result["path"] = $uploadroot . substr($uploadpath,0,-1) . $actualdir . $thumb_folder . "/" . $result["name"];
-                }
-
-                return $result;
-        }
-
-
-        /**
-         * Create thumb folder if not exists
-         * 
-         * @param string $actualdir
-         * @return string
-         */
-        public function createThumbFolder($actualdir)
-        {
-                $tools = new Tools($this->context, $this->config);
-                $rootname = $tools->getRootName();
-
-                $uploadpath = $this->config["uploadpath"];
-                $uploadroot = $this->config["uploadroot"];
-                $foldername = $this->config["thumb_prefix"] . md5($actualdir);
-
-                if ($actualdir === $rootname)
-                        $path = $uploadpath;
-                else
-                        $path = substr($uploadpath, 0, -1) . $actualdir;
-
-                if (!is_dir($uploadroot . $path . $foldername))
-                        $this->mkdir($uploadroot . $path . $foldername);
-
-                return $foldername;
         }
 
 

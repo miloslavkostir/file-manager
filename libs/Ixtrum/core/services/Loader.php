@@ -66,6 +66,12 @@ final class Loader extends Container
         }
 
 
+        protected function createServiceThumbs()
+        {
+                return new System\Thumbs($this->container, $this->parameters);
+        }
+
+
         protected function createServicePlugins()
         {
                 $pluginDir = $this->parameters["rootPath"] . $this->parameters["pluginDir"];

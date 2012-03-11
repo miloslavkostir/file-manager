@@ -2,9 +2,8 @@
 
 namespace Ixtrum;
 
-use Nette\Image,
-        Nette\Utils\Finder,
-        Nette\Templating\DefaultHelpers,
+use Nette\Utils\Finder,
+        Nette\Templating\Helpers,
         Nette\Application\Responses\FileResponse;
 
 
@@ -39,7 +38,7 @@ class Content extends Ixtrum
 
                         $info = $this->context->files->getFilesInfo($actualdir, $files, true);
                         $this->presenter->payload->result = "success";
-                        $this->presenter->payload->size = DefaultHelpers::bytes($info["size"]);
+                        $this->presenter->payload->size = Helpers::bytes($info["size"]);
                         $this->presenter->payload->dirCount = $info["dirCount"];
                         $this->presenter->payload->fileCount = $info["fileCount"];
                         $this->presenter->sendPayload();
@@ -219,7 +218,7 @@ class Content extends Ixtrum
                         $actualPath = $this->context->tools->getAbsolutePath($actualdir);
 
 
-                        $zip = new System\Zip($actualPath, $this->context->parameters["thumb_prefix"]);
+                        $zip = new System\Zip($actualPath);
                         $zip->addFiles($files);
 
 
@@ -328,38 +327,8 @@ class Content extends Ixtrum
         public function handleShowThumb($dir, $file)
         {
                 $path = $this->context->tools->getAbsolutePath($dir) . $file;
-
-                $cache_file =  $this->context->files->createThumbName($dir, $file);
-
-                if ( file_exists($cache_file["path"]) ) {
-
-                        $image = Image::fromFile($cache_file["path"]);
-                        $image->send();
-                } else {
-
-                        $disksize = $this->context->tools->diskSizeInfo();
-                        if ($disksize["spaceleft"] > 2 ) {
-
-                                $status = true;
-                                if (function_exists("exec"))
-                                        exec("convert -version", $results, $status);
-
-                                if (class_exists("\Nette\ImageMagick") && !$status) {
-                                        $image = new \Nette\ImageMagick($path);
-                                } elseif (class_exists("\Imagick")) {
-                                        $thumb = new \Imagick($path);
-                                        $thumb->resizeImage(90, 0, \Imagick::FILTER_LANCZOS, 1);
-                                        $thumb->writeImage($cache_file["path"]);
-                                        $thumb->destroy();
-                                        $image = Image::fromFile($path);
-                                } else
-                                        $image = Image::fromFile($path);
-
-                                $image->resize(96, NULL);
-                                $image->save($cache_file["path"], 80);
-                                $image->send();
-                        }
-                }
+                $thumb = $this->context->thumbs->getThumb($path);
+                $thumb->send();
         }
 
 
@@ -427,7 +396,7 @@ class Content extends Ixtrum
         /**
          * Load directory content
          * TODO Nette Finder does not support mask for folders
-         * 
+         * TODO initialize global variables first, access to services in foreach can slow down => better performance
          * @serializationVersion 1
          * 
          * @param string $actualdir
@@ -446,12 +415,11 @@ class Content extends Ixtrum
                 $uploadpath = $this->context->parameters["uploadpath"];
                 $rootname = $tools->getRootName();
                 $uploadroot = $this->context->parameters["uploadroot"];
-
+                $supportedThumbs = $this->context->thumbs->supported;
                 $absolutePath = $tools->getAbsolutePath($actualdir);
 
                 $files = SortedFinder::find($mask)
                             ->in($absolutePath)
-                            ->exclude($this->context->parameters["thumb_prefix"] . "*")
                             ->orderBy($order);
 
                 $dir_array = array();
@@ -471,7 +439,7 @@ class Content extends Ixtrum
                                 if (file_exists($this->presenter->context->parameters["wwwDir"] . $thumb_dir . $filetype . ".png")) {
 
                                         $dir_array[$name]["icon"] =  $filetype . ".png";
-                                        if (($filetype == "jpg") or ($filetype == "png") or ($filetype == "gif") or ($filetype == "jpeg") or ($filetype == "bmp"))
+                                        if (in_array($filetype, $supportedThumbs))
                                             $dir_array[$name]["create_thumb"] =  true;
                                         else
                                             $dir_array[$name]["create_thumb"] =  false;
