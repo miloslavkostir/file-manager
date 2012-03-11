@@ -41,26 +41,7 @@ jQuery(document).ready(function() {
 
 
                 /* Filter mask */
-                $(".fm-filter-form input").focus(function(src)
-                {
-                    if ($(this).val() == $(this)[0].title)
-                    {
-                        $(this).removeClass("active");
-                        $(this).val("");
-                    }
-                });
-
-                $(".fm-filter-form input").blur(function()
-                {
-                    if ($(this).val() == "")
-                    {
-                        $(this).addClass("active");
-                        $(this).val($(this)[0].title);
-                    }
-                });
-
-                //$(".fm-filter-form input").blur();
-
+                $(".fm-filter-form input").blur();
 
 
                 /* Navigation */
@@ -135,26 +116,21 @@ jQuery(document).ready(function() {
 
 
         /* Filter mask */
-        $(".fm-filter-form input").focus(function(src)
-        {
-            if ($(this).val() == $(this)[0].title)
-            {
-                $(this).removeClass("active");
-                $(this).val("");
-            }
+        $('body').delegate('.fm-filter-form input', 'focusin', function() {
+                if ($(this).val() == $(this)[0].title) {
+                    $(this).removeClass('active');
+                    $(this).val("");
+                }
         });
 
-        $(".fm-filter-form input").blur(function()
-        {
-            if ($(this).val() == "")
-            {
-                $(this).addClass("active");
-                $(this).val($(this)[0].title);
-            }
+        $('body').delegate('.fm-filter-form input', 'focusout', function() {
+                if ($(this).val() == '') {
+                    $(this).addClass('active');
+                    $(this).val($(this)[0].title);
+                }
         });
 
         $(".fm-filter-form input").blur();
-
 
 
         /* Navigation */
