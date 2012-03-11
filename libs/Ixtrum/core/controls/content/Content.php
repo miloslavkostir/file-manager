@@ -346,7 +346,7 @@ class Content extends Ixtrum
 
                                 if (class_exists("\Nette\ImageMagick") && !$status) {
                                         $image = new \Nette\ImageMagick($path);
-                                } elseif (class_exists("Imagick")) {
+                                } elseif (class_exists("\Imagick")) {
                                         $thumb = new \Imagick($path);
                                         $thumb->resizeImage(90, 0, \Imagick::FILTER_LANCZOS, 1);
                                         $thumb->writeImage($cache_file["path"]);
