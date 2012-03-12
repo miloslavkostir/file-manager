@@ -44,13 +44,13 @@ class Navigation extends FileManager
         $template->render();
     }
 
-    public function createComponentLocationForm()
+    protected function createComponentLocationForm()
     {
         $translator = $this->context->translator;
         $form = new Form;
         $form->setTranslator($translator);
         $form->addText('location');
-        $form->onSuccess[] = array($this, 'LocationFormSubmitted');
+        $form->onSuccess[] = callback($this, 'LocationFormSubmitted');
 
         return $form;
     }

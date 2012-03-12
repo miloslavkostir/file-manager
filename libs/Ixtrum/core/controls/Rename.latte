@@ -1,10 +1,18 @@
-<h2>{_'Rename'}</h2>
+<h2>{_'Rename'}: {$origFile}</h2>
 
 <div class="fm-delimiter"></div>
 
-<span style="margin: 5px;">
-    <strong>{_'Original name'}:</strong>
-    {$origFile}
-</span>
-
-{control renameForm}
+{form renameForm class => "fm-ajax"}
+<table>
+    <tbody>
+        <tr>
+            <th>{label new_filename /}</th>
+            <td>{input new_filename}</td>
+        </tr>
+        <tr>
+            <th></th>
+            <td>{input send}</td>
+        </tr>
+    </tbody>
+</table>
+{/form}

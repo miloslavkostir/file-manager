@@ -2,4 +2,17 @@
 
 <div class="fm-delimiter"></div>
 
-{control newFolderForm}
+{form newFolderForm class => "fm-ajax"}
+<table>
+    <tbody>
+        <tr>
+            <th>{label name /}</th>
+            <td>{input name}</td>
+        </tr>
+        <tr>
+            <th></th>
+            <td>{input send}</td>
+        </tr>
+    </tbody>
+</table>
+{/form}

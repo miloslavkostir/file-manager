@@ -23,7 +23,7 @@ class ViewSelector extends FileManager
                 $template->render();
         }
 
-        public function createComponentChangeViewForm()
+        protected function createComponentChangeViewForm()
         {
                 $translator = $this->context->translator;
                 $items = array(
@@ -34,10 +34,9 @@ class ViewSelector extends FileManager
                 );
 
                 $form = new Form;
-                $form->getElementPrototype()->class("fm-ajax");
                 $form->addSelect("view", NULL, $items);
 
-                $form->onSuccess[] = array($this, "ChangeViewFormSubmitted");
+                $form->onSuccess[] = callback($this, "ChangeViewFormSubmitted");
 
                 return $form;
         }

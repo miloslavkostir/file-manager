@@ -23,8 +23,7 @@ class NewFolder extends FileManager
         {
                 $form = new \Nette\Application\UI\Form;
                 $form->setTranslator($this->context->translator);
-                $form->getElementPrototype()->class("fm-ajax");
-                $form->addText("foldername", "Name:")
+                $form->addText("name", "Name:")
                         ->setRequired("Folder name required.");
                 $form->addSubmit("send", "Create");
                 $form->onSuccess[] = callback($this, "NewFolderFormSubmitted");
@@ -45,7 +44,7 @@ class NewFolder extends FileManager
                         $tools = $this->context->tools;
                         if ($tools->validPath($actualdir)) {
 
-                                $foldername = $this->context->files->safe_foldername($values->foldername);
+                                $foldername = $this->context->files->safe_foldername($values->name);
                                 if (!$foldername)
                                         parent::getParent()->flashMessage("Folder name can not be used - illegal characters.", "warning");
                                 else {

@@ -26,13 +26,13 @@ class Filter extends FileManager
         }
 
 
-        public function createComponentFilterForm()
+        protected function createComponentFilterForm()
         {
                 $translator = $this->context->translator;
                 $form = new Form;
                 $form->setTranslator($translator);
                 $form->addText("phrase")->getControlPrototype()->setTitle($translator->translate("Filter"));
-                $form->onSuccess[] = array($this, "FilterFormSubmitted");
+                $form->onSuccess[] = callback($this, "FilterFormSubmitted");
 
                 return $form;
         }

@@ -31,17 +31,15 @@ class Rename extends FileManager
         }
 
 
-        public function createComponentRenameForm()
+        protected function createComponentRenameForm()
         {
-                $translator = $this->context->translator;
                 $form = new Form;
-                $form->setTranslator($translator);
-                $form->getElementPrototype()->class("fm-ajax");
+                $form->setTranslator($this->context->translator);
                 $form->addText("new_filename", "New name")
-                        ->addRule(Form::FILLED, "You must fill new name");
+                        ->setRequired("New name required.");
                 $form->addHidden("orig_filename");
                 $form->addSubmit("send", "OK");
-                $form->onSuccess[] = array($this, "RenameFormSubmitted");
+                $form->onSuccess[] = callback($this, "RenameFormSubmitted");
 
                 return $form;
         }
