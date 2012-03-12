@@ -59,8 +59,6 @@ jQuery(document).ready(function() {
         });
 
 
-        $(".file-manager .fm-body").noTextHighlight();
-
         $(".file-manager").delegate("a.fm-ajax", "click", function(e) {
                 $.getJSON(this.href);
                 $.animateProgress(".file-manager", e);
@@ -213,21 +211,6 @@ jQuery(document).ready(function() {
 		});
 	};
 
-
-        $.fn.noTextHighlight = function() {
-                return this.each(function() {
-                        this.onselectstart = function() {
-                            return false;
-                        };
-                        this.unselectable = "on";
-                        $(this).css('user-select', 'none');
-                        $(this).css('-o-user-select', 'none');
-                        $(this).css('-moz-user-select', 'none');
-                        $(this).css('-khtml-user-select', 'none');
-                        $(this).css('-webkit-user-select', 'none');
-                });
-        }
-        
 
         $.ctrl = function(key, callback, args) {
             $(document).keydown(function(e) {
