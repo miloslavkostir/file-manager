@@ -46,7 +46,6 @@ class Rename extends FileManager
 
         public function RenameFormSubmitted($form)
         {
-                $translator = $this->context->translator;
                 $values = $form->getValues();
                 $actualdir = $this->context->system->getActualDir();
                 $tools = $this->context->tools;

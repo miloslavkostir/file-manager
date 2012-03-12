@@ -46,9 +46,8 @@ class Navigation extends FileManager
 
     protected function createComponentLocationForm()
     {
-        $translator = $this->context->translator;
         $form = new Form;
-        $form->setTranslator($translator);
+        $form->setTranslator($this->context->translator);
         $form->addText('location');
         $form->onSuccess[] = callback($this, 'LocationFormSubmitted');
 
