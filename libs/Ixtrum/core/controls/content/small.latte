@@ -2,7 +2,7 @@
     {$actualdir}
 </h2>
 
-<a n:if="$actualdir <> $rootname" n:href="goToParent!}" title="{_'Go to parent folder'}" class="fm-ajax fm-link-parent">
+<a n:if="$actualdir <> $rootname" n:href="goToParent!}" title="{_'Parent folder'}" class="fm-ajax fm-link-parent">
     <h2>[..]</h2>
 </a>
 <div class="fm-delimiter"></div>
@@ -305,7 +305,7 @@
                         var filename = ui.draggable.attr('alt'); // filename
                         var targetdir = $(this).attr('id'); // targetdir
 
-                        if (confirm({_'Do you really want to move this file'} + "?")) {
+                        if (confirm({_'Do you really want to move this file?'})) {
                                 $.getJSON({link move!}, { filename: filename, targetdir: targetdir }, function(payload){
                                     $.nette.success(payload);
                                     if (payload.result == 'success')

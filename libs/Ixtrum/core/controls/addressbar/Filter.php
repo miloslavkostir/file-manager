@@ -19,7 +19,6 @@ class Filter extends FileManager
 
                 $template = $this->template;
                 $template->setFile(__DIR__ . "/Filter.latte");
-                $template->setTranslator($this->context->translator);
 
                 $this["filterForm"]->setDefaults(array("phrase" => $session->mask));
 
@@ -32,7 +31,7 @@ class Filter extends FileManager
                 $translator = $this->context->translator;
                 $form = new Form;
                 $form->setTranslator($translator);
-                $form->addText("phrase")->getControlPrototype()->setTitle("Filter");
+                $form->addText("phrase")->getControlPrototype()->setTitle($translator->translate("Filter"));
                 $form->onSuccess[] = array($this, "FilterFormSubmitted");
 
                 return $form;

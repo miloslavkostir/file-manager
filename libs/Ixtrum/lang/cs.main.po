@@ -1,0 +1,189 @@
+# Gettext keys exported by GettextTranslator and Translation Panel
+# Created: 2012-03-12 19:53:11
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: 2012-03-12 19:53+0000\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=((n==1) ? 0 : (n>=2 && n<=4 ? 1 : 2));
+\n"
+
+
+msgid "Add new folder"
+msgstr "Vytvořit novou složku"
+
+msgid "Add to ZIP"
+msgstr "Přidat do ZIPu"
+
+msgid "An error occured!"
+msgstr "Došlo k chybě!"
+
+msgid "Available"
+msgstr "Dostupné"
+
+msgid "Clear all"
+msgstr "Vyprázdnit vše"
+
+msgid "Clear clipboard"
+msgstr "Vyprázdnit schránku"
+
+msgid "Clipboard"
+msgstr "Schránka"
+
+msgid "Close"
+msgstr "Zavřít"
+
+msgid "Copy"
+msgstr "Kopírovat"
+
+msgid "Create"
+msgstr "Vytvořit"
+
+msgid "Create new folder"
+msgstr "Vytvořit novou složku"
+
+msgid "Cut"
+msgstr "Vyjmout"
+
+msgid "Date Modified"
+msgstr "Datum změny"
+
+msgid "Delete"
+msgstr "Smazat"
+
+msgid "Details"
+msgstr "Detaily"
+
+msgid "Directory does not exists."
+msgstr "Složka neexistuje."
+
+msgid "Disk usage"
+msgstr "Využití disku"
+
+msgid "Do you really want to delete "
+msgstr "Opravdu chcete smazat "
+
+msgid "Do you really want to delete all these files?"
+msgstr "Opravdu chcete všechny tyto soubory smazat?"
+
+msgid "Do you really want to move this file?"
+msgstr "Opravdu chcete tento soubor přesunout?"
+
+msgid "Download"
+msgstr "Stáhnout"
+
+msgid "Filename"
+msgstr "Název soubor"
+
+msgid "Files"
+msgstr "Soubory"
+
+msgid "Files count: "
+msgstr "Počet souborů:"
+
+msgid "Filter"
+msgstr "Filtr"
+
+msgid "Folder name required."
+msgstr "Název složky je povinný."
+
+msgid "Folders count: "
+msgstr "Počet složek:"
+
+msgid "Hide"
+msgstr "Skrýt"
+
+msgid "Hide clipboard"
+msgstr "Skrýt schránku"
+
+msgid "Large images"
+msgstr "Velké ikony"
+
+msgid "List"
+msgstr "Seznam"
+
+msgid "Modificated"
+msgstr "Upraveno"
+
+msgid "More"
+msgstr "Více"
+
+msgid "Name"
+msgstr "Název"
+
+msgid "Name:"
+msgstr "Název:"
+
+msgid "New folder"
+msgstr "Nová složka"
+
+msgid "Open folder"
+msgstr "Otevřít složku"
+
+msgid "Parent folder"
+msgstr "Nadřazená složka"
+
+msgid "Paste"
+msgstr "Vložit"
+
+msgid "Paste from clipboard"
+msgstr "Vložit ze schránky"
+
+msgid "Permissions"
+msgstr "Oprávnění"
+
+msgid "Properties"
+msgstr "Vlastnosti"
+
+msgid "Read-only mode enabled!"
+msgstr "Je zapnut mód pouze pro čtení!"
+
+msgid "Refresh content"
+msgstr "Obnovit obsah"
+
+msgid "Rename"
+msgstr "Přejmenovat"
+
+msgid "Select all"
+msgstr "Vybrat vše"
+
+msgid "Show items in clipboard"
+msgstr "Zobrazit položky ve schránce"
+
+msgid "Size"
+msgstr "Velikost"
+
+msgid "Small images"
+msgstr "Malé ikony"
+
+msgid "Sort by name"
+msgstr "Řadit dle jména"
+
+msgid "Sort by size"
+msgstr "Řadit dle velikosti"
+
+msgid "Sort by time"
+msgstr "Řadit dle času"
+
+msgid "Sort by type"
+msgstr "Řadit dle typu"
+
+msgid "This name already exist!"
+msgstr "Tento název již existuje!"
+
+msgid "Total size: "
+msgstr "Celková velikost:"
+
+msgid "Type"
+msgstr "Typ"
+
+msgid "Used"
+msgstr "Použito"
+
+msgid "Successfuly moved."
+msgstr "Úspěšně přesunuto."
+

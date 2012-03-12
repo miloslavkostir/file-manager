@@ -28,7 +28,6 @@ class Content extends FileManager
         public function handleShowMultiFileInfo($files = "")
         {
                 $actualdir = $this->context->system->getActualDir();
-                $translator = $this->context->translator;
 
                 // if sended by AJAX
                 if (!$files)
@@ -43,7 +42,7 @@ class Content extends FileManager
                         $this->presenter->payload->fileCount = $info["fileCount"];
                         $this->presenter->sendPayload();
                 } else
-                        parent::getParent()->flashMessage($translator->translate("Incorrect input type data. Must be an array!"), "error");
+                        parent::getParent()->flashMessage("Incorrect input type data. Must be an array!", "error");
         }
 
 
@@ -65,10 +64,8 @@ class Content extends FileManager
                         );
 
                         $this->handleShowContent($actualdir);
-                } else {
-                        $translator = $this->context->translator;
-                        parent::getParent()->flashMessage($translator->translate("File %s already does not exist!", $actualdir.$filename), "warning");
-                }
+                } else
+                        parent::getParent()->flashMessage("File $actualdir$filename already does not exist!", "warning");
         }
 
 
@@ -76,7 +73,6 @@ class Content extends FileManager
         {
                 $session = $this->presenter->context->session->getSection("file-manager");
                 $actualdir = $this->context->system->getActualDir();
-                $translator = $this->context->translator;
 
                 // if sended by AJAX
                 if (!$files)
@@ -92,7 +88,7 @@ class Content extends FileManager
                                 );
                         }
                 } else
-                        parent::getParent()->flashMessage($translator->translate("Incorrect input type data. Must be an array!"), "error");
+                        parent::getParent()->flashMessage("Incorrect input type data. Must be an array!", "error");
 
                 parent::getParent()->refreshSnippets(array("clipboard"));
         }
@@ -123,7 +119,6 @@ class Content extends FileManager
         {
                 $session = $this->presenter->context->session->getSection("file-manager");
                 $actualdir = $this->context->system->getActualDir();
-                $translator = $this->context->translator;
 
                 // if sended by AJAX
                 if (!$files)
@@ -140,7 +135,7 @@ class Content extends FileManager
                                 );
                         }
                 } else
-                        parent::getParent()->flashMessage($translator->translate("Incorrect input type data. Must be an array!"), "error");
+                        parent::getParent()->flashMessage("Incorrect input type data. Must be an array!", "error");
 
                 parent::getParent()->refreshSnippets(array("clipboard"));
         }
@@ -149,24 +144,23 @@ class Content extends FileManager
         public function handleDelete($filename = "")
         {
                 $actualdir = $this->context->system->getActualDir();
-                $translator = $this->context->translator;
 
                 // if sended by AJAX
                 if (!$filename)
                         $filename = $this->presenter->context->httpRequest->getQuery("filename");
 
                 if ($this->context->parameters["readonly"])
-                        parent::getParent()->flashMessage($translator->translate("File manager is in read-only mode"), "warning");
+                        parent::getParent()->flashMessage("Read-only mode enabled!", "warning");
                 else {
 
                         if ($this->context->tools->validPath($actualdir, $filename)) {
 
                             if ($this->context->files->delete($actualdir, $filename))
-                                parent::getParent()->flashMessage($translator->translate("Successfuly deleted"), "info");
+                                parent::getParent()->flashMessage("Successfuly deleted", "info");
                             else
-                                parent::getParent()->flashMessage($translator->translate("An error occured!"), "error");
+                                parent::getParent()->flashMessage("An error occured!", "error");
                         } else
-                                parent::getParent()->flashMessage($translator->translate("File %s already does not exist!", $actualdir.$filename), "warning");
+                                parent::getParent()->flashMessage("File $actualdir$filename already does not exist!", "warning");
                 }
 
                 $this->handleShowContent($actualdir);
@@ -176,14 +170,13 @@ class Content extends FileManager
         public function handleMultiDelete($files = "")
         {
                 $actualdir = $this->context->system->getActualDir();
-                $translator = $this->context->translator;
 
                 // if sended by AJAX
                 if (!$files)
                         $files = $this->presenter->context->httpRequest->getPost("files");
 
                 if ($this->context->parameters["readonly"])
-                        parent::getParent()->flashMessage($translator->translate("File manager is in read-only mode"), "warning");
+                        parent::getParent()->flashMessage("Read-only mode enabled!", "warning");
                 else {
 
                         if (is_array($files)) {
@@ -191,12 +184,12 @@ class Content extends FileManager
                                 foreach($files as $file) {
 
                                         if ($this->context->files->delete($actualdir, $file))
-                                                parent::getParent()->flashMessage($translator->translate("Successfuly deleted"), "info");
+                                                parent::getParent()->flashMessage("Successfuly deleted", "info");
                                         else
-                                                parent::getParent()->flashMessage($translator->translate("An error occured!"), "error");
+                                                parent::getParent()->flashMessage("An error occured!", "error");
                                 }
                         } else
-                                parent::getParent()->flashMessage($translator->translate("Incorrect input type data. Must be an array!"), "error");
+                                parent::getParent()->flashMessage("Incorrect input type data. Must be an array!", "error");
 
                         $this->handleShowContent($actualdir);
                 }
@@ -211,7 +204,7 @@ class Content extends FileManager
 
 
                 if ($this->context->parameters["readonly"])
-                        parent::getParent()->flashMessage($translator->translate("File manager is in read-only mode"), "warning");
+                        parent::getParent()->flashMessage("Read-only mode enabled!", "warning");
                 else {
 
                         $actualdir = $this->context->system->getActualDir();
@@ -266,11 +259,8 @@ class Content extends FileManager
 
                         $path = $this->context->tools->getAbsolutePath($actualdir) . $filename;
                         $this->presenter->sendResponse(new FileResponse($path, NULL, NULL));
-                } else {
-
-                        $translator = $this->context->translator;
-                        parent::getParent()->flashMessage($translator->translate("File %s already does not exist!", $actualdir.$filename), "warning");
-                }
+                } else
+                        parent::getParent()->flashMessage("File $actualdir$filename already does not exist!", "warning");
         }
 
 
@@ -291,7 +281,6 @@ class Content extends FileManager
         {
                 $session = $this->presenter->context->session->getSection("file-manager");
                 $actualdir = $session->actualdir;
-                $translator = $this->context->translator;
                 $request = $this->presenter->context->httpRequest;
 
                 // if sended by AJAX
@@ -301,17 +290,17 @@ class Content extends FileManager
                     $filename = $request->getQuery("filename");
 
                 if ($this->context->parameters["readonly"])
-                        parent::getParent()->flashMessage($translator->translate("File manager is in read-only mode!"), "warning");
+                        parent::getParent()->flashMessage("Read-only mode enabled!!", "warning");
                 else {
 
                         if ($this->context->files->move($actualdir, $targetdir, $filename)) {
 
                                 $this->presenter->payload->result = "success";
-                                parent::getParent()->flashMessage($translator->translate("Successfuly moved."), "info");
+                                parent::getParent()->flashMessage("Successfuly moved.", "info");
                                 parent::getParent()->handleShowContent($targetdir);
                         } else {
 
-                                parent::getParent()->flashMessage($translator->translate("An error occured. File was not moved."), "error");
+                                parent::getParent()->flashMessage("An error occured. File was not moved.", "error");
                                 parent::getParent()->handleShowContent($actualdir);
                         }
                 }
@@ -334,12 +323,9 @@ class Content extends FileManager
 
         public function render()
         {
-                $translator = $this->context->translator;
+                $template = $this->template;
                 $session = $this->presenter->context->session->getSection("file-manager");
                 $actualdir = $session->actualdir;
-
-                $template = $this->template;
-                $template->setTranslator($translator);
 
                 $view = $session->view;
                 $mask = $session->mask;
@@ -357,14 +343,11 @@ class Content extends FileManager
 
                         $c_template = __DIR__ . "/" . $view . ".latte";
                         if (file_exists($c_template))
-                            $template->setFile($c_template);
+                                $template->setFile($c_template);
                         else {
-                            $template->setFile(__DIR__ . "/large.latte");
-                            parent::getParent()->flashMessage(
-                                        $translator->translate("Unknown view selected."),
-                                        "warning"
-                                    );
-                            $view = "large";
+
+                                $template->setFile(__DIR__ . "/large.latte");
+                                $view = "large";
                         }
                 } else {
                         $template->setFile(__DIR__ . "/large.latte");

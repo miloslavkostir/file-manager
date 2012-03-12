@@ -26,7 +26,7 @@ final class Loader extends Container
                 $this->parameters = $config["parameters"];
                 $this->container = $container;
 
-                $this->checkRequirements();
+                $this->init();
         }
 
 
@@ -38,13 +38,18 @@ final class Loader extends Container
 
         protected function createServiceTranslator()
         {
-                $parameters = $this->parameters;
-                $lang = $parameters["rootPath"] . $parameters["langDir"] . $parameters["lang"] . ".mo";
+                $param = $this->parameters;
+                $langDir = $param["rootPath"] . $param["langDir"];
+                $lang = $param["lang"];
 
-                if (file_exists($lang))
-                        return new \GettextTranslator($lang);
-                else
-                        throw new ApplicationException("Language file $lang does not exists!");
+                $container = $this->container;
+                $container->params["lang"] = $lang;
+
+                $translator = \NetteTranslator\Gettext::getTranslator($container);
+                $translator->addFile($langDir, "main");
+                $translator->setLang($lang);
+
+                return $translator;
         }
 
 
@@ -79,7 +84,7 @@ final class Loader extends Container
         }
 
 
-        private function checkRequirements()
+        private function init()
         {
                 $config = $this->parameters;
                 $uploadPath = $config["uploadroot"] . $config["uploadpath"];

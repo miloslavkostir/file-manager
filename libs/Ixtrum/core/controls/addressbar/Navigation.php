@@ -33,7 +33,6 @@ class Navigation extends FileManager
 
         $template = $this->template;
         $template->setFile(__DIR__ . '/Navigation.latte');
-        $template->setTranslator($this->context->translator);
 
         if (!$actualdir)
             $template->items = $this->getNav($rootname);
@@ -62,14 +61,11 @@ class Navigation extends FileManager
         $path = $this->context->tools->getAbsolutePath($val['location']);
 
         if (file_exists($path))
-            parent::getParent()->handleShowContent($val['location']);
+                parent::getParent()->handleShowContent($val['location']);
         else {
-            $translator = $this->context->translator;
-            parent::getParent()->flashMessage(
-                $translator->translate('Directory does not exists.'),
-                'warning'
-            );
-            parent::getParent()->handleShowContent($this->context->system->getActualDir());
+                $folder = $val['location'];
+                parent::getParent()->flashMessage("Folder $folder does not exists!", 'warning');
+                parent::getParent()->handleShowContent($this->context->system->getActualDir());
         }
     }
 

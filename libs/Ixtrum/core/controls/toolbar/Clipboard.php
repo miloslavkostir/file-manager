@@ -22,16 +22,15 @@ class Clipboard extends FileManager
 
         public function handlePasteFromClipboard()
         {
-                $translator =  $this->context->translator;
                 $session = $this->presenter->context->session->getSection('file-manager');
                 $actualdir = $this->context->system->getActualDir();
 
                 if ($this->context->tools->validPath($actualdir)) {
 
                         if ($this->context->parameters["readonly"])
-                                parent::getParent()->flashMessage($translator->translate("File manager is in read-only mode"), "warning");
+                                parent::getParent()->flashMessage("Read-only mode enabled!", "warning");
                         elseif (!isset($session->clipboard) || count($session->clipboard) <= 0)
-                                parent::getParent()->flashMessage($translator->translate("There is nothing to paste from clipboard!"), "warning");
+                                parent::getParent()->flashMessage("There is nothing to paste from clipboard!", "warning");
                         else {
 
                                 foreach ($session->clipboard as $key => $val) {
@@ -39,38 +38,37 @@ class Clipboard extends FileManager
                                         if ($val["action"] === "copy") {
 
                                                 if ($this->context->files->copy($val['actualdir'], $actualdir, $val['filename']))
-                                                        parent::getParent()->flashMessage($translator->translate("Succesfully copied."), "info");
+                                                        parent::getParent()->flashMessage("Succesfully copied.", "info");
                                                 else
-                                                        parent::getParent()->flashMessage($translator->translate("An error occured!"), "error");
+                                                        parent::getParent()->flashMessage("An error occured!", "error");
 
                                         } elseif ($val["action"] === "cut") {
 
                                                 if ($this->context->files->move($val["actualdir"], $actualdir, $val["filename"]))
-                                                        parent::getParent()->flashMessage($translator->translate("Succesfully moved."), "info");
+                                                        parent::getParent()->flashMessage("Succesfully moved.", "info");
                                                 else
-                                                        parent::getParent()->flashMessage($translator->translate("An error occured!"), "error");
+                                                        parent::getParent()->flashMessage("An error occured!", "error");
 
                                         } else
-                                                parent::getParent()->flashMessage($translator->translate("Unknown action!"), "error");
+                                                parent::getParent()->flashMessage("Unknown action!", "error");
                                 }
 
                                 $this->handleClearClipboard();
                         }
                 } else
-                        parent::getParent()->flashMessage($translator->translate("Dir %s already does not exist!", $actualdir), "warning");
+                        parent::getParent()->flashMessage("Dir $actualdir already does not exist!", "warning");
         }
 
 
         public function handleRemoveFromClipboard($actualdir, $filename)
         {
-                $translator = $this->context->translator;
                 $session = $this->presenter->context->session->getSection("file-manager");
                 $path = $actualdir.$filename;
 
                 if (isset($session->clipboard[$path]))
                         unset($session->clipboard[$path]);
                 else
-                        parent::getParent()->flashMessage($translator->translate("Item %s does not exist in clipboard!", $path), "error");
+                        parent::getParent()->flashMessage("Item $path does not exist in clipboard!", "error");
 
                 parent::getParent()->handleShowContent($session->actualdir);
         }
@@ -80,7 +78,6 @@ class Clipboard extends FileManager
         {
                 $template = $this->template;
                 $template->setFile(__DIR__ . "/Clipboard.latte");
-                $template->setTranslator($this->context->translator);
 
                 $session = $this->presenter->context->session->getSection("file-manager");
                 $template->clipboard = $session->clipboard;

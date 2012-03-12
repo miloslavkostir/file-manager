@@ -54,6 +54,26 @@ class FileManager extends UI\Control
         }
 
 
+        public function createTemplate($class = NULL)
+        {
+                $template = parent::createTemplate($class);
+
+                $this->context->translator->setLang($this->context->parameters["lang"]);
+                $template->setTranslator($this->context->translator);
+
+                return $template;
+        }
+
+
+        public function flashMessage($message, $type = "info")
+        {
+                if ($this->context->hasService("translator")) {
+                    $message = $this->context->translator->translate($message);
+                }
+                return parent::flashMessage($message, $type);
+        }
+
+
         public function handleMove()
         {
                 $this["content"]->handleMove();
@@ -89,11 +109,8 @@ class FileManager extends UI\Control
                         $this->template->plugin = $pluginName;
                         if (property_exists($this[$pluginName], "files"))
                                 $this[$pluginName]->files = $files;
-                } else {
-
-                        $translator = $this->context->translator;
-                        $this->flashMessage($translator->translate("Plugin '$pluginName' not found!"), "warning");
-                }
+                } else
+                        $this->flashMessage("Plugin '$pluginName' not found!", "warning");
 
                 $this->handleShowContent($actualdir);
         }
@@ -107,11 +124,8 @@ class FileManager extends UI\Control
 
                         $this->template->fileinfo = $actualdir;
                         $this["fileInfo"]->filename = $filename;
-                } else {
-
-                        $translator = $this->context->translator;
-                        $this->flashMessage($translator->translate("File %s already does not exist!", $actualdir.$filename), "warning");
-                }
+                } else
+                        $this->flashMessage("File $actualdir$filename already does not exist!", "warning");
 
                 $this->invalidateControl("fileinfo");
         }
@@ -126,11 +140,8 @@ class FileManager extends UI\Control
 
                         if ($this->presenter->isAjax())
                                 $this->refreshSnippets();
-                } else {
-
-                        $translator = $this->context->translator;
-                        $this->flashMessage($translator->translate("Folder %s already does not exist!", $actualdir), "warning");
-                }
+                } else
+                        $this->flashMessage("Folder $actualdir does not exists!", "warning");
         }
 
 
@@ -138,7 +149,6 @@ class FileManager extends UI\Control
         {
                 $template = $this->template;
                 $template->setFile(__DIR__ . "/FileManager.latte");
-                $template->setTranslator($this->context->translator);
 
                 $session = $this->presenter->context->session->getSection("file-manager");
                 $clipboard = $session->clipboard;

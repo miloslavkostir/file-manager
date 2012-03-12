@@ -16,7 +16,6 @@ class ViewSelector extends FileManager
         {
                 $template = $this->template;
                 $template->setFile(__DIR__ . "/ViewSelector.latte");
-                $template->setTranslator($this->context->translator);
 
                 $session = $this->presenter->context->session->getSection("file-manager");
                 $this["changeViewForm"]->setDefaults(array("view" => $session->view));

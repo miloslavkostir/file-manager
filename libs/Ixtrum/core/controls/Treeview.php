@@ -24,7 +24,6 @@ class Treeview extends FileManager
         {
                 $template = $this->template;
                 $template->setFile(__DIR__ . "/Treeview.latte");
-                $template->setTranslator($this->context->translator);
                 $template->treeview = $this->loadData();
                 $template->render();
         }

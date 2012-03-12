@@ -20,7 +20,6 @@ class Rename extends FileManager
         {
                 $template = $this->template;
                 $template->setFile(__DIR__ . "/Rename.latte");
-                $template->setTranslator($this->context->translator);
                 $template->origFile = $this->files;
 
                 $this["renameForm"]->setDefaults(array(
@@ -56,13 +55,13 @@ class Rename extends FileManager
                 $path = $tools->getAbsolutePath($actualdir);
 
                 if ($this->context->parameters["readonly"])
-                        parent::getParent()->flashMessage($translator->translate("File manager is in read-only mode"), "warning");
+                        parent::getParent()->flashMessage("Read-only mode enabled!", "warning");
                 elseif ($values["new_filename"] == $values["orig_filename"])
-                        parent::getParent()->flashMessage($translator->translate("File/folder was not renamed, orignal name = new name"), "warning");
+                        parent::getParent()->flashMessage("File/folder was not renamed, orignal name = new name", "warning");
                 elseif (file_exists($path . $values["new_filename"]))
-                        parent::getParent()->flashMessage($translator->translate("This name was already used. Try another"), "warning");
+                        parent::getParent()->flashMessage("This name was already used. Try another", "warning");
                 elseif (!file_exists($path . $values["orig_filename"]))
-                        parent::getParent()->flashMessage($translator->translate("File/folder does not already exists!"), "error");
+                        parent::getParent()->flashMessage("File/folder does not already exists!", "error");
                 else {
 
                         $origPath = $path . $values["orig_filename"];
@@ -91,10 +90,10 @@ class Rename extends FileManager
 
                         if (rename($origPath, $path . $new_filename)) {
 
-                                parent::getParent()->flashMessage($translator->translate("File/folder name successfully changed."), "info");
+                                parent::getParent()->flashMessage("File/folder name successfully changed.", "info");
                                 $this->context->system->clearClipboard();
                         } else
-                                parent::getParent()->flashMessage($translator->translate("An error occurred during file/folder renaming"), "error");
+                                parent::getParent()->flashMessage("An error occurred during file/folder renaming", "error");
                 }
 
                 parent::getParent()->handleShowContent($actualdir);
