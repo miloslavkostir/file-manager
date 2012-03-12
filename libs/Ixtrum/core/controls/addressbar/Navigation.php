@@ -40,10 +40,7 @@ class Navigation extends FileManager
         else
             $template->items = $this->getNav($actualdir);
 
-        $this['locationForm']->setDefaults(array(
-                    'actualdir' => $actualdir,
-                    'location' => $actualdir
-        ));
+        $this['locationForm']->setDefaults(array('location' => $actualdir));
 
         $template->render();
     }
@@ -54,7 +51,6 @@ class Navigation extends FileManager
         $form = new Form;
         $form->setTranslator($translator);
         $form->addText('location');
-        $form->addHidden('actualdir');
         $form->onSuccess[] = array($this, 'LocationFormSubmitted');
 
         return $form;
@@ -73,7 +69,7 @@ class Navigation extends FileManager
                 $translator->translate('Directory does not exists.'),
                 'warning'
             );
-            parent::getParent()->handleShowContent($val['actualdir']);
+            parent::getParent()->handleShowContent($this->context->system->getActualDir());
         }
     }
 
