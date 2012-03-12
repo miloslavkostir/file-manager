@@ -53,7 +53,6 @@ class Navigation extends FileManager
         $translator = $this->context->translator;
         $form = new Form;
         $form->setTranslator($translator);
-        $form->getElementPrototype()->class('fm-ajax');
         $form->addText('location');
         $form->addHidden('actualdir');
         $form->onSuccess[] = array($this, 'LocationFormSubmitted');

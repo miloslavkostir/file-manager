@@ -32,7 +32,6 @@ class Filter extends FileManager
                 $translator = $this->context->translator;
                 $form = new Form;
                 $form->setTranslator($translator);
-                $form->getElementPrototype()->class("fm-ajax");
                 $form->addText("phrase")->getControlPrototype()->setTitle("Filter");
                 $form->onSuccess[] = array($this, "FilterFormSubmitted");
 

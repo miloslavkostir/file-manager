@@ -8,9 +8,13 @@
  */
 
 jQuery.fn.extend({
-	ajaxSubmit: function (callback) {
+	ajaxSubmit: function (callback, ajaxOptions) {
 		var form;
 		var sendValues = {};
+
+		if (ajaxOptions === undefined) {
+			ajaxOptions = {};
+		}
 
 		// submit button
 		if (this.is(":submit")) {
@@ -51,11 +55,9 @@ jQuery.fn.extend({
 		}
 
 		// send ajax request
-		var ajaxOptions = {
-			url: form.attr("action"),
-			data: sendValues,
-			type: form.attr("method") || "get"
-		};
+		ajaxOptions.url = form.attr("action");
+		ajaxOptions.data = sendValues;
+		ajaxOptions.type = form.attr("method") || "get";
 
 		if (callback) {
 			ajaxOptions.success = callback;

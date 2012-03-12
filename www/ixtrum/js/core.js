@@ -73,18 +73,21 @@ jQuery(document).ready(function() {
                 return false;
         });
 
-        $(".file-manager").delegate("form.fm-ajax", "submit", function() {
+        $(".file-manager").delegate("form.fm-ajax", "submit", function(e) {
+                $.animateProgress(".file-manager", e);
                 $(this).ajaxSubmit();
                 return false;
         });
 
-        $(".file-manager").delegate("form.fm-ajax :submit", "click", function() {
+        $(".file-manager").delegate("form.fm-ajax :submit", "click", function(e) {
                 $(this).ajaxSubmit();
+                $.animateProgress(".file-manager", e);
                 return false;
         });
 
-        $(".file-manager").delegate("#frm-fileManager-viewSelector-changeViewForm", "change", function() {
+        $(".file-manager").delegate("#frm-fileManager-viewSelector-changeViewForm", "change", function(e) {
                 $(this).ajaxSubmit();
+                $.animateProgress(".file-manager", e);
                 return false;
         });
 
