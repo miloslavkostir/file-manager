@@ -1,10 +1,11 @@
 <?php
 
-namespace Ixtrum;
+namespace Ixtrum\Services;
 
 use Nette\DI\Container,
         Nette\DirectoryNotFoundException,
-        Nette\Application\ApplicationException;
+        Nette\Application\ApplicationException,
+        Ixtrum\System;
 
 
 final class Loader extends Container
@@ -45,7 +46,7 @@ final class Loader extends Container
                 $container = $this->container;
                 $container->params["lang"] = $lang;
 
-                $translator = \NetteTranslator\Gettext::getTranslator($container);
+                $translator = External\NetteTranslator\Gettext::getTranslator($container);
                 $translator->addFile($langDir, "main");
                 $translator->setLang($lang);
 

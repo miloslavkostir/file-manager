@@ -24,7 +24,7 @@
  * OTHER DEALINGS IN THE SOFTWARE.
  *
  */
-namespace NetteTranslator;
+namespace Ixtrum\Services\External\NetteTranslator;
 
 require_once __DIR__ . '/shortcuts.php';
 
@@ -42,7 +42,7 @@ use Nette,
  * @copyright  Copyright (c) 2009 Roman Sklenář (http://romansklenar.cz)
  * @license    New BSD License
  * @example    http://addons.nettephp.com/gettext-translator
- * @package    NetteTranslator\Gettext
+ * @package    Ixtrum\Services\External\NetteTranslator
  * @version    0.5
  *
  * @todo refactor (according to Nella Project by Vrtak-CZ)
@@ -585,7 +585,7 @@ class Gettext extends Nette\Object implements IEditable
 	 *
 	 * @param Nette\DI\IContainer $container
 	 * @param array|Nette\ArrayHash $options
-	 * @return NetteTranslator\Gettext
+	 * @return Ixtrum\Services\External\NetteTranslator\Gettext
 	 */
 	public static function getTranslator(Nette\DI\IContainer $container, $options = NULL)
 	{

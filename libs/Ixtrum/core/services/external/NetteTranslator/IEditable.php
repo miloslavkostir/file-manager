@@ -25,7 +25,7 @@
  *
  */
 
-namespace NetteTranslator;
+namespace Ixtrum\Services\External\NetteTranslator;
 
 /**
  * Editable translator

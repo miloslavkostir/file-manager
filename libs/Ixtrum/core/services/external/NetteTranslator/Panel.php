@@ -1,6 +1,6 @@
 <?php
 
-namespace NetteTranslator;
+namespace Ixtrum\Services\External\NetteTranslator;
 
 use Nette;
 
@@ -173,7 +173,7 @@ class Panel extends Nette\Object implements Nette\Diagnostics\IBarPanel
 	/**
 	 * Register this panel
 	 *
-	 * @param NetteTranslator\IEditable $translator
+	 * @param Ixtrum\Services\External\NetteTranslator\IEditable $translator
 	 * @param int $layout
 	 * @param int $height
 	 */
