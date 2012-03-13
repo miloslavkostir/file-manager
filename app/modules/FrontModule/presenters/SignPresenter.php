@@ -7,6 +7,11 @@ use Nette\Application\UI\Form,
 
 class SignPresenter extends BasePresenter
 {
+        public function renderDefault()
+        {
+                $this->getHttpResponse()->setHeader('X-Frame-Options', "SAMEORIGIN");
+        }
+
 	/**
 	 * Sign in form component factory.
 	 * @return Nette\Application\UI\Form
