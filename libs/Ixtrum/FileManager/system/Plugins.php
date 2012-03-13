@@ -25,9 +25,11 @@ class Plugins
 
         /**
          * Get plugins
+         * 
+         * @param Caching
          * @return array
          */
-        public function loadPlugins()
+        public function loadPlugins(Caching $cache)
         {
                 $files = \Nette\Utils\Finder::findFiles("*.php")
                                 ->from($this->pluginDir);
@@ -35,16 +37,26 @@ class Plugins
                 $plugins = array();
                 foreach( $files as $file ) {
 
-                        $php_code = file_get_contents($file->getPathName());
-                        $classes = $this->get_php_classes($php_code);
-                        $class = $classes[0];
+                        $filePath = $file->getRealPath();
+                        $cacheData = $cache->getItem(array("plugins", $filePath));
 
-                        $vars = get_class_vars("\Ixtrum\FileManager\Plugins\\$class");
+                        if ($cacheData)
+                                $plugins[$filePath] = $cacheData;
+                        else {
 
-                        $plugins[$class]["name"] = $class;
-                        $plugins[$class]["title"] = $vars["title"];
-                        $plugins[$class]["toolbarPlugin"] = $vars["toolbarPlugin"];
-                        $plugins[$class]["contextPlugin"] = $vars["contextPlugin"];
+                                $php_code = file_get_contents($filePath);
+                                $classes = $this->get_php_classes($php_code);
+                                $class = $classes[0];
+
+                                $vars = get_class_vars("\Ixtrum\FileManager\Plugins\\$class");
+
+                                $plugins[$filePath]["name"] = $class;
+                                $plugins[$filePath]["title"] = $vars["title"];
+                                $plugins[$filePath]["toolbarPlugin"] = $vars["toolbarPlugin"];
+                                $plugins[$filePath]["contextPlugin"] = $vars["contextPlugin"];
+
+                                $cache->saveItem(array("plugins", $filePath), $plugins[$filePath], array(\Nette\Caching\Cache::FILES => $filePath));
+                        }
                 }
 
                 return $plugins;

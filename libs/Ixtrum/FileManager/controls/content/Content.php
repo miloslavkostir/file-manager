@@ -331,7 +331,7 @@ class Content extends \Ixtrum\FileManager
                 $mask = $session->mask;
                 $order = $session->order;
 
-                $plugins = $this->context->plugins->loadPlugins();
+                $plugins = $this->context->plugins->loadPlugins($this->context->caching);
 
                 if (!$mask)
                     $mask = "*";
