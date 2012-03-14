@@ -7,19 +7,17 @@ class Plugins
         /** @var string */
         private $pluginDir;
 
-        /** @var array */
-        private $systemControls = array(
-            "NewFolder",
-            "rename"
-        );
+        /** @var Caching */
+        private $cache;
 
-
-        public function __construct($pluginDir)
+        public function __construct($pluginDir, Caching $cache)
         {
                 if (is_dir($pluginDir))
                         $this->pluginDir = $pluginDir;
                 else
                         throw new \Nette\DirectoryNotFoundException("Plugin directory '$pluginDir' does not exists!");
+
+                $this->cache = $cache;
         }
 
 
@@ -29,13 +27,15 @@ class Plugins
          * @param Caching
          * @return array
          */
-        public function loadPlugins(Caching $cache)
+        public function loadPlugins()
         {
                 $files = \Nette\Utils\Finder::findFiles("*.php")
                                 ->from($this->pluginDir);
 
+                $cache = $this->cache;
                 $plugins = array();
-                foreach( $files as $file ) {
+
+                foreach ( $files as $file ) {
 
                         $filePath = $file->getRealPath();
                         $cacheData = $cache->getItem(array("plugins", $filePath));
@@ -64,8 +64,27 @@ class Plugins
 
 
         /**
+         * Get list of plugin names
+         * 
+         * @return array
+         */
+        public function getPluginNames()
+        {
+                $plugins = $this->loadPlugins();
+                $names = array();
+
+                foreach ($plugins as $plugin) {
+                    $names[] = $plugin["name"];
+                }
+
+                return $names;
+        }
+
+
+        /**
          * Get classes from PHP code
          * 
+         * @internal
          * @param string $php_code
          * @return array
          */
@@ -90,17 +109,17 @@ class Plugins
 
 
         /**
-         * Check if string is name of valid plugin
+         * Check if string is name of valid plugin or system control
          * 
          * @param string $name
-         * @param array $external (optional)
          * @return bool
          */
-        public function isValidPlugin($name, $external = array())
+        public function isValidControl($name)
         {
-                if (in_array($name, $this->systemControls, true) || isset($external[$name]))
+                $systemControls = array("NewFolder", "rename");
+                if (in_array($name, $this->getPluginNames()) || in_array($name, $systemControls))
                         return true;
-                else
-                        return false;
+
+                return false;
         }
 }

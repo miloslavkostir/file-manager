@@ -331,8 +331,6 @@ class Content extends \Ixtrum\FileManager
                 $mask = $session->mask;
                 $order = $session->order;
 
-                $plugins = $this->context->plugins->loadPlugins($this->context->caching);
-
                 if (!$mask)
                     $mask = "*";
 
@@ -359,7 +357,8 @@ class Content extends \Ixtrum\FileManager
                 $template->rootname = $this->context->tools->getRootName();
                 $template->thumb_dir = $this->context->parameters["resource_dir"] . "img/icons/" . $view . "/";
 
-                if ($this->plugins) {
+                $plugins = $this->context->plugins->loadPlugins();
+                if ($plugins) {
 
                         $contextPlugins = array();
                         foreach($plugins as $plugin) {

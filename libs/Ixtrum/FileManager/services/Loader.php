@@ -81,7 +81,7 @@ final class Loader extends Container
         protected function createServicePlugins()
         {
                 $pluginDir = $this->parameters["rootPath"] . $this->parameters["pluginDir"];
-                return new System\Plugins($pluginDir);
+                return new System\Plugins($pluginDir, new System\Caching($this->container, $this->parameters));
         }
 
 

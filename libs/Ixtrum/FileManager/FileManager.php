@@ -17,9 +17,6 @@ class FileManager extends UI\Control
         protected $context;
 
         /** @var array */
-        protected $plugins;
-
-        /** @var array */
         private $userConfig;
 
 
@@ -36,7 +33,6 @@ class FileManager extends UI\Control
                 if ($presenter instanceof UI\Presenter) {
 
                         $this->context = new FileManager\Services\Loader($this->presenter->context, $this->userConfig, __DIR__);
-                        $this->plugins = $this->context->plugins->loadPlugins($this->context->caching);
 
                         $system = $this->context->system;
                         $actualdir = $system->getActualdir();
@@ -102,17 +98,15 @@ class FileManager extends UI\Control
                 if (!$files)
                         $files = $this->presenter->context->httpRequest->getPost("files");
 
-                $actualdir = $this->context->system->getActualDir();
-
-                if ($this->context->plugins->isValidPlugin($pluginName, $this->plugins)) {
+                if ($this->context->plugins->isValidControl($pluginName)) {
 
                         $this->template->plugin = $pluginName;
-                        if (property_exists($this[$pluginName], "files"))
+                        if (property_exists($this[$pluginName], "files") && $files)
                                 $this[$pluginName]->files = $files;
                 } else
                         $this->flashMessage("Plugin '$pluginName' not found!", "warning");
 
-                $this->handleShowContent($actualdir);
+                $this->handleShowContent($this->context->system->getActualDir());
         }
 
 
@@ -168,7 +162,7 @@ class FileManager extends UI\Control
                         }
                 }
 
-                $plugins = $this->plugins;
+                $plugins = $this->context->plugins->loadPlugins();
                 if ($plugins) {
 
                         $toolbarPlugins = array();
@@ -211,8 +205,9 @@ class FileManager extends UI\Control
                 if (!method_exists($this, "createComponent$name")) {
 
                         $namespace = __NAMESPACE__;
-                        $externalPlugins = $this->plugins;
-                        if (isset($externalPlugins[$name]))
+
+                        $plugins = $this->context->plugins->getPluginNames();
+                        if (in_array($name, $plugins))
                                 $namespace .= "\\FileManager\Plugins";
                         else
                                 $namespace .= "\\FileManager\Controls";
@@ -220,8 +215,8 @@ class FileManager extends UI\Control
                         $class = "$namespace\\$name";
                         if (class_exists($class)) {
 
-                                $comp = new $class($this->userConfig);
-                                return $comp;
+                                $component = new $class($this->userConfig);
+                                return $component;
                         } else
                                 throw new \Nette\FileNotFoundException("Can not create component '$name'. Required class '$class' not found.");
                 } else
