@@ -45,24 +45,24 @@
                 {control treeview}
             </div>
             <div class="fm-content">
-                {snippet plugin}
-                    <div n:ifset="$plugin">
+                <div n:snippet="plugin">
+                    {ifset $plugin}
                         {control $plugin}
-                    </div>
-                {/snippet}
-                {snippet content}
+                    {/ifset}
+                </div>
+                <div n:snippet="content">
                     {control content}
-                {/snippet}
+                </div>
             </div>
     </div>
     <div class="fm-info-bar">
-        {snippet fileinfo}
-            <div n:ifset="$fileinfo">
+        <div n:snippet="fileinfo">
+            {ifset $fileinfo}
                 {control fileInfo}
-            </div>
-        {/snippet}
-        {snippet diskusage}
+            {/ifset}
+        </div>
+        <div n:snippet="diskusage">
             {control diskUsage}
-        {/snippet}
+        </div>
     </div>
 </div>
