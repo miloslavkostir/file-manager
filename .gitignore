@@ -1,6 +1,6 @@
 /nbproject
-/libs/Nette
-/libs/dibi
-/www/data
-/temp
-/log
+
+/data
+
+/plugins
+!plugins/plugins.txt

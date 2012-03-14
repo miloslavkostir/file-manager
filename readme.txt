@@ -1,7 +1,3 @@
-iXtrum
-
-Version: 0.5 dev
-
-================
-
-Simple PHP/NETTE/AJAX file manager.
+Ixtrum File Manager
+=========================================
+For more information visit www.ixtrum.com
