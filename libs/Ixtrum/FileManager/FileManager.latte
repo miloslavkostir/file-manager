@@ -56,12 +56,12 @@
             </div>
     </div>
     <div class="fm-info-bar">
-        <div n:snippet="fileinfo">
+        <div n:snippet="fileinfo" class="fm-file-info">
             {ifset $fileinfo}
                 {control fileInfo}
             {/ifset}
         </div>
-        <div n:snippet="diskusage">
+        <div n:snippet="diskusage" class="fm-disk-usage">
             {control diskUsage}
         </div>
     </div>

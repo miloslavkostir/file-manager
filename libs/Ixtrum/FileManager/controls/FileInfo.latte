@@ -1,24 +1,23 @@
-<ul class="fm-file-info">
-    <li class="fm-file-info">
+<ul>
+    <li>
         <img src="{$basePath}{$fileinfo['icon']}" alt="" class="fm-thumb" />
     </li>
-    <li class="fm-file-info">
-        <ul class="fm-file-info">
+    <li>
+        <ul class="fm-file-info-details">
             <li>
-                <span class="fm-file-info title">
+                <h2>
                     {if $fileinfo['type'] === 'folder'}
                         {_'Folder'}
                     {else}
                         {$fileinfo['type']|upper}
                     {/if}
-                </span>
+                </h2>
             </li>
-            <li>&nbsp;</li>
-            <li><strong>{_'Filename'}: </strong>{$fileinfo['filename']}</li>
-            <li n:ifset="$fileinfo['files_count']"><strong>{_'Files'}: </strong>{$fileinfo['files_count']}</li>
-            <li><strong>{_'Size'}: </strong>{$fileinfo['size']|bytes}</li>
-            <li><strong>{_'Modificated'}: </strong>{$fileinfo['modificated']}</li>
-            <li><strong>{_'Permissions'}: </strong>{$fileinfo['permissions']}</li>
+            <li><span>{$fileinfo['filename']}</span></li>
+            <li n:ifset="$fileinfo['files_count']">{_'Files'}: <strong>{$fileinfo['files_count']}</strong></li>
+            <li>{_'Size'}: <strong>{$fileinfo['size']|bytes}</strong></li>
+            <li>{_'Modificated'}: <strong>{$fileinfo['modificated']}</strong></li>
+            <li>{_'Permissions'}: <strong>{$fileinfo['permissions']}</strong></li>
         </ul>
     </li>
 </ul>

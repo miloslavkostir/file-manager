@@ -1,10 +1,10 @@
-<ul class="fm-disk-usage">
+<ul>
     <li><h2>{_'Disk usage'}</h2></li>
     <li>
         <div class="fm-progressbar">
             <div class="fm-progressbar-value" style="width: {$sizeinfo['percentused']}%;"></div>
         </div>
     </li>
-    <li><strong>{_'Used'}: </strong>{$sizeinfo['usedsize']|bytes}</li>
-    <li><strong>{_'Available'}: </strong>{$sizeinfo['spaceleft']|bytes}</li>
+    <li>{_'Used'}: <strong>{$sizeinfo['usedsize']|bytes}</strong></li>
+    <li>{_'Available'}: <strong>{$sizeinfo['spaceleft']|bytes}</strong></li>
 </ul>
