@@ -420,7 +420,11 @@ class Content extends \Ixtrum\FileManager
 
                                 if (file_exists($this->presenter->context->parameters["wwwDir"] . $thumb_dir . $filetype . ".png")) {
 
-                                        $dir_array[$name]["icon"] =  $filetype . ".png";
+                                        if ($filetype === "folder")
+                                            $dir_array[$name]["icon"] =  "icon.png";
+                                        else
+                                            $dir_array[$name]["icon"] =  "$filetype.png";
+
                                         if (in_array($filetype, $supportedThumbs))
                                             $dir_array[$name]["create_thumb"] =  true;
                                         else
