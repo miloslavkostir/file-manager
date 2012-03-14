@@ -84,6 +84,20 @@
             </ul>
         </td>
     </tr>
+    <tr>
+        <th>Read-only</th>
+        <td>
+            <ul class="icons">
+                <li class="ui-state-default ui-corner-all">
+                    {if $details->readonly}
+                        <span class="ui-icon ui-icon-check"></span>
+                    {else}
+                        <span class="ui-icon ui-icon-close"></span>
+                    {/if}
+                </li>
+            </ul>
+        </td>
+    </tr>
     <tr n:if="!$details->password">
         <td colspan="2">
             <div class="ui-state-highlight ui-corner-all" style="margin-top: 20px; padding: 0 .7em;">
