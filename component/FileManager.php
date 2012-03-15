@@ -98,30 +98,40 @@ class FileManager extends UI\Control
                 if (!$files)
                         $files = $this->presenter->context->httpRequest->getPost("files");
 
-                if ($this->context->plugins->isValidControl($pluginName)) {
+                if ($files) {
 
-                        $this->template->plugin = $pluginName;
-                        if (property_exists($this[$pluginName], "files") && $files)
-                                $this[$pluginName]->files = $files;
+                        if ($this->context->plugins->isValidControl($pluginName)) {
+
+                                $this->template->plugin = $pluginName;
+                                if (property_exists($this[$pluginName], "files") && $files)
+                                        $this[$pluginName]->files = $files;
+                        } else
+                                $this->flashMessage("Plugin '$pluginName' not found!", "warning");
                 } else
-                        $this->flashMessage("Plugin '$pluginName' not found!", "warning");
+                        $this->flashMessage("Incorrect input data!", "error");
 
                 $this->handleShowContent($this->context->system->getActualDir());
         }
 
 
-        public function handleShowFileInfo($filename)
+        public function handleShowFileInfo($filename = "")
         {
-                $actualdir = $this->context->system->getActualDir();
+                // if sended by AJAX
+                if (!$filename)
+                        $filename = $this->presenter->context->httpRequest->getQuery("filename");
 
-                if ($this->context->tools->validPath($actualdir, $filename)) {
+                if ($filename) {
 
-                        $this->template->fileinfo = $actualdir;
-                        $this["fileInfo"]->filename = $filename;
+                        $actualdir = $this->context->system->getActualDir();
+                        if ($this->context->tools->validPath($actualdir, $filename)) {
+
+                                $this->template->fileinfo = $actualdir;
+                                $this["fileInfo"]->filename = $filename;
+                                $this->invalidateControl("fileinfo");
+                        } else
+                                $this->flashMessage("File not found!", "warning");      
                 } else
-                        $this->flashMessage("File $actualdir$filename already does not exist!", "warning");
-
-                $this->invalidateControl("fileinfo");
+                        $this->flashMessage("Incorrect input data!", "error");
         }
 
 

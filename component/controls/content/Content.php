@@ -2,9 +2,7 @@
 
 namespace Ixtrum\FileManager\Controls;
 
-use Nette\Utils\Finder,
-        Nette\Templating\Helpers,
-        Nette\Application\Responses\FileResponse;
+use Nette\Application\Responses\FileResponse;
 
 
 class Content extends \Ixtrum\FileManager
@@ -17,15 +15,11 @@ class Content extends \Ixtrum\FileManager
 
         public function handleShowFileInfo($filename = "")
         {
-                // if sended by AJAX
-                if (!$filename)
-                        $filename = $this->presenter->context->httpRequest->getQuery("filename");
-
-                parent::getParent()->handleShowFileInfo($filename);
+                parent::getParent()->handleShowFileInfo($filename);;
         }
 
 
-        public function handleShowMultiFileInfo($files = "")
+        public function handleShowMultiFileInfo($files = array())
         {
                 $actualdir = $this->context->system->getActualDir();
 
@@ -33,16 +27,16 @@ class Content extends \Ixtrum\FileManager
                 if (!$files)
                         $files = $this->presenter->context->httpRequest->getPost("files");
 
-                if (is_array($files)) {
+                if (is_array($files) && $files) {
 
                         $info = $this->context->files->getFilesInfo($actualdir, $files, true);
                         $this->presenter->payload->result = "success";
-                        $this->presenter->payload->size = Helpers::bytes($info["size"]);
+                        $this->presenter->payload->size = \Nette\Templating\Helpers::bytes($info["size"]);
                         $this->presenter->payload->dirCount = $info["dirCount"];
                         $this->presenter->payload->fileCount = $info["fileCount"];
                         $this->presenter->sendPayload();
                 } else
-                        parent::getParent()->flashMessage("Incorrect input type data. Must be an array!", "error");
+                        parent::getParent()->flashMessage("Incorrect input data!", "error");
         }
 
 
@@ -52,45 +46,48 @@ class Content extends \Ixtrum\FileManager
                 if (!$filename)
                         $filename = $this->presenter->context->httpRequest->getPost("filename");
 
-                $session = $this->presenter->context->session->getSection("file-manager");
-                $actualdir = $this->context->system->getActualDir();
+                if ($filename) {
 
-                if ($this->context->tools->validPath($actualdir, $filename)) {
+                        $actualdir = $this->context->system->getActualDir();
+                        if ($this->context->tools->validPath($actualdir, $filename)) {
 
-                        $session->clipboard[$actualdir.$filename] = array(
-                            "action" => "copy",
-                            "actualdir" => $actualdir,
-                            "filename" => $filename
-                        );
+                                $session = $this->presenter->context->session->getSection("file-manager");
+                                $session->clipboard[$actualdir.$filename] = array(
+                                    "action" => "copy",
+                                    "actualdir" => $actualdir,
+                                    "filename" => $filename
+                                );
 
-                        $this->handleShowContent($actualdir);
+                                parent::getParent()->refreshSnippets(array("clipboard"));
+                        } else
+                                parent::getParent()->flashMessage("File not found!", "warning");
                 } else
-                        parent::getParent()->flashMessage("File $actualdir$filename already does not exist!", "warning");
+                        parent::getParent()->flashMessage("Incorrect input data!", "error");
         }
 
 
-        public function handleMultiCopyToClipboard($files = "")
+        public function handleMultiCopyToClipboard($files = array())
         {
-                $session = $this->presenter->context->session->getSection("file-manager");
-                $actualdir = $this->context->system->getActualDir();
-
                 // if sended by AJAX
                 if (!$files)
                         $files = $this->presenter->context->httpRequest->getPost("files");
 
-                if (is_array($files)) {
+                if (is_array($files) && $files) {
 
+                        $actualdir = $this->context->system->getActualDir();
+                        $session = $this->presenter->context->session->getSection("file-manager");
                         foreach($files as $file) {
+
                                 $session->clipboard[$actualdir.$file] = array(
                                     "action" => "copy",
                                     "actualdir" => $actualdir,
                                     "filename" => $file
                                 );
                         }
-                } else
-                        parent::getParent()->flashMessage("Incorrect input type data. Must be an array!", "error");
 
-                parent::getParent()->refreshSnippets(array("clipboard"));
+                        parent::getParent()->refreshSnippets(array("clipboard"));
+                } else
+                        parent::getParent()->flashMessage("Incorrect input data!", "error");
         }
 
 
@@ -100,31 +97,36 @@ class Content extends \Ixtrum\FileManager
                 if (!$filename)
                         $filename = $this->presenter->context->httpRequest->getPost("filename");
 
-                $session = $this->presenter->context->session->getSection("file-manager");
-                $actualdir = $this->context->system->getActualDir();
+                if ($filename) {
 
-                if ($this->context->tools->validPath($actualdir, $filename)) {
+                        $actualdir = $this->context->system->getActualDir();
+                        if ($this->context->tools->validPath($actualdir, $filename)) {
 
-                        $session->clipboard[$actualdir.$filename] = array(
-                            "action" => "cut",
-                            "actualdir" => $actualdir,
-                            "filename" => $filename
-                        );
+                                $session = $this->presenter->context->session->getSection("file-manager");
+                                $session->clipboard[$actualdir.$filename] = array(
+                                    "action" => "cut",
+                                    "actualdir" => $actualdir,
+                                    "filename" => $filename
+                                );
 
-                        $this->handleShowContent($actualdir);
-                }
+                                parent::getParent()->refreshSnippets(array("clipboard"));
+                        } else
+                                parent::getParent()->flashMessage("File not found!", "warning");
+                } else
+                        parent::getParent()->flashMessage("Incorrect input data!", "error");
         }
 
-        public function handleMultiCutToClipboard($files = "")
-        {
-                $session = $this->presenter->context->session->getSection("file-manager");
-                $actualdir = $this->context->system->getActualDir();
 
+        public function handleMultiCutToClipboard($files = array())
+        {
                 // if sended by AJAX
                 if (!$files)
                         $files = $this->presenter->context->httpRequest->getPost("files");
 
-                if (is_array($files)) {
+                if (is_array($files) && $files) {
+
+                        $actualdir = $this->context->system->getActualDir();
+                        $session = $this->presenter->context->session->getSection("file-manager");
 
                         foreach($files as $file) {
 
@@ -134,43 +136,44 @@ class Content extends \Ixtrum\FileManager
                                     "filename" => $file
                                 );
                         }
-                } else
-                        parent::getParent()->flashMessage("Incorrect input type data. Must be an array!", "error");
 
-                parent::getParent()->refreshSnippets(array("clipboard"));
+                        parent::getParent()->refreshSnippets(array("clipboard"));
+                } else
+                        parent::getParent()->flashMessage("Incorrect input data!", "error");
         }
 
 
         public function handleDelete($filename = "")
         {
-                $actualdir = $this->context->system->getActualDir();
-
                 // if sended by AJAX
                 if (!$filename)
                         $filename = $this->presenter->context->httpRequest->getQuery("filename");
 
+                $actualdir = $this->context->system->getActualDir();
                 if ($this->context->parameters["readonly"])
                         parent::getParent()->flashMessage("Read-only mode enabled!", "warning");
                 else {
 
-                        if ($this->context->tools->validPath($actualdir, $filename)) {
+                        if ($filename) {
 
-                            if ($this->context->files->delete($actualdir, $filename))
-                                parent::getParent()->flashMessage("Successfuly deleted", "info");
-                            else
-                                parent::getParent()->flashMessage("An error occured!", "error");
+                                if ($this->context->tools->validPath($actualdir, $filename)) {
+
+                                        if ($this->context->files->delete($actualdir, $filename))
+                                                parent::getParent()->flashMessage("Successfuly deleted.", "info");
+                                        else
+                                                parent::getParent()->flashMessage("An error occured!", "error");
+                                } else
+                                        parent::getParent()->flashMessage("File not found!", "warning");
                         } else
-                                parent::getParent()->flashMessage("File $actualdir$filename already does not exist!", "warning");
+                                parent::getParent()->flashMessage("Incorrect input data!", "error");
                 }
 
                 $this->handleShowContent($actualdir);
         }
 
 
-        public function handleMultiDelete($files = "")
+        public function handleMultiDelete($files = array())
         {
-                $actualdir = $this->context->system->getActualDir();
-
                 // if sended by AJAX
                 if (!$files)
                         $files = $this->presenter->context->httpRequest->getPost("files");
@@ -179,7 +182,8 @@ class Content extends \Ixtrum\FileManager
                         parent::getParent()->flashMessage("Read-only mode enabled!", "warning");
                 else {
 
-                        if (is_array($files)) {
+                        $actualdir = $this->context->system->getActualDir();
+                        if (is_array($files) && $files) {
 
                                 foreach($files as $file) {
 
@@ -189,19 +193,18 @@ class Content extends \Ixtrum\FileManager
                                                 parent::getParent()->flashMessage("An error occured!", "error");
                                 }
                         } else
-                                parent::getParent()->flashMessage("Incorrect input type data. Must be an array!", "error");
+                                parent::getParent()->flashMessage("Incorrect input data!", "error");
 
                         $this->handleShowContent($actualdir);
                 }
         }
 
 
-        public function handleZip($files = "")
+        public function handleZip($files = array())
         {
                 // if sended by AJAX
                 if (!$files)
                         $files = $this->presenter->context->httpRequest->getPost("files");
-
 
                 if ($this->context->parameters["readonly"])
                         parent::getParent()->flashMessage("Read-only mode enabled!", "warning");
@@ -220,7 +223,6 @@ class Content extends \Ixtrum\FileManager
                                 parent::getParent()->context->caching->deleteItem(array("content", $key));
                 }
 
-                parent::getParent()->refreshSnippets(array("message"));
                 $this->handleShowContent($actualdir);
         }
 
@@ -255,12 +257,16 @@ class Content extends \Ixtrum\FileManager
                 if (!$filename)
                         $filename = $this->presenter->context->httpRequest->getQuery("filename");
 
-                if ($this->context->tools->validPath($actualdir, $filename)) {
+                if ($filename) {
 
-                        $path = $this->context->tools->getAbsolutePath($actualdir) . $filename;
-                        $this->presenter->sendResponse(new FileResponse($path, NULL, NULL));
+                        if ($this->context->tools->validPath($actualdir, $filename)) {
+
+                                $path = $this->context->tools->getAbsolutePath($actualdir) . $filename;
+                                $this->presenter->sendResponse(new FileResponse($path, NULL, NULL));
+                        } else
+                                parent::getParent()->flashMessage("File not found!", "warning");
                 } else
-                        parent::getParent()->flashMessage("File $actualdir$filename already does not exist!", "warning");
+                        parent::getParent()->flashMessage("Incorrect input data!", "error");
         }
 
 
@@ -279,30 +285,31 @@ class Content extends \Ixtrum\FileManager
 
         public function handleMove($targetdir = "", $filename = "")
         {
-                $session = $this->presenter->context->session->getSection("file-manager");
-                $actualdir = $session->actualdir;
                 $request = $this->presenter->context->httpRequest;
 
                 // if sended by AJAX
                 if (!$targetdir)
-                    $targetdir = $request->getQuery("targetdir");
+                        $targetdir = $request->getQuery("targetdir");
+
                 if (!$filename)
-                    $filename = $request->getQuery("filename");
+                        $filename = $request->getQuery("filename");
 
                 if ($this->context->parameters["readonly"])
                         parent::getParent()->flashMessage("Read-only mode enabled!!", "warning");
                 else {
 
-                        if ($this->context->files->move($actualdir, $targetdir, $filename)) {
+                        $actualdir = $this->context->system->getActualDir();
+                        if ($targetdir && $filename) {
 
-                                $this->presenter->payload->result = "success";
-                                parent::getParent()->flashMessage("Successfuly moved.", "info");
-                                parent::getParent()->handleShowContent($targetdir);
-                        } else {
+                                if ($this->context->files->move($actualdir, $targetdir, $filename)) {
 
-                                parent::getParent()->flashMessage("An error occured. File was not moved.", "error");
-                                parent::getParent()->handleShowContent($actualdir);
+                                        $this->presenter->payload->result = "success";
+                                        parent::getParent()->flashMessage("Successfuly moved.", "info");
+                                } else
+                                        parent::getParent()->flashMessage("An error occured. File was not moved.", "error");
                         }
+
+                        parent::getParent()->handleShowContent($actualdir);
                 }
         }
 
@@ -325,7 +332,7 @@ class Content extends \Ixtrum\FileManager
         {
                 $template = $this->template;
                 $session = $this->presenter->context->session->getSection("file-manager");
-                $actualdir = $session->actualdir;
+                $actualdir = $this->context->system->getActualDir();
 
                 $view = $session->view;
                 $mask = $session->mask;
@@ -348,6 +355,7 @@ class Content extends \Ixtrum\FileManager
                                 $view = "large";
                         }
                 } else {
+
                         $template->setFile(__DIR__ . "/large.latte");
                         $view = "large";
                 }
@@ -377,10 +385,10 @@ class Content extends \Ixtrum\FileManager
 
         /**
          * Load directory content
-         * TODO Nette Finder does not support mask for folders
          *
          * @serializationVersion 1
-         * 
+         * @internal
+         * @todo Nette Finder does not support mask for folders
          * @param string $actualdir
          * @param string $mask
          * @param string $view
@@ -401,8 +409,8 @@ class Content extends \Ixtrum\FileManager
                 $absolutePath = $tools->getAbsolutePath($actualdir);
 
                 $files = \Ixtrum\FileManager\System\Files\Finder::find($mask)
-                            ->in($absolutePath)
-                            ->orderBy($order);
+                                                                    ->in($absolutePath)
+                                                                    ->orderBy($order);
 
                 $dir_array = array();
                 foreach( $files as $file ) {
@@ -438,7 +446,7 @@ class Content extends \Ixtrum\FileManager
                         } else {
                                 $dir_array[ $name ]["type"] = "folder";
                                 $dir_array[ $name ]["icon"] =  "folder.png";
-                                $dir_array[ $name ]["create_thumb"] =  False;
+                                $dir_array[ $name ]["create_thumb"] =  false;
                         }
                 }
 
@@ -447,8 +455,9 @@ class Content extends \Ixtrum\FileManager
 
 
         /**
-         * Load data
+         * Load data from actual directory
          *
+         * @internal
          * @param string $actualdir
          * @param string $mask
          * @param string $view
