@@ -748,7 +748,7 @@ class Files
                 closedir($directoryHandle);
 
                 if(!$empty) {
-                    if(!rmdir($directory))
+                    if(!@rmdir($directory))
                         return false;
                 }
 
