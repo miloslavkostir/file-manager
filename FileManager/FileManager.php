@@ -92,25 +92,21 @@ class FileManager extends UI\Control
         }
 
 
-        public function handleRunPlugin($pluginName, $files = "")
+        public function handleRunPlugin($plugin, $files = "")
         {
                 // if sended by AJAX
                 if (!$files)
                         $files = $this->presenter->context->httpRequest->getPost("files");
 
-                if ($files) {
+                if ($this->context->plugins->isValidControl($plugin)) {
 
-                        if ($this->context->plugins->isValidControl($pluginName)) {
+                        if (property_exists($this[$plugin], "files") && $files)
+                                $this[$plugin]->files = $files;
 
-                                $this->template->plugin = $pluginName;
-                                if (property_exists($this[$pluginName], "files") && $files)
-                                        $this[$pluginName]->files = $files;
-                        } else
-                                $this->flashMessage("Plugin '$pluginName' not found!", "warning");
+                        $this->template->plugin = $plugin;
+                        $this->refreshSnippets(array("plugin"));
                 } else
-                        $this->flashMessage("Incorrect input data!", "error");
-
-                $this->handleShowContent($this->context->system->getActualDir());
+                        $this->flashMessage("Plugin '$plugin' not found!", "warning");
         }
 
 
