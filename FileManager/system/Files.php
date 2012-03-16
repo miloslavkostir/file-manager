@@ -428,12 +428,12 @@ class Files
 
                             foreach ($items as $item) {
 
-                                       $filesClass = new Files($this->context, $this->config);
-                                       $info['size'] += $filesClass->filesize($item->getPathName());
                                        if ($item->isDir())
                                                $info['dirCount']++;
-                                       else
+                                       else {
+                                               $info['size'] += $this->filesize($item->getPathName());
                                                $info['fileCount']++;
+                                       }
                             }        
                     }
                 }
