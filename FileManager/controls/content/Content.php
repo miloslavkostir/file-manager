@@ -398,8 +398,8 @@ class Content extends \Ixtrum\FileManager
         private function getDirectoryContent($actualdir, $mask, $view, $order)
         {
                 $thumb_dir = $this->context->parameters["resource_dir"] . "img/icons/" . $view . "/";
-                if (!file_exists($this->presenter->context->parameters["wwwDir"] . $thumb_dir))
-                        throw new \Nette\DirectoryNotFoundException("Missing folder with icons for '$view' view");
+                if (!is_dir($this->presenter->context->parameters["wwwDir"] . $thumb_dir))
+                        throw new \Nette\DirectoryNotFoundException("Missing folder with icons for '$view' view!");
 
                 $tools = $this->context->tools;
                 $uploadpath = $this->context->parameters["uploadpath"];

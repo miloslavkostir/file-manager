@@ -59,7 +59,7 @@ class Navigation extends \Ixtrum\FileManager
         $val = $form->values;
         $path = $this->context->tools->getAbsolutePath($val['location']);
 
-        if (file_exists($path))
+        if (is_dir($path))
                 parent::getParent()->handleShowContent($val['location']);
         else {
                 $folder = $val['location'];

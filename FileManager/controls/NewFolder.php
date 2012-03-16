@@ -50,7 +50,7 @@ class NewFolder extends \Ixtrum\FileManager
                                 else {
 
                                         $target_dir = $this->context->tools->getAbsolutePath($actualdir) . $foldername;
-                                        if (file_exists($target_dir))
+                                        if (is_dir($target_dir))
                                                 parent::getParent()->flashMessage("This name already exist!", "warning");
                                         else {
 

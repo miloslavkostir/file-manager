@@ -723,7 +723,7 @@ class Files
             if (substr($directory,-1) == "/")
                 $directory = substr($directory,0,-1);
 
-            if (!file_exists($directory) || !is_dir($directory))
+            if (!is_dir($directory))
                 return false;
             elseif(!is_readable($directory))
                 return false;

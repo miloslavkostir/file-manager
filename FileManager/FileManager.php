@@ -39,7 +39,7 @@ class FileManager extends UI\Control
                         if ($actualdir) {
 
                                 $actualPath = $this->context->tools->getAbsolutePath($actualdir);
-                                if (!file_exists($actualPath) || !is_dir($actualPath))
+                                if (!is_dir($actualPath))
                                         $system->setActualdir(null);
                         }
 

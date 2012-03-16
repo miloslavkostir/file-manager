@@ -19,7 +19,7 @@ class Zip
                         throw new ApplicationException("PHP ZIP not loaded.");
 
 
-                if (!file_exists($targetDir) || !is_dir($targetDir)) {
+                if (!is_dir($targetDir)) {
 
                         $oldumask = umask(0);
                         mkdir($targetDir, 0777);
