@@ -23,7 +23,7 @@ jQuery(document).ready(function() {
                 /** Main */
                 $('.fm-alert').width($(".file-manager").width());
 
-                var mb = $('.fm-alert, fm-other-messages').stop(true, true).fadeIn(); // http://stackoverflow.com/questions/2884221/how-to-start-stop-restart-jquery-animation
+                var mb = $('.fm-alert').stop(true, true).fadeIn(); // http://stackoverflow.com/questions/2884221/how-to-start-stop-restart-jquery-animation
                 if(mb.data('delay')) clearTimeout(mb.data('delay'));
                 mb.data('delay', setTimeout(function() { mb.fadeOut(500); }, 10000));
 
