@@ -711,49 +711,33 @@ class Files
 
         /**
          * Delete folder recursively
-         * TODO use Finder
-         * thx O S http://php.net/manual/en/function.rmdir.php
          * 
-         * @param string aboslute path
-         * @param-optional bool only clear direcotry content if true
+         * @param string absolute path
          * @return bool
          */
-        public function deleteFolder($directory, $empty = false)
+        public function deleteFolder($directory)
         {
-            if (substr($directory,-1) == "/")
-                $directory = substr($directory,0,-1);
-
-            if (!is_dir($directory))
+            if (!is_dir($directory) || !is_readable($directory))
                 return false;
-            elseif(!is_readable($directory))
-                return false;
-            else {
-                $directoryHandle = opendir($directory);
 
-                while ($contents = readdir($directoryHandle)) {
-                    if($contents != '.' && $contents != '..') {
-                        $path = $directory . "/" . $contents;
+            $contents = Finder::find("*")->in($directory);
+            foreach ($contents as $item) {
 
-                        if(is_dir($path))
-                            $this->deleteFolder($path);
-                        else {
-                            if ( is_writable($path))
-                                unlink($path);
+                    if ($item->isDir())
+                            $this->deleteFolder($item->getPathName());
+                    else {
+
+                            if ($item->isWritable())
+                                unlink ($item->getPathName());
                             else
                                 return false;
-                        }
                     }
-                }
-
-                closedir($directoryHandle);
-
-                if(!$empty) {
-                    if(!@rmdir($directory))
-                        return false;
-                }
-
-                return true;
             }
+
+            if (!@rmdir($directory))
+                return false;
+
+            return true;
         }
 
 
