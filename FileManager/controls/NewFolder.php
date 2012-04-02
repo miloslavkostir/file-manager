@@ -15,6 +15,7 @@ class NewFolder extends \Ixtrum\FileManager
         {
                 $template = $this->template;
                 $template->setFile(__DIR__ . "/NewFolder.latte");
+                $template->setTranslator($this->context->translator);
                 $template->render();
         }
 

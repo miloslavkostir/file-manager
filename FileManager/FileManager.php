@@ -50,17 +50,6 @@ class FileManager extends UI\Control
         }
 
 
-        public function createTemplate($class = NULL)
-        {
-                $template = parent::createTemplate($class);
-
-                $this->context->translator->setLang($this->context->parameters["lang"]);
-                $template->setTranslator($this->context->translator);
-
-                return $template;
-        }
-
-
         public function handleMove()
         {
                 $this["content"]->handleMove();
@@ -140,6 +129,7 @@ class FileManager extends UI\Control
         {
                 $template = $this->template;
                 $template->setFile(__DIR__ . "/FileManager.latte");
+                $template->setTranslator($this->context->translator);
 
                 $session = $this->presenter->context->session->getSection("file-manager");
                 $clipboard = $session->clipboard;

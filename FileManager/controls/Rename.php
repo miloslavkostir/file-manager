@@ -20,6 +20,7 @@ class Rename extends \Ixtrum\FileManager
         {
                 $template = $this->template;
                 $template->setFile(__DIR__ . "/Rename.latte");
+                $template->setTranslator($this->context->translator);
                 $template->origFile = $this->files;
 
                 $this["renameForm"]->setDefaults(array(

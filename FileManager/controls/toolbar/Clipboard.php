@@ -79,6 +79,7 @@ class Clipboard extends \Ixtrum\FileManager
         {
                 $template = $this->template;
                 $template->setFile(__DIR__ . "/Clipboard.latte");
+                $template->setTranslator($this->context->translator);
 
                 $session = $this->presenter->context->session->getSection("file-manager");
                 $template->clipboard = $session->clipboard;

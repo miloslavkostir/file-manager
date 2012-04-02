@@ -40,17 +40,9 @@ final class Loader extends Container
         protected function createServiceTranslator()
         {
                 $param = $this->parameters;
-                $langDir = $param["rootPath"] . $param["langDir"];
-                $lang = $param["lang"];
+                $langFile = $param["rootPath"] . $param["langDir"] . $param["lang"] . ".mo";
 
-                $container = $this->container;
-                $container->params["lang"] = $lang;
-
-                $translator = External\NetteTranslator\Gettext::getTranslator($container);
-                $translator->addFile($langDir, "file-manager");
-                $translator->setLang($lang);
-
-                return $translator;
+                return new System\Translator\GettextTranslator($langFile);
         }
 
 

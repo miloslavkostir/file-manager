@@ -33,6 +33,7 @@ class Navigation extends \Ixtrum\FileManager
 
         $template = $this->template;
         $template->setFile(__DIR__ . '/Navigation.latte');
+        $template->setTranslator($this->context->translator);
 
         if (!$actualdir)
             $template->items = $this->getNav($rootname);

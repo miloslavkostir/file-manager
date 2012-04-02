@@ -362,6 +362,8 @@ class Content extends \Ixtrum\FileManager
                         $view = "large";
                 }
 
+                $template->setTranslator($this->context->translator);
+
                 $template->files = $this->loadData($actualdir, $mask, $view, $order);
                 $template->actualdir = $actualdir;
                 $template->rootname = $this->context->tools->getRootName();

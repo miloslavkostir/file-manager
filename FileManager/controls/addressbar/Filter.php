@@ -19,6 +19,7 @@ class Filter extends \Ixtrum\FileManager
 
                 $template = $this->template;
                 $template->setFile(__DIR__ . "/Filter.latte");
+                $template->setTranslator($this->context->translator);
 
                 $this["filterForm"]->setDefaults(array("phrase" => $session->mask));
 
