@@ -47,7 +47,7 @@ final class Loader extends Container
                 $container->params["lang"] = $lang;
 
                 $translator = External\NetteTranslator\Gettext::getTranslator($container);
-                $translator->addFile($langDir, "main");
+                $translator->addFile($langDir, "file-manager");
                 $translator->setLang($lang);
 
                 return $translator;
