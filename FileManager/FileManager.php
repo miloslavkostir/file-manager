@@ -61,15 +61,6 @@ class FileManager extends UI\Control
         }
 
 
-        public function flashMessage($message, $type = "info")
-        {
-                if ($this->context->hasService("translator")) {
-                    $message = $this->context->translator->translate($message);
-                }
-                return parent::flashMessage($message, $type);
-        }
-
-
         public function handleMove()
         {
                 $this["content"]->handleMove();
@@ -106,7 +97,7 @@ class FileManager extends UI\Control
                         $this->template->plugin = $plugin;
                         $this->refreshSnippets(array("plugin"));
                 } else
-                        $this->flashMessage("Plugin '$plugin' not found!", "warning");
+                        $this->flashMessage($this->context->translator->translate("Plugin '%s' not found!", $plugin), "warning");
         }
 
 
@@ -125,9 +116,9 @@ class FileManager extends UI\Control
                                 $this["fileInfo"]->filename = $filename;
                                 $this->invalidateControl("fileinfo");
                         } else
-                                $this->flashMessage("File not found!", "warning");      
+                                $this->flashMessage($this->context->translator->translate("File not found!"), "warning");      
                 } else
-                        $this->flashMessage("Incorrect input data!", "error");
+                        $this->flashMessage($this->context->translator->translate("Incorrect input data!"), "error");
         }
 
 
@@ -141,7 +132,7 @@ class FileManager extends UI\Control
                         if ($this->presenter->isAjax())
                                 $this->refreshSnippets();
                 } else
-                        $this->flashMessage("Folder $actualdir does not exists!", "warning");
+                        $this->flashMessage($this->context->translator->translate("Folder %s does not exists!", $actualdir), "warning");
         }
 
 

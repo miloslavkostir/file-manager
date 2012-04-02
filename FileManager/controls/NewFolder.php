@@ -38,7 +38,7 @@ class NewFolder extends \Ixtrum\FileManager
                 $actualdir = $this->context->system->getActualDir();
 
                 if ($this->context->parameters["readonly"])
-                        parent::getParent()->flashMessage("Read-only mode enabled!", "warning");
+                        parent::getParent()->flashMessage($this->context->translator->translate("Read-only mode enabled!"), "warning");
                 else {
 
                         $tools = $this->context->tools;
@@ -46,12 +46,12 @@ class NewFolder extends \Ixtrum\FileManager
 
                                 $foldername = $this->context->files->safe_foldername($values->name);
                                 if (!$foldername)
-                                        parent::getParent()->flashMessage("Folder name can not be used - illegal characters.", "warning");
+                                        parent::getParent()->flashMessage($this->context->translator->translate("Folder name can not be used - illegal characters."), "warning");
                                 else {
 
                                         $target_dir = $this->context->tools->getAbsolutePath($actualdir) . $foldername;
                                         if (is_dir($target_dir))
-                                                parent::getParent()->flashMessage("This name already exist!", "warning");
+                                                parent::getParent()->flashMessage($this->context->translator->translate("This name already exist!"), "warning");
                                         else {
 
                                                 if ($this->context->files->mkdir($target_dir)) {
@@ -63,14 +63,14 @@ class NewFolder extends \Ixtrum\FileManager
                                                                 $caching->deleteItem(NULL, array("tags" => "treeview"));
                                                         }
 
-                                                        parent::getParent()->flashMessage("Folder successfully created", "info");
+                                                        parent::getParent()->flashMessage($this->context->translator->translate("Folder successfully created"), "info");
                                                         parent::getParent()->handleShowContent($actualdir);
                                                 } else
-                                                        parent::getParent()->flashMessage("An unkonwn error occurred during folder creation", "info");
+                                                        parent::getParent()->flashMessage($this->context->translator->translate("An unkonwn error occurred during folder creation"), "info");
                                         }
                                 }
                         } else
-                                parent::getParent()->flashMessage("Folder $actualdir already does not exist!", "warning");
+                                parent::getParent()->flashMessage($this->context->translator->translate("Folder %s already does not exist!", $actualdir), "warning");
                 }
 
                 parent::getParent()->handleShowContent($actualdir);

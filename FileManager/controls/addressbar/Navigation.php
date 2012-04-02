@@ -63,7 +63,7 @@ class Navigation extends \Ixtrum\FileManager
                 parent::getParent()->handleShowContent($val['location']);
         else {
                 $folder = $val['location'];
-                parent::getParent()->flashMessage("Folder $folder does not exists!", 'warning');
+                parent::getParent()->flashMessage($this->context->translator->translate("Folder %s does not exists!", $folder), 'warning');
                 parent::getParent()->handleShowContent($this->context->system->getActualDir());
         }
     }

@@ -25,12 +25,13 @@ class Clipboard extends \Ixtrum\FileManager
                 $session = $this->presenter->context->session->getSection('file-manager');
                 $actualdir = $this->context->system->getActualDir();
 
+                $translator = $this->context->translator;
                 if ($this->context->tools->validPath($actualdir)) {
 
                         if ($this->context->parameters["readonly"])
-                                parent::getParent()->flashMessage("Read-only mode enabled!", "warning");
+                                parent::getParent()->flashMessage($translator->translate("Read-only mode enabled!"), "warning");
                         elseif (!isset($session->clipboard) || count($session->clipboard) <= 0)
-                                parent::getParent()->flashMessage("There is nothing to paste from clipboard!", "warning");
+                                parent::getParent()->flashMessage($translator->translate("There is nothing to paste from clipboard!"), "warning");
                         else {
 
                                 foreach ($session->clipboard as $key => $val) {
@@ -38,25 +39,25 @@ class Clipboard extends \Ixtrum\FileManager
                                         if ($val["action"] === "copy") {
 
                                                 if ($this->context->files->copy($val['actualdir'], $actualdir, $val['filename']))
-                                                        parent::getParent()->flashMessage("Succesfully copied.", "info");
+                                                        parent::getParent()->flashMessage($translator->translate("Succesfully copied."), "info");
                                                 else
-                                                        parent::getParent()->flashMessage("An error occured!", "error");
+                                                        parent::getParent()->flashMessage($translator->translate("An error occured!"), "error");
 
                                         } elseif ($val["action"] === "cut") {
 
                                                 if ($this->context->files->move($val["actualdir"], $actualdir, $val["filename"]))
-                                                        parent::getParent()->flashMessage("Succesfully moved.", "info");
+                                                        parent::getParent()->flashMessage($translator->translate("Succesfully moved."), "info");
                                                 else
-                                                        parent::getParent()->flashMessage("An error occured!", "error");
+                                                        parent::getParent()->flashMessage($translator->translate("An error occured!"), "error");
 
                                         } else
-                                                parent::getParent()->flashMessage("Unknown action!", "error");
+                                                parent::getParent()->flashMessage($translator->translate("Unknown action!"), "error");
                                 }
 
                                 $this->handleClearClipboard();
                         }
                 } else
-                        parent::getParent()->flashMessage("Dir $actualdir already does not exist!", "warning");
+                        parent::getParent()->flashMessage($translator->translate("Dir %s already does not exist!", $actualdir), "warning");
         }
 
 
@@ -68,7 +69,7 @@ class Clipboard extends \Ixtrum\FileManager
                 if (isset($session->clipboard[$path]))
                         unset($session->clipboard[$path]);
                 else
-                        parent::getParent()->flashMessage("Item $path does not exist in clipboard!", "error");
+                        parent::getParent()->flashMessage($this->context->translator->translate("Item %s does not exist in clipboard!", $path), "error");
 
                 parent::getParent()->handleShowContent($session->actualdir);
         }

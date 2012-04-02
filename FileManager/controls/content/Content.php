@@ -36,7 +36,7 @@ class Content extends \Ixtrum\FileManager
                         $this->presenter->payload->fileCount = $info["fileCount"];
                         $this->presenter->sendPayload();
                 } else
-                        parent::getParent()->flashMessage("Incorrect input data!", "error");
+                        parent::getParent()->flashMessage($this->context->translator->translate("Incorrect input data!"), "error");
         }
 
 
@@ -60,9 +60,9 @@ class Content extends \Ixtrum\FileManager
 
                                 parent::getParent()->refreshSnippets(array("clipboard"));
                         } else
-                                parent::getParent()->flashMessage("File not found!", "warning");
+                                parent::getParent()->flashMessage($this->context->translator->translate("File not found!"), "warning");
                 } else
-                        parent::getParent()->flashMessage("Incorrect input data!", "error");
+                        parent::getParent()->flashMessage($this->context->translator->translate("Incorrect input data!"), "error");
         }
 
 
@@ -87,7 +87,7 @@ class Content extends \Ixtrum\FileManager
 
                         parent::getParent()->refreshSnippets(array("clipboard"));
                 } else
-                        parent::getParent()->flashMessage("Incorrect input data!", "error");
+                        parent::getParent()->flashMessage($this->context->translator->translate("Incorrect input data!"), "error");
         }
 
 
@@ -111,9 +111,9 @@ class Content extends \Ixtrum\FileManager
 
                                 parent::getParent()->refreshSnippets(array("clipboard"));
                         } else
-                                parent::getParent()->flashMessage("File not found!", "warning");
+                                parent::getParent()->flashMessage($this->context->translator->translate("File not found!"), "warning");
                 } else
-                        parent::getParent()->flashMessage("Incorrect input data!", "error");
+                        parent::getParent()->flashMessage($this->context->translator->translate("Incorrect input data!"), "error");
         }
 
 
@@ -139,7 +139,7 @@ class Content extends \Ixtrum\FileManager
 
                         parent::getParent()->refreshSnippets(array("clipboard"));
                 } else
-                        parent::getParent()->flashMessage("Incorrect input data!", "error");
+                        parent::getParent()->flashMessage($this->context->translator->translate("Incorrect input data!"), "error");
         }
 
 
@@ -151,7 +151,7 @@ class Content extends \Ixtrum\FileManager
 
                 $actualdir = $this->context->system->getActualDir();
                 if ($this->context->parameters["readonly"])
-                        parent::getParent()->flashMessage("Read-only mode enabled!", "warning");
+                        parent::getParent()->flashMessage($this->context->translator->translate("Read-only mode enabled!"), "warning");
                 else {
 
                         if ($filename) {
@@ -159,13 +159,13 @@ class Content extends \Ixtrum\FileManager
                                 if ($this->context->tools->validPath($actualdir, $filename)) {
 
                                         if ($this->context->files->delete($actualdir, $filename))
-                                                parent::getParent()->flashMessage("Successfuly deleted.", "info");
+                                                parent::getParent()->flashMessage($this->context->translator->translate("Successfuly deleted."), "info");
                                         else
-                                                parent::getParent()->flashMessage("An error occured!", "error");
+                                                parent::getParent()->flashMessage($this->context->translator->translate("An error occured!"), "error");
                                 } else
-                                        parent::getParent()->flashMessage("File not found!", "warning");
+                                        parent::getParent()->flashMessage($this->context->translator->translate("File not found!"), "warning");
                         } else
-                                parent::getParent()->flashMessage("Incorrect input data!", "error");
+                                parent::getParent()->flashMessage($this->context->translator->translate("Incorrect input data!"), "error");
                 }
 
                 $this->handleShowContent($actualdir);
@@ -178,8 +178,9 @@ class Content extends \Ixtrum\FileManager
                 if (!$files)
                         $files = $this->presenter->context->httpRequest->getPost("files");
 
+                $translator = $this->context->translator;
                 if ($this->context->parameters["readonly"])
-                        parent::getParent()->flashMessage("Read-only mode enabled!", "warning");
+                        parent::getParent()->flashMessage($translator->translate("Read-only mode enabled!"), "warning");
                 else {
 
                         $actualdir = $this->context->system->getActualDir();
@@ -188,12 +189,12 @@ class Content extends \Ixtrum\FileManager
                                 foreach($files as $file) {
 
                                         if ($this->context->files->delete($actualdir, $file))
-                                                parent::getParent()->flashMessage("Successfuly deleted", "info");
+                                                parent::getParent()->flashMessage($translator->translate("Successfuly deleted"), "info");
                                         else
-                                                parent::getParent()->flashMessage("An error occured!", "error");
+                                                parent::getParent()->flashMessage($translator->translate("An error occured!"), "error");
                                 }
                         } else
-                                parent::getParent()->flashMessage("Incorrect input data!", "error");
+                                parent::getParent()->flashMessage($translator->translate("Incorrect input data!"), "error");
 
                         $this->handleShowContent($actualdir);
                 }
@@ -207,7 +208,7 @@ class Content extends \Ixtrum\FileManager
                         $files = $this->presenter->context->httpRequest->getPost("files");
 
                 if ($this->context->parameters["readonly"])
-                        parent::getParent()->flashMessage("Read-only mode enabled!", "warning");
+                        parent::getParent()->flashMessage($this->context->translator->translate("Read-only mode enabled!"), "warning");
                 else {
 
                         $actualdir = $this->context->system->getActualDir();
@@ -264,9 +265,9 @@ class Content extends \Ixtrum\FileManager
                                 $path = $this->context->tools->getAbsolutePath($actualdir) . $filename;
                                 $this->presenter->sendResponse(new FileResponse($path, NULL, NULL));
                         } else
-                                parent::getParent()->flashMessage("File not found!", "warning");
+                                parent::getParent()->flashMessage($this->context->translator->translate("File not found!"), "warning");
                 } else
-                        parent::getParent()->flashMessage("Incorrect input data!", "error");
+                        parent::getParent()->flashMessage($this->context->translator->translate("Incorrect input data!"), "error");
         }
 
 
@@ -295,18 +296,19 @@ class Content extends \Ixtrum\FileManager
                         $filename = $request->getQuery("filename");
 
                 if ($this->context->parameters["readonly"])
-                        parent::getParent()->flashMessage("Read-only mode enabled!!", "warning");
+                        parent::getParent()->flashMessage($this->context->translator->translate("Read-only mode enabled!"), "warning");
                 else {
 
                         $actualdir = $this->context->system->getActualDir();
                         if ($targetdir && $filename) {
 
+                                $translator = $this->context->translator;
                                 if ($this->context->files->move($actualdir, $targetdir, $filename)) {
 
                                         $this->presenter->payload->result = "success";
-                                        parent::getParent()->flashMessage("Successfuly moved.", "info");
+                                        parent::getParent()->flashMessage($translator->translate("Successfuly moved."), "info");
                                 } else
-                                        parent::getParent()->flashMessage("An error occured. File was not moved.", "error");
+                                        parent::getParent()->flashMessage($translator->translate("An error occured. File was not moved."), "error");
                         }
 
                         parent::getParent()->handleShowContent($actualdir);
