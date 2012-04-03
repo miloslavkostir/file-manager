@@ -5,7 +5,8 @@ namespace Ixtrum\FileManager\System\Translator;
 use Nette\Object,
         Nette\Localization\ITranslator,
         Nette\InvalidArgumentException,
-        Nette\Utils\Strings;
+        Nette\Utils\Strings,
+        Ixtrum\FileManager\System\Caching;
 
 /**
  * Gettext translator.
@@ -22,34 +23,43 @@ class GettextTranslator extends Object implements ITranslator
 {
 	/** @var string */
 	public $locale;
-	
+
 	/** @var bool */
 	private $endian = FALSE;
-	
-	/** @var string|stream  MO gettext file */
-	protected $file = FALSE;
-	
+
+	/** @var string filepath */
+	protected $filePath = FALSE;
+
 	/** @var array  translation table */
 	protected $dictionary = array();
-	
+
 	/** @var array */
 	protected $meta;
-	
-	
-	
+
+	/** @var Caching */
+	private $cache;
+
+        /** @var bool */
+        public $useCache = true;
+
+
 	/**
 	 * Translator contructor.
 	 * @param string
+         * @param Caching
 	 * @param string
 	 * @return void
 	 */
-	public function __construct($filename, $locale = NULL)
+	public function __construct($filePath, Caching $cache, $locale)
 	{
 		$this->locale = $locale;
-		$this->buildDictionary($filename);
+                $this->filePath = $filePath;
+                $this->cache = $cache;
+
+		$this->loadDictionary();
 	}
-	
-	
+
+
 	/**
 	 * Translates the given string.
 	 * @param  string	translation string
@@ -63,12 +73,12 @@ class GettextTranslator extends Object implements ITranslator
 			$word = $this->dictionary[$message];
 			if (!is_int($count))
                             $count = 1;
-			
+
 			$s = preg_replace('/([a-z]+)/', '$$1', "n=$count;" . $this->meta['Plural-Forms']);
 			eval($s);
-			$message = $word->translate($plural);
+			$message = $word->translate();
 		}
-		
+
 		$args = func_get_args();
 		if (count($args) > 1) {
 			array_shift($args);
@@ -76,10 +86,52 @@ class GettextTranslator extends Object implements ITranslator
 		}
 		return $message;
 	}
-	
-	
-	/**
-	 * Load translation data (MO file reader) and builds the dictionary.
+
+        /**
+         * Load translation data (MO file reader) and dictionary.
+         * @throws InvalidArgumentException
+         */
+        private function loadDictionary()
+        {
+                $file = $this->filePath;
+                if ($file && file_exists($file)) {
+
+                        $cache = $this->cache;
+                        $key = "dictionary-$this->locale";
+
+                        if ($cache && $this->useCache) {
+
+                                $cacheItem = $cache->getItem($key);
+                                if ($cacheItem) {
+                                        $dictionary = $cacheItem;
+                                } else {
+                                        $dictionary = $this->buildDictionary($file);
+                                        $cache->saveItem($key, $dictionary, array(
+                                            "files" => array($file),
+                                            "tags" => array($key)
+                                        ));
+                                }
+
+                                $this->dictionary = $dictionary;
+                                                //\nette\diagnostics\debugger::bardump($dictionary);
+                        } else {
+                                $dictionary = $this->buildDictionary($file);
+                                $this->dictionary = $dictionary;
+                                if ($this->useCache) {
+                                        $cache->save($key, $dictionary, array(
+                                            "files" => array($file),
+                                            "tags" => array($key)
+                                        ));
+                                }
+                                                \nette\diagnostics\debugger::bardump($dictionary);
+                        }
+
+                } else
+                        throw new InvalidArgumentException("MO file '$file' probably does not exist.");
+        }
+
+        /**
+	 * Builds the dictionary.
 	 * @param  string  $filename  MO file to add, full path must be given for access
 	 * @throws InvalidArgumentException
 	 * @return void
@@ -87,8 +139,8 @@ class GettextTranslator extends Object implements ITranslator
 	private function buildDictionary($filename)
 	{
 		$this->endian = FALSE;
-		$this->file = @fopen($filename, 'rb');
-		if (!$this->file) {
+		$file = @fopen($filename, 'rb');
+		if (!$file) {
 			throw new InvalidArgumentException("Error opening translation file '$filename'.");
 		}
 		if (@filesize($filename) < 10) {
@@ -96,7 +148,7 @@ class GettextTranslator extends Object implements ITranslator
 		}
 
 		// get endian
-		$input = $this->readMoData(1);
+		$input = $this->readMoData(1, $file);
 		if (strtolower(substr(dechex($input[1]), -8)) == "950412de") {
 			$this->endian = FALSE;
 		} else if (strtolower(substr(dechex($input[1]), -8)) == "de120495") {
@@ -105,61 +157,62 @@ class GettextTranslator extends Object implements ITranslator
 			throw new InvalidArgumentException("'$filename' is not a gettext file.");
 		}
 		// read revision - not supported for now
-		$input = $this->readMoData(1);
+		$input = $this->readMoData(1, $file);
 
 		// number of bytes
-		$input = $this->readMoData(1);
+		$input = $this->readMoData(1, $file);
 		$total = $input[1];
 
 		// number of original strings
-		$input = $this->readMoData(1);
+		$input = $this->readMoData(1, $file);
 		$originalOffset = $input[1];
 
 		// number of translation strings
-		$input = $this->readMoData(1);
+		$input = $this->readMoData(1, $file);
 		$translationOffset = $input[1];
 
 		// fill the original table
-		fseek($this->file, $originalOffset);
-		$origtemp = $this->readMoData(2 * $total);
-		fseek($this->file, $translationOffset);
-		$transtemp = $this->readMoData(2 * $total);
+		fseek($file, $originalOffset);
+		$origtemp = $this->readMoData(2 * $total, $file);
+		fseek($file, $translationOffset);
+		$transtemp = $this->readMoData(2 * $total, $file);
 
 		for ($count = 0; $count < $total; ++$count) {
 			if ($origtemp[$count * 2 + 1] != 0) {
-				fseek($this->file, $origtemp[$count * 2 + 2]);
-				$original = @fread($this->file, $origtemp[$count * 2 + 1]);
+				fseek($file, $origtemp[$count * 2 + 2]);
+				$original = @fread($file, $origtemp[$count * 2 + 1]);
 			} else {
 				$original = '';
 			}
 
 			if ($transtemp[$count * 2 + 1] != 0) {
-				fseek($this->file, $transtemp[$count * 2 + 2]);
-				$tr = fread($this->file, $transtemp[$count * 2 + 1]);
+				fseek($file, $transtemp[$count * 2 + 2]);
+				$tr = fread($file, $transtemp[$count * 2 + 1]);
 				if ($original === '') {
 					$this->generateMeta($tr);
 					continue;
 				}
-				
+
 				$word = new Word(explode(Strings::chr(0x00), $original), explode(Strings::chr(0x00), $tr));
-				$this->dictionary[$word->message] = $word;
+				$dictionary[$word->message] = $word;
 			}
 		}
-		return $this->dictionary;
+		return $dictionary;
 	}
-	
-	
+
+
 	/**
 	 * Read values from the MO file.
 	 * @param  string
+         * @param  string|stream  MO gettext file
 	 */
-	private function readMoData($bytes)
+	private function readMoData($bytes, $file)
 	{
-		$data = fread($this->file, 4 * $bytes);
+		$data = fread($file, 4 * $bytes);
 		return $this->endian === FALSE ? unpack('V' . $bytes, $data) : unpack('N' . $bytes, $data);
 	}
-	
-	
+
+
 	/**
 	 * Generates meta information about distionary.
 	 * @return void
@@ -167,7 +220,7 @@ class GettextTranslator extends Object implements ITranslator
 	private function generateMeta($s)
 	{
 		$s = trim($s);
-		
+
 		$s = preg_split('/[\n,]+/', $s);
 		foreach ($s as $meta) {
 			$pattern = ': ';
@@ -180,7 +233,7 @@ class GettextTranslator extends Object implements ITranslator
 
 /**
  * Class that represents translatable word.
- * 
+ *
  * @author     Roman Sklenář
  * @copyright  Copyright (c) 2009 Roman Sklenář (http://romansklenar.cz)
  * @license    New BSD License
@@ -192,10 +245,10 @@ class Word extends Object
 {
 	/** @var string|array */
 	protected $message;
-	
+
 	/** @var string|array */
 	protected $translation;
-	
+
 	/**
 	 * Word constructor.
 	 * @param string|array
@@ -207,8 +260,8 @@ class Word extends Object
 		$this->message = $message;
 		$this->translation = $translation;
 	}
-	
-	
+
+
 	/**
 	 * @return string
 	 */
@@ -216,8 +269,8 @@ class Word extends Object
 	{
 		return is_array($this->translation) ? $this->translation[$form] : $this->translation;
 	}
-	
-	
+
+
 	/**
 	 * @return string
 	 */
@@ -225,8 +278,8 @@ class Word extends Object
 	{
 		return is_array($this->message) ? $this->message[$form] : $this->message;
 	}
-	
-	
+
+
 	/**
 	 * Translates a word.
 	 * @param  string  translation string

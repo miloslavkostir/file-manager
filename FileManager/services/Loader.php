@@ -41,8 +41,10 @@ final class Loader extends Container
         {
                 $param = $this->parameters;
                 $langFile = $param["rootPath"] . $param["langDir"] . $param["lang"] . ".mo";
+                $cache = new System\Caching($this->container, $this->parameters);
+                $translator = new System\Translator\GettextTranslator($langFile, $cache, $param["lang"]);
 
-                return new System\Translator\GettextTranslator($langFile);
+                return $translator;
         }
 
 
