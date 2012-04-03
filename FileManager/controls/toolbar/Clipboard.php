@@ -39,25 +39,25 @@ class Clipboard extends \Ixtrum\FileManager
                                         if ($val["action"] === "copy") {
 
                                                 if ($this->context->files->copy($val['actualdir'], $actualdir, $val['filename']))
-                                                        parent::getParent()->flashMessage($translator->translate("Succesfully copied."), "info");
+                                                        parent::getParent()->flashMessage($translator->translate("Succesfully copied - %s", $val['filename']), "info");
                                                 else
-                                                        parent::getParent()->flashMessage($translator->translate("An error occured!"), "error");
+                                                        parent::getParent()->flashMessage($translator->translate("An error occured - %s", $val['filename']), "error");
 
                                         } elseif ($val["action"] === "cut") {
 
                                                 if ($this->context->files->move($val["actualdir"], $actualdir, $val["filename"]))
-                                                        parent::getParent()->flashMessage($translator->translate("Succesfully moved."), "info");
+                                                        parent::getParent()->flashMessage($translator->translate("Succesfully moved - %s", $val["filename"]), "info");
                                                 else
-                                                        parent::getParent()->flashMessage($translator->translate("An error occured!"), "error");
+                                                        parent::getParent()->flashMessage($translator->translate("An error occured - %s", $val["filename"]), "error");
 
                                         } else
-                                                parent::getParent()->flashMessage($translator->translate("Unknown action!"), "error");
+                                                parent::getParent()->flashMessage($translator->translate("Unknown action! - %s", $val["action"]), "error");
                                 }
 
                                 $this->handleClearClipboard();
                         }
                 } else
-                        parent::getParent()->flashMessage($translator->translate("Dir %s already does not exist!", $actualdir), "warning");
+                        parent::getParent()->flashMessage($translator->translate("Folder %s already does not exist!", $actualdir), "warning");
         }
 
 

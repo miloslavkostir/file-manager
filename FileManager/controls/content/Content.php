@@ -60,7 +60,7 @@ class Content extends \Ixtrum\FileManager
 
                                 parent::getParent()->refreshSnippets(array("clipboard"));
                         } else
-                                parent::getParent()->flashMessage($this->context->translator->translate("File not found!"), "warning");
+                                parent::getParent()->flashMessage($this->context->translator->translate("File %s not found!", $filename), "warning");
                 } else
                         parent::getParent()->flashMessage($this->context->translator->translate("Incorrect input data!"), "error");
         }
@@ -111,7 +111,7 @@ class Content extends \Ixtrum\FileManager
 
                                 parent::getParent()->refreshSnippets(array("clipboard"));
                         } else
-                                parent::getParent()->flashMessage($this->context->translator->translate("File not found!"), "warning");
+                                parent::getParent()->flashMessage($this->context->translator->translate("File %s not found!", $filename), "warning");
                 } else
                         parent::getParent()->flashMessage($this->context->translator->translate("Incorrect input data!"), "error");
         }
@@ -159,11 +159,11 @@ class Content extends \Ixtrum\FileManager
                                 if ($this->context->tools->validPath($actualdir, $filename)) {
 
                                         if ($this->context->files->delete($actualdir, $filename))
-                                                parent::getParent()->flashMessage($this->context->translator->translate("Successfuly deleted."), "info");
+                                                parent::getParent()->flashMessage($this->context->translator->translate("Successfuly deleted - %s", $filename), "info");
                                         else
                                                 parent::getParent()->flashMessage($this->context->translator->translate("An error occured!"), "error");
                                 } else
-                                        parent::getParent()->flashMessage($this->context->translator->translate("File not found!"), "warning");
+                                        parent::getParent()->flashMessage($this->context->translator->translate("File %s not found!", $filename), "warning");
                         } else
                                 parent::getParent()->flashMessage($this->context->translator->translate("Incorrect input data!"), "error");
                 }
@@ -189,9 +189,9 @@ class Content extends \Ixtrum\FileManager
                                 foreach($files as $file) {
 
                                         if ($this->context->files->delete($actualdir, $file))
-                                                parent::getParent()->flashMessage($translator->translate("Successfuly deleted"), "info");
+                                                parent::getParent()->flashMessage($translator->translate("Successfuly deleted - %s", $file), "info");
                                         else
-                                                parent::getParent()->flashMessage($translator->translate("An error occured!"), "error");
+                                                parent::getParent()->flashMessage($translator->translate("An error occured - %s", $file), "error");
                                 }
                         } else
                                 parent::getParent()->flashMessage($translator->translate("Incorrect input data!"), "error");
@@ -265,7 +265,7 @@ class Content extends \Ixtrum\FileManager
                                 $path = $this->context->tools->getAbsolutePath($actualdir) . $filename;
                                 $this->presenter->sendResponse(new FileResponse($path, NULL, NULL));
                         } else
-                                parent::getParent()->flashMessage($this->context->translator->translate("File not found!"), "warning");
+                                parent::getParent()->flashMessage($this->context->translator->translate("File %s not found!", $filename), "warning");
                 } else
                         parent::getParent()->flashMessage($this->context->translator->translate("Incorrect input data!"), "error");
         }
@@ -306,9 +306,9 @@ class Content extends \Ixtrum\FileManager
                                 if ($this->context->files->move($actualdir, $targetdir, $filename)) {
 
                                         $this->presenter->payload->result = "success";
-                                        parent::getParent()->flashMessage($translator->translate("Successfuly moved."), "info");
+                                        parent::getParent()->flashMessage($translator->translate("Successfuly moved - %s", $filename), "info");
                                 } else
-                                        parent::getParent()->flashMessage($translator->translate("An error occured. File was not moved."), "error");
+                                        parent::getParent()->flashMessage($translator->translate("An error occured. File %s was not moved.", $filename), "error");
                         }
 
                         parent::getParent()->handleShowContent($actualdir);

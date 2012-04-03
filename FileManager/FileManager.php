@@ -105,7 +105,7 @@ class FileManager extends UI\Control
                                 $this["fileInfo"]->filename = $filename;
                                 $this->invalidateControl("fileinfo");
                         } else
-                                $this->flashMessage($this->context->translator->translate("File not found!"), "warning");      
+                                $this->flashMessage($this->context->translator->translate("File %s not found!", $filename), "warning");      
                 } else
                         $this->flashMessage($this->context->translator->translate("Incorrect input data!"), "error");
         }
@@ -121,7 +121,7 @@ class FileManager extends UI\Control
                         if ($this->presenter->isAjax())
                                 $this->refreshSnippets();
                 } else
-                        $this->flashMessage($this->context->translator->translate("Folder %s does not exists!", $actualdir), "warning");
+                        $this->flashMessage($this->context->translator->translate("Folder %s does not exist!", $actualdir), "warning");
         }
 
 
