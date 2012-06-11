@@ -90,7 +90,7 @@ class Thumbs
                         $image->save($thumbPath, 80);
                         return $image;
                 } else
-                        Debugger::log("Thumb can not be created, there is no free space on disk.", Debugger::ERROR);
+                        Debugger::log("Thumb can not be created, there is no free space on disk.", Debugger::WARNING);
         }
     }
 
