@@ -113,7 +113,6 @@ class GettextTranslator extends Object implements ITranslator
                                 }
 
                                 $this->dictionary = $dictionary;
-                                                //\nette\diagnostics\debugger::bardump($dictionary);
                         } else {
                                 $dictionary = $this->buildDictionary($file);
                                 $this->dictionary = $dictionary;
@@ -123,7 +122,6 @@ class GettextTranslator extends Object implements ITranslator
                                             "tags" => array($key)
                                         ));
                                 }
-                                                \nette\diagnostics\debugger::bardump($dictionary);
                         }
 
                 } else
