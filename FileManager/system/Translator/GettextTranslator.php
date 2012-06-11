@@ -124,8 +124,7 @@ class GettextTranslator extends Object implements ITranslator
                                 }
                         }
 
-                } else
-                        throw new InvalidArgumentException("MO file '$file' probably does not exist.");
+                }
         }
 
         /**
