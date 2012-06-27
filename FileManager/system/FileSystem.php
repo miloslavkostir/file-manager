@@ -7,7 +7,7 @@ use Nette\Utils\Finder,
         Nette\DI\Container;
 
 
-class Files
+class FileSystem
 {
         /** @var Container */
         private $context;
@@ -458,7 +458,7 @@ class Files
                 if (filesize($path) === 0)
                         return null;
 
-                $filesize = new Files\Filesize;
+                $filesize = new FileSystem\Filesize;
 
                 $return = $filesize->sizeCurl($path);
                 if ($return)
@@ -494,7 +494,7 @@ class Files
 
                 foreach ($files as $file) {
 
-                        $filesClass = new Files($this->context, $this->config);
+                        $filesClass = new FileSystem($this->context, $this->config);
                         $info['size'] += $filesClass->filesize($file->getPathName());
                         $info['count']++;
                 }

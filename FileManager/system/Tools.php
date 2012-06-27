@@ -95,8 +95,8 @@ class Tools
 
                 foreach ($files as $file) {
 
-                        $filesClass = new Files($this->context, $this->config);
-                        $size += $filesClass->filesize($file->getPathName());
+                        $fileSystem = new FileSystem($this->context, $this->config);
+                        $size += $fileSystem->filesize($file->getPathName());
                 }
 
                 return $size;

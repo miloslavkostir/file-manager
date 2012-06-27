@@ -7,7 +7,7 @@
  *
  */
 
-namespace Ixtrum\FileManager\Application\Files;
+namespace Ixtrum\FileManager\Application\FileSystem;
 
 
 class Finder extends \Nette\Utils\Finder
@@ -47,8 +47,8 @@ class Finder extends \Nette\Utils\Finder
                 break;
             case 'size':
                 $this->order = function($f1, $f2) {
-                    $files = new Files;
-                    return $files->filesize($f2->getPathName()) - $files->filesize($f1->getPathName());
+                    $fileSystem = new FileSystem;
+                    return $fileSystem->filesize($f2->getPathName()) - $fileSystem->filesize($f1->getPathName());
                 };
                 break;
             default:

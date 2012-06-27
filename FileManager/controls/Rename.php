@@ -65,7 +65,7 @@ class Rename extends \Ixtrum\FileManager
                         $origPath = $path . $values["orig_filename"];
                         if (is_dir($tools->getRealPath($origPath))) {
 
-                                $new_filename = $this->context->files->safe_foldername($values["new_filename"]);
+                                $new_filename = $this->context->filesystem->safe_foldername($values["new_filename"]);
                                 $this->context->thumbs->deleteDirThumbs($origPath);
 
                                 if ($this->context->parameters["cache"]) {
@@ -76,7 +76,7 @@ class Rename extends \Ixtrum\FileManager
                                 }
                         } else {
 
-                                $new_filename = $this->context->files->safe_filename($values["new_filename"]);
+                                $new_filename = $this->context->filesystem->safe_filename($values["new_filename"]);
                                 $this->context->thumbs->deleteThumb($tools->getRealPath($origPath));
 
                                 if ($this->context->parameters["cache"]) {

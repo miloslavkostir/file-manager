@@ -1,6 +1,6 @@
 <?php
 
-namespace Ixtrum\FileManager\Application\Files;
+namespace Ixtrum\FileManager\Application\FileSystem;
 
 class Filesize
 {

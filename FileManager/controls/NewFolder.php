@@ -45,7 +45,7 @@ class NewFolder extends \Ixtrum\FileManager
                         $tools = $this->context->tools;
                         if ($tools->validPath($actualdir)) {
 
-                                $foldername = $this->context->files->safe_foldername($values->name);
+                                $foldername = $this->context->filesystem->safe_foldername($values->name);
                                 if (!$foldername)
                                         parent::getParent()->flashMessage($this->context->translator->translate("Folder name '%s' can not be used - not allowed characters used.", $values->name), "warning");
                                 else {
@@ -55,7 +55,7 @@ class NewFolder extends \Ixtrum\FileManager
                                                 parent::getParent()->flashMessage($this->context->translator->translate("Target name %s already exists!", $foldername), "warning");
                                         else {
 
-                                                if ($this->context->files->mkdir($target_dir)) {
+                                                if ($this->context->filesystem->mkdir($target_dir)) {
 
                                                         if ($this->context->parameters["cache"]) {
 

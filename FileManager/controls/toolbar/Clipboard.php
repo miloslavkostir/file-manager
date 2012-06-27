@@ -38,14 +38,14 @@ class Clipboard extends \Ixtrum\FileManager
 
                                         if ($val["action"] === "copy") {
 
-                                                if ($this->context->files->copy($val['actualdir'], $actualdir, $val['filename']))
+                                                if ($this->context->filesystem->copy($val['actualdir'], $actualdir, $val['filename']))
                                                         parent::getParent()->flashMessage($translator->translate("Succesfully copied - %s", $val['filename']), "info");
                                                 else
                                                         parent::getParent()->flashMessage($translator->translate("An error occured - %s", $val['filename']), "error");
 
                                         } elseif ($val["action"] === "cut") {
 
-                                                if ($this->context->files->move($val["actualdir"], $actualdir, $val["filename"]))
+                                                if ($this->context->filesystem->move($val["actualdir"], $actualdir, $val["filename"]))
                                                         parent::getParent()->flashMessage($translator->translate("Succesfully moved - %s", $val["filename"]), "info");
                                                 else
                                                         parent::getParent()->flashMessage($translator->translate("An error occured - %s", $val["filename"]), "error");

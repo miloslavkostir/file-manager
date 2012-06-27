@@ -38,7 +38,7 @@ class Zip
         public function addFiles($files)
         {
                 $zip = new \ZipArchive;
-                $filesClass = new Files;
+                $filesClass = new FileSystem;
 
                 $name = $filesClass->checkDuplName($this->targetDir, Date("Ymd_H-m-s") . ".zip");
                 $zipPath = "$this->targetDir/$name";

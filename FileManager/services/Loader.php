@@ -60,9 +60,9 @@ final class Loader extends Container
         }
 
 
-        protected function createServiceFiles()
+        protected function createServiceFilesystem()
         {
-                return new Application\Files($this->container, $this->parameters);
+                return new Application\FileSystem($this->container, $this->parameters);
         }
 
 

@@ -29,7 +29,7 @@ class Content extends \Ixtrum\FileManager
 
                 if (is_array($files) && $files) {
 
-                        $info = $this->context->files->getFilesInfo($actualdir, $files, true);
+                        $info = $this->context->filesystem->getFilesInfo($actualdir, $files, true);
                         $this->presenter->payload->result = "success";
                         $this->presenter->payload->size = \Nette\Templating\Helpers::bytes($info["size"]);
                         $this->presenter->payload->dirCount = $info["dirCount"];
@@ -158,7 +158,7 @@ class Content extends \Ixtrum\FileManager
 
                                 if ($this->context->tools->validPath($actualdir, $filename)) {
 
-                                        if ($this->context->files->delete($actualdir, $filename))
+                                        if ($this->context->filesystem->delete($actualdir, $filename))
                                                 parent::getParent()->flashMessage($this->context->translator->translate("Successfuly deleted - %s", $filename), "info");
                                         else
                                                 parent::getParent()->flashMessage($this->context->translator->translate("An error occured!"), "error");
@@ -188,7 +188,7 @@ class Content extends \Ixtrum\FileManager
 
                                 foreach($files as $file) {
 
-                                        if ($this->context->files->delete($actualdir, $file))
+                                        if ($this->context->filesystem->delete($actualdir, $file))
                                                 parent::getParent()->flashMessage($translator->translate("Successfuly deleted - %s", $file), "info");
                                         else
                                                 parent::getParent()->flashMessage($translator->translate("An error occured - %s", $file), "error");
@@ -303,7 +303,7 @@ class Content extends \Ixtrum\FileManager
                         if ($targetdir && $filename) {
 
                                 $translator = $this->context->translator;
-                                if ($this->context->files->move($actualdir, $targetdir, $filename)) {
+                                if ($this->context->filesystem->move($actualdir, $targetdir, $filename)) {
 
                                         $this->presenter->payload->result = "success";
                                         parent::getParent()->flashMessage($translator->translate("Successfuly moved - %s", $filename), "info");
@@ -412,7 +412,7 @@ class Content extends \Ixtrum\FileManager
                 $supportedThumbs = $this->context->thumbs->supported;
                 $absolutePath = $tools->getAbsolutePath($actualdir);
 
-                $files = \Ixtrum\FileManager\Application\Files\Finder::find($mask)
+                $files = \Ixtrum\FileManager\Application\FileSystem\Finder::find($mask)
                                                                     ->in($absolutePath)
                                                                     ->orderBy($order);
 
@@ -426,7 +426,7 @@ class Content extends \Ixtrum\FileManager
                         if (!is_dir($file->getPath() . "/$name")) {
 
                                 $dir_array[$name]["type"] = "file";
-                                $dir_array[$name]["size"] =  $this->context->files->filesize($file->getPathName());
+                                $dir_array[$name]["size"] =  $this->context->filesystem->filesize($file->getPathName());
                                 $filetype = strtolower(pathinfo($name, PATHINFO_EXTENSION));
                                 $dir_array[$name]["filetype"] = $filetype;
 
