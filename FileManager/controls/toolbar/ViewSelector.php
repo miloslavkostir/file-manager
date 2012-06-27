@@ -4,49 +4,50 @@ namespace Ixtrum\FileManager\Controls;
 
 use Nette\Application\UI\Form;
 
-
 class ViewSelector extends \Ixtrum\FileManager
 {
-        public function __construct($userConfig)
-        {
-                parent::__construct($userConfig);
-        }
 
-        public function render()
-        {
-                $template = $this->template;
-                $template->setFile(__DIR__ . "/ViewSelector.latte");
-                $template->setTranslator($this->context->translator);
+    public function __construct($userConfig)
+    {
+        parent::__construct($userConfig);
+    }
 
-                $session = $this->presenter->context->session->getSection("file-manager");
-                $this["changeViewForm"]->setDefaults(array("view" => $session->view));
+    public function render()
+    {
+        $template = $this->template;
+        $template->setFile(__DIR__ . "/ViewSelector.latte");
+        $template->setTranslator($this->context->translator);
 
-                $template->render();
-        }
+        $session = $this->presenter->context->session->getSection("file-manager");
+        $this["changeViewForm"]->setDefaults(array("view" => $session->view));
 
-        protected function createComponentChangeViewForm()
-        {
-                $translator = $this->context->translator;
-                $items = array(
-                    "large" => $translator->translate("Large images"),
-                    "small" => $translator->translate("Small images"),
-                    "list" => $translator->translate("List"),
-                    "details" => $translator->translate("Details")
-                );
+        $template->render();
+    }
 
-                $form = new Form;
-                $form->addSelect("view", NULL, $items);
+    protected function createComponentChangeViewForm()
+    {
+        $translator = $this->context->translator;
+        $items = array(
+            "large" => $translator->translate("Large images"),
+            "small" => $translator->translate("Small images"),
+            "list" => $translator->translate("List"),
+            "details" => $translator->translate("Details")
+        );
 
-                $form->onSuccess[] = callback($this, "ChangeViewFormSubmitted");
+        $form = new Form;
+        $form->addSelect("view", NULL, $items);
 
-                return $form;
-        }
+        $form->onSuccess[] = callback($this, "ChangeViewFormSubmitted");
 
-        public function ChangeViewFormSubmitted($form)
-        {
-                $val = $form->values;
-                $session = $this->presenter->context->session->getSection("file-manager");
-                $session->view = $val["view"];
-                parent::getParent()->handleShowContent($this->context->application->getActualDir());
-        }
+        return $form;
+    }
+
+    public function ChangeViewFormSubmitted($form)
+    {
+        $val = $form->values;
+        $session = $this->presenter->context->session->getSection("file-manager");
+        $session->view = $val["view"];
+        parent::getParent()->handleShowContent($this->context->application->getActualDir());
+    }
+
 }

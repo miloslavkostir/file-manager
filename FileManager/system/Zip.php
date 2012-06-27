@@ -3,72 +3,75 @@
 namespace Ixtrum\FileManager\Application;
 
 use Nette\Utils\Finder,
-        Nette\Application\ApplicationException,
-        Nette\Utils\Strings;
-
+    Nette\Application\ApplicationException,
+    Nette\Utils\Strings;
 
 class Zip
 {
-        /** @var string */
-        private $targetDir;
 
+    /** @var string */
+    private $targetDir;
 
-        public function __construct($targetDir)
-        {
-                if (!extension_loaded("zip"))
-                        throw new ApplicationException("PHP ZIP not loaded.");
-
-
-                if (!is_dir($targetDir)) {
-
-                        $oldumask = umask(0);
-                        mkdir($targetDir, 0777);
-                        umask($oldumask);
-                }
-
-                $this->targetDir = $targetDir;
+    public function __construct($targetDir)
+    {
+        if (!extension_loaded("zip")) {
+            throw new ApplicationException("PHP ZIP not loaded.");
         }
 
+        if (!is_dir($targetDir)) {
 
-        /**
-         * Zip files from list
-         * 
-         * @param array $files
-         */
-        public function addFiles($files)
-        {
-                $zip = new \ZipArchive;
-                $filesClass = new FileSystem;
+            $oldumask = umask(0);
+            mkdir($targetDir, 0777);
+            umask($oldumask);
+        }
 
-                $name = $filesClass->checkDuplName($this->targetDir, Date("Ymd_H-m-s") . ".zip");
-                $zipPath = "$this->targetDir/$name";
+        $this->targetDir = $targetDir;
+    }
 
-                if ($zip->open($zipPath, \ZipArchive::CREATE)) {
+    /**
+     * Zip files from list
+     * 
+     * @param array $files
+     */
+    public function addFiles($files)
+    {
+        $zip = new \ZipArchive;
+        $fileSystem = new FileSystem;
 
-                        $path = $this->targetDir;
-                        foreach ($files as $file) {
+        $name = $fileSystem->checkDuplName($this->targetDir, Date("Ymd_H-m-s") . ".zip");
+        $zipPath = "$this->targetDir/$name";
 
-                                $name = $file;
-                                $file = $path . $file;
+        if ($zip->open($zipPath, \ZipArchive::CREATE)) {
 
-                                if (is_dir($file)) {
+            $path = $this->targetDir;
+            foreach ($files as $file) {
 
-                                        $iterator = Finder::find("*")->from($file);
-                                        foreach ($iterator as $item) {
+                $name = $file;
+                $file = $path . $file;
 
-                                                $name = substr_replace($item->getPathname(), "", 0, strlen($path));
-                                                if ($item->isFile())
-                                                        $zip->addFile($item->getRealPath(), $name);
+                if (is_dir($file)) {
 
-                                                if ($item->isDir())
-                                                        $zip->addEmptyDir($name);
-                                        }
-                                } else
-                                        $zip->addFile($file, $name);
+                    $iterator = Finder::find("*")->from($file);
+                    foreach ($iterator as $item) {
+
+                        $name = substr_replace($item->getPathname(), "", 0, strlen($path));
+                        if ($item->isFile()) {
+                            $zip->addFile($item->getRealPath(), $name);
                         }
 
-                        $zip->close();
-                 } else
-                        throw new ApplicationException("Can not create ZIP archive '$zipPath' from '$this->targetDir'.");
+                        if ($item->isDir()) {
+                            $zip->addEmptyDir($name);
+                        }
+                    }
+                } else {
+                    $zip->addFile($file, $name);
+                }
+            }
+
+            $zip->close();
+        } else {
+            throw new ApplicationException("Can not create ZIP archive '$zipPath' from '$this->targetDir'.");
         }
+    }
+
 }

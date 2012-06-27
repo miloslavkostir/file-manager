@@ -3,12 +3,13 @@
 namespace Ixtrum\FileManager\Application;
 
 use Nette\Image,
-        Nette\Diagnostics\Debugger,
-        Nette\DI\Container,
-        Nette\Utils\Finder;
+    Nette\Diagnostics\Debugger,
+    Nette\DI\Container,
+    Nette\Utils\Finder;
 
 class Thumbs
 {
+
     /** @var string */
     private $thumbDir;
 
@@ -26,15 +27,16 @@ class Thumbs
         $tempDir = $container->parameters["tempDir"];
         $thumbDir = "$tempDir/file-manager/thumbs";
 
-        if(!is_dir($thumbDir)) {
+        if (!is_dir($thumbDir)) {
 
-                $oldumask = umask(0);
-                mkdir($thumbDir, 0777);
-                umask($oldumask);
+            $oldumask = umask(0);
+            mkdir($thumbDir, 0777);
+            umask($oldumask);
         }
 
-        if (!is_writable($thumbDir))
-                throw new \Nette\Application\ApplicationException("Thumb dir '$thumbDir' is not writeable!");
+        if (!is_writable($thumbDir)) {
+            throw new \Nette\Application\ApplicationException("Thumb dir '$thumbDir' is not writeable!");
+        }
 
         $this->thumbDir = $thumbDir;
         $this->context = $container;
@@ -62,35 +64,40 @@ class Thumbs
     {
         $thumbPath = $this->getThumbPath($path);
 
-        if (file_exists($thumbPath))
-                return Image::fromFile($thumbPath);
-        else {
+        if (file_exists($thumbPath)) {
+            return Image::fromFile($thumbPath);
+        } else {
 
-                $tools = new Tools($this->context, $this->config);
-                $disksize = $tools->diskSizeInfo();
+            $tools = new Tools($this->context, $this->config);
+            $disksize = $tools->diskSizeInfo();
 
-                if ($disksize["spaceleft"] > 50 ) {
+            if ($disksize["spaceleft"] > 50) {
 
-                        $status = true;
-                        if (function_exists("exec"))
-                                exec("convert -version", $results, $status);
+                $status = true;
+                if (function_exists("exec")) {
+                    exec("convert -version", $results, $status);
+                }
 
-                        if (class_exists("\Nette\ImageMagick") && !$status) {
-                                $image = new \Nette\ImageMagick($path);
-                        } elseif (class_exists("\Imagick")) {
-                                $thumb = new \Imagick($path);
-                                $thumb->resizeImage(96, NULL, \Imagick::FILTER_LANCZOS, 1);
-                                $thumb->writeImage($thumbPath);
-                                $thumb->destroy();
-                                return Image::fromFile($path);
-                        } else
-                                $image = Image::fromFile($path);
+                if (class_exists("\Nette\ImageMagick") && !$status) {
+                    $image = new \Nette\ImageMagick($path);
+                } elseif (class_exists("\Imagick")) {
+                    $thumb = new \Imagick($path);
+                    $thumb->resizeImage(96, NULL, \Imagick::FILTER_LANCZOS, 1);
+                    $thumb->writeImage($thumbPath);
+                    $thumb->destroy();
 
-                        $image->resize(96, NULL);
-                        $image->save($thumbPath, 80);
-                        return $image;
-                } else
-                        Debugger::log("Thumb can not be created, there is no free space on disk.", Debugger::WARNING);
+                    return Image::fromFile($path);
+                } else {
+                    $image = Image::fromFile($path);
+                }
+
+                $image->resize(96, NULL);
+                $image->save($thumbPath, 80);
+
+                return $image;
+            } else {
+                Debugger::log("Thumb can not be created, there is no free space on disk.", Debugger::WARNING);
+            }
         }
     }
 
@@ -104,6 +111,7 @@ class Thumbs
     {
         $tools = new Tools($this->context, $this->config);
         $path = $tools->getRealPath($path);
+
         return md5($path) . "." . pathinfo($path, PATHINFO_EXTENSION);
     }
 
@@ -116,20 +124,22 @@ class Thumbs
     {
         if (is_dir($dirPath)) {
 
-                $mask = $this->supported;
-                foreach ($mask as $key => $val) {
-                        $mask[$key] = "*.$val";
-                }
+            $mask = $this->supported;
+            foreach ($mask as $key => $val) {
+                $mask[$key] = "*.$val";
+            }
 
-                $files = Finder::findFiles($mask)->from($dirPath);
-                foreach ($files as $file) {
+            $files = Finder::findFiles($mask)->from($dirPath);
+            foreach ($files as $file) {
 
-                        $thumbPath = $this->getThumbPath($file->getPathname());
-                        if (file_exists($thumbPath))
-                                unlink($thumbPath);
+                $thumbPath = $this->getThumbPath($file->getPathname());
+                if (file_exists($thumbPath)) {
+                    unlink($thumbPath);
                 }
-        } else
-                throw new \Nette\DirectoryNotFoundException("Given path $dirPath does not exist.");
+            }
+        } else {
+            throw new \Nette\DirectoryNotFoundException("Given path $dirPath does not exist.");
+        }
     }
 
     /**
@@ -140,7 +150,9 @@ class Thumbs
     public function deleteThumb($path)
     {
         $thumbPath = $this->getThumbPath($path);
-        if (file_exists($thumbPath))
-                unlink($thumbPath);
+        if (file_exists($thumbPath)) {
+            unlink($thumbPath);
+        }
     }
+
 }

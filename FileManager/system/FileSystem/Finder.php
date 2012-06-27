@@ -1,17 +1,15 @@
 <?php
 
-/**
- * THX pracj3am
- * http://forum.nette.org/cs/5331-2010-09-15-trida-nette-finder-pro-prochazeni-adresarovou-strukturou
- * Workaround for missing sort method in Nette Finder
- *
- */
-
 namespace Ixtrum\FileManager\Application\FileSystem;
 
-
+/**
+ * Workaround for missing sort method in Nette Finder
+ *
+ * @see http://forum.nette.org/cs/5331-2010-09-15-trida-nette-finder-pro-prochazeni-adresarovou-strukturou
+ */
 class Finder extends \Nette\Utils\Finder
 {
+
     private $order;
 
     /**
@@ -30,26 +28,25 @@ class Finder extends \Nette\Utils\Finder
         switch ($key) {
             case 'name':
                 $this->order = function($f1, $f2) {
-                    return \strcasecmp($f1->getFilename(), $f2->getFilename());
-                };
+                            return \strcasecmp($f1->getFilename(), $f2->getFilename());
+                        };
                 break;
             case 'type':
                 $this->order = function($f1, $f2) {
-                    return \strcasecmp(
-                            pathinfo($f1->getPathName(), PATHINFO_EXTENSION),
-                            pathinfo($f2->getPathName(), PATHINFO_EXTENSION));
-                };
+                            return \strcasecmp(
+                                            pathinfo($f1->getPathName(), PATHINFO_EXTENSION), pathinfo($f2->getPathName(), PATHINFO_EXTENSION));
+                        };
                 break;
             case 'time':
                 $this->order = function($f1, $f2) {
-                    return $f2->getMTime() - $f1->getMTime();
-                };
+                            return $f2->getMTime() - $f1->getMTime();
+                        };
                 break;
             case 'size':
                 $this->order = function($f1, $f2) {
-                    $fileSystem = new FileSystem;
-                    return $fileSystem->filesize($f2->getPathName()) - $fileSystem->filesize($f1->getPathName());
-                };
+                            $fileSystem = new FileSystem;
+                            return $fileSystem->filesize($f2->getPathName()) - $fileSystem->filesize($f1->getPathName());
+                        };
                 break;
             default:
                 throw new InvalidArgumentException('Unknown expression, allowed are NAME, TYPE, TIME, SIZE');
@@ -74,4 +71,5 @@ class Finder extends \Nette\Utils\Finder
 
         return $iterator;
     }
+
 }

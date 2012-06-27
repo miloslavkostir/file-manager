@@ -6,6 +6,7 @@ use Nette\Application\UI\Form;
 
 class Navigation extends \Ixtrum\FileManager
 {
+
     public function __construct($userConfig)
     {
         parent::__construct($userConfig);
@@ -17,10 +18,10 @@ class Navigation extends \Ixtrum\FileManager
 
         if ($this->context->parameters["cache"]) {
 
-                $tools = $this->context->tools;
-                $caching = $this->context->caching;
-                $caching->deleteItem(NULL, array("tags" => "treeview"));
-                $caching->deleteItem(array("content", $tools->getRealPath($tools->getAbsolutePath($actualdir))));
+            $tools = $this->context->tools;
+            $caching = $this->context->caching;
+            $caching->deleteItem(NULL, array("tags" => "treeview"));
+            $caching->deleteItem(array("content", $tools->getRealPath($tools->getAbsolutePath($actualdir))));
         }
 
         parent::getParent()->handleShowContent($actualdir);
@@ -35,10 +36,11 @@ class Navigation extends \Ixtrum\FileManager
         $template->setFile(__DIR__ . '/Navigation.latte');
         $template->setTranslator($this->context->translator);
 
-        if (!$actualdir)
+        if (!$actualdir) {
             $template->items = $this->getNav($rootname);
-        else
+        } else {
             $template->items = $this->getNav($actualdir);
+        }
 
         $this['locationForm']->setDefaults(array('location' => $actualdir));
 
@@ -60,12 +62,12 @@ class Navigation extends \Ixtrum\FileManager
         $val = $form->values;
         $path = $this->context->tools->getAbsolutePath($val['location']);
 
-        if (is_dir($path))
-                parent::getParent()->handleShowContent($val['location']);
-        else {
-                $folder = $val['location'];
-                parent::getParent()->flashMessage($this->context->translator->translate("Folder %s does not exist!", $folder), 'warning');
-                parent::getParent()->handleShowContent($this->context->application->getActualDir());
+        if (is_dir($path)) {
+            parent::getParent()->handleShowContent($val['location']);
+        } else {
+            $folder = $val['location'];
+            parent::getParent()->flashMessage($this->context->translator->translate("Folder %s does not exist!", $folder), 'warning');
+            parent::getParent()->handleShowContent($this->context->application->getActualDir());
         }
     }
 
@@ -74,24 +76,25 @@ class Navigation extends \Ixtrum\FileManager
         $var = array();
         $rootname = $this->context->tools->getRootName();
         if ($actualdir === $rootname)
-                $var[] = array(
-                        "name" => $rootname,
-                        "link" => parent::getParent()->link("showContent", $rootname)
-                );
+            $var[] = array(
+                "name" => $rootname,
+                "link" => parent::getParent()->link("showContent", $rootname)
+            );
         else {
-                $nav = explode("/", $actualdir);
-                $path = "/";
-                foreach ($nav as $item) {
-                    if ($item) {
-                        $path .= $item . "/";
-                        $var[] = array(
-                            "name" => $item,
-                            "link" => parent::getParent()->link("showContent", $path)
-                        );
-                    }
+            $nav = explode("/", $actualdir);
+            $path = "/";
+            foreach ($nav as $item) {
+                if ($item) {
+                    $path .= "$item/";
+                    $var[] = array(
+                        "name" => $item,
+                        "link" => parent::getParent()->link("showContent", $path)
+                    );
                 }
+            }
         }
 
         return $var;
     }
+
 }

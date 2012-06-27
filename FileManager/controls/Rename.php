@@ -6,94 +6,94 @@ use Nette\Application\UI\Form;
 
 class Rename extends \Ixtrum\FileManager
 {
-        /** @var string */
-        public $files;
 
+    /** @var string */
+    public $files;
 
-        public function __construct($userConfig)
-        {
-                parent::__construct($userConfig);
-        }
+    public function __construct($userConfig)
+    {
+        parent::__construct($userConfig);
+    }
 
+    public function render()
+    {
+        $template = $this->template;
+        $template->setFile(__DIR__ . "/Rename.latte");
+        $template->setTranslator($this->context->translator);
+        $template->origFile = $this->files;
 
-        public function render()
-        {
-                $template = $this->template;
-                $template->setFile(__DIR__ . "/Rename.latte");
-                $template->setTranslator($this->context->translator);
-                $template->origFile = $this->files;
+        $this["renameForm"]->setDefaults(array(
+            "new_filename" => $this->files,
+            "orig_filename" => $this->files,
+        ));
 
-                $this["renameForm"]->setDefaults(array(
-                    "new_filename" => $this->files,
-                    "orig_filename" => $this->files,
-                ));
+        $template->render();
+    }
 
-                $template->render();
-        }
+    protected function createComponentRenameForm()
+    {
+        $form = new Form;
+        $form->setTranslator($this->context->translator);
+        $form->addText("new_filename", "New name")
+                ->setRequired("New name required.");
+        $form->addHidden("orig_filename");
+        $form->addSubmit("send", "OK");
+        $form->onSuccess[] = callback($this, "RenameFormSubmitted");
 
+        return $form;
+    }
 
-        protected function createComponentRenameForm()
-        {
-                $form = new Form;
-                $form->setTranslator($this->context->translator);
-                $form->addText("new_filename", "New name")
-                        ->setRequired("New name required.");
-                $form->addHidden("orig_filename");
-                $form->addSubmit("send", "OK");
-                $form->onSuccess[] = callback($this, "RenameFormSubmitted");
+    public function RenameFormSubmitted($form)
+    {
+        $values = $form->getValues();
+        $actualdir = $this->context->application->getActualDir();
+        $tools = $this->context->tools;
+        $path = $tools->getAbsolutePath($actualdir);
 
-                return $form;
-        }
+        if ($this->context->parameters["readonly"]) {
+            parent::getParent()->flashMessage($this->context->translator->translate("Read-only mode enabled!"), "warning");
+        } elseif ($values["new_filename"] == $values["orig_filename"]) {
+            parent::getParent()->flashMessage($this->context->translator->translate("New name can not be the same!"), "warning");
+        } elseif (file_exists($path . $values["new_filename"])) {
+            parent::getParent()->flashMessage($this->context->translator->translate("The name %s was already used.", $values["new_filename"]), "warning");
+        } elseif (!file_exists($path . $values["orig_filename"])) {
+            parent::getParent()->flashMessage($this->context->translator->translate("File/folder %s does not already exists!", $values["orig_filename"]), "error");
+        } else {
 
-        public function RenameFormSubmitted($form)
-        {
-                $values = $form->getValues();
-                $actualdir = $this->context->application->getActualDir();
-                $tools = $this->context->tools;
-                $path = $tools->getAbsolutePath($actualdir);
+            $origPath = $path . $values["orig_filename"];
+            if (is_dir($tools->getRealPath($origPath))) {
 
-                if ($this->context->parameters["readonly"])
-                        parent::getParent()->flashMessage($this->context->translator->translate("Read-only mode enabled!"), "warning");
-                elseif ($values["new_filename"] == $values["orig_filename"])
-                        parent::getParent()->flashMessage($this->context->translator->translate("New name can not be the same!"), "warning");
-                elseif (file_exists($path . $values["new_filename"]))
-                        parent::getParent()->flashMessage($this->context->translator->translate("The name %s was already used.", $values["new_filename"]), "warning");
-                elseif (!file_exists($path . $values["orig_filename"]))
-                        parent::getParent()->flashMessage($this->context->translator->translate("File/folder %s does not already exists!", $values["orig_filename"]), "error");
-                else {
+                $new_filename = $this->context->filesystem->safeFoldername($values["new_filename"]);
+                $this->context->thumbs->deleteDirThumbs($origPath);
 
-                        $origPath = $path . $values["orig_filename"];
-                        if (is_dir($tools->getRealPath($origPath))) {
+                if ($this->context->parameters["cache"]) {
 
-                                $new_filename = $this->context->filesystem->safe_foldername($values["new_filename"]);
-                                $this->context->thumbs->deleteDirThumbs($origPath);
-
-                                if ($this->context->parameters["cache"]) {
-
-                                        $caching = $this->context->caching;
-                                        $caching->deleteItem(array("content", $tools->getRealPath($path)));
-                                        $caching->deleteItemsRecursive($origPath);
-                                }
-                        } else {
-
-                                $new_filename = $this->context->filesystem->safe_filename($values["new_filename"]);
-                                $this->context->thumbs->deleteThumb($tools->getRealPath($origPath));
-
-                                if ($this->context->parameters["cache"]) {
-
-                                        $caching = $this->context->caching;
-                                        $caching->deleteItem(array("content", $tools->getRealPath($path)));
-                                }
-                        }
-
-                        if (rename($origPath, $path . $new_filename)) {
-
-                                parent::getParent()->flashMessage($this->context->translator->translate("Successfully renamed to %s.", $new_filename), "info");
-                                $this->context->application->clearClipboard();
-                        } else
-                                parent::getParent()->flashMessage($this->context->translator->translate("An error occurred during %s renaming!", $values["orig_filename"]), "error");
+                    $caching = $this->context->caching;
+                    $caching->deleteItem(array("content", $tools->getRealPath($path)));
+                    $caching->deleteItemsRecursive($origPath);
                 }
+            } else {
 
-                parent::getParent()->handleShowContent($actualdir);
+                $new_filename = $this->context->filesystem->safeFilename($values["new_filename"]);
+                $this->context->thumbs->deleteThumb($tools->getRealPath($origPath));
+
+                if ($this->context->parameters["cache"]) {
+
+                    $caching = $this->context->caching;
+                    $caching->deleteItem(array("content", $tools->getRealPath($path)));
+                }
+            }
+
+            if (rename($origPath, $path . $new_filename)) {
+
+                parent::getParent()->flashMessage($this->context->translator->translate("Successfully renamed to %s.", $new_filename), "info");
+                $this->context->application->clearClipboard();
+            } else {
+                parent::getParent()->flashMessage($this->context->translator->translate("An error occurred during %s renaming!", $values["orig_filename"]), "error");
+            }
         }
+
+        parent::getParent()->handleShowContent($actualdir);
+    }
+
 }
