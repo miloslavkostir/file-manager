@@ -1,6 +1,6 @@
 <?php
 
-namespace Ixtrum\FileManager\System;
+namespace Ixtrum\FileManager\Application;
 
 use Nette\Image,
         Nette\Diagnostics\Debugger,

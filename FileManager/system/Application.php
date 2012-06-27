@@ -3,7 +3,7 @@
 namespace Ixtrum\FileManager;
 
 
-class System
+class Application
 {
         /** @var \Nette\Http\Session */
         private $session;

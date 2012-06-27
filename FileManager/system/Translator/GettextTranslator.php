@@ -1,12 +1,12 @@
 <?php
 
-namespace Ixtrum\FileManager\System\Translator;
+namespace Ixtrum\FileManager\Application\Translator;
 
 use Nette\Object,
         Nette\Localization\ITranslator,
         Nette\InvalidArgumentException,
         Nette\Utils\Strings,
-        Ixtrum\FileManager\System\Caching;
+        Ixtrum\FileManager\Application\Caching;
 
 /**
  * Gettext translator.

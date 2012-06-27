@@ -7,7 +7,7 @@
  *
  */
 
-namespace Ixtrum\FileManager\System\Files;
+namespace Ixtrum\FileManager\Application\Files;
 
 
 class Finder extends \Nette\Utils\Finder

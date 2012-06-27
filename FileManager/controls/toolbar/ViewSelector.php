@@ -47,6 +47,6 @@ class ViewSelector extends \Ixtrum\FileManager
                 $val = $form->values;
                 $session = $this->presenter->context->session->getSection("file-manager");
                 $session->view = $val["view"];
-                parent::getParent()->handleShowContent($this->context->system->getActualDir());
+                parent::getParent()->handleShowContent($this->context->application->getActualDir());
         }
 }

@@ -5,7 +5,7 @@ namespace Ixtrum\FileManager\Services;
 use Nette\DI\Container,
         Nette\DirectoryNotFoundException,
         Nette\Application\ApplicationException,
-        Ixtrum\FileManager\System;
+        Ixtrum\FileManager\Application;
 
 
 final class Loader extends Container
@@ -33,7 +33,7 @@ final class Loader extends Container
 
         protected function createServiceCaching()
         {
-                return new System\Caching($this->container, $this->parameters);
+                return new Application\Caching($this->container, $this->parameters);
         }
 
 
@@ -41,41 +41,41 @@ final class Loader extends Container
         {
                 $param = $this->parameters;
                 $langFile = $param["rootPath"] . $param["langDir"] . $param["lang"] . ".mo";
-                $cache = new System\Caching($this->container, $this->parameters);
-                $translator = new System\Translator\GettextTranslator($langFile, $cache, $param["lang"]);
+                $cache = new Application\Caching($this->container, $this->parameters);
+                $translator = new Application\Translator\GettextTranslator($langFile, $cache, $param["lang"]);
 
                 return $translator;
         }
 
 
-        protected function createServiceSystem()
+        protected function createServiceApplication()
         {
-                return new System($this->container->session);
+                return new Application($this->container->session);
         }
 
 
         protected function createServiceTools()
         {
-                return new System\Tools($this->container, $this->parameters);
+                return new Application\Tools($this->container, $this->parameters);
         }
 
 
         protected function createServiceFiles()
         {
-                return new System\Files($this->container, $this->parameters);
+                return new Application\Files($this->container, $this->parameters);
         }
 
 
         protected function createServiceThumbs()
         {
-                return new System\Thumbs($this->container, $this->parameters);
+                return new Application\Thumbs($this->container, $this->parameters);
         }
 
 
         protected function createServicePlugins()
         {
                 $pluginDir = $this->parameters["rootPath"] . $this->parameters["pluginDir"];
-                return new System\Plugins($pluginDir, new System\Caching($this->container, $this->parameters));
+                return new Application\Plugins($pluginDir, new Application\Caching($this->container, $this->parameters));
         }
 
 

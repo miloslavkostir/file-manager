@@ -42,7 +42,7 @@ class Filter extends \Ixtrum\FileManager
         public function FilterFormSubmitted($form)
         {
                 $session = $this->presenter->context->session->getSection("file-manager");
-                $actualdir = $this->context->system->getActualDir();
+                $actualdir = $this->context->application->getActualDir();
 
                 $val = $form->values;
                 $session->mask = $val["phrase"];

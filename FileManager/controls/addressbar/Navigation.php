@@ -13,7 +13,7 @@ class Navigation extends \Ixtrum\FileManager
 
     public function handleRefreshContent()
     {
-        $actualdir = $this->context->system->getActualDir();
+        $actualdir = $this->context->application->getActualDir();
 
         if ($this->context->parameters["cache"]) {
 
@@ -28,7 +28,7 @@ class Navigation extends \Ixtrum\FileManager
 
     public function render()
     {
-        $actualdir = $this->context->system->getActualDir();
+        $actualdir = $this->context->application->getActualDir();
         $rootname = $this->context->tools->getRootName();
 
         $template = $this->template;
@@ -65,7 +65,7 @@ class Navigation extends \Ixtrum\FileManager
         else {
                 $folder = $val['location'];
                 parent::getParent()->flashMessage($this->context->translator->translate("Folder %s does not exist!", $folder), 'warning');
-                parent::getParent()->handleShowContent($this->context->system->getActualDir());
+                parent::getParent()->handleShowContent($this->context->application->getActualDir());
         }
     }
 

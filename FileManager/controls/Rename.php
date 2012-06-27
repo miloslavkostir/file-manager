@@ -48,7 +48,7 @@ class Rename extends \Ixtrum\FileManager
         public function RenameFormSubmitted($form)
         {
                 $values = $form->getValues();
-                $actualdir = $this->context->system->getActualDir();
+                $actualdir = $this->context->application->getActualDir();
                 $tools = $this->context->tools;
                 $path = $tools->getAbsolutePath($actualdir);
 
@@ -89,7 +89,7 @@ class Rename extends \Ixtrum\FileManager
                         if (rename($origPath, $path . $new_filename)) {
 
                                 parent::getParent()->flashMessage($this->context->translator->translate("Successfully renamed to %s.", $new_filename), "info");
-                                $this->context->system->clearClipboard();
+                                $this->context->application->clearClipboard();
                         } else
                                 parent::getParent()->flashMessage($this->context->translator->translate("An error occurred during %s renaming!", $values["orig_filename"]), "error");
                 }

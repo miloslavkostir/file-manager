@@ -1,6 +1,6 @@
 <?php
 
-namespace Ixtrum\FileManager\System;
+namespace Ixtrum\FileManager\Application;
 
 use Nette\Utils\Finder,
         Nette\Diagnostics\Debugger,
@@ -253,8 +253,8 @@ class Files
         {
                 if (rename($actualpath . $filename, $targetpath . $this->checkDuplName($targetpath, $filename))) {
 
-                        $system = new \Ixtrum\FileManager\System($this->context->session);
-                        $system->clearClipboard();
+                        $application = new \Ixtrum\FileManager\Application($this->context->session);
+                        $application->clearClipboard();
                         return true;
                 } else
                         return false;

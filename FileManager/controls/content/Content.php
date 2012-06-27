@@ -21,7 +21,7 @@ class Content extends \Ixtrum\FileManager
 
         public function handleShowMultiFileInfo($files = array())
         {
-                $actualdir = $this->context->system->getActualDir();
+                $actualdir = $this->context->application->getActualDir();
 
                 // if sended by AJAX
                 if (!$files)
@@ -48,7 +48,7 @@ class Content extends \Ixtrum\FileManager
 
                 if ($filename) {
 
-                        $actualdir = $this->context->system->getActualDir();
+                        $actualdir = $this->context->application->getActualDir();
                         if ($this->context->tools->validPath($actualdir, $filename)) {
 
                                 $session = $this->presenter->context->session->getSection("file-manager");
@@ -74,7 +74,7 @@ class Content extends \Ixtrum\FileManager
 
                 if (is_array($files) && $files) {
 
-                        $actualdir = $this->context->system->getActualDir();
+                        $actualdir = $this->context->application->getActualDir();
                         $session = $this->presenter->context->session->getSection("file-manager");
                         foreach($files as $file) {
 
@@ -99,7 +99,7 @@ class Content extends \Ixtrum\FileManager
 
                 if ($filename) {
 
-                        $actualdir = $this->context->system->getActualDir();
+                        $actualdir = $this->context->application->getActualDir();
                         if ($this->context->tools->validPath($actualdir, $filename)) {
 
                                 $session = $this->presenter->context->session->getSection("file-manager");
@@ -125,7 +125,7 @@ class Content extends \Ixtrum\FileManager
 
                 if (is_array($files) && $files) {
 
-                        $actualdir = $this->context->system->getActualDir();
+                        $actualdir = $this->context->application->getActualDir();
                         $session = $this->presenter->context->session->getSection("file-manager");
 
                         foreach($files as $file) {
@@ -149,7 +149,7 @@ class Content extends \Ixtrum\FileManager
                 if (!$filename)
                         $filename = $this->presenter->context->httpRequest->getQuery("filename");
 
-                $actualdir = $this->context->system->getActualDir();
+                $actualdir = $this->context->application->getActualDir();
                 if ($this->context->parameters["readonly"])
                         parent::getParent()->flashMessage($this->context->translator->translate("Read-only mode enabled!"), "warning");
                 else {
@@ -183,7 +183,7 @@ class Content extends \Ixtrum\FileManager
                         parent::getParent()->flashMessage($translator->translate("Read-only mode enabled!"), "warning");
                 else {
 
-                        $actualdir = $this->context->system->getActualDir();
+                        $actualdir = $this->context->application->getActualDir();
                         if (is_array($files) && $files) {
 
                                 foreach($files as $file) {
@@ -211,11 +211,11 @@ class Content extends \Ixtrum\FileManager
                         parent::getParent()->flashMessage($this->context->translator->translate("Read-only mode enabled!"), "warning");
                 else {
 
-                        $actualdir = $this->context->system->getActualDir();
+                        $actualdir = $this->context->application->getActualDir();
                         $actualPath = $this->context->tools->getAbsolutePath($actualdir);
 
 
-                        $zip = new \Ixtrum\FileManager\System\Zip($actualPath);
+                        $zip = new \Ixtrum\FileManager\Application\Zip($actualPath);
                         $zip->addFiles($files);
 
 
@@ -234,7 +234,7 @@ class Content extends \Ixtrum\FileManager
                 $session->order = $key;
 
                 $tools = $this->context->tools;
-                $actualdir = $this->context->system->getActualDir();
+                $actualdir = $this->context->application->getActualDir();
                 $absPath = $tools->getRealPath($tools->getAbsolutePath($actualdir));
 
                 if ($this->context->parameters["cache"])
@@ -252,7 +252,7 @@ class Content extends \Ixtrum\FileManager
 
         public function handleDownloadFile($filename = "")
         {
-                $actualdir = $this->context->system->getActualDir();
+                $actualdir = $this->context->application->getActualDir();
 
                 // if sended by AJAX
                 if (!$filename)
@@ -273,7 +273,7 @@ class Content extends \Ixtrum\FileManager
 
         public function handleGoToParent()
         {
-                $actualdir = $this->context->system->getActualDir();
+                $actualdir = $this->context->application->getActualDir();
                 $parent = dirname($actualdir);
 
                 if ($parent == "\\" || $parent == ".")
@@ -299,7 +299,7 @@ class Content extends \Ixtrum\FileManager
                         parent::getParent()->flashMessage($this->context->translator->translate("Read-only mode enabled!"), "warning");
                 else {
 
-                        $actualdir = $this->context->system->getActualDir();
+                        $actualdir = $this->context->application->getActualDir();
                         if ($targetdir && $filename) {
 
                                 $translator = $this->context->translator;
@@ -334,7 +334,7 @@ class Content extends \Ixtrum\FileManager
         {
                 $template = $this->template;
                 $session = $this->presenter->context->session->getSection("file-manager");
-                $actualdir = $this->context->system->getActualDir();
+                $actualdir = $this->context->application->getActualDir();
 
                 $view = $session->view;
                 $mask = $session->mask;
@@ -412,7 +412,7 @@ class Content extends \Ixtrum\FileManager
                 $supportedThumbs = $this->context->thumbs->supported;
                 $absolutePath = $tools->getAbsolutePath($actualdir);
 
-                $files = \Ixtrum\FileManager\System\Files\Finder::find($mask)
+                $files = \Ixtrum\FileManager\Application\Files\Finder::find($mask)
                                                                     ->in($absolutePath)
                                                                     ->orderBy($order);
 

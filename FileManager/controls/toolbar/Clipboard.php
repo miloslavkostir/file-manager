@@ -15,7 +15,7 @@ class Clipboard extends \Ixtrum\FileManager
         public function handleClearClipboard()
         {
             $session = $this->presenter->context->session->getSection('file-manager');
-            $this->context->system->clearClipboard();
+            $this->context->application->clearClipboard();
             parent::getParent()->handleShowContent($session->actualdir);
         }
 
@@ -23,7 +23,7 @@ class Clipboard extends \Ixtrum\FileManager
         public function handlePasteFromClipboard()
         {
                 $session = $this->presenter->context->session->getSection('file-manager');
-                $actualdir = $this->context->system->getActualDir();
+                $actualdir = $this->context->application->getActualDir();
 
                 $translator = $this->context->translator;
                 if ($this->context->tools->validPath($actualdir)) {

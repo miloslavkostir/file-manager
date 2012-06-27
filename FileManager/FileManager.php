@@ -34,13 +34,13 @@ class FileManager extends UI\Control
 
                         $this->context = new FileManager\Services\Loader($this->presenter->context, $this->userConfig, __DIR__);
 
-                        $system = $this->context->system;
-                        $actualdir = $system->getActualdir();
+                        $actualdir = $this->context->application->getActualdir();
                         if ($actualdir) {
 
                                 $actualPath = $this->context->tools->getAbsolutePath($actualdir);
-                                if (!is_dir($actualPath))
-                                        $system->setActualdir(null);
+                                if (!is_dir($actualPath)) {
+                                        $this->context->application->setActualdir(null);
+                                }
                         }
 
                         $this->refreshSnippets(array("message", "diskusage"));
@@ -58,7 +58,7 @@ class FileManager extends UI\Control
 
         public function handleRefreshContent()
         {
-                $actualdir = $this->context->system->getActualDir();
+                $actualdir = $this->context->application->getActualDir();
 
                 if ($this->context->parameters["cache"]) {
 
@@ -98,7 +98,7 @@ class FileManager extends UI\Control
 
                 if ($filename) {
 
-                        $actualdir = $this->context->system->getActualDir();
+                        $actualdir = $this->context->application->getActualDir();
                         if ($this->context->tools->validPath($actualdir, $filename)) {
 
                                 $this->template->fileinfo = $actualdir;
@@ -116,7 +116,7 @@ class FileManager extends UI\Control
                 if ($this->context->tools->validPath($actualdir)) {
 
                         $this->template->content = $actualdir;
-                        $this->context->system->setActualDir($actualdir);
+                        $this->context->application->setActualDir($actualdir);
 
                         if ($this->presenter->isAjax())
                                 $this->refreshSnippets();
@@ -145,7 +145,7 @@ class FileManager extends UI\Control
 
                                 $rootname = $this->context->tools->getRootname();
                                 $template->content = $rootname;
-                                $this->context->system->setActualDir($rootname);
+                                $this->context->application->setActualDir($rootname);
                         }
                 }
 

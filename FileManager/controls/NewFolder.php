@@ -36,7 +36,7 @@ class NewFolder extends \Ixtrum\FileManager
         public function NewFolderFormSubmitted($form)
         {
                 $values = $form->values;
-                $actualdir = $this->context->system->getActualDir();
+                $actualdir = $this->context->application->getActualDir();
 
                 if ($this->context->parameters["readonly"])
                         parent::getParent()->flashMessage($this->context->translator->translate("Read-only mode enabled!"), "warning");
