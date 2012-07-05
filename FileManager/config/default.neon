@@ -1,6 +1,7 @@
 parameters:
 	uploadpath: /data/
 	cache: true
+	cacheStorage: FileStorage
 	readonly:
 	resource_dir: /ixtrum/
 	quota:

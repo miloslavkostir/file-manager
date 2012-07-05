@@ -5,6 +5,7 @@ namespace Ixtrum\FileManager\Application;
 use Nette\Caching\Cache,
     Nette\Caching\Storages\FileJournal,
     Nette\Caching\Storages\FileStorage,
+    Nette\Caching\Storages\MemcachedStorage,
     Nette\Utils\Finder,
     Nette\DI\Container;
 
@@ -22,17 +23,23 @@ class Caching
 
     public function __construct(Container $container, array $config)
     {
-        $tempDir = $container->parameters["tempDir"];
-        $cacheDir = "$tempDir/file-manager/cache";
+        $storageCfg = strtolower($config["cacheStorage"]);
+        if ($storageCfg === "filestorage") {
+            $tempDir = $container->parameters["tempDir"];
+            $cacheDir = "$tempDir/file-manager/cache";
 
-        if (!is_dir($cacheDir)) {
+            if (!is_dir($cacheDir)) {
 
-            $oldumask = umask(0);
-            mkdir($cacheDir, 0777);
-            umask($oldumask);
+                $oldumask = umask(0);
+                mkdir($cacheDir, 0777);
+                umask($oldumask);
+            }
+
+            $storage = new FileStorage($cacheDir, new FileJournal($cacheDir));
+        } elseif ($storageCfg === "memcachedstorage") {
+            $storage = new MemcachedStorage();
         }
 
-        $storage = new FileStorage($cacheDir, new FileJournal($cacheDir));
         $this->cache = new Cache($storage);
         $this->context = $container;
         $this->config = $config;
