@@ -32,6 +32,7 @@ class FileManager extends UI\Control
         if ($presenter instanceof UI\Presenter) {
 
             $this->context = new FileManager\Services\Loader($this->presenter->context, $this->userConfig, __DIR__);
+            $this->context->freeze();
 
             $actualdir = $this->context->application->getActualdir();
             if ($actualdir) {
