@@ -39,15 +39,15 @@ class NewFolder extends \Ixtrum\FileManager
             parent::getParent()->flashMessage($this->context->translator->translate("Read-only mode enabled!"), "warning");
         } else {
 
-            $tools = $this->context->tools;
-            if ($tools->validPath($actualdir)) {
+            $filesystem = $this->context->filesystem;
+            if ($filesystem->validPath($actualdir)) {
 
                 $foldername = $this->context->filesystem->safeFoldername($values->name);
                 if (!$foldername) {
                     parent::getParent()->flashMessage($this->context->translator->translate("Folder name '%s' can not be used - not allowed characters used.", $values->name), "warning");
                 } else {
 
-                    $target_dir = $this->context->tools->getAbsolutePath($actualdir) . $foldername;
+                    $target_dir = $this->context->filesystem->getAbsolutePath($actualdir) . $foldername;
                     if (is_dir($target_dir)) {
                         parent::getParent()->flashMessage($this->context->translator->translate("Target name %s already exists!", $foldername), "warning");
                     } else {
@@ -57,7 +57,7 @@ class NewFolder extends \Ixtrum\FileManager
                             if ($this->context->parameters["cache"]) {
 
                                 $caching = $this->context->caching;
-                                $caching->deleteItem(array("content", $tools->getRealPath($tools->getAbsolutePath($actualdir))));
+                                $caching->deleteItem(array("content", $filesystem->getRealPath($filesystem->getAbsolutePath($actualdir))));
                                 $caching->deleteItem(NULL, array("tags" => "treeview"));
                             }
 

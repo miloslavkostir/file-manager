@@ -34,7 +34,7 @@ class Treeview extends \Ixtrum\FileManager
 
             $html .= "<li>";
             $html .= '<span class="folder fm-droppable" id="' . $superior . '/' . $key . '/' . '">';
-            $html .= '<a href="' . parent::getParent()->link("showContent", "$superior/$key/") . '" class="treeview-folder fm-ajax" title="' . $this->context->tools->getRootName() . $superior . '/' . $key . '/">';
+            $html .= '<a href="' . parent::getParent()->link("showContent", "$superior/$key/") . '" class="treeview-folder fm-ajax" title="' . $this->context->filesystem->getRootName() . $superior . '/' . $key . '/">';
             $html .= $key;
             $html .= '</a></span>';
 
@@ -70,7 +70,7 @@ class Treeview extends \Ixtrum\FileManager
     {
         $dirs = $this->getDirTree($this->context->parameters["uploadroot"] . $this->context->parameters["uploadpath"]);
 
-        $rootname = $this->context->tools->getRootName();
+        $rootname = $this->context->filesystem->getRootName();
 
         $output = '<ul class="filetree" style="display: block;">';
         $output .= '<span class="fm-droppable folder-root" id="' . $rootname . '">';
@@ -92,7 +92,7 @@ class Treeview extends \Ixtrum\FileManager
     {
         if ($this->context->parameters["cache"]) {
 
-            $path = $this->context->tools->getRealPath($this->context->parameters["uploadroot"] . $this->context->parameters["uploadpath"]);
+            $path = $this->context->filesystem->getRealPath($this->context->parameters["uploadroot"] . $this->context->parameters["uploadpath"]);
 
             $caching = parent::getParent()->context->caching;
             $cacheData = $caching->getItem($path);

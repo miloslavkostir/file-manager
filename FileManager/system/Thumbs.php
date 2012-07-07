@@ -68,8 +68,8 @@ class Thumbs
             return Image::fromFile($thumbPath);
         } else {
 
-            $tools = new Tools($this->context, $this->config);
-            $disksize = $tools->diskSizeInfo();
+            $filesystem = new FileSystem($this->context, $this->config);
+            $disksize = $filesystem->diskSizeInfo();
 
             if ($disksize["spaceleft"] > 50) {
 
@@ -109,8 +109,8 @@ class Thumbs
      */
     private function getName($path)
     {
-        $tools = new Tools($this->context, $this->config);
-        $path = $tools->getRealPath($path);
+        $filesystem = new FileSystem($this->context, $this->config);
+        $path = $filesystem->getRealPath($path);
 
         return md5($path) . "." . pathinfo($path, PATHINFO_EXTENSION);
     }

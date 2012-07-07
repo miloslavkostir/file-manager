@@ -50,11 +50,6 @@ final class Loader extends Container
         return new Application($this->container->session);
     }
 
-    protected function createServiceTools()
-    {
-        return new Application\Tools($this->container, $this->parameters);
-    }
-
     protected function createServiceFilesystem()
     {
         return new Application\FileSystem($this->container, $this->parameters);

@@ -53,18 +53,17 @@ class FileSystem
      */
     public function copy($actualdir, $targetdir, $filename)
     {
-        $tools = new Tools($this->context, $this->config);
-        $actualpath = $tools->getAbsolutePath($actualdir);
-        $targetpath = $tools->getAbsolutePath($targetdir);
+        $actualpath = $this->getAbsolutePath($actualdir);
+        $targetpath = $this->getAbsolutePath($targetdir);
 
         if (is_writable($targetpath)) {
 
-            $disksize = $tools->diskSizeInfo();
+            $disksize = $this->diskSizeInfo();
 
             if ($this->config["cache"]) {
 
                 $caching = new Caching($this->context, $this->config);
-                $caching->deleteItem(array("content", $tools->getRealPath($targetpath)));
+                $caching->deleteItem(array("content", $this->getRealPath($targetpath)));
             }
 
             if (is_dir($actualpath . $filename)) {
@@ -72,7 +71,7 @@ class FileSystem
                 if ($this->config["cache"]) {
 
                     $caching->deleteItem(NULL, array("tags" => "treeview"));
-                    $caching->deleteItem(array('content', $tools->getRealPath($targetpath)));
+                    $caching->deleteItem(array('content', $this->getRealPath($targetpath)));
                 }
 
                 $dirinfo = $this->getFolderInfo(realpath($actualpath . $filename));
@@ -164,12 +163,11 @@ class FileSystem
     public function isSubFolder($actualpath, $targetpath, $filename)
     {
         $state = false;
-        $tools = new Tools($this->context, $this->config);
 
         $folders = Finder::findDirectories('*')->from(realpath($actualpath . $filename));
         foreach ($folders as $folder) {
 
-            if ($folder->getRealPath() == $tools->getRealPath($targetpath)) {
+            if ($folder->getRealPath() == $this->getRealPath($targetpath)) {
                 $state = true;
             }
         }
@@ -187,9 +185,8 @@ class FileSystem
      */
     public function move($actualdir, $targetdir, $filename)
     {
-        $tools = new Tools($this->context, $this->config);
-        $actualpath = $tools->getAbsolutePath($actualdir);
-        $targetpath = $tools->getAbsolutePath($targetdir);
+        $actualpath = $this->getAbsolutePath($actualdir);
+        $targetpath = $this->getAbsolutePath($targetdir);
 
         if ($actualdir == $targetdir) {
             return false;
@@ -207,8 +204,8 @@ class FileSystem
 
                         $caching = new Caching($this->context, $this->config);
                         $caching->deleteItemsRecursive($actualpath . $filename);
-                        $caching->deleteItem(array("content", $tools->getRealPath($actualpath)));
-                        $caching->deleteItem(array("content", $tools->getRealPath($targetpath)));
+                        $caching->deleteItem(array("content", $this->getRealPath($actualpath)));
+                        $caching->deleteItem(array("content", $this->getRealPath($targetpath)));
                     }
 
                     if ($this->deleteFolder($actualpath . $filename)) {
@@ -229,8 +226,8 @@ class FileSystem
                     if ($this->config["cache"]) {
 
                         $caching = new Caching($this->context, $this->config);
-                        $caching->deleteItem(array("content", $tools->getRealPath($actualpath)));
-                        $caching->deleteItem(array("content", $tools->getRealPath($targetpath)));
+                        $caching->deleteItem(array("content", $this->getRealPath($actualpath)));
+                        $caching->deleteItem(array("content", $this->getRealPath($targetpath)));
                     }
 
                     return true;
@@ -359,10 +356,9 @@ class FileSystem
     {
         $thumb_dir = $this->config["resource_dir"] . "img/icons/";
         $uploadpath = $this->config["uploadpath"];
-        $tools = new Tools($this->context, $this->config);
-        $rootname = $tools->getRootName();
+        $rootname = $this->getRootName();
         $uploadroot = $this->config["uploadroot"];
-        $path = $tools->getAbsolutePath($actualdir) . $filename;
+        $path = $this->getAbsolutePath($actualdir) . $filename;
         $info = array();
 
         if (!is_dir($path)) {
@@ -407,8 +403,7 @@ class FileSystem
      */
     public function getFilesInfo($dir, $files, $iterate = false)
     {
-        $tools = new Tools($this->context, $this->config);
-        $path = $tools->getAbsolutePath($dir);
+        $path = $this->getAbsolutePath($dir);
         $info = array(
             "size" => 0,
             "dirCount" => 0,
@@ -560,8 +555,7 @@ class FileSystem
      */
     public function delete($dir, $file = "")
     {
-        $tools = new Tools($this->context, $this->config);
-        $absDir = $tools->getAbsolutePath($dir);
+        $absDir = $this->getAbsolutePath($dir);
 
         if (is_dir($absDir . $file)) {
 
@@ -598,8 +592,7 @@ class FileSystem
      */
     public function deleteFile($actualdir, $filename)
     {
-        $tools = new Tools($this->context, $this->config);
-        $path = $tools->getAbsolutePath($actualdir);
+        $path = $this->getAbsolutePath($actualdir);
 
         if (is_writable($path)) {
 
@@ -613,7 +606,7 @@ class FileSystem
                 if ($this->config["cache"]) {
 
                     $caching = new Caching($this->context, $this->config);
-                    $caching->deleteItem(array("content", $tools->getRealPath($path)));
+                    $caching->deleteItem(array("content", $this->getRealPath($path)));
                 }
 
                 return true;
@@ -677,4 +670,141 @@ class FileSystem
         return false;
     }
 
+    /**
+     * Get absolute path from relative path
+     * 
+     * @param string $actualdir
+     * @return string
+     */
+    public function getAbsolutePath($actualdir)
+    {
+        if ($actualdir == $this->getRootname()) {
+            return $this->config["uploadroot"] . $this->config["uploadpath"];
+        }
+
+        return $this->config["uploadroot"] . substr($this->config["uploadpath"], 0, -1) . $actualdir;
+    }
+
+    /**
+     * Repair (back)slashes according to OS
+     * 
+     * @param string $path
+     * @return string
+     */
+    public function getRealPath($path)
+    {
+        $os = strtoupper(substr(PHP_OS, 0, 3));
+        if ($os === "WIN") {
+            $path = str_replace("/", "\\", $path);
+        } else {
+            $path = str_replace("\\", "/", $path);
+        }
+
+        if (realpath($path)) {
+
+            $path = realpath($path);
+            if (is_dir($path)) {
+
+                if ($os === "WIN" && substr($path, -1) <> "\\") {
+                    $path .= "\\";
+                }
+
+                if ($os <> "WIN" && substr($path, -1) <> "/") {
+                    $path .= "/";
+                }
+            }
+
+            return $path;
+        } else {
+            throw new InvalidArgumentException("Invalid path '$path' given!");
+        }
+    }
+
+    /**
+     * Get root folder name
+     * 
+     * @return string
+     */
+    public function getRootname()
+    {
+        $path = $this->config["uploadpath"];
+        $first = substr($path, 0, 1);
+        $last = substr($path, -1, 1);
+
+        if (($first === "/" || $first === "\\") && ($last === "/" || $last === "\\")) {
+            $path = substr($path, 1, strlen($path) - 2);
+        } else {
+            throw new \Nette\InvalidArgumentException("Invalid upload path '$path' given! Correct path starts & ends with \ (Windows) or / (Unix).");
+        }
+
+        return $path;
+    }
+
+    /**
+     * Get used disk space
+     * 
+     * @return integer bytes
+     */
+    public function getUsedSize()
+    {
+        $size = 0;
+        $files = Finder::findFiles("*")->from($this->config["uploadroot"] . $this->config["uploadpath"]);
+
+        foreach ($files as $file) {
+
+            $fileSystem = new FileSystem($this->context, $this->config);
+            $size += $fileSystem->filesize($file->getPathName());
+        }
+
+        return $size;
+    }
+
+    /**
+     * Get details about used disk size
+     * 
+     * @return array
+     */
+    public function diskSizeInfo()
+    {
+        $info = array();
+        if ($this->config["quota"]) {
+
+            $size = $this->getUsedSize();
+            $info["usedsize"] = $size;
+            $info["spaceleft"] = ($this->config["quota_limit"] * 1048576) - $size;
+            $info["percentused"] = round(($size / ($this->config["quota_limit"] * 1048576)) * 100);
+        } else {
+
+            $path = $this->config["uploadroot"] . $this->config["uploadpath"];
+            $freesize = disk_free_space($path);
+            $totalsize = disk_total_space($path);
+            $info["usedsize"] = $totalsize - $freesize;
+            $info["spaceleft"] = $freesize;
+            $info["percentused"] = round(($info["usedsize"] / $totalsize ) * 100);
+        }
+
+        return $info;
+    }
+
+    /**
+     * Check if realtive path is valid
+     * 
+     * @todo move it
+     * @param string $dir
+     * @param string $file (optional)
+     * @return bool
+     */
+    public function validPath($dir, $file = NULL)
+    {
+        $path = $this->getAbsolutePath($dir);
+        if ($file) {
+            $path .= $file;
+        }
+
+        if (file_exists($path)) {
+            return true;
+        }
+
+        return false;
+    }
 }

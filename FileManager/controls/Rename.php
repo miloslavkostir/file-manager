@@ -47,8 +47,8 @@ class Rename extends \Ixtrum\FileManager
     {
         $values = $form->getValues();
         $actualdir = $this->context->application->getActualDir();
-        $tools = $this->context->tools;
-        $path = $tools->getAbsolutePath($actualdir);
+        $filesystem = $this->context->filesystem;
+        $path = $filesystem->getAbsolutePath($actualdir);
 
         if ($this->context->parameters["readonly"]) {
             parent::getParent()->flashMessage($this->context->translator->translate("Read-only mode enabled!"), "warning");
@@ -61,7 +61,7 @@ class Rename extends \Ixtrum\FileManager
         } else {
 
             $origPath = $path . $values["orig_filename"];
-            if (is_dir($tools->getRealPath($origPath))) {
+            if (is_dir($filesystem->getRealPath($origPath))) {
 
                 $new_filename = $this->context->filesystem->safeFoldername($values["new_filename"]);
                 $this->context->thumbs->deleteDirThumbs($origPath);
@@ -69,18 +69,18 @@ class Rename extends \Ixtrum\FileManager
                 if ($this->context->parameters["cache"]) {
 
                     $caching = $this->context->caching;
-                    $caching->deleteItem(array("content", $tools->getRealPath($path)));
+                    $caching->deleteItem(array("content", $filesystem->getRealPath($path)));
                     $caching->deleteItemsRecursive($origPath);
                 }
             } else {
 
                 $new_filename = $this->context->filesystem->safeFilename($values["new_filename"]);
-                $this->context->thumbs->deleteThumb($tools->getRealPath($origPath));
+                $this->context->thumbs->deleteThumb($filesystem->getRealPath($origPath));
 
                 if ($this->context->parameters["cache"]) {
 
                     $caching = $this->context->caching;
-                    $caching->deleteItem(array("content", $tools->getRealPath($path)));
+                    $caching->deleteItem(array("content", $filesystem->getRealPath($path)));
                 }
             }
 

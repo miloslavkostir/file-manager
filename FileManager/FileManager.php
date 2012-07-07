@@ -37,7 +37,7 @@ class FileManager extends UI\Control
             $actualdir = $this->context->application->getActualdir();
             if ($actualdir) {
 
-                $actualPath = $this->context->tools->getAbsolutePath($actualdir);
+                $actualPath = $this->context->filesystem->getAbsolutePath($actualdir);
                 if (!is_dir($actualPath)) {
                     $this->context->application->setActualdir(null);
                 }
@@ -60,10 +60,10 @@ class FileManager extends UI\Control
 
         if ($this->context->parameters["cache"]) {
 
-            $tools = $this->context->tools;
+            $filesystem = $this->context->filesystem;
             $caching = $this->context->caching;
             $caching->deleteItem(NULL, array("tags" => "treeview"));
-            $caching->deleteItem(array("content", $tools->getRealPath($tools->getAbsolutePath($actualdir))));
+            $caching->deleteItem(array("content", $filesystem->getRealPath($filesystem->getAbsolutePath($actualdir))));
         }
 
         $this->handleShowContent($actualdir);
@@ -99,7 +99,7 @@ class FileManager extends UI\Control
         if ($filename) {
 
             $actualdir = $this->context->application->getActualDir();
-            if ($this->context->tools->validPath($actualdir, $filename)) {
+            if ($this->context->filesystem->validPath($actualdir, $filename)) {
 
                 $this->template->fileinfo = $actualdir;
                 $this["fileInfo"]->filename = $filename;
@@ -114,7 +114,7 @@ class FileManager extends UI\Control
 
     public function handleShowContent($actualdir)
     {
-        if ($this->context->tools->validPath($actualdir)) {
+        if ($this->context->filesystem->validPath($actualdir)) {
 
             $this->template->content = $actualdir;
             $this->context->application->setActualDir($actualdir);
@@ -146,7 +146,7 @@ class FileManager extends UI\Control
                 $template->content = $session->actualdir;
             } else {
 
-                $rootname = $this->context->tools->getRootname();
+                $rootname = $this->context->filesystem->getRootname();
                 $template->content = $rootname;
                 $this->context->application->setActualDir($rootname);
             }

@@ -25,7 +25,7 @@ class Clipboard extends \Ixtrum\FileManager
         $actualdir = $this->context->application->getActualDir();
 
         $translator = $this->context->translator;
-        if ($this->context->tools->validPath($actualdir)) {
+        if ($this->context->filesystem->validPath($actualdir)) {
 
             if ($this->context->parameters["readonly"]) {
                 parent::getParent()->flashMessage($translator->translate("Read-only mode enabled!"), "warning");
@@ -83,7 +83,7 @@ class Clipboard extends \Ixtrum\FileManager
 
         $session = $this->presenter->context->session->getSection("file-manager");
         $template->clipboard = $session->clipboard;
-        $template->rootname = $this->context->tools->getRootName();
+        $template->rootname = $this->context->filesystem->getRootName();
 
         $template->render();
     }

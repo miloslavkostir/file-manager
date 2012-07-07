@@ -69,15 +69,15 @@ class Caching
     {
         $dirs = Finder::findDirectories("*")->from($absDir);
         $cache = $this->cache;
-        $tools = new Tools($this->context, $this->config);
+        $fileSystem = new FileSystem($this->context, $this->config);
 
         foreach ($dirs as $dir) {
 
-            $key = $tools->getRealPath($dir->getPathName());
+            $key = $fileSystem->getRealPath($dir->getPathName());
             unset($cache[array("content", $key)]);
         }
 
-        unset($cache[array("content", $tools->getRealPath($absDir))]);
+        unset($cache[array("content", $fileSystem->getRealPath($absDir))]);
         $this->deleteItem(NULL, array("tags" => "treeview"));
     }
 

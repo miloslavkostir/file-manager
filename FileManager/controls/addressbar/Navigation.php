@@ -18,10 +18,10 @@ class Navigation extends \Ixtrum\FileManager
 
         if ($this->context->parameters["cache"]) {
 
-            $tools = $this->context->tools;
+            $filesystem = $this->context->filesystem;
             $caching = $this->context->caching;
             $caching->deleteItem(NULL, array("tags" => "treeview"));
-            $caching->deleteItem(array("content", $tools->getRealPath($tools->getAbsolutePath($actualdir))));
+            $caching->deleteItem(array("content", $filesystem->getRealPath($filesystem->getAbsolutePath($actualdir))));
         }
 
         parent::getParent()->handleShowContent($actualdir);
@@ -30,7 +30,7 @@ class Navigation extends \Ixtrum\FileManager
     public function render()
     {
         $actualdir = $this->context->application->getActualDir();
-        $rootname = $this->context->tools->getRootName();
+        $rootname = $this->context->filesystem->getRootName();
 
         $template = $this->template;
         $template->setFile(__DIR__ . '/Navigation.latte');
@@ -60,7 +60,7 @@ class Navigation extends \Ixtrum\FileManager
     public function LocationFormSubmitted($form)
     {
         $val = $form->values;
-        $path = $this->context->tools->getAbsolutePath($val['location']);
+        $path = $this->context->filesystem->getAbsolutePath($val['location']);
 
         if (is_dir($path)) {
             parent::getParent()->handleShowContent($val['location']);
@@ -74,7 +74,7 @@ class Navigation extends \Ixtrum\FileManager
     public function getNav($actualdir)
     {
         $var = array();
-        $rootname = $this->context->tools->getRootName();
+        $rootname = $this->context->filesystem->getRootName();
         if ($actualdir === $rootname)
             $var[] = array(
                 "name" => $rootname,

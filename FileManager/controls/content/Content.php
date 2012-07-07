@@ -49,7 +49,7 @@ class Content extends \Ixtrum\FileManager
         if ($filename) {
 
             $actualdir = $this->context->application->getActualDir();
-            if ($this->context->tools->validPath($actualdir, $filename)) {
+            if ($this->context->filesystem->validPath($actualdir, $filename)) {
 
                 $session = $this->presenter->context->session->getSection("file-manager");
                 $session->clipboard[$actualdir . $filename] = array(
@@ -103,7 +103,7 @@ class Content extends \Ixtrum\FileManager
         if ($filename) {
 
             $actualdir = $this->context->application->getActualDir();
-            if ($this->context->tools->validPath($actualdir, $filename)) {
+            if ($this->context->filesystem->validPath($actualdir, $filename)) {
 
                 $session = $this->presenter->context->session->getSection("file-manager");
                 $session->clipboard[$actualdir . $filename] = array(
@@ -162,7 +162,7 @@ class Content extends \Ixtrum\FileManager
 
             if ($filename) {
 
-                if ($this->context->tools->validPath($actualdir, $filename)) {
+                if ($this->context->filesystem->validPath($actualdir, $filename)) {
 
                     if ($this->context->filesystem->delete($actualdir, $filename)) {
                         parent::getParent()->flashMessage($this->context->translator->translate("Successfuly deleted - %s", $filename), "info");
@@ -223,12 +223,12 @@ class Content extends \Ixtrum\FileManager
         } else {
 
             $actualdir = $this->context->application->getActualDir();
-            $actualPath = $this->context->tools->getAbsolutePath($actualdir);
+            $actualPath = $this->context->filesystem->getAbsolutePath($actualdir);
 
             $zip = new \Ixtrum\FileManager\Application\Zip($actualPath);
             $zip->addFiles($files);
 
-            $key = $this->context->tools->getRealPath($actualPath);
+            $key = $this->context->filesystem->getRealPath($actualPath);
             if ($this->context->parameters["cache"]) {
                 parent::getParent()->context->caching->deleteItem(array("content", $key));
             }
@@ -242,9 +242,9 @@ class Content extends \Ixtrum\FileManager
         $session = $this->presenter->context->session->getSection("file-manager");
         $session->order = $key;
 
-        $tools = $this->context->tools;
+        $filesystem = $this->context->filesystem;
         $actualdir = $this->context->application->getActualDir();
-        $absPath = $tools->getRealPath($tools->getAbsolutePath($actualdir));
+        $absPath = $filesystem->getRealPath($filesystem->getAbsolutePath($actualdir));
 
         if ($this->context->parameters["cache"]) {
             $this->context->caching->deleteItem(array("content", $absPath));
@@ -269,9 +269,9 @@ class Content extends \Ixtrum\FileManager
 
         if ($filename) {
 
-            if ($this->context->tools->validPath($actualdir, $filename)) {
+            if ($this->context->filesystem->validPath($actualdir, $filename)) {
 
-                $path = $this->context->tools->getAbsolutePath($actualdir) . $filename;
+                $path = $this->context->filesystem->getAbsolutePath($actualdir) . $filename;
                 $this->presenter->sendResponse(new FileResponse($path, NULL, NULL));
             } else {
                 parent::getParent()->flashMessage($this->context->translator->translate("File %s not found!", $filename), "warning");
@@ -287,7 +287,7 @@ class Content extends \Ixtrum\FileManager
         $parent = dirname($actualdir);
 
         if ($parent == "\\" || $parent == ".") {
-            $parent_path = $this->context->tools->getRootname();
+            $parent_path = $this->context->filesystem->getRootname();
         } else {
             $parent_path = $parent . "/";
         }
@@ -336,7 +336,7 @@ class Content extends \Ixtrum\FileManager
 
     public function handleShowThumb($dir, $file)
     {
-        $path = $this->context->tools->getAbsolutePath($dir) . $file;
+        $path = $this->context->filesystem->getAbsolutePath($dir) . $file;
         $thumb = $this->context->thumbs->getThumbFile($path);
         $thumb->send();
     }
@@ -379,7 +379,7 @@ class Content extends \Ixtrum\FileManager
 
         $template->files = $this->loadData($actualdir, $mask, $view, $order);
         $template->actualdir = $actualdir;
-        $template->rootname = $this->context->tools->getRootName();
+        $template->rootname = $this->context->filesystem->getRootName();
         $template->thumb_dir = $this->context->parameters["resource_dir"] . "img/icons/" . $view . "/";
 
         $plugins = $this->context->plugins->loadPlugins();
@@ -420,12 +420,12 @@ class Content extends \Ixtrum\FileManager
             throw new \Nette\DirectoryNotFoundException("Missing folder with icons for '$view' view!");
         }
 
-        $tools = $this->context->tools;
+        $filesystem = $this->context->filesystem;
         $uploadpath = $this->context->parameters["uploadpath"];
-        $rootname = $tools->getRootName();
+        $rootname = $filesystem->getRootName();
         $uploadroot = $this->context->parameters["uploadroot"];
         $supportedThumbs = $this->context->thumbs->supported;
-        $absolutePath = $tools->getAbsolutePath($actualdir);
+        $absolutePath = $filesystem->getAbsolutePath($actualdir);
 
         $files = \Ixtrum\FileManager\Application\FileSystem\Finder::find($mask)
                 ->in($absolutePath)
@@ -487,8 +487,8 @@ class Content extends \Ixtrum\FileManager
     {
         if ($this->context->parameters["cache"]) {
 
-            $tools = $this->context->tools;
-            $absDir = $tools->getRealPath($tools->getAbsolutePath($actualdir));
+            $filesystem = $this->context->filesystem;
+            $absDir = $filesystem->getRealPath($filesystem->getAbsolutePath($actualdir));
             $caching = $this->context->caching;
             $cacheData = $caching->getItem(array("content", $absDir));
 
