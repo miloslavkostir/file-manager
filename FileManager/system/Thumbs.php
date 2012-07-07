@@ -45,9 +45,9 @@ class Thumbs
 
     /**
      * Get thumb path
-     * 
+     *
      * @param string $path
-     * @return string 
+     * @return string
      */
     public function getThumbPath($path)
     {
@@ -56,11 +56,11 @@ class Thumbs
 
     /**
      * Get thumb file
-     * 
+     *
      * @param string $path
      * @return Nette\Image
      */
-    public function getThumb($path)
+    public function getThumbFile($path)
     {
         $thumbPath = $this->getThumbPath($path);
 
@@ -103,7 +103,7 @@ class Thumbs
 
     /**
      * Encode thumb name
-     * 
+     *
      * @param string $path
      * @return string
      */
@@ -117,7 +117,7 @@ class Thumbs
 
     /**
      * Delete all thumbs in folder recursively
-     * 
+     *
      * @param string $dirPath
      */
     public function deleteDirThumbs($dirPath)
@@ -144,7 +144,7 @@ class Thumbs
 
     /**
      * Delete thumb
-     * 
+     *
      * @param string $path
      */
     public function deleteThumb($path)

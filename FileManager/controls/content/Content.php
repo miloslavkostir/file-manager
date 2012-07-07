@@ -337,7 +337,7 @@ class Content extends \Ixtrum\FileManager
     public function handleShowThumb($dir, $file)
     {
         $path = $this->context->tools->getAbsolutePath($dir) . $file;
-        $thumb = $this->context->thumbs->getThumb($path);
+        $thumb = $this->context->thumbs->getThumbFile($path);
         $thumb->send();
     }
 
