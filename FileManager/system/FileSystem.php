@@ -290,6 +290,7 @@ class FileSystem
     /**
      * Get permissions
      *
+     * @see http://php.net/manual/en/function.fileperms.php
      * @param string $path
      * @return string
      */
@@ -493,6 +494,12 @@ class FileSystem
         return false;
     }
 
+    /**
+     * Get full dir info about size and subfolders count
+     *
+     * @param string $path
+     * @return array
+     */
     public function getFolderInfo($path)
     {
         $info = array();

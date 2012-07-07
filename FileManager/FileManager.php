@@ -24,6 +24,9 @@ class FileManager extends UI\Control
         $this->monitor("Presenter");
     }
 
+    /**
+     * @param Nette\Application\UI\Presenter $presenter
+     */
     protected function attached($presenter)
     {
         if ($presenter instanceof UI\Presenter) {
@@ -167,7 +170,13 @@ class FileManager extends UI\Control
         $template->render();
     }
 
-    protected function refreshSnippets($snippets = "")
+    /**
+     * Invalidate controls
+     *
+     * @param array $snippets
+     * @throws \Nette\InvalidArgumentException
+     */
+    protected function refreshSnippets($snippets = array())
     {
         if (!$snippets) {
             $this->invalidateControl();
@@ -184,8 +193,8 @@ class FileManager extends UI\Control
     /**
      * Global component factory
      *
-     * @param	string	$name
-     * @return	Component
+     * @param string $name component name
+     * @return IComponent created component
      */
     protected function createComponent($name)
     {
