@@ -672,7 +672,7 @@ class FileSystem
 
     /**
      * Get absolute path from relative path
-     * 
+     *
      * @param string $actualdir
      * @return string
      */
@@ -687,7 +687,7 @@ class FileSystem
 
     /**
      * Repair (back)slashes according to OS
-     * 
+     *
      * @param string $path
      * @return string
      */
@@ -722,7 +722,7 @@ class FileSystem
 
     /**
      * Get root folder name
-     * 
+     *
      * @return string
      */
     public function getRootname()
@@ -742,7 +742,7 @@ class FileSystem
 
     /**
      * Get used disk space
-     * 
+     *
      * @return integer bytes
      */
     public function getUsedSize()
@@ -761,7 +761,7 @@ class FileSystem
 
     /**
      * Get details about used disk size
-     * 
+     *
      * @return array
      */
     public function diskSizeInfo()
@@ -788,8 +788,7 @@ class FileSystem
 
     /**
      * Check if realtive path is valid
-     * 
-     * @todo move it
+     *
      * @param string $dir
      * @param string $file (optional)
      * @return bool
@@ -807,4 +806,5 @@ class FileSystem
 
         return false;
     }
+
 }
