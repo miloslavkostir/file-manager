@@ -81,21 +81,18 @@ class FileSystem
 
                     if (!$this->isSubFolder($actualpath, $targetpath, $filename)) {
 
-                        $this->copyFolder($actualpath . $filename, $targetpath . $this->checkDuplName($targetpath, $filename));
-                        return true;
+                        if (!$this->copyFolder($actualpath . $filename, $targetpath . $this->checkDuplName($targetpath, $filename))) {
+                            return false;
+                        };
                     }
-
                     return false;
                 }
             } else {
 
-                $filesize = $this->filesize($actualpath . $filename);
-                if ($disksize["spaceleft"] >= $filesize) {
-                    $this->copyFile($actualpath . $filename, $targetpath . $this->checkDuplName($targetpath, $filename));
-                    return true;
-                }
-
-                return false;
+                    if ($this->copyFile($actualpath . $filename, $targetpath . $this->checkDuplName($targetpath, $filename))) {
+                        return true;
+                    }
+                    return false;
             }
         } else {
             return false;
@@ -108,9 +105,14 @@ class FileSystem
      * @param string $src (absolute path)
      * @param string $dest (absolute path)
      * @return integer bytes written
+     * @return bool
      */
     public function copyFile($src, $dest)
     {
+        if (!$this->validateFileSize($src)) {
+            return false;
+        }
+
         $buffer_size = 1048576;
         $ret = 0;
         $fin = fopen($src, "rb");
@@ -123,7 +125,7 @@ class FileSystem
         fclose($fin);
         fclose($fout);
 
-        return $ret;
+        return true;
     }
 
     /**
@@ -131,6 +133,7 @@ class FileSystem
      *
      * @param  string  actual dir (absolute path)
      * @param  string  target dir (absolute path)
+     * @return bool
      */
     public function copyFolder($src, $dst)
     {
@@ -144,12 +147,15 @@ class FileSystem
                 if (is_dir("$dst/$file")) {
                     $this->copyFolder("$src/$file", "$dst/$file");
                 } else {
-                    $this->copyFile("$src/$file", "$dst/$file");
+                    if (!$this->copyFile("$src/$file", "$dst/$file")) {
+                        return false;
+                    };
                 }
             }
         }
 
         closedir($dir);
+        return true;
     }
 
     /**
@@ -784,6 +790,34 @@ class FileSystem
         }
 
         return $info;
+    }
+
+    /**
+     * Check if is enough space on disk for file
+     *
+     * @param string $path
+     * @return bool
+     */
+    public function validateFileSize($path)
+    {
+        $diskInfo = $this->diskSizeInfo();
+        $needSpace = $diskInfo["spaceleft"] - $this->filesize($path);
+
+        if ($needSpace > 0) {
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * Get free space on disk
+     *
+     * @return int
+     */
+    public function getFreeSpaceLeft()
+    {
+        
     }
 
     /**
