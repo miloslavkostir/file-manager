@@ -811,16 +811,6 @@ class FileSystem
     }
 
     /**
-     * Get free space on disk
-     *
-     * @return int
-     */
-    public function getFreeSpaceLeft()
-    {
-        
-    }
-
-    /**
      * Check if realtive path is valid
      *
      * @param string $dir
