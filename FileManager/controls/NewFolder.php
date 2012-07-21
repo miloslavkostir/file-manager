@@ -26,6 +26,7 @@ class NewFolder extends \Ixtrum\FileManager
                 ->setRequired("Folder name required.");
         $form->addSubmit("send", "Create");
         $form->onSuccess[] = callback($this, "NewFolderFormSubmitted");
+        $form->onError[] = callback(parent::getParent(), "onFormError");
 
         return $form;
     }

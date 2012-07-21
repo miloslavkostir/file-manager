@@ -192,6 +192,19 @@ class FileManager extends UI\Control
     }
 
     /**
+     * Callback for error event in form
+     *
+     * @param \Nette\Application\UI\Form $form
+     * @return void
+     */
+    public function onFormError(\Nette\Application\UI\Form $form)
+    {
+        foreach ($form->errors as $error) {
+            $this->flashMessage($error, "warning");
+        }
+    }
+
+    /**
      * Global component factory
      *
      * @param string $name component name
