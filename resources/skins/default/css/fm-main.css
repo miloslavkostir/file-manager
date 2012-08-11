@@ -97,39 +97,41 @@
 .fm-body #frm-fileManager-renameForm { margin: 5px; }
 .fm-body input#frmnewFolderForm-send, input#frmnewFolderForm-filename { border: 1px solid #CCCCCC; }
 
-.fm-body #fm-files-large { width: auto; height: 430px; overflow: auto; }
-.fm-body #fm-files-large .fm-item { width: 140px; height: 121px; float: left; margin: 5px; padding: 5px; text-align: center; }
-.fm-body #fm-files-large .fm-item .fm-thumb { border-style: none; max-height: 96px; }
-.fm-body #fm-files-large .fm-item .fm-thumb.photo { border: 1px solid #CCCCCC; max-height: 96px; }
-.fm-body #fm-files-large #fm-small-images { list-style: none outside none; margin: 5px; padding: 10px; }
-.fm-body #fm-files-large #fm-small-images li {
+.fm-body .fm-files-large { width: auto; height: 430px; overflow: auto; }
+.fm-body .fm-files-large .fm-item { width: 140px; height: 121px; float: left; margin: 5px; padding: 5px; text-align: center; }
+.fm-body .fm-files-large .fm-item .fm-thumb { border-style: none; max-height: 96px; }
+.fm-body .fm-files-large .fm-item .fm-thumb.photo { border: 1px solid #CCCCCC; max-height: 96px; }
+.fm-body .fm-files-large .fm-item .fm-file-name { word-wrap: break-word; }
+.fm-body .fm-files-large ul { list-style: none outside none; margin: 5px; padding: 10px; }
+.fm-body .fm-files-large li {
   border: 1px solid #ffffff;
   -webkit-border-radius: 4px;
   -moz-border-radius: 4px;
   border-radius: 4px;
 }
-.fm-body #fm-files-large #fm-small-images li:hover { background: url(../img/icons_hover.png) repeat; border: 1px solid #D6E5F5; }
-.fm-body #fm-files-large #fm-small-images li.selected { background: url(../img/addressbar.png) repeat scroll 0 0 transparent; border-color: #624BD1; color: #ffffff; }
-.fm-body #fm-files-large #fm-small-images li.selected:hover { background: url(../img/addressbar.png) repeat scroll 0 0 transparent; border-color: #624BD1; color: #ffffff; }
+.fm-body .fm-files-large li:hover { background: url(../img/icons_hover.png) repeat; border: 1px solid #D6E5F5; }
+.fm-body .fm-files-large li.selected { background: url(../img/addressbar.png) repeat scroll 0 0 transparent; border-color: #624BD1; color: #ffffff; }
+.fm-body .fm-files-large li.selected:hover { background: url(../img/addressbar.png) repeat scroll 0 0 transparent; border-color: #624BD1; color: #ffffff; }
 
-.fm-body #fm-files-small { width: auto; height: 430px; overflow: auto; }
-.fm-body #fm-files-small .fm-item { width: 80px; height: 121px; float: left; margin: 5px; padding: 5px; text-align: center; }
-.fm-body #fm-files-small .fm-item .fm-thumb { border-style: none; max-height: 48px; }
-.fm-body #fm-files-small .fm-item .fm-thumb.photo { border: 1px solid #CCCCCC; max-height: 48px; }
-.fm-body #fm-files-small #fm-small-images { list-style: none outside none; margin: 5px; padding: 10px; }
-.fm-body #fm-files-small #fm-small-images li {
+.fm-body .fm-files-small { width: auto; height: 430px; overflow: auto; }
+.fm-body .fm-files-small .fm-item { width: 80px; height: 121px; float: left; margin: 5px; padding: 5px; text-align: center; }
+.fm-body .fm-files-small .fm-item .fm-thumb { border-style: none; max-height: 48px; }
+.fm-body .fm-files-small .fm-item .fm-thumb.photo { border: 1px solid #CCCCCC; max-height: 48px; }
+.fm-body .fm-files-large .fm-item .fm-file-name { word-wrap: break-word; }
+.fm-body .fm-files-small ul { list-style: none outside none; margin: 5px; padding: 10px; }
+.fm-body .fm-files-small li {
   border: 1px solid #ffffff;
   -webkit-border-radius: 4px;
   -moz-border-radius: 4px;
   border-radius: 4px;
 }
-.fm-body #fm-files-small #fm-small-images li:hover { background: url(../img/icons_hover.png) repeat; border: 1px solid #D6E5F5; }
-.fm-body #fm-files-small #fm-small-images li.selected { background: url(../img/addressbar.png) repeat scroll 0 0 transparent; border-color: #624BD1; color: #ffffff; }
-.fm-body #fm-files-small #fm-small-images li.selected:hover { background: url(../img/addressbar.png) repeat scroll 0 0 transparent; border-color: #624BD1; color: #ffffff; }
+.fm-body .fm-files-small li:hover { background: url(../img/icons_hover.png) repeat; border: 1px solid #D6E5F5; }
+.fm-body .fm-files-small li.selected { background: url(../img/addressbar.png) repeat scroll 0 0 transparent; border-color: #624BD1; color: #ffffff; }
+.fm-body .fm-files-small li.selected:hover { background: url(../img/addressbar.png) repeat scroll 0 0 transparent; border-color: #624BD1; color: #ffffff; }
 
-.fm-body #fm-files-list { width: auto; height: 430px; overflow: auto; }
-.fm-body #fm-files-list .fm-thumb { border-style: none; }
-.fm-body #fm-files-list #fm-small-images {
+.fm-body .fm-files-list { width: auto; height: 430px; overflow: auto; }
+.fm-body .fm-files-list .fm-thumb { border-style: none; }
+.fm-body .fm-files-list ul {
         /* works only with Firefox */
 	-moz-column-count: 2;
         -moz-column-width: auto;
@@ -143,7 +145,7 @@
         list-style: none;
         height: 350px;
 }
-.fm-body #fm-files-list #fm-small-images li {
+.fm-body .fm-files-list li {
     line-height: 24px;
     text-align: left;
     padding: 0 5px;
@@ -152,20 +154,20 @@
     -moz-border-radius: 4px;
     border-radius: 4px;
 }
-.fm-body #fm-files-list #fm-small-images li:hover { background: url(../img/icons_hover.png) repeat; border: 1px solid #D6E5F5; }
-.fm-body #fm-files-list #fm-small-images li.selected { background: url(../img/addressbar.png) repeat scroll 0 0 transparent; border-color: #624BD1; color: #ffffff; }
-.fm-body #fm-files-list #fm-small-images li.selected:hover { background: url(../img/addressbar.png) repeat scroll 0 0 transparent; border-color: #624BD1; color: #ffffff; }
+.fm-body .fm-files-list li:hover { background: url(../img/icons_hover.png) repeat; border: 1px solid #D6E5F5; }
+.fm-body .fm-files-list li.selected { background: url(../img/addressbar.png) repeat scroll 0 0 transparent; border-color: #624BD1; color: #ffffff; }
+.fm-body .fm-files-list li.selected:hover { background: url(../img/addressbar.png) repeat scroll 0 0 transparent; border-color: #624BD1; color: #ffffff; }
 
 
-.fm-body #fm-files-details { width: auto; height: 430px; overflow: auto; }
-.fm-body #fm-files-details table { border-collapse: collapse; }
-.fm-body #fm-files-details tbody tr { border: 1px solid #ffffff; height: 24px; text-align: left; margin: 1px; }
-.fm-body #fm-files-details tbody tr:hover { background: url(../img/icons_hover.png) repeat; border: 1px solid #D6E5F5; }
-.fm-body #fm-files-details tr.selected { background: url(../img/addressbar.png) repeat scroll 0 0 transparent; border: 1px solid #624BD1; color: #ffffff; }
-.fm-body #fm-files-details tr.selected:hover { background: url(../img/addressbar.png) repeat scroll 0 0 transparent; border: 1px solid #624BD1; color: #ffffff; }
-.fm-body #fm-files-details tbody td { height: 24px; text-align: left; padding-left: 5px; }
-.fm-body #fm-files-details thead th { background: url(../img/views/details/thead_separator.png) no-repeat scroll right top transparent; color: #4C607A; font-weight: normal; padding: 0 5px; }
-.fm-body #fm-files-details .fm-thumb { border-style: none; }
+.fm-body .fm-files-details { width: auto; height: 430px; overflow: auto; }
+.fm-body .fm-files-details table { border-collapse: collapse; }
+.fm-body .fm-files-details tbody tr { border: 1px solid #ffffff; height: 24px; text-align: left; margin: 1px; }
+.fm-body .fm-files-details tbody tr:hover { background: url(../img/icons_hover.png) repeat; border: 1px solid #D6E5F5; }
+.fm-body .fm-files-details tr.selected { background: url(../img/addressbar.png) repeat scroll 0 0 transparent; border: 1px solid #624BD1; color: #ffffff; }
+.fm-body .fm-files-details tr.selected:hover { background: url(../img/addressbar.png) repeat scroll 0 0 transparent; border: 1px solid #624BD1; color: #ffffff; }
+.fm-body .fm-files-details tbody td { height: 24px; text-align: left; padding-left: 5px; }
+.fm-body .fm-files-details thead th { background: url(../img/views/details/thead_separator.png) no-repeat scroll right top transparent; color: #4C607A; font-weight: normal; padding: 0 5px; }
+.fm-body .fm-files-details .fm-thumb { border-style: none; }
 
 
 .fm-info-bar { width: 100%; height: 135px; background: url(../img/details_back_top.gif) repeat-x scroll left top #F1F5FB; margin: 0; }

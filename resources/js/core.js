@@ -11,21 +11,28 @@
  * ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES
  * WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN
  * ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
- * OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE. 
+ * OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 
-jQuery(document).ready(function() {
+$(function() {
 
         $(".file-manager").bind("snippetUpdated", function() {
-
-
 
                 /** Main */
                 $('.fm-alert').width($(".file-manager").width());
 
-                var mb = $('.fm-alert').stop(true, true).fadeIn(); // http://stackoverflow.com/questions/2884221/how-to-start-stop-restart-jquery-animation
+                // http://stackoverflow.com/questions/2884221/how-to-start-stop-restart-jquery-animation
+                var mb = $('.fm-alert').stop(true, true).fadeIn();
                 if(mb.data('delay')) clearTimeout(mb.data('delay'));
                 mb.data('delay', setTimeout(function() { mb.fadeOut(500); }, 10000));
+
+                $(".fm-draggable").draggable({
+                    revert: true,
+                    cursor: "pointer",
+                    helper: "clone",
+                    scroll: false,
+                    opacity : 0.6
+                });
 
 
                 /** Clipboard */
@@ -45,6 +52,24 @@ jQuery(document).ready(function() {
                 });
 
                 $(".file-manager .hitarea").hide();
+
+
+                /* Content */
+                $(".fm-files-content ul").shiftClick("li", "selected");
+
+                $.ctrl("A", function() {
+                    $(".fm-files-content ul").markAll("li", "selected");
+                });
+
+                $(".fm-files-content ul").selectable({
+                    filter: "li",
+                    selecting: function(event, ui) {
+                        $(ui.selecting).addClass("selected");
+                    },
+                    unselecting: function(event, ui) {
+                        $(ui.unselecting).removeClass("selected");
+                    }
+                });
         });
 
 
@@ -91,6 +116,13 @@ jQuery(document).ready(function() {
                 return false;
         });
 
+        $(".fm-draggable").draggable({
+            revert: true,
+            cursor: "pointer",
+            helper: "clone",
+            scroll: false,
+            opacity : 0.6
+        });
 
 
         /* Filter mask */
@@ -153,9 +185,27 @@ jQuery(document).ready(function() {
                 $('.fm-clipboard').slideToggle('slow');
                 return false;
         });
+
+
+        /* Content */
+        $(".fm-files-content ul").shiftClick("li", "selected");
+
+        $.ctrl("A", function() {
+            $(".fm-files-content ul").markAll("li", "selected");
+        });
+
+        $(".fm-files-content ul").selectable({
+            filter: "li",
+            selecting: function(event, ui) {
+                $(ui.selecting).addClass("selected");
+            },
+            unselecting: function(event, ui) {
+                $(ui.unselecting).removeClass("selected");
+            }
+        });
   });
-  
-  
+
+
 /** Custom functions */
 (function($) {
 
@@ -195,7 +245,7 @@ jQuery(document).ready(function() {
                         parents.attr('unselectable', 'on');
 			$(this).click(function(ev) {
 				if (ev.shiftKey) {
-                                        
+
                                         var first = parents.children().index(this);
 					var last = parents.children().index(lastSelected);
 
@@ -230,16 +280,11 @@ jQuery(document).ready(function() {
                 $(this).addClass(clickedClass);
             });
         };
-        
+
         $.fn.unmarkAll = function(tag, clickedClass) {
             this.children(tag).each(function() {
                 $(this).removeClass(clickedClass);
             });
-        };        
-        
-        $.getSelected = function() {
-            var items = $("#fm-small-images .selected");          
-            return items;
         };
 
 })(jQuery);
