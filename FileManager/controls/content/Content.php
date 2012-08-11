@@ -359,16 +359,9 @@ class Content extends \Ixtrum\FileManager
             $order = "type";
         }
 
-        if ($view) {
-
-            $c_template = __DIR__ . "/$view.latte";
-            if (file_exists($c_template)) {
-                $template->setFile($c_template);
-            } else {
-
-                $template->setFile(__DIR__ . "/large.latte");
-                $view = "large";
-            }
+        $allowedViews = array("details", "large", "list", "small");
+        if ($view && in_array($view, $allowedViews)) {
+            $template->setFile(__DIR__ . "/$view.latte");
         } else {
 
             $template->setFile(__DIR__ . "/large.latte");
