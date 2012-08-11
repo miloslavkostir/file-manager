@@ -4,3 +4,4 @@
 
 /plugins
 !plugins/plugins.txt
+/FileManager/data/
