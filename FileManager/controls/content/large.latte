@@ -10,12 +10,12 @@
     <ul>
         <li n:foreach="$files as $item"
             class="fm-item"
-            id="{$item['filename']}">
+            data-filename="{$item['filename']}">
                     {if $item['create_thumb'] <> 1}
                             {if $item['type'] == 'file'}
                                 <img src="{$basePath . $thumb_dir . $item['icon']}"
-                                     alt="{$item['filename']}"
-                                     id="{$actualdir}"
+                                     data-filename="{$item['filename']}"
+                                     data-actualdir="{$actualdir}"
                                      class="fm-draggable fm-thumb" />
                             {else}
                                 {if $actualdir === $rootname}
@@ -27,14 +27,14 @@
                                    class="fm-ajax-dbl fm-thumb"
                                    title="{_'Open folder'}">
                                     <img src="{$basePath . $thumb_dir . $item['icon']}"
-                                         alt="{$item['filename']}"
-                                         id="{$targetpath}"
+                                         data-filename="{$item['filename']}"
+                                         data-targetdir="{$targetpath}"
                                          class="fm-droppable fm-draggable fm-thumb" />
                                 </a>
                             {/if}
                     {else}
                             <img src="{link showThumb!, $actualdir, $item['filename']}"
-                                 alt="{$item['filename']}"
+                                 data-filename="{$item['filename']}"
                                  class="fm-thumb photo fm-draggable" />
                     {/if}
                     <div class="fm-file-name">{$item['filename']|truncate:20}</div>

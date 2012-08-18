@@ -1,29 +1,25 @@
+{!$treeview}
 <script type="text/javascript">
-$(document).ready(function() {
-
+$(function() {
     $(".fm-droppable").droppable({
             hoverClass: "fm-state-highlight",
-            drop: function( event, ui ) {
+            drop: function(event, ui) {
                 $(this).addClass("fm-state-highlight");
-
-                var actualdir = ui.draggable.attr('id'), // actualdir
-                    filename = ui.draggable.attr('alt'), // filename
-                    targetdir = $(this).attr('id'); // targetdir
-
+                var actualdir = ui.draggable.data("actualdir");
+                var filename = ui.draggable.data("filename");
+                var targetdir = $(this).data("targetdir");
                 if (confirm({_'Do you really want to move this file?'})) {
-                        $.getJSON({link move!}, { actualdir: actualdir, filename: filename, targetdir: targetdir }, function(payload){
+                        $.getJSON({link move!}, { actualdir: actualdir, filename: filename, targetdir: targetdir }, function(payload) {
                             $.nette.success(payload);
-                            if (payload.result == 'success')
+                            if (payload.result == "success") {
                                 ui.draggable.remove();
+                            }
                         });
-
                         $.animateProgress(".file-manager", event);
                  }
-
                  $(this).removeClass("fm-state-highlight");
 
             }
     });
 });
 </script>
-{!$treeview}

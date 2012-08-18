@@ -78,7 +78,7 @@
 
 .fm-body { width: 100%; }
 .fm-body .fm-treeview { width: 20%; height: 465px; float: left; margin: 0; padding: 0; background-color: white; overflow: auto; }
-.fm-body .fm-treeview .filetree { margin-left: 10px; margin-top: 10px; }
+.fm-body .fm-treeview .filetree { margin-left: 10px; margin-top: 10px; display: block; }
 .fm-body .fm-treeview .treeview-folder { margin: 2px; padding: 2px; }
 .fm-body .fm-treeview .folder, .fm-body .fm-treeview .folder-root {
     border: 1px solid #ffffff;
