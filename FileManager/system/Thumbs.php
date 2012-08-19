@@ -96,7 +96,8 @@ class Thumbs
 
                 return $image;
             } else {
-                Debugger::log("Thumb can not be created, there is no free space on disk.", Debugger::WARNING);
+                Debugger::fireLog("Thumb can not be created, there is no free space on disk.", Debugger::WARNING);
+                return Image::fromBlank(50, 25);
             }
         }
     }
