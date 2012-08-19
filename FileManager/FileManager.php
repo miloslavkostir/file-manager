@@ -17,6 +17,9 @@ class FileManager extends UI\Control
     /** @var array */
     private $userConfig;
 
+    /** @var array */
+    protected $plugins;
+
     public function __construct($userConfig = array())
     {
         parent::__construct();
@@ -42,6 +45,8 @@ class FileManager extends UI\Control
                     $this->context->application->setActualdir(null);
                 }
             }
+
+            $this->plugins = $this->context->plugins->loadPlugins();
 
             $this->refreshSnippets(array("message", "diskusage"));
         }
@@ -153,11 +158,10 @@ class FileManager extends UI\Control
         }
 
         // Load plugins
-        $plugins = $this->context->plugins->loadPlugins();
-        if ($plugins) {
+        if ($this->plugins) {
 
             $toolbarPlugins = $fileInfoPlugins = array();
-            foreach ($plugins as $plugin) {
+            foreach ($this->plugins as $plugin) {
                 if ($plugin["toolbarPlugin"]) {
                     $toolbarPlugins[] = $plugin;
                 }
