@@ -52,8 +52,19 @@ class Plugins
 
                 $plugins[$filePath]["name"] = $class;
                 $plugins[$filePath]["title"] = $vars["title"];
-                $plugins[$filePath]["toolbarPlugin"] = $vars["toolbarPlugin"];
-                $plugins[$filePath]["contextPlugin"] = $vars["contextPlugin"];
+                $plugins[$filePath]["toolbarPlugin"] = false;
+                $plugins[$filePath]["contextPlugin"] = false;
+                $plugins[$filePath]["fileInfoPlugin"] = false;
+
+                if (isset($vars["toolbarPlugin"])) {
+                    $plugins[$filePath]["toolbarPlugin"] = $vars["toolbarPlugin"];
+                }
+                if (isset($vars["contextPlugin"])) {
+                    $plugins[$filePath]["contextPlugin"] = $vars["contextPlugin"];
+                }
+                if (isset($vars["fileInfoPlugin"])) {
+                    $plugins[$filePath]["fileInfoPlugin"] = $vars["fileInfoPlugin"];
+                }
 
                 $cache->saveItem(array("plugins", $filePath), $plugins[$filePath], array(\Nette\Caching\Cache::FILES => $filePath));
             }

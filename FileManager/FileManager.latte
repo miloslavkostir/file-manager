@@ -25,8 +25,8 @@
                     <span>{_'New folder'}</span>
                 </a>
             </li>
-            <li n:ifset="$plugins">
-                <a n:foreach="$plugins as $plugin" n:href="runPlugin!, $plugin['name']" class="fm-ajax fm-toolbar-item">
+            <li n:ifset="$toolbarPlugins">
+                <a n:foreach="$toolbarPlugins as $plugin" n:href="runPlugin!, $plugin['name']" class="fm-ajax fm-toolbar-item">
                     <span>{$plugin['title']}</span>
                 </a>
             </li>
@@ -56,13 +56,18 @@
             </div>
     </div>
     <div class="fm-info-bar">
-        <div n:snippet="fileinfo" class="fm-file-info">
+        <div n:snippet="diskusage" class="fm-disk-usage fm-left">
+            {control diskUsage}
+        </div>
+        <div n:snippet="fileinfo" class="fm-file-info fm-left">
             {ifset $fileinfo}
                 {control fileInfo}
             {/ifset}
         </div>
-        <div n:snippet="diskusage" class="fm-disk-usage">
-            {control diskUsage}
+        <div n:ifset="$fileInfoPlugins" class="fm-file-info-plugins">
+            <div n:foreach="$fileInfoPlugins as $plugin" class="fm-file-info-plugin">
+                {control $plugin["name"]}
+            </div>
         </div>
     </div>
 </div>

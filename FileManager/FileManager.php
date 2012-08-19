@@ -152,19 +152,25 @@ class FileManager extends UI\Control
             }
         }
 
+        // Load plugins
         $plugins = $this->context->plugins->loadPlugins();
         if ($plugins) {
 
-            $toolbarPlugins = array();
+            $toolbarPlugins = $fileInfoPlugins = array();
             foreach ($plugins as $plugin) {
-
                 if ($plugin["toolbarPlugin"]) {
                     $toolbarPlugins[] = $plugin;
                 }
+                if ($plugin["fileInfoPlugin"]) {
+                    $fileInfoPlugins[] = $plugin;
+                }
             }
 
-            if ($toolbarPlugins) {
-                $template->plugins = $toolbarPlugins;
+            if (!empty($toolbarPlugins)) {
+                $template->toolbarPlugins = $toolbarPlugins;
+            }
+            if (!empty($fileInfoPlugins)) {
+                $template->fileInfoPlugins = $fileInfoPlugins;
             }
         }
 
