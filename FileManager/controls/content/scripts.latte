@@ -3,8 +3,7 @@ $(function() {
 
     $(".fm-item").contextMenu(function() {
         var selected = $(".fm-files-content .selected");
-
-        if ($(selected).length <= 1 ) {
+        if ($(selected).size() <= 1 ) {
 
                         var o1 = {},
                             o2 = {},
