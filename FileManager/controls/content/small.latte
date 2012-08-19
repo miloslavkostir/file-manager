@@ -35,6 +35,7 @@
                     {else}
                             <img src="{link showThumb!, $actualdir, $item['filename']}"
                                  data-filename="{$item['filename']}"
+                                 data-actualdir="{$actualdir}"
                                  class="fm-thumb photo fm-draggable" />
                     {/if}
                     <div class="fm-file-name">{$item['filename']|truncate:20}</div>
