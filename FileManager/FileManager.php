@@ -60,10 +60,13 @@ class FileManager extends UI\Control
 
         if ($this->context->parameters["cache"]) {
 
-            $filesystem = $this->context->filesystem;
-            $caching = $this->context->caching;
-            $caching->deleteItem(NULL, array("tags" => "treeview"));
-            $caching->deleteItem(array("content", $filesystem->getRealPath($filesystem->getAbsolutePath($actualdir))));
+            $this->context->caching->deleteItem(NULL, array("tags" => "treeview"));
+            $this->context->caching->deleteItem(array(
+                "content",
+                $this->context->filesystem->getRealPath(
+                    $this->context->filesystem->getAbsolutePath($actualdir)
+                )
+            ));
         }
 
         $this->handleShowContent($actualdir);

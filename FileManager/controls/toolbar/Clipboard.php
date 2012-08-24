@@ -24,13 +24,12 @@ class Clipboard extends \Ixtrum\FileManager
         $session = $this->presenter->context->session->getSection('file-manager');
         $actualdir = $this->context->application->getActualDir();
 
-        $translator = $this->context->translator;
         if ($this->context->filesystem->validPath($actualdir)) {
 
             if ($this->context->parameters["readonly"]) {
-                $this->parent->flashMessage($translator->translate("Read-only mode enabled!"), "warning");
+                $this->parent->flashMessage($this->context->translator->translate("Read-only mode enabled!"), "warning");
             } elseif (!isset($session->clipboard) || count($session->clipboard) <= 0) {
-                $this->parent->flashMessage($translator->translate("There is nothing to paste from clipboard!"), "warning");
+                $this->parent->flashMessage($this->context->translator->translate("There is nothing to paste from clipboard!"), "warning");
             } else {
 
                 foreach ($session->clipboard as $key => $val) {
@@ -38,26 +37,26 @@ class Clipboard extends \Ixtrum\FileManager
                     if ($val["action"] === "copy") {
 
                         if ($this->context->filesystem->copy($val['actualdir'], $actualdir, $val['filename'])) {
-                            $this->parent->flashMessage($translator->translate("Succesfully copied - %s", $val['filename']), "info");
+                            $this->parent->flashMessage($this->context->translator->translate("Succesfully copied - %s", $val['filename']), "info");
                         } else {
-                            $this->parent->flashMessage($translator->translate("An error occured - %s", $val['filename']), "error");
+                            $this->parent->flashMessage($this->context->translator->translate("An error occured - %s", $val['filename']), "error");
                         }
                     } elseif ($val["action"] === "cut") {
 
                         if ($this->context->filesystem->move($val["actualdir"], $actualdir, $val["filename"])) {
-                            $this->parent->flashMessage($translator->translate("Succesfully moved - %s", $val["filename"]), "info");
+                            $this->parent->flashMessage($this->context->translator->translate("Succesfully moved - %s", $val["filename"]), "info");
                         } else {
-                            $this->parent->flashMessage($translator->translate("An error occured - %s", $val["filename"]), "error");
+                            $this->parent->flashMessage($this->context->translator->translate("An error occured - %s", $val["filename"]), "error");
                         }
                     } else {
-                        $this->parent->flashMessage($translator->translate("Unknown action! - %s", $val["action"]), "error");
+                        $this->parent->flashMessage($this->context->translator->translate("Unknown action! - %s", $val["action"]), "error");
                     }
                 }
 
                 $this->handleClearClipboard();
             }
         } else {
-            $this->parent->flashMessage($translator->translate("Folder %s already does not exist!", $actualdir), "warning");
+            $this->parent->flashMessage($this->context->translator->translate("Folder %s already does not exist!", $actualdir), "warning");
         }
     }
 

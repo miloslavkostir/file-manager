@@ -27,10 +27,9 @@ class Filter extends \Ixtrum\FileManager
 
     protected function createComponentFilterForm()
     {
-        $translator = $this->context->translator;
         $form = new Form;
-        $form->setTranslator($translator);
-        $form->addText("phrase")->getControlPrototype()->setTitle($translator->translate("Filter"));
+        $form->setTranslator($this->context->translator);
+        $form->addText("phrase")->getControlPrototype()->setTitle($this->context->translator->translate("Filter"));
         $form->onSuccess[] = $this->filterFormSubmitted;
         return $form;
     }

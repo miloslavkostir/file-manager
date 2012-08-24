@@ -47,8 +47,7 @@ class Rename extends \Ixtrum\FileManager
     {
         $values = $form->getValues();
         $actualdir = $this->context->application->getActualDir();
-        $filesystem = $this->context->filesystem;
-        $path = $filesystem->getAbsolutePath($actualdir);
+        $path = $this->context->filesystem->getAbsolutePath($actualdir);
 
         if ($this->context->parameters["readonly"]) {
             $this->parent->flashMessage($this->context->translator->translate("Read-only mode enabled!"), "warning");
@@ -61,26 +60,30 @@ class Rename extends \Ixtrum\FileManager
         } else {
 
             $origPath = $path . $values["orig_filename"];
-            if (is_dir($filesystem->getRealPath($origPath))) {
+            if (is_dir($this->context->filesystem->getRealPath($origPath))) {
 
                 $new_filename = $this->context->filesystem->safeFoldername($values["new_filename"]);
                 $this->context->thumbs->deleteDirThumbs($origPath);
 
                 if ($this->context->parameters["cache"]) {
 
-                    $caching = $this->context->caching;
-                    $caching->deleteItem(array("content", $filesystem->getRealPath($path)));
-                    $caching->deleteItemsRecursive($origPath);
+                    $this->context->caching->deleteItem(array(
+                        "content",
+                        $this->context->filesystem->getRealPath($path)
+                    ));
+                    $this->context->caching->deleteItemsRecursive($origPath);
                 }
             } else {
 
                 $new_filename = $this->context->filesystem->safeFilename($values["new_filename"]);
-                $this->context->thumbs->deleteThumb($filesystem->getRealPath($origPath));
+                $this->context->thumbs->deleteThumb($this->context->filesystem->getRealPath($origPath));
 
                 if ($this->context->parameters["cache"]) {
 
-                    $caching = $this->context->caching;
-                    $caching->deleteItem(array("content", $filesystem->getRealPath($path)));
+                    $this->context->caching->deleteItem(array(
+                        "content",
+                        $this->context->filesystem->getRealPath($path)
+                    ));
                 }
             }
 

@@ -88,13 +88,12 @@ class Treeview extends \Ixtrum\FileManager
 
             $path = $this->context->filesystem->getRealPath($this->context->parameters["uploadroot"] . $this->context->parameters["uploadpath"]);
 
-            $caching = $this->parent->context->caching;
-            $cacheData = $caching->getItem($path);
+            $cacheData = $this->context->caching->getItem($path);
 
             if (!$cacheData) {
 
                 $output = $this->generateTreeview();
-                $caching->saveItem($path, $output, array("tags" => array("treeview")));
+                $this->context->caching->saveItem($path, $output, array("tags" => array("treeview")));
                 return $output;
             } else {
                 return $cacheData;

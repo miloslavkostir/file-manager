@@ -39,8 +39,7 @@ class NewFolder extends \Ixtrum\FileManager
             $this->parent->flashMessage($this->context->translator->translate("Read-only mode enabled!"), "warning");
         } else {
 
-            $filesystem = $this->context->filesystem;
-            if ($filesystem->validPath($actualdir)) {
+            if ($this->context->filesystem->validPath($actualdir)) {
 
                 $foldername = $this->context->filesystem->safeFoldername($values->name);
                 if (!$foldername) {
@@ -56,9 +55,11 @@ class NewFolder extends \Ixtrum\FileManager
 
                             if ($this->context->parameters["cache"]) {
 
-                                $caching = $this->context->caching;
-                                $caching->deleteItem(array("content", $filesystem->getRealPath($filesystem->getAbsolutePath($actualdir))));
-                                $caching->deleteItem(NULL, array("tags" => "treeview"));
+                                $this->context->caching->deleteItem(array(
+                                    "content",
+                                    $this->context->filesystem->getRealPath($this->context->filesystem->getAbsolutePath($actualdir))
+                                ));
+                                $this->context->caching->deleteItem(NULL, array("tags" => "treeview"));
                             }
 
                             $this->parent->flashMessage($this->context->translator->translate("Folder %s successfully created", $foldername), "info");

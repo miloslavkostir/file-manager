@@ -205,9 +205,8 @@ class Content extends \Ixtrum\FileManager
             $files = $this->presenter->context->httpRequest->getPost("files");
         }
 
-        $translator = $this->context->translator;
         if ($this->context->parameters["readonly"]) {
-            $this->parent->flashMessage($translator->translate("Read-only mode enabled!"), "warning");
+            $this->parent->flashMessage($this->context->translator->translate("Read-only mode enabled!"), "warning");
         } else {
 
             $actualdir = $this->context->application->getActualDir();
@@ -216,13 +215,13 @@ class Content extends \Ixtrum\FileManager
                 foreach ($files as $file) {
 
                     if ($this->context->filesystem->delete($actualdir, $file)) {
-                        $this->parent->flashMessage($translator->translate("Successfuly deleted - %s", $file), "info");
+                        $this->parent->flashMessage($this->context->translator->translate("Successfuly deleted - %s", $file), "info");
                     } else {
-                        $this->parent->flashMessage($translator->translate("An error occured - %s", $file), "error");
+                        $this->parent->flashMessage($this->context->translator->translate("An error occured - %s", $file), "error");
                     }
                 }
             } else {
-                $this->parent->flashMessage($translator->translate("Incorrect input data!"), "error");
+                $this->parent->flashMessage($this->context->translator->translate("Incorrect input data!"), "error");
             }
 
             $this->handleShowContent($actualdir);
@@ -260,9 +259,8 @@ class Content extends \Ixtrum\FileManager
         $session = $this->presenter->context->session->getSection("file-manager");
         $session->order = $key;
 
-        $filesystem = $this->context->filesystem;
         $actualdir = $this->context->application->getActualDir();
-        $absPath = $filesystem->getRealPath($filesystem->getAbsolutePath($actualdir));
+        $absPath = $this->context->filesystem->getRealPath($this->context->filesystem->getAbsolutePath($actualdir));
 
         if ($this->context->parameters["cache"]) {
             $this->context->caching->deleteItem(array("content", $absPath));
@@ -333,13 +331,12 @@ class Content extends \Ixtrum\FileManager
             $actualdir = $this->context->application->getActualDir();
             if ($targetdir && $filename) {
 
-                $translator = $this->context->translator;
                 if ($this->context->filesystem->move($actualdir, $targetdir, $filename)) {
 
                     $this->presenter->payload->result = "success";
-                    $this->parent->flashMessage($translator->translate("Successfuly moved - %s", $filename), "info");
+                    $this->parent->flashMessage($this->context->translator->translate("Successfuly moved - %s", $filename), "info");
                 } else {
-                    $this->parent->flashMessage($translator->translate("An error occured. File %s was not moved.", $filename), "error");
+                    $this->parent->flashMessage($this->context->translator->translate("An error occured. File %s was not moved.", $filename), "error");
                 }
             }
 
@@ -431,12 +428,11 @@ class Content extends \Ixtrum\FileManager
             throw new \Nette\DirectoryNotFoundException("Missing folder with icons for '$view' view!");
         }
 
-        $filesystem = $this->context->filesystem;
         $uploadpath = $this->context->parameters["uploadpath"];
-        $rootname = $filesystem->getRootName();
+        $rootname = $this->context->filesystem->getRootName();
         $uploadroot = $this->context->parameters["uploadroot"];
         $supportedThumbs = $this->context->thumbs->supported;
-        $absolutePath = $filesystem->getAbsolutePath($actualdir);
+        $absolutePath = $this->context->filesystem->getAbsolutePath($actualdir);
 
         $files = \Ixtrum\FileManager\Application\FileSystem\Finder::find($mask)
                 ->in($absolutePath)
@@ -498,15 +494,13 @@ class Content extends \Ixtrum\FileManager
     {
         if ($this->context->parameters["cache"]) {
 
-            $filesystem = $this->context->filesystem;
-            $absDir = $filesystem->getRealPath($filesystem->getAbsolutePath($actualdir));
-            $caching = $this->context->caching;
-            $cacheData = $caching->getItem(array("content", $absDir));
+            $absDir = $this->context->filesystem->getRealPath($this->context->filesystem->getAbsolutePath($actualdir));
+            $cacheData = $this->context->caching->getItem(array("content", $absDir));
 
             if (!$cacheData) {
 
                 $output = $this->getDirectoryContent($actualdir, $mask, $view, $order);
-                $caching->saveItem(array("content", $absDir), $output);
+                $this->context->caching->saveItem(array("content", $absDir), $output);
                 return $output;
             } else {
                 return $cacheData;
