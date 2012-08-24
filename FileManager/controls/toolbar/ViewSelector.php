@@ -36,9 +36,7 @@ class ViewSelector extends \Ixtrum\FileManager
 
         $form = new Form;
         $form->addSelect("view", NULL, $items);
-
-        $form->onSuccess[] = callback($this, "ChangeViewFormSubmitted");
-
+        $form->onSuccess[] = $this->changeViewFormSubmitted;
         return $form;
     }
 

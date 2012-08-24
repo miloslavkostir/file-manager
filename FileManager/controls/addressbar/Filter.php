@@ -31,8 +31,7 @@ class Filter extends \Ixtrum\FileManager
         $form = new Form;
         $form->setTranslator($translator);
         $form->addText("phrase")->getControlPrototype()->setTitle($translator->translate("Filter"));
-        $form->onSuccess[] = callback($this, "FilterFormSubmitted");
-
+        $form->onSuccess[] = $this->filterFormSubmitted;
         return $form;
     }
 

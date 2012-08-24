@@ -38,9 +38,8 @@ class Rename extends \Ixtrum\FileManager
                 ->setRequired("New name required.");
         $form->addHidden("orig_filename");
         $form->addSubmit("send", "OK");
-        $form->onSuccess[] = callback($this, "RenameFormSubmitted");
+        $form->onSuccess[] = $this->renameFormSubmitted;
         $form->onError[] = $this->parent->onFormError;
-
         return $form;
     }
 

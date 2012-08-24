@@ -52,8 +52,7 @@ class Navigation extends \Ixtrum\FileManager
         $form = new Form;
         $form->setTranslator($this->context->translator);
         $form->addText('location');
-        $form->onSuccess[] = callback($this, 'LocationFormSubmitted');
-
+        $form->onSuccess[] = $this->locationFormSubmitted;
         return $form;
     }
 
