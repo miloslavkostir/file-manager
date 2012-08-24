@@ -43,7 +43,7 @@ class Rename extends \Ixtrum\FileManager
         return $form;
     }
 
-    public function RenameFormSubmitted($form)
+    public function renameFormSubmitted($form)
     {
         $values = $form->getValues();
         $actualdir = $this->context->application->getActualDir();

@@ -56,7 +56,7 @@ class Navigation extends \Ixtrum\FileManager
         return $form;
     }
 
-    public function LocationFormSubmitted($form)
+    public function locationFormSubmitted($form)
     {
         $val = $form->values;
         $path = $this->context->filesystem->getAbsolutePath($val['location']);

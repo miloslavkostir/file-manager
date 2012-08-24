@@ -30,7 +30,7 @@ class NewFolder extends \Ixtrum\FileManager
         return $form;
     }
 
-    public function NewFolderFormSubmitted($form)
+    public function newFolderFormSubmitted($form)
     {
         $values = $form->values;
         $actualdir = $this->context->application->getActualDir();

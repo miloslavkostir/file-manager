@@ -35,7 +35,7 @@ class Filter extends \Ixtrum\FileManager
         return $form;
     }
 
-    public function FilterFormSubmitted($form)
+    public function filterFormSubmitted($form)
     {
         $session = $this->presenter->context->session->getSection("file-manager");
         $actualdir = $this->context->application->getActualDir();

@@ -40,7 +40,7 @@ class ViewSelector extends \Ixtrum\FileManager
         return $form;
     }
 
-    public function ChangeViewFormSubmitted($form)
+    public function changeViewFormSubmitted($form)
     {
         $val = $form->values;
         $session = $this->presenter->context->session->getSection("file-manager");
