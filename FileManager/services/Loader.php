@@ -37,11 +37,11 @@ final class Loader extends Container
 
     protected function createServiceTranslator()
     {
-        $param = $this->parameters;
-        $langFile = $param["rootPath"] . $param["langDir"] . $param["lang"] . ".mo";
-        $cache = new Application\Caching($this->container, $this->parameters);
-        $translator = new Application\Translator\GettextTranslator($langFile, $cache, $param["lang"]);
-
+        $translator = new Application\Translator\GettextTranslator(
+            $this->parameters["rootPath"] . $this->parameters["langDir"] . $this->parameters["lang"] . ".mo",
+            new Application\Caching($this->container, $this->parameters),
+            $this->parameters["lang"]
+        );
         return $translator;
     }
 
@@ -62,15 +62,16 @@ final class Loader extends Container
 
     protected function createServicePlugins()
     {
-        $pluginDir = $this->parameters["rootPath"] . $this->parameters["pluginDir"];
-        return new Application\Plugins($pluginDir, new Application\Caching($this->container, $this->parameters));
+        return new Application\Plugins(
+            $this->parameters["rootPath"] . $this->parameters["pluginDir"],
+            new Application\Caching($this->container, $this->parameters)
+        );
     }
 
     private function init()
     {
-        $config = $this->parameters;
-        $uploadPath = $config["uploadroot"] . $config["uploadpath"];
-        $resDir = $this->container->parameters["wwwDir"] . $config["resource_dir"];
+        $uploadPath = $this->parameters["uploadroot"] . $this->parameters["uploadpath"];
+        $resDir = $this->container->parameters["wwwDir"] . $this->parameters["resource_dir"];
 
         if (!is_dir($resDir)) {
             throw new DirectoryNotFoundException("Resource dir '$resDir' does not exist!");
