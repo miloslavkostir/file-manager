@@ -88,7 +88,7 @@ class Treeview extends \Ixtrum\FileManager
 
             $path = $this->context->filesystem->getRealPath($this->context->parameters["uploadroot"] . $this->context->parameters["uploadpath"]);
 
-            $caching = parent::getParent()->context->caching;
+            $caching = $this->parent->context->caching;
             $cacheData = $caching->getItem($path);
 
             if (!$cacheData) {

@@ -43,7 +43,7 @@ class Filter extends \Ixtrum\FileManager
 
         $val = $form->values;
         $session->mask = $val["phrase"];
-        parent::getParent()->handleShowContent($actualdir);
+        $this->parent->handleShowContent($actualdir);
     }
 
 }
