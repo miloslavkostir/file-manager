@@ -89,29 +89,6 @@ class FileManager extends UI\Control
         }
     }
 
-    public function handleShowFileInfo($filename = "")
-    {
-        // if sended by AJAX
-        if (!$filename) {
-            $filename = $this->presenter->context->httpRequest->getQuery("filename");
-        }
-
-        if ($filename) {
-
-            $actualdir = $this->context->application->getActualDir();
-            if ($this->context->filesystem->validPath($actualdir, $filename)) {
-
-                $this->template->fileinfo = $actualdir;
-                $this["fileInfo"]->filename = $filename;
-                $this->invalidateControl("fileinfo");
-            } else {
-                $this->flashMessage($this->context->translator->translate("File %s not found!", $filename), "warning");
-            }
-        } else {
-            $this->flashMessage($this->context->translator->translate("Incorrect input data!"), "error");
-        }
-    }
-
     public function handleShowContent($actualdir)
     {
         if ($this->context->filesystem->validPath($actualdir)) {
@@ -182,7 +159,7 @@ class FileManager extends UI\Control
      * @param array $snippets
      * @throws \Nette\InvalidArgumentException
      */
-    protected function refreshSnippets($snippets = array())
+    public function refreshSnippets($snippets = array())
     {
         if (!$snippets) {
             $this->invalidateControl();

@@ -14,7 +14,25 @@ class Content extends \Ixtrum\FileManager
 
     public function handleShowFileInfo($filename = "")
     {
-        parent::getParent()->handleShowFileInfo($filename);
+        // if sended by AJAX
+        if (!$filename) {
+            $filename = $this->presenter->context->httpRequest->getQuery("filename");
+        }
+
+        if ($filename) {
+
+            $actualdir = $this->context->application->getActualDir();
+            if ($this->context->filesystem->validPath($actualdir, $filename)) {
+
+                $this->parent->template->fileinfo = $actualdir;
+                $this->parent["fileInfo"]->filename = $filename;
+                $this->parent->invalidateControl("fileinfo");
+            } else {
+                $this->parent->flashMessage($this->context->translator->translate("File %s not found!", $filename), "warning");
+            }
+        } else {
+            $this->parent->flashMessage($this->context->translator->translate("Incorrect input data!"), "error");
+        }
     }
 
     public function handleShowMultiFileInfo($files = array())
