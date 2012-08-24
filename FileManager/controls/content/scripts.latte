@@ -227,31 +227,8 @@ $(function() {
 
         return [o1, o2, o3, o4, o5, o6];
     }, {
-        theme: 'vista',
+        theme: "vista",
         constrainToScreen: true
-    });
-
-    $(".fm-droppable").droppable({
-        hoverClass: "fm-state-highlight",
-        drop: function(event, ui) {
-            $(this).addClass("fm-state-highlight");
-
-            var filename = ui.draggable.data("filename");
-            var targetdir = $(this).data("targetdir");
-
-            if (confirm({_'Do you really want to move this file?'})) {
-                    $.getJSON({link move!}, { filename: filename, targetdir: targetdir }, function (payload) {
-                        $.nette.success(payload);
-                        if (payload.result === 'success') {
-                            ui.draggable.remove();
-                        }
-                    });
-
-                    $.animateProgress(".file-manager", event)
-            }
-
-            $(this).removeClass("fm-state-highlight");
-        }
     });
 
 });

@@ -13,11 +13,6 @@ class Treeview extends \Ixtrum\FileManager
         parent::__construct($userConfig);
     }
 
-    public function handleMoveFile($actualdir = "", $targetdir = "", $filename = "")
-    {
-        parent::getParent()->handleMoveFile($actualdir = "", $targetdir = "", $filename = "");
-    }
-
     public function render()
     {
         $template = $this->template;
@@ -33,8 +28,8 @@ class Treeview extends \Ixtrum\FileManager
         foreach ($dirs as $key => $value) {
 
             $html .= "<li>";
-            $html .= '<span class="folder fm-droppable" data-targetdir="' . $superior . '/' . $key . '/' . '">';
-            $html .= '<a href="' . parent::getParent()->link("showContent", "$superior/$key/") . '" class="treeview-folder fm-ajax" title="' . $this->context->filesystem->getRootName() . $superior . '/' . $key . '/">';
+            $html .= '<span class="folder fm-droppable" data-move-url="'.$this->parent["content"]->link("move").'" data-targetdir="' . $superior . '/' . $key . '/' . '">';
+            $html .= '<a href="' . $this->parent->link("showContent", "$superior/$key/") . '" class="treeview-folder fm-ajax" title="' . $this->context->filesystem->getRootName() . $superior . '/' . $key . '/">';
             $html .= $key;
             $html .= '</a></span>';
 
@@ -69,12 +64,11 @@ class Treeview extends \Ixtrum\FileManager
     private function generateTreeview()
     {
         $dirs = $this->getDirTree($this->context->parameters["uploadroot"] . $this->context->parameters["uploadpath"]);
-
         $rootname = $this->context->filesystem->getRootName();
 
         $output = '<ul class="filetree">';
-        $output .= '<span class="fm-droppable folder-root" data-targetdir="' . $rootname . '">';
-        $output .= '<a href="' . parent::getParent()->link("showContent", $rootname) . '" class="fm-ajax treeview-folder" title="' . $rootname . '">';
+        $output .= '<span class="fm-droppable folder-root" data-move-url="'.$this->parent["content"]->link("move").'" data-targetdir="' . $rootname . '">';
+        $output .= '<a href="' . $this->parent->link("showContent", $rootname) . '" class="fm-ajax treeview-folder" title="' . $rootname . '">';
         $output .= $rootname;
         $output .= '</a></span>';
         $output .= $this->generateTree($dirs, null);

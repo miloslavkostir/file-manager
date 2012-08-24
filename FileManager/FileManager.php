@@ -54,11 +54,6 @@ class FileManager extends UI\Control
         parent::attached($presenter);
     }
 
-    public function handleMove()
-    {
-        $this["content"]->handleMove();
-    }
-
     public function handleRefreshContent()
     {
         $actualdir = $this->context->application->getActualDir();
