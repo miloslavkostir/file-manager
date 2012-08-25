@@ -109,6 +109,10 @@ class FileManager extends UI\Control
 
     public function render()
     {
+        $this->flashMessage("dsa", "warning");
+        $this->flashMessage("dsa", "error");
+        $this->flashMessage("dsa");
+        $this->flashMessage("dsa2");
         $template = $this->template;
         $template->setFile(__DIR__ . "/FileManager.latte");
         $template->setTranslator($this->context->translator);
@@ -152,6 +156,11 @@ class FileManager extends UI\Control
                 $template->fileInfoPlugins = $fileInfoPlugins;
             }
         }
+
+        // Sort flash messages; 1=error, 2=warning, 3=info
+        usort($template->flashes, function($flash, $nextFlash) {
+             return ($flash->type === "error") ? -1 : 1;
+        });
 
         $template->render();
     }
