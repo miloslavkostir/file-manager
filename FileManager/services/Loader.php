@@ -19,6 +19,7 @@ final class Loader extends Container
         $config = $loader->load("$rootPath/config/config.neon");
         $config["parameters"] = array_merge($config["parameters"], $userConfig);
         $config["parameters"]["rootPath"] = $rootPath;
+        $config["parameters"]["resPath"] = $container->parameters["wwwDir"] . $config["parameters"]["resDir"];
 
         if (!isset($config["parameters"]["uploadroot"])) {
             $config["parameters"]["uploadroot"] = $rootPath;
@@ -71,12 +72,6 @@ final class Loader extends Container
     private function init()
     {
         $uploadPath = $this->parameters["uploadroot"] . $this->parameters["uploadpath"];
-        $resDir = $this->container->parameters["wwwDir"] . $this->parameters["resource_dir"];
-
-        if (!is_dir($resDir)) {
-            throw new DirectoryNotFoundException("Resource dir '$resDir' does not exist!");
-        }
-
         if (!is_dir($uploadPath)) {
             throw new DirectoryNotFoundException("Upload path '$uploadPath' doesn't exist!");
         }
