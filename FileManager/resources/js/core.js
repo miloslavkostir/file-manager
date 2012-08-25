@@ -103,7 +103,7 @@ $(function() {
         mb.fadeOut(500);
     }, 15000));
 
-    $(".fm-alert").delegate(".fm-show-messages", "click", function() {
+    $(".file-manager").delegate(".fm-show-messages", "click", function() {
         $(".fm-alert-message-text").toggleClass("fm-hide");
     });
 
