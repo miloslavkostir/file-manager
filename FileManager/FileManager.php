@@ -34,9 +34,15 @@ class FileManager extends UI\Control
     {
         if ($presenter instanceof UI\Presenter) {
 
-            $this->context = new FileManager\Services\Loader($this->presenter->context, $this->userConfig, __DIR__);
+            // Load system configuration
+            $this->context = new FileManager\Services\Loader(
+                    $this->presenter->context,
+                    $this->userConfig,
+                    __DIR__
+            );
             $this->context->freeze();
 
+            // Get/set actual dir
             $actualdir = $this->context->application->getActualdir();
             if ($actualdir) {
 
@@ -46,6 +52,7 @@ class FileManager extends UI\Control
                 }
             }
 
+            // Load plugins
             $this->plugins = $this->context->plugins->loadPlugins();
 
             $this->refreshSnippets(array("message", "diskusage"));
@@ -109,15 +116,32 @@ class FileManager extends UI\Control
 
     public function render()
     {
+        \Nette\Diagnostics\Debugger::barDump($this->context, "Ixtrum container");
+
+        // Load resources
+        if ($this->context->parameters["synchronizeResDir"] === true) {
+            $resources = new FileManager\Application\Resources(
+                    $this->context->parameters["resPath"],
+                    $this->context->parameters["rootPath"]
+            );
+            $resources->synchronize();
+        }
+        $this->template->resDir = $this->context->parameters["resDir"];
+
         $template = $this->template;
         $template->setFile(__DIR__ . "/FileManager.latte");
         $template->setTranslator($this->context->translator);
 
         $session = $this->presenter->context->session->getSection("file-manager");
-        $clipboard = $session->clipboard;
 
-        if ($clipboard) {
+        if ($session->clipboard) {
             $template->clipboard = $session->clipboard;
+        }
+
+        if ($session->theme) {
+            $template->theme = $session->theme;
+        } else {
+            $template->theme = "default";
         }
 
         if (!isset($template->content)) {
@@ -152,6 +176,11 @@ class FileManager extends UI\Control
                 $template->fileInfoPlugins = $fileInfoPlugins;
             }
         }
+
+        // Sort flash messages; 1=error, 2=warning, 3=info
+        usort($template->flashes, function($flash, $nextFlash) {
+             return ($flash->type === "error") ? -1 : 1;
+        });
 
         $template->render();
     }

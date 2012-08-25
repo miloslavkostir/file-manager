@@ -19,12 +19,11 @@ $(function() {
         $(".file-manager").bind("snippetUpdated", function() {
 
                 /** Main */
-                $('.fm-alert').width($(".file-manager").width());
 
                 // http://stackoverflow.com/questions/2884221/how-to-start-stop-restart-jquery-animation
-                var mb = $('.fm-alert').stop(true, true).fadeIn();
-                if(mb.data('delay')) clearTimeout(mb.data('delay'));
-                mb.data('delay', setTimeout(function() { mb.fadeOut(500); }, 10000));
+                var mb = $(".fm-alert").stop(true, true).fadeIn();
+                if(mb.data("delay")) clearTimeout(mb.data("delay"));
+                mb.data("delay", setTimeout(function() { mb.fadeOut(500); }, 15000));
 
                 $(".fm-draggable").draggable({
                     revert: true,
@@ -47,11 +46,10 @@ $(function() {
                                 ui.draggable.remove();
                             }
                         });
-                        $.animateProgress(".file-manager", event)
-                        $(this).removeClass("fm-state-highlight");
-                    }
+                         $.animateProgress(".file-manager", event);
+                         $(this).removeClass("fm-state-highlight");
+                     }
                 });
-
 
                 /** Clipboard */
                 $('.fm-clipboard').css({
@@ -93,14 +91,18 @@ $(function() {
 
 
         /** Main */
-        $('.fm-alert').delegate('.fm-show-messages', 'click', function() {
-                $(".fm-other-messages").toggleClass("fm-hide");
+        // http://stackoverflow.com/questions/2884221/how-to-start-stop-restart-jquery-animation
+        var mb = $(".fm-alert").stop(true, true).fadeIn();
+        if(mb.data("delay")) clearTimeout(mb.data("delay"));
+        mb.data("delay", setTimeout(function() { mb.fadeOut(500); }, 15000));
+
+        $(".fm-alert").delegate(".fm-show-messages", "click", function() {
+                $(".fm-alert-message-text").toggleClass("fm-hide");
         });
 
-        $('.fm-alert').delegate('.fm-icon-close', 'click', function() {
-                $(".fm-alert, .fm-other-messages").hide();
+        $(".fm-alert").delegate(".fm-close", "click", function() {
+                $(".fm-alert").remove();
         });
-
 
         $(".file-manager").delegate("a.fm-ajax", "click", function(e) {
                 $.getJSON(this.href);
@@ -128,10 +130,10 @@ $(function() {
                 return false;
         });
 
-        $(".file-manager").delegate("#frm-fileManager-viewSelector-changeViewForm", "change", function(e) {
-                $(this).ajaxSubmit();
-                $.animateProgress(".file-manager", e);
-                return false;
+        $(".file-manager").delegate(".ajax-select-form", "change", function(event) {
+            event.preventDefault();
+            $(this).ajaxSubmit();
+            $.animateProgress(".file-manager", event);
         });
 
         $(".fm-draggable").draggable({
@@ -155,11 +157,10 @@ $(function() {
                         ui.draggable.remove();
                     }
                 });
-                $.animateProgress(".file-manager", event)
-                $(this).removeClass("fm-state-highlight");
-            }
+                 $.animateProgress(".file-manager", event);
+                 $(this).removeClass("fm-state-highlight");
+             }
         });
-
 
         /* Filter mask */
         $('body').delegate('.fm-filter-form input', 'focusin', function() {
@@ -239,7 +240,7 @@ $(function() {
                 $(ui.unselecting).removeClass("selected");
             }
         });
-  });
+});
 
 
 /** Custom functions */

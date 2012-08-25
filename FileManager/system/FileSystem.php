@@ -89,10 +89,10 @@ class FileSystem
                 }
             } else {
 
-                    if ($this->copyFile($actualpath . $filename, $targetpath . $this->checkDuplName($targetpath, $filename))) {
-                        return true;
-                    }
-                    return false;
+                if ($this->copyFile($actualpath . $filename, $targetpath . $this->checkDuplName($targetpath, $filename))) {
+                    return true;
+                }
+                return false;
             }
         } else {
             return false;
@@ -356,11 +356,12 @@ class FileSystem
      *
      * @param string $actualdir
      * @param string $filename
+     *
      * @return array
      */
     public function fileDetails($actualdir, $filename)
     {
-        $thumb_dir = $this->config["resource_dir"] . "img/icons/";
+        $thumbDir = $this->config["resDir"] . "img/icons/";
         $uploadpath = $this->config["uploadpath"];
         $rootname = $this->getRootName();
         $uploadroot = $this->config["uploadroot"];
@@ -377,10 +378,10 @@ class FileSystem
             $info["modificated"] = date("F d Y H:i:s", filemtime($path));
             $info["permissions"] = $this->getFileMod($path);
 
-            if (file_exists($this->context->parameters["wwwDir"] . $thumb_dir . "large/" . strtolower($info["type"]) . ".png" && strtolower($info["type"]) <> "folder")) {
-                $info["icon"] = $thumb_dir . "large/" . $info['type'] . ".png";
+            if (file_exists($this->context->parameters["wwwDir"] . $thumbDir . "large/" . strtolower($info["type"]) . ".png" && strtolower($info["type"]) <> "folder")) {
+                $info["icon"] = $thumbDir . "large/" . $info['type'] . ".png";
             } else {
-                $info["icon"] = $thumb_dir . "large/icon.png";
+                $info["icon"] = $thumbDir . "large/icon.png";
             }
         } else {
 
@@ -393,7 +394,7 @@ class FileSystem
             $info["files_count"] = $folder_info["count"];
             $info["modificated"] = date("F d Y H:i:s", filemtime($path));
             $info["permissions"] = $this->getFileMod($path);
-            $info["icon"] = $thumb_dir . "large/folder.png";
+            $info["icon"] = $thumbDir . "large/folder.png";
         }
 
         return $info;

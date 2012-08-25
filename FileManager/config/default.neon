@@ -1,9 +1,9 @@
 parameters:
+	synchronizeResDir: true
 	uploadpath: /data/
 	cache: true
 	cacheStorage: FileStorage
 	readonly:
-	resource_dir: /ixtrum/
 	quota:
 	quota_limit: 20 # MB
 	lang: en

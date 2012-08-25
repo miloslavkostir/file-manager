@@ -1,7 +1,17 @@
+<!-- load CSS -->
+<link rel="stylesheet" href="{$basePath}{$resDir}themes/{$theme}/css/fm-main.css" type="text/css" />
+<link rel="stylesheet" href="{$basePath}{$resDir}themes/{$theme}/css/jquery.treeview.css" type="text/css" />
+<link rel="stylesheet" href="{$basePath}{$resDir}themes/{$theme}/css/jquery.contextmenu.css" type="text/css" />
+
+<!-- load JS -->
+<script type="text/javascript" src="{$basePath}{$resDir}js/jquery.nette.js"></script>
+<script type="text/javascript" src="{$basePath}{$resDir}js/jquery.ajaxform.js"></script>
+<script src="{$basePath}{$resDir}js/jquery.treeview.js" type="text/javascript"></script>
+<script src="{$basePath}{$resDir}js/jquery.cookie.js" type="text/javascript"></script>
+<script src="{$basePath}{$resDir}js/jquery.contextmenu.js" type="text/javascript"></script>
+<script src="{$basePath}{$resDir}js/core.js" type="text/javascript"></script>
+
 <div class="file-manager">
-    <div n:snippet="message" class="fm-alert">
-        {include 'templates/messages.latte'}
-    </div>
     <div class="fm-adressbar">
         <ul>
             <li n:snippet="addressbar" class="fm-location">
@@ -36,9 +46,26 @@
                 {/ifset}
             </li>
             <li class="fm-right">
+                {control themes}
                 {control viewSelector}
             </li>
         </ul>
+    </div>
+    <div n:snippet="message" class="fm-alert-message">
+        <div n:if="$flashes" n:class="$flashes[0]->type, fm-alert">
+            <span class="fm-close fm-right" title="{_'Close'}">&times;</span>
+            {if count($flashes) > 1}
+                <strong>{_'%d messages', count($flashes)}</strong>
+                <a class="fm-show-messages">{_'View all'}</a>
+                <div n:foreach="$flashes as $flash" class="fm-alert-message-text fm-hide">
+                    <i class="fm-icon fm-icon-{$flash->type} fm-left"></i>
+                    {$flash->message}
+                </div>
+            {else}
+                <i class="fm-icon fm-icon-{$flashes[0]->type}"></i>
+                {$flashes[0]->message}
+            {/if}
+        </div>
     </div>
     <div class="fm-body">
             <div n:snippet="treeview" class="fm-treeview">
