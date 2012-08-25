@@ -133,10 +133,15 @@ class FileManager extends UI\Control
         $template->setTranslator($this->context->translator);
 
         $session = $this->presenter->context->session->getSection("file-manager");
-        $clipboard = $session->clipboard;
 
-        if ($clipboard) {
+        if ($session->clipboard) {
             $template->clipboard = $session->clipboard;
+        }
+
+        if ($session->theme) {
+            $template->theme = $session->theme;
+        } else {
+            $template->theme = "default";
         }
 
         if (!isset($template->content)) {

@@ -130,10 +130,10 @@ $(function() {
                 return false;
         });
 
-        $(".file-manager").delegate("#frm-fileManager-viewSelector-changeViewForm", "change", function(e) {
-                $(this).ajaxSubmit();
-                $.animateProgress(".file-manager", e);
-                return false;
+        $(".file-manager").delegate(".ajax-select-form", "change", function(event) {
+            event.preventDefault();
+            $(this).ajaxSubmit();
+            $.animateProgress(".file-manager", event);
         });
 
         $(".fm-draggable").draggable({

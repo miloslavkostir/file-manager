@@ -86,6 +86,7 @@
 
 .fm-toolbar { width: auto; background: transparent url(../img/navbar.png) 0 0 repeat-x; height: 31px; padding:0 3px; }
 .fm-toolbar ul { width: 100%; list-style: none outside none; margin: 0; padding: 0; }
+.fm-toolbar ul form { padding-left: 5px; }
 .fm-toolbar li { float: left; padding: 3px 3px 4px; position: relative; }
 .fm-toolbar li a.fm-toolbar-item { color: #003366; float: left; line-height: 24px; }
 .fm-toolbar li a.fm-toolbar-item:hover { background: url(../img/navbar.png) right -79px no-repeat; }
