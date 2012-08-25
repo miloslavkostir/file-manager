@@ -100,7 +100,7 @@ $(function() {
                 $(".fm-alert-message-text").toggleClass("fm-hide");
         });
 
-        $(".fm-alert").delegate(".fm-close", "click", function() {
+        $(".file-manager").delegate(".fm-close", "click", function() {
                 $(".fm-alert").remove();
         });
 
