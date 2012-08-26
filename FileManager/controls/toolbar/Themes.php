@@ -27,7 +27,8 @@ class Themes extends \Ixtrum\FileManager
     protected function createComponentThemeForm()
     {
         $form = new \Nette\Application\UI\Form;
-        $form->addSelect("theme", NULL, $this->loadThemes());
+        $form->addSelect("theme", NULL, $this->loadThemes())
+                ->setAttribute("onchange", "submit()");
         $form->onSuccess[] = $this->themeFormSubmitted;
         return $form;
     }
@@ -36,7 +37,7 @@ class Themes extends \Ixtrum\FileManager
     {
         $session = $this->presenter->context->session->getSection("file-manager");
         $session->theme = $form->values->theme;
-        $this->parent->handleShowContent($this->context->application->getActualDir());
+        $this->redirect("this");
     }
 
     /**
