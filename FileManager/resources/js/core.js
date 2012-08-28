@@ -64,7 +64,7 @@ $(function() {
 
 
         /* Filter mask */
-        $(".fm-filter-form input").blur();
+        $(".fm-filter input").blur();
 
 
         /* Treeview */
@@ -173,21 +173,21 @@ $(function() {
     });
 
     /* Filter mask */
-    $('body').delegate('.fm-filter-form input', 'focusin', function() {
+    $('body').delegate('.fm-filter input', 'focusin', function() {
         if ($(this).val() == $(this)[0].title) {
             $(this).removeClass('active');
             $(this).val("");
         }
     });
 
-    $('body').delegate('.fm-filter-form input', 'focusout', function() {
+    $('body').delegate('.fm-filter input', 'focusout', function() {
         if ($(this).val() == '') {
             $(this).addClass('active');
             $(this).val($(this)[0].title);
         }
     });
 
-    $(".fm-filter-form input").blur();
+    $(".fm-filter input").blur();
 
 
     /* Navigation */

@@ -12,19 +12,17 @@
 
 <div class="file-manager">
     <div class="fm-adressbar">
-        <ul>
-            <li n:snippet="addressbar" class="fm-location">
-                {control navigation}
-            </li>
-            <li class="fm-refresh">
-                <a n:href="refreshContent!" title="{_'Refresh content'}" class="fm-ajax">
-                    <div class="fm-refresh-icon"></div>
-                </a>
-            </li>
-            <li n:snippet="filter" class="fm-filter">
-                {control filter}
-            </li>
-        </ul>
+        <div n:snippet="addressbar" class="fm-location">
+            {control navigation}
+        </div>
+        <div class="fm-refresh">
+            <a n:href="refreshContent!" title="{_'Refresh content'}" class="fm-ajax">
+                <div class="fm-refresh-icon"></div>
+            </a>
+        </div>
+        <div n:snippet="filter" class="fm-filter">
+            {control filter}
+        </div>
         <div class="fm-clear"></div>
     </div>
     <div n:snippet="toolbar" class="fm-toolbar">
