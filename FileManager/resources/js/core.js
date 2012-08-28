@@ -256,7 +256,7 @@ $(function() {
 /** Custom functions */
 (function($) {
 
-    // disable file manager and show spinner
+    // disable file manager and show ajax loader
     $.animateProgress = function(selector, e) {
         var fm = $(selector);
         $('<div class="fm-inactive"></div>').css({
@@ -269,7 +269,7 @@ $(function() {
 
         }).appendTo(fm);
 
-        $('<div id="fm-ajax-spinner"></div>').css({
+        $('<div class="fm-ajax-loader"></div>').css({
             position: "absolute",
             left: e.pageX + 20,
             top: e.pageY + 40

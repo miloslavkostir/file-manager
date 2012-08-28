@@ -1,8 +1,8 @@
 <ul>
     <li><h2>{_'Disk usage'}</h2></li>
     <li>
-        <div class="fm-progressbar">
-            <div class="fm-progressbar-value" style="width: {$sizeinfo['percentused']}%;"></div>
+        <div class="fm-disk-status">
+            <span style="width: {$sizeinfo['percentused']}%;"></span>
         </div>
     </li>
     <li>{_'Used'}: <strong>{$sizeinfo['usedsize']|bytes}</strong></li>
