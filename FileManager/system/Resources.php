@@ -60,11 +60,14 @@ class Resources
                 $this->copyFolder($sourceFile, $targetFile);
             } else {
                 if (!file_exists($targetFile)) {
-                    $this->copyFile($sourceFile, $targetFile);
-                    \Nette\Diagnostics\FireLogger::log("Resources: new file $targetFile");
+                    if ($this->copyFile($sourceFile, $targetFile)) {
+;
+                        \Nette\Diagnostics\FireLogger::log("Resources: new file $targetFile");
+                    }
                 } elseif (filesize($targetFile) != filesize($sourceFile)) {
-                    $this->copyFile($sourceFile, $targetFile);
-                    \Nette\Diagnostics\FireLogger::log("Resources: modified file $targetFile");
+                    if ($this->copyFile($sourceFile, $targetFile)) {
+                        \Nette\Diagnostics\FireLogger::log("Resources: modified file $targetFile");
+                    }
                 }
             }
         }
@@ -77,13 +80,26 @@ class Resources
      *
      * @param string $src  source file
      * @param string $dest destination file
+     *
+     * @return boolean
      */
     public function copyFile($src, $dest)
     {
         $buffer_size = 1048576;
         $ret = 0;
-        $fin = fopen($src, "rb");
-        $fout = fopen($dest, "w");
+
+        $fin = @fopen($src, "rb");
+        if ($fin == false) {
+            \Nette\Diagnostics\FireLogger::log("Resources: can not open file $src for reading", \Nette\Diagnostics\FireLogger::WARNING);
+            \Nette\Diagnostics\Debugger::log("Resources: can not open file $dest for reading", \Nette\Diagnostics\Debugger::WARNING);
+            return false;
+        }
+        $fout = @fopen($dest, "w");
+        if ($fout == false) {
+            \Nette\Diagnostics\FireLogger::log("Resources: can not open file $dest for writting", \Nette\Diagnostics\FireLogger::WARNING);
+            \Nette\Diagnostics\Debugger::log("Resources: can not open file $dest for writting", \Nette\Diagnostics\Debugger::WARNING);
+            return false;
+        };
 
         while (!feof($fin)) {
             $ret += fwrite($fout, fread($fin, $buffer_size));
@@ -91,6 +107,7 @@ class Resources
 
         fclose($fin);
         fclose($fout);
+        return true;
     }
 
     /**
