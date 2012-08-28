@@ -60,13 +60,13 @@
 .fm-adressbar { width: 100%; background: url(../img/addressbar.png) repeat transparent;}
 .fm-adressbar .fm-location { width: 75%; float: left; margin-left: 5px; margin-top: 7px; margin-bottom: 7px; position: relative;}
 .fm-adressbar .fm-location form { width: 100%; height: 24px; margin: 0; padding: 0; }
-.fm-adressbar .fm-location input { padding-left: 25px; width: 100%; height: 24px; border: 1px solid #CCCCCC; background: url(../img/adressbar-background.png) repeat transparent; font-family: 'Segoe UI', 'MS Sans Serif', sans-serif; font-size: 12px; }
+.fm-adressbar .fm-location input { padding-left: 25px; width: 100%; height: 24px; border: 1px solid #CCCCCC; background: url(../img/adressbar-bg.png) repeat transparent; font-family: 'Segoe UI', 'MS Sans Serif', sans-serif; font-size: 12px; }
 .fm-adressbar .fm-location input.active { background: url(../img/icons/folder.gif) no-repeat 0 50% #FFFFFF; }
-.fm-adressbar .fm-navigation { position: absolute; border-top: 1px solid #CCCCCC; border-bottom: 1px solid #CCCCCC; height: 26px; line-height: 26px; background: url(../img/adressbar-background.png) repeat transparent; }
+.fm-adressbar .fm-navigation { position: absolute; border-top: 1px solid #CCCCCC; border-bottom: 1px solid #CCCCCC; height: 26px; line-height: 26px; background: url(../img/adressbar-bg.png) repeat transparent; }
 .fm-adressbar .fm-navigation .fm-navigation-root { display: block; margin-left: 4px; height: 26px; width: 20px; float: left; background: url(../img/icons/folder.gif) no-repeat 50% 50% transparent; }
 .fm-adressbar .fm-navigation a span { height: 26px; float: left; background: url(../img/arrow.png) no-repeat scroll right; padding: 0 14px 0 5px; }
 .fm-adressbar .fm-navigation a span:hover { background: url(../img/nav_hover.png) repeat transparent; }
-.fm-adressbar .fm-refresh { width: 26px; height: 26px; float: left; background: url(../img/adressbar-background.png) repeat transparent; border: 1px solid #CCCCCC; cursor: pointer; margin-top: 7px; margin-bottom: 7px; position: relative; }
+.fm-adressbar .fm-refresh { width: 26px; height: 26px; float: left; background: url(../img/adressbar-bg.png) repeat transparent; border: 1px solid #CCCCCC; cursor: pointer; margin-top: 7px; margin-bottom: 7px; position: relative; }
 .fm-adressbar .fm-refresh:hover { background: url(../img/nav_hover.png) repeat transparent; }
 .fm-adressbar .fm-refresh .fm-refresh-icon { background: url(../img/icons/refresh.png) no-repeat 50% 50% transparent; margin: 5px 0 0 5px; width: 15px; height: 15px; border: none; }
 .fm-adressbar .fm-filter { float: left; margin-top: 7px; margin-bottom: 7px; position: relative; }
