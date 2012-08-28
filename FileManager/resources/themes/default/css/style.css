@@ -215,7 +215,7 @@
     -khtml-border-radius: 3px;
     border-radius: 3px;
 }
-.fm-info-bar .fm-disk-usage .fm-disk-status span { height: 100%; background: url(../img/diskstatus.png) repeat-x; }
+.fm-info-bar .fm-disk-usage .fm-disk-status span { height: 100%; background: url(../img/disk-status-bar.png) repeat-x; display: block; }
 .fm-info-bar .fm-file-info-plugins { margin: 10px; float: right; }
 .fm-info-bar .fm-file-info-plugins .fm-file-info-plugin { margin: 5px; }
 .fm-info-bar .fm-file-info { margin: 10px; }
