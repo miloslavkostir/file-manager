@@ -185,9 +185,12 @@
 .fm-body .fm-files-list li.selected { background: url(../img/addressbar.png) repeat scroll 0 0 transparent; border-color: #624BD1; color: #ffffff; }
 .fm-body .fm-files-list li.selected:hover { background: url(../img/addressbar.png) repeat scroll 0 0 transparent; border-color: #624BD1; color: #ffffff; }
 .fm-body .fm-files-details { width: auto; height: 430px; overflow: auto; }
-.fm-body .fm-files-details table { border-collapse: collapse; }
-.fm-body .fm-files-details tbody tr { border: 1px solid #ffffff; height: 24px; text-align: left; margin: 1px; }
-.fm-body .fm-files-details tbody tr:hover { background: url(../img/icons_hover.png) repeat; border: 1px solid #D6E5F5; }
+.fm-body .fm-files-details a { color: #003366; }
+.fm-body .fm-files-details table { border-collapse: collapse; width: 99%; }
+.fm-body .fm-files-details tr { text-align: left; }
+.fm-body .fm-files-details thead tr { height: 28px; }
+.fm-body .fm-files-details tbody tr { border: 1px solid #ffffff; height: 24px; color: #586b7d; }
+.fm-body .fm-files-details tbody tr:hover { background: url(../img/icons_hover.png) repeat; border-color: #D6E5F5; }
 .fm-body .fm-files-details tr.selected { background: url(../img/addressbar.png) repeat scroll 0 0 transparent; border: 1px solid #624BD1; color: #ffffff; }
 .fm-body .fm-files-details tr.selected:hover { background: url(../img/addressbar.png) repeat scroll 0 0 transparent; border: 1px solid #624BD1; color: #ffffff; }
 .fm-body .fm-files-details tbody td { height: 24px; text-align: left; padding-left: 5px; }
