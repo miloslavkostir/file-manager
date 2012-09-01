@@ -76,14 +76,14 @@ $(function() {
 
 
         /* Content */
-        $(".fm-files-content ul").shiftClick("li", "selected");
+        $(".fm-content-files ul").shiftClick("li", "selected");
 
         $.ctrl("A", function() {
-            $(".fm-files-content ul").markAll("li", "selected");
+            $(".fm-content-files ul").markAll("li", "selected");
         });
 
-        $(".fm-files-content ul").selectable({
-            filter: "li",
+        $(".fm-content-files").selectable({
+            filter: ".fm-content-file",
             selecting: function(event, ui) {
                 $(ui.selecting).addClass("selected");
             },
@@ -235,14 +235,14 @@ $(function() {
 
 
     /* Content */
-    $(".fm-files-content ul").shiftClick("li", "selected");
+    $(".fm-content-files ul").shiftClick("li", "selected");
 
     $.ctrl("A", function() {
-        $(".fm-files-content ul").markAll("li", "selected");
+        $(".fm-content-files ul").markAll("li", "selected");
     });
 
-    $(".fm-files-content ul").selectable({
-        filter: "li",
+    $(".fm-content-files").selectable({
+        filter: ".fm-content-file",
         selecting: function(event, ui) {
             $(ui.selecting).addClass("selected");
         },

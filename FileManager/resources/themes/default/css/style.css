@@ -132,20 +132,20 @@
 .fm-body .fm-content .fm-link-parent { float: right; }
 .fm-body .fm-content .fm-delimiter { clear: both; border-bottom: 1px solid #D6E5F5; }
 .fm-body .fm-files-large { width: auto; height: 430px; overflow: auto; }
-.fm-body .fm-files-large .fm-item { width: 140px; height: 121px; float: left; margin: 5px; padding: 5px; text-align: center; }
-.fm-body .fm-files-large .fm-item .fm-thumb { border-style: none; max-height: 96px; }
-.fm-body .fm-files-large .fm-item .fm-thumb.fm-photo { border: 1px solid #CCCCCC; max-height: 96px; }
-.fm-body .fm-files-large .fm-item .fm-file-name { word-wrap: break-word; }
+.fm-body .fm-files-large .fm-content-file { width: 140px; height: 121px; float: left; margin: 5px; padding: 5px; text-align: center; }
+.fm-body .fm-files-large .fm-content-file .fm-thumb { border-style: none; max-height: 96px; }
+.fm-body .fm-files-large .fm-content-file .fm-thumb.fm-photo { border: 1px solid #CCCCCC; max-height: 96px; }
+.fm-body .fm-files-large .fm-content-file .fm-file-name { word-wrap: break-word; }
 .fm-body .fm-files-large ul { list-style: none outside none; margin: 5px; padding: 10px; }
 .fm-body .fm-files-large li { border: 1px solid #ffffff; -webkit-border-radius: 4px; -moz-border-radius: 4px; border-radius: 4px; }
 .fm-body .fm-files-large li:hover { background: url(../img/icons_hover.png) repeat; border: 1px solid #D6E5F5; }
 .fm-body .fm-files-large li.selected { background: url(../img/addressbar.png) repeat scroll 0 0 transparent; border-color: #624BD1; color: #ffffff; }
 .fm-body .fm-files-large li.selected:hover { background: url(../img/addressbar.png) repeat scroll 0 0 transparent; border-color: #624BD1; color: #ffffff; }
 .fm-body .fm-files-small { width: auto; height: 430px; overflow: auto; }
-.fm-body .fm-files-small .fm-item { width: 80px; height: 121px; float: left; margin: 5px; padding: 5px; text-align: center; }
-.fm-body .fm-files-small .fm-item .fm-thumb { border-style: none; max-height: 48px; }
-.fm-body .fm-files-small .fm-item .fm-thumb.fm-photo { border: 1px solid #CCCCCC; max-height: 48px; }
-.fm-body .fm-files-large .fm-item .fm-file-name { word-wrap: break-word; }
+.fm-body .fm-files-small .fm-content-file { width: 80px; height: 121px; float: left; margin: 5px; padding: 5px; text-align: center; }
+.fm-body .fm-files-small .fm-content-file .fm-thumb { border-style: none; max-height: 48px; }
+.fm-body .fm-files-small .fm-content-file .fm-thumb.fm-photo { border: 1px solid #CCCCCC; max-height: 48px; }
+.fm-body .fm-files-large .fm-content-file .fm-file-name { word-wrap: break-word; }
 .fm-body .fm-files-small ul { list-style: none outside none; margin: 5px; padding: 10px; }
 .fm-body .fm-files-small li {
     border: 1px solid #ffffff;

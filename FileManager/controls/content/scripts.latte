@@ -1,8 +1,8 @@
 <script type="text/javascript">
 $(function() {
 
-    $(".fm-item").contextMenu(function() {
-        var selected = $(".fm-files-content .selected");
+    $(".fm-content-file").contextMenu(function() {
+        var selected = $(".fm-content-files .selected");
         if ($(selected).size() <= 1 ) {
 
                         var o1 = {},
@@ -18,7 +18,7 @@ $(function() {
                             {/ifset}
                             o7 = {};
 
-                        $(".fm-files-content ul").unmarkAll("li", "selected");
+                        $(".fm-content-files ul").unmarkAll("li", "selected");
 
 
                         o1[{_'Details'}] = function(menuItem, menuObject, e) {                            
@@ -187,7 +187,7 @@ $(function() {
         constrainToScreen: true            
     });
 
-    $('.fm-files-content').contextMenu(function() {
+    $('.fm-content-files').contextMenu(function() {
 
         var o1 = {},
             o2 = {},
@@ -197,7 +197,7 @@ $(function() {
             o6 = {};
 
         o1[{_'Select all'}] = function(menuItem, menuObject) {
-            $(".fm-files-content ul").markAll("li", "selected");
+            $(".fm-content-files ul").markAll("li", "selected");
         }
 
         o2[{_'Sort by name'}] = function(menuItem, menuObject, e) {

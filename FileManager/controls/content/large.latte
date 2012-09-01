@@ -6,10 +6,10 @@
     <h2>[..]</h2>
 </a>
 <div class="fm-delimiter"></div>
-<div class="fm-files-content fm-files-large">
+<div class="fm-content-files fm-files-large">
     <ul>
         <li n:foreach="$files as $item"
-            class="fm-item"
+            class="fm-content-file"
             data-filename="{$item['filename']}">
                     {if $item['create_thumb'] <> 1}
                             {if $item['type'] == 'file'}

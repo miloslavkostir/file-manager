@@ -6,8 +6,8 @@
     <h2>[..]</h2>
 </a>
 <div class="fm-delimiter"></div>
-<div class="fm-files-content fm-files-details">
-    <table>
+<div class="fm-content-files fm-files-details">
+    <table cellspacing="0">
         <thead>
             <tr>
                 <th><a n:href="orderBy!, 'name'" class="fm-ajax">{_'Name'}</a></th>
@@ -18,7 +18,7 @@
         </thead>
         <tbody>
             <tr n:foreach="$files as $item"
-                class="fm-item"
+                class="fm-content-file"
                 data-filename="{$item['filename']}">
                 <td>
                     {if $item['type'] == 'file'}
