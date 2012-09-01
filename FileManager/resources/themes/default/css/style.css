@@ -30,12 +30,11 @@
 
 
 /** Icons */
-.fm-icon { width: 16px; height: 16px; display: block; text-indent: -99999px;
-          overflow: hidden; background-repeat: no-repeat; padding-right: 5px; }
-.fm-icon-remove {  background-image: url(../img/icons/remove.png); }
-.fm-icon-info { background-image: url(../img/icons/info.png); }
-.fm-icon-error { background-image: url(../img/icons/error.png); }
-.fm-icon-warning { background-image: url(../img/icons/warning.png); }
+.fm-icon { width: 16px; height: 16px; display: block; text-indent: -99999px; overflow: hidden; background-repeat: no-repeat; padding-right: 5px; }
+.fm-icon-remove { background-image: url(../img/icons/remove.png); }
+.fm-icon-info { float: left; background-image: url(../img/icons/info.png); }
+.fm-icon-error { float: left; background-image: url(../img/icons/error.png); }
+.fm-icon-warning { float: left; background-image: url(../img/icons/warning.png); }
 
 
 
@@ -205,7 +204,7 @@
 .fm-info-bar h2 { margin: 2px 0 2px 0; }
 .fm-info-bar ul { list-style: none outside none; margin: 0; padding: 0; }
 .fm-info-bar strong { color: #003366; font-weight: normal; }
-.fm-info-bar .fm-disk-usage { margin: 10px; }
+.fm-info-bar .fm-disk-usage { margin: 10px; float: left; }
 .fm-info-bar .fm-disk-usage .fm-disk-status {
     height: 12px;
     border: 1px solid #9f9f9f;
@@ -217,6 +216,6 @@
 .fm-info-bar .fm-disk-usage .fm-disk-status span { height: 100%; background: url(../img/disk-status-bar.png) repeat-x; display: block; }
 .fm-info-bar .fm-file-info-plugins { margin: 10px; float: right; }
 .fm-info-bar .fm-file-info-plugins .fm-file-info-plugin { margin: 5px; }
-.fm-info-bar .fm-file-info { margin: 10px; }
+.fm-info-bar .fm-file-info { margin: 10px; float: left; }
 .fm-info-bar .fm-file-info li { float: left; }
 .fm-info-bar .fm-file-info .fm-file-info-details li { float: none; }

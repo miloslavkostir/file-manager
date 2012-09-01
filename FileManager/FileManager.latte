@@ -53,11 +53,11 @@
                 <strong>{_'%d messages', count($flashes)}</strong>
                 <a class="fm-show-messages">{_'View all'}</a>
                 <div n:foreach="$flashes as $flash" class="fm-alert-message-text fm-hide">
-                    <i class="fm-icon fm-icon-{$flash->type} fm-left"></i>
+                    <i class="fm-icon fm-icon-{$flash->type}"></i>
                     {$flash->message}
                 </div>
             {else}
-                <i class="fm-icon fm-icon-{$flashes[0]->type} fm-left"></i>
+                <i class="fm-icon fm-icon-{$flashes[0]->type}"></i>
                 {$flashes[0]->message}
             {/if}
         </div>
@@ -78,10 +78,10 @@
             </div>
     </div>
     <div class="fm-info-bar">
-        <div n:snippet="diskusage" class="fm-disk-usage fm-left">
+        <div n:snippet="diskusage" class="fm-disk-usage">
             {control diskUsage}
         </div>
-        <div n:snippet="fileinfo" class="fm-file-info fm-left">
+        <div n:snippet="fileinfo" class="fm-file-info">
             {ifset $fileinfo}
                 {control fileInfo}
             {/ifset}
