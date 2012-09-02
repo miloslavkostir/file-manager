@@ -79,7 +79,7 @@ $(function() {
         $(".fm-content-files ul").shiftClick("li", "selected");
 
         $.ctrl("A", function() {
-            $(".fm-content-files ul").markAll("li", "selected");
+            $(".fm-content-file").addClass("selected");
         });
 
         $(".fm-content-files").selectable({
@@ -238,7 +238,7 @@ $(function() {
     $(".fm-content-files ul").shiftClick("li", "selected");
 
     $.ctrl("A", function() {
-        $(".fm-content-files ul").markAll("li", "selected");
+        $(".fm-content-file").addClass("selected");
     });
 
     $(".fm-content-files").selectable({
@@ -265,42 +265,42 @@ $(function() {
      * @version     0.2
      */
     jQuery.extend({
-            nette: {
-                    updateSnippet: function (id, html) {
-                            var el = $("#" + id);
-                            jQuery.nette.changeContent(el, html);
-                            el.trigger("snippetUpdated", [el]);
-                    },
+        nette: {
+            updateSnippet: function (id, html) {
+                var el = $("#" + id);
+                jQuery.nette.changeContent(el, html);
+                el.trigger("snippetUpdated", [el]);
+            },
 
-                    changeContent: function (element, content) {
-                            element.html(content);
-                    },
+            changeContent: function (element, content) {
+                element.html(content);
+            },
 
-                    success: function (payload) {
+            success: function (payload) {
 
-                            // empty payload
-                            if (payload === null || payload === undefined)
-                                    return;
+                // empty payload
+                if (payload === null || payload === undefined)
+                    return;
 
-                            // redirect
-                            if (payload.redirect) {
-                                    window.location.href = payload.redirect;
-                                    return;
-                            }
+                // redirect
+                if (payload.redirect) {
+                    window.location.href = payload.redirect;
+                    return;
+                }
 
-                            // snippets
-                            if (payload.snippets) {
-                                    for (var i in payload.snippets) {
-                                            jQuery.nette.updateSnippet(i, payload.snippets[i]);
-                                    }
-                            }
+                // snippets
+                if (payload.snippets) {
+                    for (var i in payload.snippets) {
+                        jQuery.nette.updateSnippet(i, payload.snippets[i]);
                     }
+                }
             }
+        }
     });
 
     jQuery.ajaxSetup({
-            success: jQuery.nette.success,
-            dataType: "json"
+        success: jQuery.nette.success,
+        dataType: "json"
     });
 
     // disable file manager and show ajax loader
@@ -366,20 +366,6 @@ $(function() {
                 callback.apply(this, args);
                 return false;
             }
-        });
-    };
-
-
-    $.fn.markAll = function(tag, clickedClass) {
-        this.children(tag).each(function() {
-            $(this).addClass(clickedClass);
-        });
-    };
-
-
-    $.fn.unmarkAll = function(tag, clickedClass) {
-        this.children(tag).each(function() {
-            $(this).removeClass(clickedClass);
         });
     };
 
