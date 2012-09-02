@@ -18,20 +18,17 @@ $(function() {
                             {/ifset}
                             o7 = {};
 
-                        $(".fm-content-files ul").unmarkAll("li", "selected");
-
-
-                        o1[{_'Details'}] = function(menuItem, menuObject, e) {                            
+                        o1[{_'Details'}] = function(menuItem, menuObject, e) {
                                 var filename = $(this).data("filename");
                                 $(this).addClass("selected");
-                                $.getJSON({link showFileInfo!},  { filename: filename });                                                        
+                                $.getJSON({link showFileInfo!},  { filename: filename });
                                 $.animateProgress(".file-manager", e);
                         }
 
-                        o2[{_'Delete'}] = function(menuItem, menuObject, e) {                            
+                        o2[{_'Delete'}] = function(menuItem, menuObject, e) {
                                 var filename = $(this).data("filename");
-                                $(this).addClass("selected");                                            
-                                if (confirm({_'Do you really want to delete '} + filename + "?")) {                                            
+                                $(this).addClass("selected");
+                                if (confirm({_'Do you really want to delete '} + filename + "?")) {
                                     $.getJSON({link delete!},  { filename: filename });
                                     $.animateProgress(".file-manager", e);
                                 }
@@ -46,20 +43,20 @@ $(function() {
                         o4[{_'Copy'}] = function(menuItem, menuObject, e) {
                                 var filename = $(this).data("filename");
                                 $(this).addClass("selected");
-                                $.post({link copyToClipboard!},  { filename: filename });                                            
+                                $.post({link copyToClipboard!},  { filename: filename });
                                 $.animateProgress(".file-manager", e);
                         }
 
                         o5[{_'Cut'}] = function(menuItem, menuObject, e) {
                                 var filename = $(this).data("filename");
                                 $(this).addClass("selected");
-                                $.post({link cutToClipboard!},  { filename: filename });                                                        
+                                $.post({link cutToClipboard!},  { filename: filename });
                                 $.animateProgress(".file-manager", e);
                         }
 
-                        o6[{_'Download'}] = function(menuItem, menuObject, e) {                            
+                        o6[{_'Download'}] = function(menuItem, menuObject, e) {
                                 var filename = $(this).data("filename");
-                                $(this).addClass("selected");                                                                                       
+                                $(this).addClass("selected");
                                 window.location.href={link downloadFile!} + "&filename=" + filename;
                         }
 
@@ -143,7 +140,7 @@ $(function() {
                                 $.each(selected, function(i) {
                                     files[i] = $(this).data("filename");
                                 });
-                                if (confirm({_'Do you really want to delete all these files?'})) {                                            
+                                if (confirm({_'Do you really want to delete all these files?'})) {
                                     $.post({link multiDelete!},  { files: files });
                                     $.animateProgress(".file-manager", e);
                                 }
@@ -153,7 +150,7 @@ $(function() {
                                 var files = {};
                                 $.each(selected, function(i) {
                                     files[i] = $(this).data("filename");
-                                });                                           
+                                });
                                 $.post({link zip!}, { files: files });
                                 $.animateProgress(".file-manager", e);
                         }
@@ -184,7 +181,7 @@ $(function() {
         }
     }, {
         theme: "vista",
-        constrainToScreen: true            
+        constrainToScreen: true
     });
 
     $('.fm-content-files').contextMenu(function() {
@@ -197,7 +194,7 @@ $(function() {
             o6 = {};
 
         o1[{_'Select all'}] = function(menuItem, menuObject) {
-            $(".fm-content-files ul").markAll("li", "selected");
+                $(".fm-content-file").addClass("selected");
         }
 
         o2[{_'Sort by name'}] = function(menuItem, menuObject, e) {
