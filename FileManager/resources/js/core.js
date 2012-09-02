@@ -253,7 +253,9 @@ $(function() {
 });
 
 
-/** Custom functions */
+/**
+ * Custom functions & plugins
+ */
 (function($) {
 
     /**
@@ -328,18 +330,17 @@ $(function() {
     };
 
 
-    /* Based on Arron Bailiss <arron@arronbailiss.com> jQuery Shift-click Plugin */
+    /*
+     * Based on Arron Bailiss <arron@arronbailiss.com> jQuery Shift-click Plugin
+     */
     $.fn.shiftClick = function(tag, clickedClass) {
-
         var lastSelected;
         var parents = $(this),
         childs = $(this).children(tag);
-
         this.children(tag).each(function() {
             parents.attr('unselectable', 'on');
             $(this).click(function(ev) {
                 if (ev.shiftKey) {
-
                     var first = parents.children().index(this);
                     var last = parents.children().index(lastSelected);
 
@@ -359,6 +360,11 @@ $(function() {
     };
 
 
+    /*
+     * CTRL + key combination plugin
+     *
+     * @author http://www.gmarwaha.com/blog/2009/06/16/ctrl-key-combination-simple-jquery-plugin/
+     */
     $.ctrl = function(key, callback, args) {
         $(document).keydown(function(e) {
             if(!args) args=[]; // IE barks when args is null
