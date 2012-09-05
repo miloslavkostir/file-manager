@@ -11,47 +11,28 @@ class FileManager extends UI\Control
     const NAME = "iXtrum File Manager";
     const VERSION = "0.5 dev";
 
-    /** @var Container */
+    /** @var \Nette\DI\Container */
     protected $context;
 
-    /** @var array */
-    private $config;
-
-    public function __construct($config = array())
+    public function __construct(\Nette\DI\Container $container = null, $config = array())
     {
         parent::__construct();
-        $this->config = $config;
-        $this->monitor("Presenter");
-        $this->invalidateControl();
-    }
 
-    /**
-     * @param Nette\Application\UI\Presenter $presenter
-     */
-    protected function attached($presenter)
-    {
-        if ($presenter instanceof UI\Presenter) {
+        // Load system container with services and configuration
+        $this->context = new FileManager\Services\Loader($container, $config, __DIR__);
+        $this->context->freeze();
 
-            // Load system configuration
-            $this->context = new FileManager\Services\Loader(
-                    $this->presenter->context,
-                    $this->config,
-                    __DIR__
-            );
-            $this->context->freeze();
+        // Get/set actual dir
+        $actualdir = $this->context->application->getActualdir();
+        if ($actualdir) {
 
-            // Get/set actual dir
-            $actualdir = $this->context->application->getActualdir();
-            if ($actualdir) {
-
-                $actualPath = $this->context->filesystem->getAbsolutePath($actualdir);
-                if (!is_dir($actualPath)) {
-                    $this->context->application->setActualdir(null);
-                }
+            $actualPath = $this->context->filesystem->getAbsolutePath($actualdir);
+            if (!is_dir($actualPath)) {
+                $this->context->application->setActualdir(null);
             }
         }
 
-        parent::attached($presenter);
+        $this->invalidateControl();
     }
 
     public function handleRefreshContent()
