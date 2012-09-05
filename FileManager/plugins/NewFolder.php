@@ -11,9 +11,9 @@ class NewFolder extends \Ixtrum\FileManager
     /** @var bool */
     public $toolbarPlugin = true;
 
-    public function __construct($userConfig)
+    public function __construct($config)
     {
-        parent::__construct($userConfig);
+        parent::__construct($config);
     }
 
     public function render()

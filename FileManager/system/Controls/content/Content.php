@@ -7,9 +7,9 @@ use Nette\Application\Responses\FileResponse;
 class Content extends \Ixtrum\FileManager
 {
 
-    public function __construct($userConfig)
+    public function __construct($config)
     {
-        parent::__construct($userConfig);
+        parent::__construct($config);
     }
 
     public function handleShowFileInfo($filename = "")
@@ -26,7 +26,6 @@ class Content extends \Ixtrum\FileManager
 
                 $this->parent->parent->template->fileinfo = $actualdir;
                 $this["control-fileInfo"]->filename = $filename;
-                $this->parent->parent->invalidateControl("fileinfo");
             } else {
                 $this->parent->parent->flashMessage($this->context->translator->translate("File %s not found!", $filename), "warning");
             }
@@ -75,8 +74,6 @@ class Content extends \Ixtrum\FileManager
                     "actualdir" => $actualdir,
                     "filename" => $filename
                 );
-
-                $this->parent->parent->refreshSnippets(array("clipboard"));
             } else {
                 $this->parent->parent->flashMessage($this->context->translator->translate("File %s not found!", $filename), "warning");
             }
@@ -104,8 +101,6 @@ class Content extends \Ixtrum\FileManager
                     "filename" => $file
                 );
             }
-
-            $this->parent->parent->refreshSnippets(array("clipboard"));
         } else {
             $this->parent->parent->flashMessage($this->context->translator->translate("Incorrect input data!"), "error");
         }
@@ -129,8 +124,6 @@ class Content extends \Ixtrum\FileManager
                     "actualdir" => $actualdir,
                     "filename" => $filename
                 );
-
-                $this->parent->parent->refreshSnippets(array("clipboard"));
             } else {
                 $this->parent->parent->flashMessage($this->context->translator->translate("File %s not found!", $filename), "warning");
             }
@@ -159,8 +152,6 @@ class Content extends \Ixtrum\FileManager
                     "filename" => $file
                 );
             }
-
-            $this->parent->parent->refreshSnippets(array("clipboard"));
         } else {
             $this->parent->parent->flashMessage($this->context->translator->translate("Incorrect input data!"), "error");
         }

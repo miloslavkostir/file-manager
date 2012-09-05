@@ -13,11 +13,11 @@ final class Loader extends Container
     /** @var Container */
     private $container;
 
-    public function __construct(Container $container, $userConfig, $rootPath)
+    public function __construct(Container $container, $config, $rootPath)
     {
         $loader = new \Nette\Config\Loader;
         $config = $loader->load("$rootPath/config/config.neon");
-        $config["parameters"] = array_merge($config["parameters"], $userConfig);
+        $config["parameters"] = array_merge($config["parameters"], $config);
         $config["parameters"]["rootPath"] = $rootPath;
         $config["parameters"]["resPath"] = $container->parameters["wwwDir"] . $config["parameters"]["resDir"];
 

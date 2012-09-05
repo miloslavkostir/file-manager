@@ -15,16 +15,17 @@ class FileManager extends UI\Control
     protected $context;
 
     /** @var array */
-    private $userConfig;
+    private $config;
 
     /** @var array */
     protected $plugins;
 
-    public function __construct($userConfig = array())
+    public function __construct($config = array())
     {
         parent::__construct();
-        $this->userConfig = $userConfig;
+        $this->config = $config;
         $this->monitor("Presenter");
+        $this->invalidateControl();
     }
 
     /**
@@ -37,7 +38,7 @@ class FileManager extends UI\Control
             // Load system configuration
             $this->context = new FileManager\Services\Loader(
                     $this->presenter->context,
-                    $this->userConfig,
+                    $this->config,
                     __DIR__
             );
             $this->context->freeze();
@@ -54,8 +55,6 @@ class FileManager extends UI\Control
 
             // Load plugins
             $this->plugins = $this->context->plugins->loadPlugins();
-
-            $this->refreshSnippets(array("message", "diskusage"));
         }
 
         parent::attached($presenter);
@@ -93,7 +92,6 @@ class FileManager extends UI\Control
             }
 
             $this->template->plugin = $name;
-            $this->refreshSnippets(array("plugin"));
         } else {
             $this->flashMessage($this->context->translator->translate("Plugin '%s' not found!", $name), "warning");
         }
@@ -105,10 +103,6 @@ class FileManager extends UI\Control
 
             $this->template->content = $actualdir;
             $this->context->application->setActualDir($actualdir);
-
-            if ($this->presenter->isAjax()) {
-                $this->refreshSnippets();
-            }
         } else {
             $this->flashMessage($this->context->translator->translate("Folder %s does not exist!", $actualdir), "warning");
         }
@@ -186,26 +180,6 @@ class FileManager extends UI\Control
     }
 
     /**
-     * Invalidate controls
-     *
-     * @param array $snippets
-     * @throws \Nette\InvalidArgumentException
-     */
-    public function refreshSnippets($snippets = array())
-    {
-        if (!$snippets) {
-            $this->invalidateControl();
-        } elseif (is_array($snippets)) {
-
-            foreach ($snippets as $snippet) {
-                $this->invalidateControl($snippet);
-            }
-        } else {
-            throw new \Nette\InvalidArgumentException("Not supported parameter for snippet refresh");
-        }
-    }
-
-    /**
      * Callback for error event in form
      *
      * @param \Nette\Application\UI\Form $form
@@ -225,7 +199,7 @@ class FileManager extends UI\Control
      */
     protected function createComponentControl()
     {
-        $config = $this->userConfig;
+        $config = $this->config;
         return new \Nette\Application\UI\Multiplier(function ($name) use ($config) {
                     $namespace = __NAMESPACE__;
                     $namespace .= "\\FileManager\Controls";
@@ -241,7 +215,7 @@ class FileManager extends UI\Control
      */
     protected function createComponentPlugin()
     {
-        $config = $this->userConfig;
+        $config = $this->config;
         return new \Nette\Application\UI\Multiplier(function ($name) use ($config) {
                     $namespace = __NAMESPACE__;
                     $namespace .= "\\FileManager\Plugins";

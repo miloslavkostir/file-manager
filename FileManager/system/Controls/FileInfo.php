@@ -8,9 +8,9 @@ class FileInfo extends \Ixtrum\FileManager
     /** @var string */
     public $filename;
 
-    public function __construct($userConfig)
+    public function __construct($config)
     {
-        parent::__construct($userConfig);
+        parent::__construct($config);
     }
 
     public function render()
