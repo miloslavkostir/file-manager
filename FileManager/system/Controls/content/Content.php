@@ -7,11 +7,6 @@ use Nette\Application\Responses\FileResponse;
 class Content extends \Ixtrum\FileManager
 {
 
-    public function __construct($config)
-    {
-        parent::__construct($config);
-    }
-
     public function handleShowFileInfo($filename = "")
     {
         // if sended by AJAX

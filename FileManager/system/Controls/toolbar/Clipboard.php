@@ -7,11 +7,6 @@ use Nette\Utils\Finder;
 class Clipboard extends \Ixtrum\FileManager
 {
 
-    public function __construct($config)
-    {
-        parent::__construct($config);
-    }
-
     public function handleClearClipboard()
     {
         $session = $this->presenter->context->session->getSection('file-manager');

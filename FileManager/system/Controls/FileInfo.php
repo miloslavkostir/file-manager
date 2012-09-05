@@ -8,11 +8,6 @@ class FileInfo extends \Ixtrum\FileManager
     /** @var string */
     public $filename;
 
-    public function __construct($config)
-    {
-        parent::__construct($config);
-    }
-
     public function render()
     {
         $actualdir = $this->context->application->getActualDir();

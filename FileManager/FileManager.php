@@ -199,12 +199,11 @@ class FileManager extends UI\Control
      */
     protected function createComponentControl()
     {
-        $config = $this->config;
-        return new \Nette\Application\UI\Multiplier(function ($name) use ($config) {
+        return new \Nette\Application\UI\Multiplier(function ($name) {
                     $namespace = __NAMESPACE__;
                     $namespace .= "\\FileManager\Controls";
                     $class = "$namespace\\$name";
-                    return new $class($config);
+                    return new $class;
                 });
     }
 
@@ -215,12 +214,11 @@ class FileManager extends UI\Control
      */
     protected function createComponentPlugin()
     {
-        $config = $this->config;
-        return new \Nette\Application\UI\Multiplier(function ($name) use ($config) {
+        return new \Nette\Application\UI\Multiplier(function ($name) {
                     $namespace = __NAMESPACE__;
                     $namespace .= "\\FileManager\Plugins";
                     $class = "$namespace\\$name";
-                    return new $class($config);
+                    return new $class;
                 });
     }
 

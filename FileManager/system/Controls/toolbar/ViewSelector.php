@@ -7,11 +7,6 @@ use Nette\Application\UI\Form;
 class ViewSelector extends \Ixtrum\FileManager
 {
 
-    public function __construct($config)
-    {
-        parent::__construct($config);
-    }
-
     public function render()
     {
         $template = $this->template;

@@ -7,11 +7,6 @@ use Nette\Application\UI\Form;
 class Filter extends \Ixtrum\FileManager
 {
 
-    public function __construct($config)
-    {
-        parent::__construct($config);
-    }
-
     public function render()
     {
         $session = $this->presenter->context->session->getSection("file-manager");

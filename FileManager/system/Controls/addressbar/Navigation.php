@@ -7,11 +7,6 @@ use Nette\Application\UI\Form;
 class Navigation extends \Ixtrum\FileManager
 {
 
-    public function __construct($config)
-    {
-        parent::__construct($config);
-    }
-
     public function handleRefreshContent()
     {
         $actualdir = $this->context->application->getActualDir();

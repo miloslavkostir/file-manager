@@ -5,11 +5,6 @@ namespace Ixtrum\FileManager\Controls;
 class Themes extends \Ixtrum\FileManager
 {
 
-    public function __construct($config)
-    {
-        parent::__construct($config);
-    }
-
     public function render()
     {
         $this->template->setFile(__DIR__ . "/Themes.latte");

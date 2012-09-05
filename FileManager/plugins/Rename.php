@@ -16,11 +16,6 @@ class Rename extends \Ixtrum\FileManager
     /** @var string */
     public $title = "Rename";
 
-    public function __construct($config)
-    {
-        parent::__construct($config);
-    }
-
     public function render()
     {
         $template = $this->template;
