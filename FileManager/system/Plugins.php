@@ -24,7 +24,7 @@ class Plugins
 
     /**
      * Get plugins
-     * 
+     *
      * @param Caching
      * @return array
      */
@@ -75,7 +75,7 @@ class Plugins
 
     /**
      * Get list of plugin names
-     * 
+     *
      * @return array
      */
     public function getPluginNames()
@@ -92,7 +92,7 @@ class Plugins
 
     /**
      * Get classes from PHP code
-     * 
+     *
      * @internal
      * @param string $php_code
      * @return array
@@ -117,15 +117,15 @@ class Plugins
     }
 
     /**
-     * Check if string is name of valid plugin or system control
-     * 
+     * Check if string is name of valid plugin
+     *
      * @param string $name
+     *
      * @return bool
      */
-    public function isValidControl($name)
+    public function isValidPlugin($name)
     {
-        $systemControls = array("NewFolder", "rename");
-        if (in_array($name, $this->getPluginNames()) || in_array($name, $systemControls)) {
+        if (in_array($name, $this->getPluginNames())) {
             return true;
         }
 

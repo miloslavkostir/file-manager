@@ -1,14 +1,20 @@
 <?php
 
-namespace Ixtrum\FileManager\Controls;
+namespace Ixtrum\FileManager\Plugins;
 
 use Nette\Application\UI\Form;
 
 class Rename extends \Ixtrum\FileManager
 {
 
+    /** @var boolean */
+    public $contextPlugin = true;
+
     /** @var string */
     public $files;
+
+    /** @var string */
+    public $title = "Rename";
 
     public function __construct($userConfig)
     {
@@ -35,11 +41,11 @@ class Rename extends \Ixtrum\FileManager
         $form = new Form;
         $form->setTranslator($this->context->translator);
         $form->addText("new_filename", "New name")
-                ->setRequired("New name required.");
+            ->setRequired("New name required.");
         $form->addHidden("orig_filename");
         $form->addSubmit("send", "OK");
         $form->onSuccess[] = $this->renameFormSubmitted;
-        $form->onError[] = $this->parent->onFormError;
+        $form->onError[] = $this->parent->parent->onFormError;
         return $form;
     }
 
@@ -50,13 +56,13 @@ class Rename extends \Ixtrum\FileManager
         $path = $this->context->filesystem->getAbsolutePath($actualdir);
 
         if ($this->context->parameters["readonly"]) {
-            $this->parent->flashMessage($this->context->translator->translate("Read-only mode enabled!"), "warning");
+            $this->parent->parent->flashMessage($this->context->translator->translate("Read-only mode enabled!"), "warning");
         } elseif ($values["new_filename"] == $values["orig_filename"]) {
-            $this->parent->flashMessage($this->context->translator->translate("New name can not be the same!"), "warning");
+            $this->parent->parent->flashMessage($this->context->translator->translate("New name can not be the same!"), "warning");
         } elseif (file_exists($path . $values["new_filename"])) {
-            $this->parent->flashMessage($this->context->translator->translate("The name %s was already used.", $values["new_filename"]), "warning");
+            $this->parent->parent->flashMessage($this->context->translator->translate("The name %s was already used.", $values["new_filename"]), "warning");
         } elseif (!file_exists($path . $values["orig_filename"])) {
-            $this->parent->flashMessage($this->context->translator->translate("File/folder %s does not already exists!", $values["orig_filename"]), "error");
+            $this->parent->parent->flashMessage($this->context->translator->translate("File/folder %s does not already exists!", $values["orig_filename"]), "error");
         } else {
 
             $origPath = $path . $values["orig_filename"];
@@ -89,14 +95,14 @@ class Rename extends \Ixtrum\FileManager
 
             if (rename($origPath, $path . $new_filename)) {
 
-                $this->parent->flashMessage($this->context->translator->translate("Successfully renamed to %s.", $new_filename), "info");
+                $this->parent->parent->flashMessage($this->context->translator->translate("Successfully renamed to %s.", $new_filename), "info");
                 $this->context->application->clearClipboard();
             } else {
-                $this->parent->flashMessage($this->context->translator->translate("An error occurred during %s renaming!", $values["orig_filename"]), "error");
+                $this->parent->parent->flashMessage($this->context->translator->translate("An error occurred during %s renaming!", $values["orig_filename"]), "error");
             }
         }
 
-        $this->parent->handleShowContent($actualdir);
+        $this->parent->parent->handleShowContent($actualdir);
     }
 
 }

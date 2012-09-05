@@ -16,7 +16,7 @@ class Clipboard extends \Ixtrum\FileManager
     {
         $session = $this->presenter->context->session->getSection('file-manager');
         $this->context->application->clearClipboard();
-        $this->parent->handleShowContent($session->actualdir);
+        $this->parent->parent->handleShowContent($session->actualdir);
     }
 
     public function handlePasteFromClipboard()
@@ -27,9 +27,9 @@ class Clipboard extends \Ixtrum\FileManager
         if ($this->context->filesystem->validPath($actualdir)) {
 
             if ($this->context->parameters["readonly"]) {
-                $this->parent->flashMessage($this->context->translator->translate("Read-only mode enabled!"), "warning");
+                $this->parent->parent->flashMessage($this->context->translator->translate("Read-only mode enabled!"), "warning");
             } elseif (!isset($session->clipboard) || count($session->clipboard) <= 0) {
-                $this->parent->flashMessage($this->context->translator->translate("There is nothing to paste from clipboard!"), "warning");
+                $this->parent->parent->flashMessage($this->context->translator->translate("There is nothing to paste from clipboard!"), "warning");
             } else {
 
                 foreach ($session->clipboard as $key => $val) {
@@ -37,26 +37,26 @@ class Clipboard extends \Ixtrum\FileManager
                     if ($val["action"] === "copy") {
 
                         if ($this->context->filesystem->copy($val['actualdir'], $actualdir, $val['filename'])) {
-                            $this->parent->flashMessage($this->context->translator->translate("Succesfully copied - %s", $val['filename']), "info");
+                            $this->parent->parent->flashMessage($this->context->translator->translate("Succesfully copied - %s", $val['filename']), "info");
                         } else {
-                            $this->parent->flashMessage($this->context->translator->translate("An error occured - %s", $val['filename']), "error");
+                            $this->parent->parent->flashMessage($this->context->translator->translate("An error occured - %s", $val['filename']), "error");
                         }
                     } elseif ($val["action"] === "cut") {
 
                         if ($this->context->filesystem->move($val["actualdir"], $actualdir, $val["filename"])) {
-                            $this->parent->flashMessage($this->context->translator->translate("Succesfully moved - %s", $val["filename"]), "info");
+                            $this->parent->parent->flashMessage($this->context->translator->translate("Succesfully moved - %s", $val["filename"]), "info");
                         } else {
-                            $this->parent->flashMessage($this->context->translator->translate("An error occured - %s", $val["filename"]), "error");
+                            $this->parent->parent->flashMessage($this->context->translator->translate("An error occured - %s", $val["filename"]), "error");
                         }
                     } else {
-                        $this->parent->flashMessage($this->context->translator->translate("Unknown action! - %s", $val["action"]), "error");
+                        $this->parent->parent->flashMessage($this->context->translator->translate("Unknown action! - %s", $val["action"]), "error");
                     }
                 }
 
                 $this->handleClearClipboard();
             }
         } else {
-            $this->parent->flashMessage($this->context->translator->translate("Folder %s already does not exist!", $actualdir), "warning");
+            $this->parent->parent->flashMessage($this->context->translator->translate("Folder %s already does not exist!", $actualdir), "warning");
         }
     }
 
@@ -68,10 +68,10 @@ class Clipboard extends \Ixtrum\FileManager
         if (isset($session->clipboard[$path])) {
             unset($session->clipboard[$path]);
         } else {
-            $this->parent->flashMessage($this->context->translator->translate("Item %s does not exist in clipboard!", $path), "error");
+            $this->parent->parent->flashMessage($this->context->translator->translate("Item %s does not exist in clipboard!", $path), "error");
         }
 
-        $this->parent->handleShowContent($session->actualdir);
+        $this->parent->parent->handleShowContent($session->actualdir);
     }
 
     public function render()
