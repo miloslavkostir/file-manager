@@ -87,7 +87,7 @@ class FileManager extends UI\Control
         }
 
         if ($this->context->plugins->isValidPlugin($name)) {
-            $control =  $this["plugin-$name"];
+            $control = $this["plugin-$name"];
             if (property_exists($control, "files") && $files) {
                 $control->files = $files;
             }
@@ -179,8 +179,8 @@ class FileManager extends UI\Control
 
         // Sort flash messages; 1=error, 2=warning, 3=info
         usort($template->flashes, function($flash, $nextFlash) {
-             return ($flash->type === "error") ? -1 : 1;
-        });
+                return ($flash->type === "error") ? -1 : 1;
+            });
 
         $template->render();
     }
@@ -222,22 +222,22 @@ class FileManager extends UI\Control
     {
         $config = $this->userConfig;
         return new \Nette\Application\UI\Multiplier(function ($name) use ($config) {
-            $namespace = __NAMESPACE__;
-            $namespace .= "\\FileManager\Controls";
-            $class = "$namespace\\$name";
-            return new $class($config);
-        });
+                    $namespace = __NAMESPACE__;
+                    $namespace .= "\\FileManager\Controls";
+                    $class = "$namespace\\$name";
+                    return new $class($config);
+                });
     }
 
     protected function createComponentPlugin()
     {
         $config = $this->userConfig;
         return new \Nette\Application\UI\Multiplier(function ($name) use ($config) {
-            $namespace = __NAMESPACE__;
-            $namespace .= "\\FileManager\Plugins";
-            $class = "$namespace\\$name";
-            return new $class($config);
-        });
+                    $namespace = __NAMESPACE__;
+                    $namespace .= "\\FileManager\Plugins";
+                    $class = "$namespace\\$name";
+                    return new $class($config);
+                });
     }
 
 }
