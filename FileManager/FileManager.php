@@ -17,9 +17,6 @@ class FileManager extends UI\Control
     /** @var array */
     private $config;
 
-    /** @var array */
-    protected $plugins;
-
     public function __construct($config = array())
     {
         parent::__construct();
