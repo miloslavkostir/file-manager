@@ -11,7 +11,7 @@
 <div class="file-manager">
     <div class="fm-adressbar">
         <div n:snippet="addressbar" class="fm-location">
-            {control navigation}
+            {control control-navigation}
         </div>
         <div class="fm-refresh">
             <a n:href="refreshContent!" title="{_'Refresh content'}" class="fm-ajax">
@@ -19,17 +19,12 @@
             </a>
         </div>
         <div n:snippet="filter" class="fm-filter">
-            {control filter}
+            {control control-filter}
         </div>
         <div class="fm-clear"></div>
     </div>
     <div n:snippet="toolbar" class="fm-toolbar">
         <ul>
-            <li>
-                <a n:href="runPlugin!, 'NewFolder'" title="{_'Create new folder'}" class="fm-ajax fm-toolbar-item">
-                    <span>{_'New folder'}</span>
-                </a>
-            </li>
             <li n:ifset="$toolbarPlugins">
                 <a n:foreach="$toolbarPlugins as $plugin" n:href="runPlugin!, $plugin['name']" class="fm-ajax fm-toolbar-item">
                     <span>{$plugin['title']}</span>
@@ -37,12 +32,12 @@
             </li>
             <li n:snippet="clipboard">
                 {ifset $clipboard}
-                    {control clipboard}
+                    {control control-clipboard}
                 {/ifset}
             </li>
             <li class="fm-right">
-                {control themes}
-                {control viewSelector}
+                {control control-themes}
+                {control control-viewSelector}
             </li>
         </ul>
     </div>
@@ -64,31 +59,31 @@
     </div>
     <div class="fm-body">
             <div n:snippet="treeview" class="fm-treeview">
-                {control treeview}
+                {control control-treeview}
             </div>
             <div class="fm-content">
                 <div n:snippet="plugin">
                     {ifset $plugin}
-                        {control $plugin}
+                        {control plugin-$plugin}
                     {/ifset}
                 </div>
                 <div n:snippet="content">
-                    {control content}
+                    {control control-content}
                 </div>
             </div>
     </div>
     <div class="fm-info-bar">
         <div n:snippet="diskusage" class="fm-disk-usage">
-            {control diskUsage}
+            {control control-diskUsage}
         </div>
         <div n:snippet="fileinfo" class="fm-file-info">
             {ifset $fileinfo}
-                {control fileInfo}
+                {control control-fileInfo}
             {/ifset}
         </div>
         <div n:ifset="$fileInfoPlugins" class="fm-file-info-plugins">
             <div n:foreach="$fileInfoPlugins as $plugin" class="fm-file-info-plugin">
-                {control $plugin["name"]}
+                {control plugin-$plugin["name"]}
             </div>
         </div>
     </div>

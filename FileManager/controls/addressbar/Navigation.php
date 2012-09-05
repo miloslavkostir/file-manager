@@ -25,7 +25,7 @@ class Navigation extends \Ixtrum\FileManager
             ));
         }
 
-        $this->parent->handleShowContent($actualdir);
+        $this->parent->parent->handleShowContent($actualdir);
     }
 
     public function render()
@@ -63,11 +63,11 @@ class Navigation extends \Ixtrum\FileManager
         $path = $this->context->filesystem->getAbsolutePath($val['location']);
 
         if (is_dir($path)) {
-            $this->parent->handleShowContent($val['location']);
+            $this->parent->parent->handleShowContent($val['location']);
         } else {
             $folder = $val['location'];
-            $this->parent->flashMessage($this->context->translator->translate("Folder %s does not exist!", $folder), 'warning');
-            $this->parent->handleShowContent($this->context->application->getActualDir());
+            $this->parent->parent->flashMessage($this->context->translator->translate("Folder %s does not exist!", $folder), 'warning');
+            $this->parent->parent->handleShowContent($this->context->application->getActualDir());
         }
     }
 
@@ -78,7 +78,7 @@ class Navigation extends \Ixtrum\FileManager
         if ($actualdir === $rootname)
             $var[] = array(
                 "name" => $rootname,
-                "link" => $this->parent->link("showContent", $rootname)
+                "link" => $this->parent->parent->link("showContent", $rootname)
             );
         else {
             $nav = explode("/", $actualdir);
@@ -88,7 +88,7 @@ class Navigation extends \Ixtrum\FileManager
                     $path .= "$item/";
                     $var[] = array(
                         "name" => $item,
-                        "link" => $this->parent->link("showContent", $path)
+                        "link" => $this->parent->parent->link("showContent", $path)
                     );
                 }
             }

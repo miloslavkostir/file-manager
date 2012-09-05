@@ -10,13 +10,12 @@ $(function() {
                             o3 = {},
                             o4 = {},
                             o5 = {},
-                            o6 = {},
                             {ifset $plugins}
                                 {foreach $plugins as $plugin}
-                                    o{7 + $iterator->getCounter()} = {},
+                                    o{6 + $iterator->getCounter()} = {},
                                 {/foreach}
                             {/ifset}
-                            o7 = {};
+                            o6 = {};
 
                         o1[{_'Details'}] = function(menuItem, menuObject, e) {
                                 var filename = $(this).data("filename");
@@ -34,33 +33,27 @@ $(function() {
                                 }
                         }
 
-                        o3[{_'Rename'}] = function(menuItem, menuObject, e) {
-                                var filename = $(this).data("filename");
-                                $.post({link runPlugin!, 'rename'},  { files: filename });
-                                $.animateProgress(".file-manager", e);
-                        }
-
-                        o4[{_'Copy'}] = function(menuItem, menuObject, e) {
+                        o3[{_'Copy'}] = function(menuItem, menuObject, e) {
                                 var filename = $(this).data("filename");
                                 $(this).addClass("selected");
                                 $.post({link copyToClipboard!},  { filename: filename });
                                 $.animateProgress(".file-manager", e);
                         }
 
-                        o5[{_'Cut'}] = function(menuItem, menuObject, e) {
+                        o4[{_'Cut'}] = function(menuItem, menuObject, e) {
                                 var filename = $(this).data("filename");
                                 $(this).addClass("selected");
                                 $.post({link cutToClipboard!},  { filename: filename });
                                 $.animateProgress(".file-manager", e);
                         }
 
-                        o6[{_'Download'}] = function(menuItem, menuObject, e) {
+                        o5[{_'Download'}] = function(menuItem, menuObject, e) {
                                 var filename = $(this).data("filename");
                                 $(this).addClass("selected");
                                 window.location.href={link downloadFile!} + "&filename=" + filename;
                         }
 
-                        o7[{_'Add to ZIP'}] = function(menuItem, menuObject, e) {
+                        o6[{_'Add to ZIP'}] = function(menuItem, menuObject, e) {
                                 var files = {};
                                 files[0] = $(this).data("filename");
                                 $.post({link zip!},  { files: files });
@@ -69,7 +62,7 @@ $(function() {
 
                         {ifset $plugins}
                             {foreach $plugins as $plugin}
-                                o{7 + $iterator->getCounter()}[{$plugin['title']}] = function(menuItem, menuObject, e) {
+                                o{6 + $iterator->getCounter()}[{$plugin['title']}] = function(menuItem, menuObject, e) {
                                     var filename = $(this).data("filename");
                                     $(this).addClass("selected");
                                     $.post({link runPlugin!, $plugin['name']},  { files: filename });
@@ -83,13 +76,12 @@ $(function() {
                                     o3,
                                     o4,
                                     o5,
-                                    o6,
                                     {ifset $plugins}
                                     {foreach $plugins as $plugin}
-                                        o{7 + $iterator->getCounter()},
+                                        o{6 + $iterator->getCounter()},
                                     {/foreach}
                                     {/ifset}
-                                    o7 ];
+                                    o6 ];
         } else {
                         var o1 = {},
                             o2 = {},
@@ -190,8 +182,7 @@ $(function() {
             o2 = {},
             o3 = {},
             o4 = {},
-            o5 = {},
-            o6 = {};
+            o5 = {};
 
         o1[{_'Select all'}] = function(menuItem, menuObject) {
                 $(".fm-content-file").addClass("selected");
@@ -217,12 +208,7 @@ $(function() {
                 $.animateProgress(".file-manager", e);
         }
 
-        o6[{_'New folder'}] = function(menuItem, menuObject, e) {
-                $.getJSON({link runPlugin!, 'NewFolder'});
-                $.animateProgress(".file-manager", e)
-        }
-
-        return [o1, o2, o3, o4, o5, o6];
+        return [o1, o2, o3, o4, o5, o5];
     }, {
         theme: "vista",
         constrainToScreen: true

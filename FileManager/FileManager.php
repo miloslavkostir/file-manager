@@ -79,23 +79,23 @@ class FileManager extends UI\Control
         $this->handleShowContent($actualdir);
     }
 
-    public function handleRunPlugin($plugin, $files = "")
+    public function handleRunPlugin($name, $files = "")
     {
         // if sended by AJAX
         if (!$files) {
             $files = $this->presenter->context->httpRequest->getPost("files");
         }
 
-        if ($this->context->plugins->isValidControl($plugin)) {
-
-            if (property_exists($this[$plugin], "files") && $files) {
-                $this[$plugin]->files = $files;
+        if ($this->context->plugins->isValidPlugin($name)) {
+            $control =  $this["plugin-$name"];
+            if (property_exists($control, "files") && $files) {
+                $control->files = $files;
             }
 
-            $this->template->plugin = $plugin;
+            $this->template->plugin = $name;
             $this->refreshSnippets(array("plugin"));
         } else {
-            $this->flashMessage($this->context->translator->translate("Plugin '%s' not found!", $plugin), "warning");
+            $this->flashMessage($this->context->translator->translate("Plugin '%s' not found!", $name), "warning");
         }
     }
 
@@ -116,7 +116,7 @@ class FileManager extends UI\Control
 
     public function render()
     {
-        \Nette\Diagnostics\Debugger::barDump($this->context, "Ixtrum container");
+        \Nette\Diagnostics\Debugger::barDump($this, "Ixtrum File Manager");
 
         // Load resources
         if ($this->context->parameters["synchronizeResDir"] === true) {
@@ -218,36 +218,26 @@ class FileManager extends UI\Control
         }
     }
 
-    /**
-     * Global component factory
-     *
-     * @param string $name component name
-     * @return IComponent created component
-     */
-    protected function createComponent($name)
+    protected function createComponentControl()
     {
-        if (!method_exists($this, "createComponent$name")) {
-
+        $config = $this->userConfig;
+        return new \Nette\Application\UI\Multiplier(function ($name) use ($config) {
             $namespace = __NAMESPACE__;
-
-            $plugins = $this->context->plugins->getPluginNames();
-            if (in_array($name, $plugins)) {
-                $namespace .= "\\FileManager\Plugins";
-            } else {
-                $namespace .= "\\FileManager\Controls";
-            }
-
+            $namespace .= "\\FileManager\Controls";
             $class = "$namespace\\$name";
-            if (class_exists($class)) {
+            return new $class($config);
+        });
+    }
 
-                $component = new $class($this->userConfig);
-                return $component;
-            } else {
-                throw new \Nette\FileNotFoundException("Can not create component '$name'. Required class '$class' not found.");
-            }
-        } else {
-            return parent::createComponent($name);
-        }
+    protected function createComponentPlugin()
+    {
+        $config = $this->userConfig;
+        return new \Nette\Application\UI\Multiplier(function ($name) use ($config) {
+            $namespace = __NAMESPACE__;
+            $namespace .= "\\FileManager\Plugins";
+            $class = "$namespace\\$name";
+            return new $class($config);
+        });
     }
 
 }
