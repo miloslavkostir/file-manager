@@ -52,9 +52,6 @@ class FileManager extends UI\Control
                     $this->context->application->setActualdir(null);
                 }
             }
-
-            // Load plugins
-            $this->plugins = $this->context->plugins->loadPlugins();
         }
 
         parent::attached($presenter);
@@ -85,7 +82,14 @@ class FileManager extends UI\Control
             $files = $this->presenter->context->httpRequest->getPost("files");
         }
 
-        if ($this->context->plugins->isValidPlugin($name)) {
+        // Find valid plugin
+        foreach ($this->context->parameters["plugins"] as $plugin) {
+            if ($name === $plugin["name"]) {
+                $validPlugin = true;
+            }
+        }
+
+        if (isset($validPlugin)) {
             $control = $this["plugin-$name"];
             if (property_exists($control, "files") && $files) {
                 $control->files = $files;
@@ -150,11 +154,11 @@ class FileManager extends UI\Control
             }
         }
 
-        // Load plugins
-        if ($this->plugins) {
+        // Get plugins
+        if ($this->context->parameters["plugins"]) {
 
             $toolbarPlugins = $fileInfoPlugins = array();
-            foreach ($this->plugins as $plugin) {
+            foreach ($this->context->parameters["plugins"] as $plugin) {
                 if ($plugin["toolbarPlugin"]) {
                     $toolbarPlugins[] = $plugin;
                 }

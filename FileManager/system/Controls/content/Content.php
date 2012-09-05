@@ -377,10 +377,10 @@ class Content extends \Ixtrum\FileManager
         $template->thumb_dir = $this->context->parameters["resDir"] . "img/icons/" . $view . "/";
 
         // Load plugins
-        if ($this->plugins) {
+        if ($this->context->parameters["plugins"]) {
 
             $contextPlugins = array();
-            foreach ($this->plugins as $plugin) {
+            foreach ($this->context->parameters["plugins"] as $plugin) {
 
                 if ($plugin["contextPlugin"]) {
                     $contextPlugins[] = $plugin;

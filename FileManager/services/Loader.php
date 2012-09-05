@@ -25,6 +25,13 @@ final class Loader extends Container
             $config["parameters"]["uploadroot"] = $rootPath;
         }
 
+        // Merge plugins with configuration
+        $plugins = new Application\Plugins(
+                $config["parameters"]["rootPath"] . $config["parameters"]["pluginDir"],
+                new Application\Caching($container, $config["parameters"])
+        );
+        $config["parameters"]["plugins"] = $plugins->loadPlugins();
+
         $this->parameters = $config["parameters"];
         $this->container = $container;
 
@@ -39,9 +46,9 @@ final class Loader extends Container
     protected function createServiceTranslator()
     {
         $translator = new Application\Translator\GettextTranslator(
-            $this->parameters["rootPath"] . $this->parameters["langDir"] . $this->parameters["lang"] . ".mo",
-            new Application\Caching($this->container, $this->parameters),
-            $this->parameters["lang"]
+                $this->parameters["rootPath"] . $this->parameters["langDir"] . $this->parameters["lang"] . ".mo",
+                new Application\Caching($this->container, $this->parameters),
+                $this->parameters["lang"]
         );
         return $translator;
     }
@@ -59,14 +66,6 @@ final class Loader extends Container
     protected function createServiceThumbs()
     {
         return new Application\Thumbs($this->container, $this->parameters);
-    }
-
-    protected function createServicePlugins()
-    {
-        return new Application\Plugins(
-            $this->parameters["rootPath"] . $this->parameters["pluginDir"],
-            new Application\Caching($this->container, $this->parameters)
-        );
     }
 
     private function init()

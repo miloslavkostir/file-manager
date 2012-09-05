@@ -74,23 +74,6 @@ class Plugins
     }
 
     /**
-     * Get list of plugin names
-     *
-     * @return array
-     */
-    public function getPluginNames()
-    {
-        $plugins = $this->loadPlugins();
-        $names = array();
-
-        foreach ($plugins as $plugin) {
-            $names[] = $plugin["name"];
-        }
-
-        return $names;
-    }
-
-    /**
      * Get classes from PHP code
      *
      * @internal
@@ -114,22 +97,6 @@ class Plugins
         }
 
         return $classes;
-    }
-
-    /**
-     * Check if string is name of valid plugin
-     *
-     * @param string $name
-     *
-     * @return bool
-     */
-    public function isValidPlugin($name)
-    {
-        if (in_array($name, $this->getPluginNames())) {
-            return true;
-        }
-
-        return false;
     }
 
 }
