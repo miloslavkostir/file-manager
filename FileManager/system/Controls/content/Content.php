@@ -266,7 +266,7 @@ class Content extends \Ixtrum\FileManager
             $this->context->caching->deleteItem(array("content", $absPath));
         }
 
-        $this->parent->parent->handleShowContent($actualdir);
+        $this->handleShowContent($actualdir);
     }
 
     public function handleRunPlugin($plugin, $files = "")
@@ -340,7 +340,7 @@ class Content extends \Ixtrum\FileManager
                 }
             }
 
-            $this->parent->parent->handleShowContent($actualdir);
+            $this->handleShowContent($actualdir);
         }
     }
 
