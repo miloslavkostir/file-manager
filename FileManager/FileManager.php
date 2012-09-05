@@ -218,6 +218,11 @@ class FileManager extends UI\Control
         }
     }
 
+    /**
+     * Control component factory
+     *
+     * @return \Nette\Application\UI\Multiplier
+     */
     protected function createComponentControl()
     {
         $config = $this->userConfig;
@@ -229,6 +234,11 @@ class FileManager extends UI\Control
                 });
     }
 
+    /**
+     * Plugin component factory
+     *
+     * @return \Nette\Application\UI\Multiplier
+     */
     protected function createComponentPlugin()
     {
         $config = $this->userConfig;
