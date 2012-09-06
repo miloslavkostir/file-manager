@@ -2,56 +2,45 @@
 
 namespace Ixtrum;
 
-use Nette\DI\Container,
-    Nette\Application\UI;
-
-class FileManager extends UI\Control
+class FileManager extends \Nette\Application\UI\Control
 {
 
     const NAME = "iXtrum File Manager";
     const VERSION = "0.5 dev";
 
-    /** @var Container */
+    /** @var \Nette\DI\Container */
     protected $context;
 
-    /** @var array */
-    private $config;
-
-    public function __construct($config = array())
-    {
-        parent::__construct();
-        $this->config = $config;
-        $this->monitor("Presenter");
-        $this->invalidateControl();
-    }
+    /** @var \Nette\DI\Container */
+    private $systemContainer;
 
     /**
-     * @param Nette\Application\UI\Presenter $presenter
+     * Constructor
+     *
+     * @param \Nette\DI\Container $systemContainer System container
+     * @param array               $config          User configuration
      */
-    protected function attached($presenter)
+    public function __construct(\Nette\DI\Container $systemContainer, $config = array())
     {
-        if ($presenter instanceof UI\Presenter) {
+        parent::__construct();
 
-            // Load system configuration
-            $this->context = new FileManager\Services\Loader(
-                    $this->presenter->context,
-                    $this->config,
-                    __DIR__
-            );
-            $this->context->freeze();
+        $this->systemContainer = $systemContainer;
 
-            // Get/set actual dir
-            $actualdir = $this->context->application->getActualdir();
-            if ($actualdir) {
+        // Load system container with services and configuration
+        $this->context = new FileManager\Services\Loader($systemContainer, $config, __DIR__);
+        $this->context->freeze();
 
-                $actualPath = $this->context->filesystem->getAbsolutePath($actualdir);
-                if (!is_dir($actualPath)) {
-                    $this->context->application->setActualdir(null);
-                }
+        // Get/set actual dir
+        $actualdir = $this->context->application->getActualdir();
+        if ($actualdir) {
+
+            $actualPath = $this->context->filesystem->getAbsolutePath($actualdir);
+            if (!is_dir($actualPath)) {
+                $this->context->application->setActualdir(null);
             }
         }
 
-        parent::attached($presenter);
+        $this->invalidateControl();
     }
 
     public function handleRefreshContent()
@@ -184,6 +173,7 @@ class FileManager extends UI\Control
      * Callback for error event in form
      *
      * @param \Nette\Application\UI\Form $form
+     *
      * @return void
      */
     public function onFormError(\Nette\Application\UI\Form $form)
@@ -200,11 +190,12 @@ class FileManager extends UI\Control
      */
     protected function createComponentControl()
     {
-        return new \Nette\Application\UI\Multiplier(function ($name) {
+        $container = $this->systemContainer;
+        return new \Nette\Application\UI\Multiplier(function ($name) use ($container) {
                     $namespace = __NAMESPACE__;
                     $namespace .= "\\FileManager\Controls";
                     $class = "$namespace\\$name";
-                    return new $class;
+                    return new $class($container);
                 });
     }
 
@@ -215,11 +206,12 @@ class FileManager extends UI\Control
      */
     protected function createComponentPlugin()
     {
-        return new \Nette\Application\UI\Multiplier(function ($name) {
+        $container = $this->systemContainer;
+        return new \Nette\Application\UI\Multiplier(function ($name) use ($container) {
                     $namespace = __NAMESPACE__;
                     $namespace .= "\\FileManager\Plugins";
                     $class = "$namespace\\$name";
-                    return new $class;
+                    return new $class($container);
                 });
     }
 
