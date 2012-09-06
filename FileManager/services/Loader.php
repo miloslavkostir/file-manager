@@ -2,22 +2,21 @@
 
 namespace Ixtrum\FileManager\Services;
 
-use Nette\DI\Container,
-    Nette\DirectoryNotFoundException,
+use Nette\DirectoryNotFoundException,
     Nette\Application\ApplicationException,
     Ixtrum\FileManager\Application;
 
-final class Loader extends Container
+final class Loader extends \Nette\DI\Container
 {
 
-    /** @var Container */
-    private $container;
+    /** @var \Nette\DI\Container System container */
+    private $context;
 
-    public function __construct(Container $container, $config, $rootPath)
+    public function __construct(\Nette\DI\Container $container, $config, $rootPath)
     {
         $loader = new \Nette\Config\Loader;
         $config = $loader->load("$rootPath/config/config.neon");
-        $config["parameters"] = array_merge($config["parameters"], $config);
+        array_merge($config["parameters"], $config);
         $config["parameters"]["rootPath"] = $rootPath;
         $config["parameters"]["resPath"] = $container->parameters["wwwDir"] . $config["parameters"]["resDir"];
 
@@ -33,21 +32,26 @@ final class Loader extends Container
         $config["parameters"]["plugins"] = $plugins->loadPlugins();
 
         $this->parameters = $config["parameters"];
-        $this->container = $container;
+        $this->context = $container;
 
         $this->init();
     }
 
+    protected function createServiceSystemContainer()
+    {
+        return $this->context;
+    }
+
     protected function createServiceCaching()
     {
-        return new Application\Caching($this->container, $this->parameters);
+        return new Application\Caching($this->context, $this->parameters);
     }
 
     protected function createServiceTranslator()
     {
         $translator = new Application\Translator\GettextTranslator(
                 $this->parameters["rootPath"] . $this->parameters["langDir"] . $this->parameters["lang"] . ".mo",
-                new Application\Caching($this->container, $this->parameters),
+                new Application\Caching($this->context, $this->parameters),
                 $this->parameters["lang"]
         );
         return $translator;
@@ -55,17 +59,17 @@ final class Loader extends Container
 
     protected function createServiceApplication()
     {
-        return new Application($this->container->session);
+        return new Application($this->context->session);
     }
 
     protected function createServiceFilesystem()
     {
-        return new Application\FileSystem($this->container, $this->parameters);
+        return new Application\FileSystem($this->context, $this->parameters);
     }
 
     protected function createServiceThumbs()
     {
-        return new Application\Thumbs($this->container, $this->parameters);
+        return new Application\Thumbs($this->context, $this->parameters);
     }
 
     private function init()
@@ -83,7 +87,7 @@ final class Loader extends Container
             throw new DirectoryNotFoundException("Resource path '$uploadPath' doesn't exist!");
         }
 
-        $tempDir = $this->container->parameters["tempDir"] . "/file-manager";
+        $tempDir = $this->context->parameters["tempDir"] . "/file-manager";
         if (!is_dir($tempDir)) {
 
             $oldumask = umask(0);
