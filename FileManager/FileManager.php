@@ -2,10 +2,7 @@
 
 namespace Ixtrum;
 
-use Nette\DI\Container,
-    Nette\Application\UI;
-
-class FileManager extends UI\Control
+class FileManager extends \Nette\Application\UI\Control
 {
 
     const NAME = "iXtrum File Manager";
@@ -17,6 +14,12 @@ class FileManager extends UI\Control
     /** @var \Nette\DI\Container */
     private $systemContainer;
 
+    /**
+     * Constructor
+     *
+     * @param \Nette\DI\Container $systemContainer System container
+     * @param array               $config          User configuration
+     */
     public function __construct(\Nette\DI\Container $systemContainer, $config = array())
     {
         parent::__construct();
@@ -170,6 +173,7 @@ class FileManager extends UI\Control
      * Callback for error event in form
      *
      * @param \Nette\Application\UI\Form $form
+     *
      * @return void
      */
     public function onFormError(\Nette\Application\UI\Form $form)
