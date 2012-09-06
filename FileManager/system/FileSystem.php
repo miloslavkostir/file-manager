@@ -511,8 +511,7 @@ class FileSystem
 
         foreach ($files as $file) {
 
-            $fileSystem = new FileSystem($this->context, $this->config);
-            $info["size"] += $fileSystem->filesize($file->getPathName());
+            $info["size"] += $this->filesize($file->getPathName());
             $info["count"]++;
         }
 
@@ -758,9 +757,7 @@ class FileSystem
         $files = Finder::findFiles("*")->from($this->config["uploadroot"] . $this->config["uploadpath"]);
 
         foreach ($files as $file) {
-
-            $fileSystem = new FileSystem($this->context, $this->config);
-            $size += $fileSystem->filesize($file->getPathName());
+            $size += $this->filesize($file->getPathName());
         }
 
         return $size;
