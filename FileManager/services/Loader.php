@@ -34,7 +34,35 @@ final class Loader extends \Nette\DI\Container
         $this->parameters = $config["parameters"];
         $this->context = $container;
 
-        $this->init();
+        $this->checkRequirements();
+    }
+
+    private function checkRequirements()
+    {
+        $uploadPath = $this->parameters["uploadroot"] . $this->parameters["uploadpath"];
+        if (!is_dir($uploadPath)) {
+            throw new DirectoryNotFoundException("Upload path '$uploadPath' doesn't exist!");
+        }
+
+        if (!is_writable($uploadPath)) {
+            throw new ApplicationException("Upload path '$uploadPath' must be writable!");
+        }
+
+        if (!is_dir($uploadPath)) {
+            throw new DirectoryNotFoundException("Resource path '$uploadPath' doesn't exist!");
+        }
+
+        $tempDir = $this->context->parameters["tempDir"] . "/file-manager";
+        if (!is_dir($tempDir)) {
+
+            $oldumask = umask(0);
+            mkdir($tempDir, 0777);
+            umask($oldumask);
+        }
+
+        if (!is_writable($tempDir)) {
+            throw new ApplicationException("Temp dir '$tempDir' must be writable!");
+        }
     }
 
     protected function createServiceSystemContainer()
@@ -70,34 +98,6 @@ final class Loader extends \Nette\DI\Container
     protected function createServiceThumbs()
     {
         return new Application\Thumbs($this->context, $this->parameters);
-    }
-
-    private function init()
-    {
-        $uploadPath = $this->parameters["uploadroot"] . $this->parameters["uploadpath"];
-        if (!is_dir($uploadPath)) {
-            throw new DirectoryNotFoundException("Upload path '$uploadPath' doesn't exist!");
-        }
-
-        if (!is_writable($uploadPath)) {
-            throw new ApplicationException("Upload path '$uploadPath' must be writable!");
-        }
-
-        if (!is_dir($uploadPath)) {
-            throw new DirectoryNotFoundException("Resource path '$uploadPath' doesn't exist!");
-        }
-
-        $tempDir = $this->context->parameters["tempDir"] . "/file-manager";
-        if (!is_dir($tempDir)) {
-
-            $oldumask = umask(0);
-            mkdir($tempDir, 0777);
-            umask($oldumask);
-        }
-
-        if (!is_writable($tempDir)) {
-            throw new ApplicationException("Temp dir '$tempDir' must be writable!");
-        }
     }
 
 }
