@@ -14,12 +14,17 @@ class FileManager extends UI\Control
     /** @var \Nette\DI\Container */
     protected $context;
 
-    public function __construct(\Nette\DI\Container $container = null, $config = array())
+    /** @var \Nette\DI\Container */
+    private $systemContainer;
+
+    public function __construct(\Nette\DI\Container $systemContainer, $config = array())
     {
         parent::__construct();
 
+        $this->systemContainer = $systemContainer;
+
         // Load system container with services and configuration
-        $this->context = new FileManager\Services\Loader($container, $config, __DIR__);
+        $this->context = new FileManager\Services\Loader($systemContainer, $config, __DIR__);
         $this->context->freeze();
 
         // Get/set actual dir
@@ -181,11 +186,12 @@ class FileManager extends UI\Control
      */
     protected function createComponentControl()
     {
-        return new \Nette\Application\UI\Multiplier(function ($name) {
+        $container = $this->systemContainer;
+        return new \Nette\Application\UI\Multiplier(function ($name) use ($container) {
                     $namespace = __NAMESPACE__;
                     $namespace .= "\\FileManager\Controls";
                     $class = "$namespace\\$name";
-                    return new $class;
+                    return new $class($container);
                 });
     }
 
@@ -196,11 +202,12 @@ class FileManager extends UI\Control
      */
     protected function createComponentPlugin()
     {
-        return new \Nette\Application\UI\Multiplier(function ($name) {
+        $container = $this->systemContainer;
+        return new \Nette\Application\UI\Multiplier(function ($name) use ($container) {
                     $namespace = __NAMESPACE__;
                     $namespace .= "\\FileManager\Plugins";
                     $class = "$namespace\\$name";
-                    return new $class;
+                    return new $class($container);
                 });
     }
 
