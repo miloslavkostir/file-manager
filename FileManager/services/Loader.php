@@ -2,88 +2,66 @@
 
 namespace Ixtrum\FileManager\Services;
 
-use Nette\DI\Container,
-    Nette\DirectoryNotFoundException,
-    Nette\Application\ApplicationException,
-    Ixtrum\FileManager\Application;
-
-final class Loader extends Container
+final class Loader extends \Nette\DI\Container
 {
 
-    /** @var Container */
-    private $container;
+    /** @var \Nette\DI\Container System container */
+    private $context;
 
-    public function __construct(Container $container, $config, $rootPath)
+    /**
+     * Constructor
+     *
+     * @param \Nette\DI\Container $systemContainer System container
+     * @param array               $config          Custom configuration
+     * @param string              $rootPath        Path to application
+     */
+    public function __construct(\Nette\DI\Container $systemContainer, $config, $rootPath)
     {
         $loader = new \Nette\Config\Loader;
         $config = $loader->load("$rootPath/config/config.neon");
-        $config["parameters"] = array_merge($config["parameters"], $config);
+        array_merge($config["parameters"], $config);
         $config["parameters"]["rootPath"] = $rootPath;
-        $config["parameters"]["resPath"] = $container->parameters["wwwDir"] . $config["parameters"]["resDir"];
+        $config["parameters"]["resPath"] = $systemContainer->parameters["wwwDir"] . $config["parameters"]["resDir"];
 
         if (!isset($config["parameters"]["uploadroot"])) {
             $config["parameters"]["uploadroot"] = $rootPath;
         }
 
         // Merge plugins with configuration
-        $plugins = new Application\Plugins(
+        $plugins = new \Ixtrum\FileManager\Application\Plugins(
                 $config["parameters"]["rootPath"] . $config["parameters"]["pluginDir"],
-                new Application\Caching($container, $config["parameters"])
+                new \Ixtrum\FileManager\Application\Caching($systemContainer, $config["parameters"])
         );
         $config["parameters"]["plugins"] = $plugins->loadPlugins();
 
         $this->parameters = $config["parameters"];
-        $this->container = $container;
+        $this->context = $systemContainer;
 
-        $this->init();
+        $this->checkRequirements();
     }
 
-    protected function createServiceCaching()
-    {
-        return new Application\Caching($this->container, $this->parameters);
-    }
-
-    protected function createServiceTranslator()
-    {
-        $translator = new Application\Translator\GettextTranslator(
-                $this->parameters["rootPath"] . $this->parameters["langDir"] . $this->parameters["lang"] . ".mo",
-                new Application\Caching($this->container, $this->parameters),
-                $this->parameters["lang"]
-        );
-        return $translator;
-    }
-
-    protected function createServiceApplication()
-    {
-        return new Application($this->container->session);
-    }
-
-    protected function createServiceFilesystem()
-    {
-        return new Application\FileSystem($this->container, $this->parameters);
-    }
-
-    protected function createServiceThumbs()
-    {
-        return new Application\Thumbs($this->container, $this->parameters);
-    }
-
-    private function init()
+    /**
+     * Check application requirements
+     *
+     * @throws \Nette\DirectoryNotFoundException
+     * @throws \Nette\Application\ApplicationException
+     */
+    private function checkRequirements()
     {
         $uploadPath = $this->parameters["uploadroot"] . $this->parameters["uploadpath"];
         if (!is_dir($uploadPath)) {
-            throw new DirectoryNotFoundException("Upload path '$uploadPath' doesn't exist!");
+            throw new \Nette\DirectoryNotFoundException("Upload path '$uploadPath' doesn't exist!");
         }
 
         if (!is_writable($uploadPath)) {
-            throw new ApplicationException("Upload path '$uploadPath' must be writable!");
+            throw new \Nette\Application\ApplicationException("Upload path '$uploadPath' must be writable!");
         }
 
         if (!is_dir($uploadPath)) {
-            throw new DirectoryNotFoundException("Resource path '$uploadPath' doesn't exist!");
+            throw new \Nette\DirectoryNotFoundException("Resource path '$uploadPath' doesn't exist!");
         }
 
-        $tempDir = $this->container->parameters["tempDir"] . "/file-manager";
+        $tempDir = $this->context->parameters["tempDir"] . "/file-manager";
         if (!is_dir($tempDir)) {
 
             $oldumask = umask(0);
@@ -92,8 +70,72 @@ final class Loader extends Container
         }
 
         if (!is_writable($tempDir)) {
-            throw new ApplicationException("Temp dir '$tempDir' must be writable!");
+            throw new \Nette\Application\ApplicationException("Temp dir '$tempDir' must be writable!");
         }
+    }
+
+    /**
+     * Create service systemContainer
+     *
+     * @return \Nette\DI\Container
+     */
+    protected function createServiceSystemContainer()
+    {
+        return $this->context;
+    }
+
+    /**
+     * Create service caching
+     *
+     * @return \Ixtrum\FileManager\Application\Caching
+     */
+    protected function createServiceCaching()
+    {
+        return new \Ixtrum\FileManager\Application\Caching($this->context, $this->parameters);
+    }
+
+    /**
+     * Create service translator
+     *
+     * @return \Ixtrum\FileManager\Application\Translator\GettextTranslator
+     */
+    protected function createServiceTranslator()
+    {
+        return new \Ixtrum\FileManager\Application\Translator\GettextTranslator(
+                $this->parameters["rootPath"] . $this->parameters["langDir"] . $this->parameters["lang"] . ".mo",
+                new \Ixtrum\FileManager\Application\Caching($this->context, $this->parameters),
+                $this->parameters["lang"]
+        );
+    }
+
+    /**
+     * Create service application
+     *
+     * @return \Ixtrum\FileManager\Application\Translator\GettextTranslator
+     */
+    protected function createServiceApplication()
+    {
+        return new \Ixtrum\FileManager\Application($this->context->session);
+    }
+
+    /**
+     * Create service fileSystem
+     *
+     * @return \Ixtrum\FileManager\Application\FileSystem
+     */
+    protected function createServiceFilesystem()
+    {
+        return new \Ixtrum\FileManager\Application\FileSystem($this->context, $this->parameters);
+    }
+
+    /**
+     * Create service thumbs
+     *
+     * @return \Ixtrum\FileManager\Application\Thumbs
+     */
+    protected function createServiceThumbs()
+    {
+        return new \Ixtrum\FileManager\Application\Thumbs($this->context, $this->parameters);
     }
 
 }
