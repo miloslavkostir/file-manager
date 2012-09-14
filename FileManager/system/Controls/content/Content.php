@@ -409,14 +409,6 @@ class Content extends \Ixtrum\FileManager
      */
     private function getDirectoryContent($actualdir, $mask, $view, $order)
     {
-        $thumbDir = $this->context->parameters["resDir"] . "img/icons/" . $view . "/";
-        if (!is_dir($this->presenter->context->parameters["wwwDir"] . $thumbDir)) {
-            throw new \Nette\DirectoryNotFoundException("Missing folder with icons for '$view' view!");
-        }
-
-        $uploadpath = $this->context->parameters["uploadpath"];
-        $rootname = $this->context->filesystem->getRootName();
-        $uploadroot = $this->context->parameters["uploadroot"];
         $supportedThumbs = $this->context->thumbs->supported;
         $absolutePath = $this->context->filesystem->getAbsolutePath($actualdir);
 
@@ -438,7 +430,7 @@ class Content extends \Ixtrum\FileManager
                 $filetype = strtolower(pathinfo($name, PATHINFO_EXTENSION));
                 $dir_array[$name]["filetype"] = $filetype;
 
-                if (file_exists($this->presenter->context->parameters["wwwDir"] . $thumbDir . $filetype . ".png")) {
+                if (file_exists($this->context->parameters["wwwDir"] . $this->context->parameters["resDir"] . "img/icons/$view/$filetype.png")) {
 
                     if ($filetype === "folder") {
                         $dir_array[$name]["icon"] = "icon.png";

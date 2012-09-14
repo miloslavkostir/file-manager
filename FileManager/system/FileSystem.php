@@ -361,13 +361,10 @@ class FileSystem
      */
     public function fileDetails($actualdir, $filename)
     {
-        $thumbDir = $this->config["resDir"] . "img/icons/";
-        $uploadpath = $this->config["uploadpath"];
-        $rootname = $this->getRootName();
-        $uploadroot = $this->config["uploadroot"];
+        $thumbDir = $this->config["resDir"] . "img/icons/large/";
         $path = $this->getAbsolutePath($actualdir) . $filename;
-        $info = array();
 
+        $info = array();
         if (!is_dir($path)) {
 
             $info["path"] = $path;
@@ -378,10 +375,10 @@ class FileSystem
             $info["modificated"] = date("F d Y H:i:s", filemtime($path));
             $info["permissions"] = $this->getFileMod($path);
 
-            if (file_exists($this->context->parameters["wwwDir"] . $thumbDir . "large/" . strtolower($info["type"]) . ".png" && strtolower($info["type"]) <> "folder")) {
-                $info["icon"] = $thumbDir . "large/" . $info['type'] . ".png";
+            if (file_exists($this->config["wwwDir"] . $thumbDir . strtolower($info["type"]) . ".png" && strtolower($info["type"]) <> "folder")) {
+                $info["icon"] = $thumbDir . $info["type"] . ".png";
             } else {
-                $info["icon"] = $thumbDir . "large/icon.png";
+                $info["icon"] = $thumbDir . "icon.png";
             }
         } else {
 
@@ -394,7 +391,7 @@ class FileSystem
             $info["files_count"] = $folder_info["count"];
             $info["modificated"] = date("F d Y H:i:s", filemtime($path));
             $info["permissions"] = $this->getFileMod($path);
-            $info["icon"] = $thumbDir . "large/folder.png";
+            $info["icon"] = $thumbDir . "folder.png";
         }
 
         return $info;
