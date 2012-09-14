@@ -4,7 +4,6 @@ namespace Ixtrum\FileManager\Application;
 
 use Nette\Image,
     Nette\Diagnostics\Debugger,
-    Nette\DI\Container,
     Nette\Utils\Finder;
 
 class Thumbs
@@ -13,20 +12,20 @@ class Thumbs
     /** @var string */
     private $thumbDir;
 
-    /** @var Container */
-    private $context;
-
     /** @var array */
     private $config;
 
     /** @var array */
     public $supported = array("jpg", "jpeg", "png", "gif", "bmp");
 
-    public function __construct(Container $container = NULL, $config = array())
+    /**
+     * Constructor
+     *
+     * @param array $config application configuration
+     */
+    public function __construct($config)
     {
-        $tempDir = $container->parameters["tempDir"];
-        $thumbDir = "$tempDir/cache/_Ixtrum.FileManager/thumbs";
-
+        $thumbDir = $config["tempDir"] . "/cache/_Ixtrum.FileManager/thumbs";
         if (!is_dir($thumbDir)) {
 
             $oldumask = umask(0);
@@ -39,7 +38,6 @@ class Thumbs
         }
 
         $this->thumbDir = $thumbDir;
-        $this->context = $container;
         $this->config = $config;
     }
 
@@ -68,7 +66,7 @@ class Thumbs
             return Image::fromFile($thumbPath);
         } else {
 
-            $filesystem = new FileSystem($this->context, $this->config);
+            $filesystem = new FileSystem($this->config);
             $disksize = $filesystem->diskSizeInfo();
 
             if ($disksize["spaceleft"] > 50) {
@@ -110,7 +108,7 @@ class Thumbs
      */
     private function getName($path)
     {
-        $filesystem = new FileSystem($this->context, $this->config);
+        $filesystem = new FileSystem($this->config);
         $path = $filesystem->getRealPath($path);
 
         return md5($path) . "." . pathinfo($path, PATHINFO_EXTENSION);

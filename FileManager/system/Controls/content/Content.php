@@ -228,7 +228,7 @@ class Content extends \Ixtrum\FileManager
             $actualdir = $this->context->application->getActualDir();
             $actualPath = $this->context->filesystem->getAbsolutePath($actualdir);
 
-            $zip = new \Ixtrum\FileManager\Application\Zip($actualPath);
+            $zip = new \Ixtrum\FileManager\Application\Zip($this->context->parameters, $actualPath);
             $zip->addFiles($files);
 
             $key = $this->context->filesystem->getRealPath($actualPath);

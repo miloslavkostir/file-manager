@@ -3,8 +3,7 @@
 namespace Ixtrum\FileManager\Application;
 
 use Nette\Utils\Finder,
-    Nette\Application\ApplicationException,
-    Nette\Utils\Strings;
+    Nette\Application\ApplicationException;
 
 class Zip
 {
@@ -12,7 +11,19 @@ class Zip
     /** @var string */
     private $targetDir;
 
-    public function __construct($targetDir)
+    /** @var array */
+    private $config;
+
+    /**
+     * Constructor
+     * 
+     * @param array $config application configuration
+     * 
+     * @param string $targetDir target directory
+     *
+     * @throws \Nette\Application\ApplicationException
+     */
+    public function __construct($config, $targetDir)
     {
         if (!extension_loaded("zip")) {
             throw new ApplicationException("PHP ZIP not loaded.");
@@ -25,6 +36,7 @@ class Zip
             umask($oldumask);
         }
 
+        $this->config = $config;
         $this->targetDir = $targetDir;
     }
 
@@ -36,7 +48,7 @@ class Zip
     public function addFiles($files)
     {
         $zip = new \ZipArchive;
-        $fileSystem = new FileSystem;
+        $fileSystem = new FileSystem($this->config);
 
         $name = $fileSystem->checkDuplName($this->targetDir, Date("Ymd_H-m-s") . ".zip");
         $zipPath = "$this->targetDir/$name";

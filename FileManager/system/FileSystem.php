@@ -3,22 +3,22 @@
 namespace Ixtrum\FileManager\Application;
 
 use Nette\Utils\Finder,
-    Nette\Diagnostics\Debugger,
-    Nette\DI\Container;
+    Nette\Diagnostics\Debugger;
 
 class FileSystem
 {
 
-    /** @var Container */
-    private $context;
-
     /** @var array */
     private $config;
 
-    public function __construct(Container $container = NULL, $config = array())
+    /**
+     * Constructor
+     *
+     * @param array $config application configuration
+     */
+    public function __construct($config)
     {
         $this->config = $config;
-        $this->context = $container;
     }
 
     /**
@@ -26,6 +26,7 @@ class FileSystem
      *
      * @param  string  actual dir (absolute path)
      * @param  string  filename
+     *
      * @return string
      */
     public function checkDuplName($targetpath, $filename)
@@ -62,7 +63,7 @@ class FileSystem
 
             if ($this->config["cache"]) {
 
-                $caching = new Caching($this->context, $this->config);
+                $caching = new Caching($this->config);
                 $caching->deleteItem(array("content", $this->getRealPath($targetpath)));
             }
 
@@ -199,7 +200,7 @@ class FileSystem
         } else {
             if (is_dir($actualpath . $filename)) {
 
-                $thumbs = new Thumbs($this->context, $this->config);
+                $thumbs = new Thumbs($this->config);
                 $thumbs->deleteDirThumbs($actualpath . $filename);
 
                 if ($this->isSubFolder($actualpath, $targetpath, $filename)) {
@@ -208,7 +209,7 @@ class FileSystem
 
                     if ($this->config["cache"]) {
 
-                        $caching = new Caching($this->context, $this->config);
+                        $caching = new Caching($this->config);
                         $caching->deleteItemsRecursive($actualpath . $filename);
                         $caching->deleteItem(array("content", $this->getRealPath($actualpath)));
                         $caching->deleteItem(array("content", $this->getRealPath($targetpath)));
@@ -224,14 +225,14 @@ class FileSystem
                 }
             } else {
 
-                $thumbs = new Thumbs($this->context, $this->config);
+                $thumbs = new Thumbs($this->config);
                 $thumbs->deleteThumb($actualpath . $filename);
 
                 if ($this->moveFile($actualpath, $targetpath, $filename)) {
 
                     if ($this->config["cache"]) {
 
-                        $caching = new Caching($this->context, $this->config);
+                        $caching = new Caching($this->config);
                         $caching->deleteItem(array("content", $this->getRealPath($actualpath)));
                         $caching->deleteItem(array("content", $this->getRealPath($targetpath)));
                     }
@@ -250,14 +251,12 @@ class FileSystem
      * @param  string  actual folder (absolute path)
      * @param  string  target folder (absolute path)
      * @param  string  filename
-     * @return bool
+     *
+     * @return boolean
      */
     public function moveFile($actualpath, $targetpath, $filename)
     {
         if (rename($actualpath . $filename, $targetpath . $this->checkDuplName($targetpath, $filename))) {
-
-            $application = new \Ixtrum\FileManager\Application($this->context->session);
-            $application->clearClipboard();
             return true;
         }
 
@@ -564,11 +563,11 @@ class FileSystem
 
             if ($this->config["cache"]) {
 
-                $caching = new Caching($this->context, $this->config);
+                $caching = new Caching($this->config);
                 $caching->deleteItemsRecursive($absDir);
             }
 
-            $thumbs = new Thumbs($this->context, $this->config);
+            $thumbs = new Thumbs($this->config);
             $thumbs->deleteDirThumbs($absDir . $file);
 
             if ($this->deleteFolder($absDir . $file)) {
@@ -600,7 +599,7 @@ class FileSystem
         if (is_writable($path)) {
 
             // delete thumb
-            $thumbs = new Thumbs($this->context, $this->config);
+            $thumbs = new Thumbs($this->config);
             $thumbs->deleteThumb($path . $filename);
 
             // delete source file
@@ -608,7 +607,7 @@ class FileSystem
 
                 if ($this->config["cache"]) {
 
-                    $caching = new Caching($this->context, $this->config);
+                    $caching = new Caching($this->config);
                     $caching->deleteItem(array("content", $this->getRealPath($path)));
                 }
 

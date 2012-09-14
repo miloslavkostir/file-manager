@@ -6,8 +6,7 @@ use Nette\Caching\Cache,
     Nette\Caching\Storages\FileJournal,
     Nette\Caching\Storages\FileStorage,
     Nette\Caching\Storages\MemcachedStorage,
-    Nette\Utils\Finder,
-    Nette\DI\Container;
+    Nette\Utils\Finder;
 
 class Caching
 {
@@ -15,19 +14,20 @@ class Caching
     /** @var Cache */
     private $cache;
 
-    /** @var Container */
-    private $context;
-
     /** @var array */
     private $config;
 
-    public function __construct(Container $container, array $config)
+    /**
+     * Constructor
+     * 
+     * @param array $config application configuration
+     */
+    public function __construct($config)
     {
         $storageCfg = strtolower($config["cacheStorage"]);
         if ($storageCfg === "filestorage") {
-            $tempDir = $container->parameters["tempDir"];
-            $cacheDir = "$tempDir/cache/_Ixtrum.FileManager";
 
+            $cacheDir = $config["tempDir"] . "/cache/_Ixtrum.FileManager";
             if (!is_dir($cacheDir)) {
 
                 $oldumask = umask(0);
@@ -41,7 +41,6 @@ class Caching
         }
 
         $this->cache = new Cache($storage);
-        $this->context = $container;
         $this->config = $config;
     }
 
@@ -69,7 +68,7 @@ class Caching
     {
         $dirs = Finder::findDirectories("*")->from($absDir);
         $cache = $this->cache;
-        $fileSystem = new FileSystem($this->context, $this->config);
+        $fileSystem = new FileSystem($this->config);
 
         foreach ($dirs as $dir) {
 

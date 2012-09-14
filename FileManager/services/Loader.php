@@ -22,6 +22,7 @@ final class Loader extends \Nette\DI\Container
         array_merge($config["parameters"], $config);
         $config["parameters"]["rootPath"] = $rootPath;
         $config["parameters"]["wwwDir"] = $systemContainer->parameters["wwwDir"];
+        $config["parameters"]["tempDir"] = $systemContainer->parameters["tempDir"];
 
         if (!isset($config["parameters"]["uploadroot"])) {
             $config["parameters"]["uploadroot"] = $rootPath;
@@ -30,7 +31,7 @@ final class Loader extends \Nette\DI\Container
         // Merge plugins with configuration
         $plugins = new \Ixtrum\FileManager\Application\Plugins(
                 $config["parameters"]["rootPath"] . $config["parameters"]["pluginDir"],
-                new \Ixtrum\FileManager\Application\Caching($systemContainer, $config["parameters"])
+                new \Ixtrum\FileManager\Application\Caching($config["parameters"])
         );
         $config["parameters"]["plugins"] = $plugins->loadPlugins();
 
@@ -79,7 +80,7 @@ final class Loader extends \Nette\DI\Container
      */
     protected function createServiceCaching()
     {
-        return new \Ixtrum\FileManager\Application\Caching($this->context, $this->parameters);
+        return new \Ixtrum\FileManager\Application\Caching($this->parameters);
     }
 
     /**
@@ -91,7 +92,7 @@ final class Loader extends \Nette\DI\Container
     {
         return new \Ixtrum\FileManager\Application\Translator\GettextTranslator(
                 $this->parameters["rootPath"] . $this->parameters["langDir"] . $this->parameters["lang"] . ".mo",
-                new \Ixtrum\FileManager\Application\Caching($this->context, $this->parameters),
+                new \Ixtrum\FileManager\Application\Caching($this->parameters),
                 $this->parameters["lang"]
         );
     }
@@ -113,7 +114,7 @@ final class Loader extends \Nette\DI\Container
      */
     protected function createServiceFilesystem()
     {
-        return new \Ixtrum\FileManager\Application\FileSystem($this->context, $this->parameters);
+        return new \Ixtrum\FileManager\Application\FileSystem($this->parameters);
     }
 
     /**
@@ -123,7 +124,7 @@ final class Loader extends \Nette\DI\Container
      */
     protected function createServiceThumbs()
     {
-        return new \Ixtrum\FileManager\Application\Thumbs($this->context, $this->parameters);
+        return new \Ixtrum\FileManager\Application\Thumbs($this->parameters);
     }
 
 }
