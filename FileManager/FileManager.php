@@ -100,7 +100,7 @@ class FileManager extends \Nette\Application\UI\Control
         // Load resources
         if ($this->context->parameters["synchronizeResDir"] === true) {
             $resources = new FileManager\Application\Resources(
-                    $this->context->parameters["resPath"],
+                    $this->context->parameters["wwwDir"] . $this->context->parameters["resDir"],
                     $this->context->parameters["rootPath"]
             );
             $resources->synchronize();

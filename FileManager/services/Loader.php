@@ -21,7 +21,7 @@ final class Loader extends \Nette\DI\Container
         $config = $loader->load("$rootPath/config/config.neon");
         array_merge($config["parameters"], $config);
         $config["parameters"]["rootPath"] = $rootPath;
-        $config["parameters"]["resPath"] = $systemContainer->parameters["wwwDir"] . $config["parameters"]["resDir"];
+        $config["parameters"]["wwwDir"] = $systemContainer->parameters["wwwDir"];
 
         if (!isset($config["parameters"]["uploadroot"])) {
             $config["parameters"]["uploadroot"] = $rootPath;

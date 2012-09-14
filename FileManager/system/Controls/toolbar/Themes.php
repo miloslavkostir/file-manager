@@ -43,7 +43,9 @@ class Themes extends \Ixtrum\FileManager
     private function loadThemes()
     {
         $themes = array();
-        $files = \Nette\Utils\Finder::findDirectories("*")->in($this->context->parameters["resPath"] . "themes");
+        $files = \Nette\Utils\Finder::findDirectories("*")->in(
+                $this->context->parameters["wwwDir"] . $this->context->parameters["resDir"] . "themes"
+        );
         foreach ($files as $file) {
 
             // Get theme name
