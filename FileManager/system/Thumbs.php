@@ -25,7 +25,7 @@ class Thumbs
     public function __construct(Container $container = NULL, $config = array())
     {
         $tempDir = $container->parameters["tempDir"];
-        $thumbDir = "$tempDir/file-manager/thumbs";
+        $thumbDir = "$tempDir/cache/_Ixtrum.FileManager/thumbs";
 
         if (!is_dir($thumbDir)) {
 

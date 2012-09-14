@@ -26,7 +26,7 @@ class Caching
         $storageCfg = strtolower($config["cacheStorage"]);
         if ($storageCfg === "filestorage") {
             $tempDir = $container->parameters["tempDir"];
-            $cacheDir = "$tempDir/file-manager/cache";
+            $cacheDir = "$tempDir/cache/_Ixtrum.FileManager";
 
             if (!is_dir($cacheDir)) {
 
