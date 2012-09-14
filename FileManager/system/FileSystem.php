@@ -719,7 +719,7 @@ class FileSystem
 
             return $path;
         } else {
-            throw new InvalidArgumentException("Invalid path '$path' given!");
+            throw new \Nette\InvalidArgumentException("Invalid path '$path' given!");
         }
     }
 
