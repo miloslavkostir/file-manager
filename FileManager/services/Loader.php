@@ -30,13 +30,14 @@ final class Loader extends \Nette\DI\Container
 
         // Merge plugins with configuration
         $plugins = new \Ixtrum\FileManager\Application\Plugins(
-                $config["parameters"]["rootPath"] . $config["parameters"]["pluginDir"],
-                new \Ixtrum\FileManager\Application\Caching($config["parameters"])
+                        $config["parameters"]["rootPath"] . $config["parameters"]["pluginDir"],
+                        new \Ixtrum\FileManager\Application\Caching($config["parameters"])
         );
         $config["parameters"]["plugins"] = $plugins->loadPlugins();
 
         $this->parameters = $config["parameters"];
         $this->context = $systemContainer;
+        $this->sessionSection = $this->context->session->getSection("file-manager");
 
         $this->checkRequirements();
     }
@@ -91,20 +92,30 @@ final class Loader extends \Nette\DI\Container
     protected function createServiceTranslator()
     {
         return new \Ixtrum\FileManager\Application\Translator\GettextTranslator(
-                $this->parameters["rootPath"] . $this->parameters["langDir"] . $this->parameters["lang"] . ".mo",
-                new \Ixtrum\FileManager\Application\Caching($this->parameters),
-                $this->parameters["lang"]
+                        $this->parameters["rootPath"] . $this->parameters["langDir"] . $this->parameters["lang"] . ".mo",
+                        new \Ixtrum\FileManager\Application\Caching($this->parameters),
+                        $this->parameters["lang"]
         );
     }
 
     /**
      * Create service application
      *
-     * @return \Ixtrum\FileManager\Application\Translator\GettextTranslator
+     * @return \Ixtrum\FileManager\Application
      */
     protected function createServiceApplication()
     {
-        return new \Ixtrum\FileManager\Application($this->context->session);
+        return new \Ixtrum\FileManager\Application($this->sessionSection);
+    }
+
+    /**
+     * Create service clipboard
+     *
+     * @return \Ixtrum\FileManager\Application\Clipboard
+     */
+    protected function createServiceClipboard()
+    {
+        return new \Ixtrum\FileManager\Application\Clipboard($this->sessionSection);
     }
 
     /**

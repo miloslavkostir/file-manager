@@ -91,7 +91,7 @@ class Rename extends \Ixtrum\FileManager
             if (rename($origPath, $path . $new_filename)) {
 
                 $this->parent->parent->flashMessage($this->context->translator->translate("Successfully renamed to %s.", $new_filename), "info");
-                $this->context->application->clearClipboard();
+                $this->context->clipboard->clear();
             } else {
                 $this->parent->parent->flashMessage($this->context->translator->translate("An error occurred during %s renaming!", $values["orig_filename"]), "error");
             }

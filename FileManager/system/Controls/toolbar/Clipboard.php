@@ -2,32 +2,24 @@
 
 namespace Ixtrum\FileManager\Controls;
 
-use Nette\Utils\Finder;
-
 class Clipboard extends \Ixtrum\FileManager
 {
 
     public function handleClearClipboard()
     {
-        $session = $this->presenter->context->session->getSection('file-manager');
-        $this->context->application->clearClipboard();
-        $this->parent->parent->handleShowContent($session->actualdir);
+        $this->context->clipboard->clear();
     }
 
     public function handlePasteFromClipboard()
     {
-        $session = $this->presenter->context->session->getSection('file-manager');
         $actualdir = $this->context->application->getActualDir();
-
         if ($this->context->filesystem->validPath($actualdir)) {
 
             if ($this->context->parameters["readonly"]) {
                 $this->parent->parent->flashMessage($this->context->translator->translate("Read-only mode enabled!"), "warning");
-            } elseif (!isset($session->clipboard) || count($session->clipboard) <= 0) {
-                $this->parent->parent->flashMessage($this->context->translator->translate("There is nothing to paste from clipboard!"), "warning");
             } else {
 
-                foreach ($session->clipboard as $key => $val) {
+                foreach ($this->context->clipboard->get() as $val) {
 
                     if ($val["action"] === "copy") {
 
@@ -47,8 +39,7 @@ class Clipboard extends \Ixtrum\FileManager
                         $this->parent->parent->flashMessage($this->context->translator->translate("Unknown action! - %s", $val["action"]), "error");
                     }
                 }
-
-                $this->handleClearClipboard();
+                $this->context->clipboard->clear();
             }
         } else {
             $this->parent->parent->flashMessage($this->context->translator->translate("Folder %s already does not exist!", $actualdir), "warning");
@@ -57,16 +48,7 @@ class Clipboard extends \Ixtrum\FileManager
 
     public function handleRemoveFromClipboard($actualdir, $filename)
     {
-        $session = $this->presenter->context->session->getSection("file-manager");
-        $path = $actualdir . $filename;
-
-        if (isset($session->clipboard[$path])) {
-            unset($session->clipboard[$path]);
-        } else {
-            $this->parent->parent->flashMessage($this->context->translator->translate("Item %s does not exist in clipboard!", $path), "error");
-        }
-
-        $this->parent->parent->handleShowContent($session->actualdir);
+        $this->context->clipboard->remove($actualdir . $filename);
     }
 
     public function render()
@@ -74,11 +56,8 @@ class Clipboard extends \Ixtrum\FileManager
         $template = $this->template;
         $template->setFile(__DIR__ . "/Clipboard.latte");
         $template->setTranslator($this->context->translator);
-
-        $session = $this->presenter->context->session->getSection("file-manager");
-        $template->clipboard = $session->clipboard;
+        $template->clipboard = $this->context->clipboard->get();
         $template->rootname = $this->context->filesystem->getRootName();
-
         $template->render();
     }
 

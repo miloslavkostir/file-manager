@@ -63,11 +63,13 @@ class Content extends \Ixtrum\FileManager
             $actualdir = $this->context->application->getActualDir();
             if ($this->context->filesystem->validPath($actualdir, $filename)) {
 
-                $session = $this->presenter->context->session->getSection("file-manager");
-                $session->clipboard[$actualdir . $filename] = array(
-                    "action" => "copy",
-                    "actualdir" => $actualdir,
-                    "filename" => $filename
+                $this->context->clipboard->add(
+                        $actualdir . $filename,
+                        array(
+                            "action" => "copy",
+                            "actualdir" => $actualdir,
+                            "filename" => $filename
+                        )
                 );
             } else {
                 $this->parent->parent->flashMessage($this->context->translator->translate("File %s not found!", $filename), "warning");
@@ -87,13 +89,15 @@ class Content extends \Ixtrum\FileManager
         if (is_array($files) && $files) {
 
             $actualdir = $this->context->application->getActualDir();
-            $session = $this->presenter->context->session->getSection("file-manager");
             foreach ($files as $file) {
 
-                $session->clipboard[$actualdir . $file] = array(
-                    "action" => "copy",
-                    "actualdir" => $actualdir,
-                    "filename" => $file
+                $this->context->clipboard->add(
+                        $actualdir . $file,
+                        array(
+                            "action" => "copy",
+                            "actualdir" => $actualdir,
+                            "filename" => $file
+                        )
                 );
             }
         } else {
@@ -113,11 +117,13 @@ class Content extends \Ixtrum\FileManager
             $actualdir = $this->context->application->getActualDir();
             if ($this->context->filesystem->validPath($actualdir, $filename)) {
 
-                $session = $this->presenter->context->session->getSection("file-manager");
-                $session->clipboard[$actualdir . $filename] = array(
-                    "action" => "cut",
-                    "actualdir" => $actualdir,
-                    "filename" => $filename
+                $this->context->clipboard->add(
+                        $actualdir . $filename,
+                        array(
+                            "action" => "cut",
+                            "actualdir" => $actualdir,
+                            "filename" => $filename
+                        )
                 );
             } else {
                 $this->parent->parent->flashMessage($this->context->translator->translate("File %s not found!", $filename), "warning");
@@ -137,14 +143,15 @@ class Content extends \Ixtrum\FileManager
         if (is_array($files) && $files) {
 
             $actualdir = $this->context->application->getActualDir();
-            $session = $this->presenter->context->session->getSection("file-manager");
-
             foreach ($files as $file) {
 
-                $session->clipboard[$actualdir . $file] = array(
-                    "action" => "cut",
-                    "actualdir" => $actualdir,
-                    "filename" => $file
+                $this->context->clipboard->add(
+                        $actualdir . $file,
+                        array(
+                            "action" => "cut",
+                            "actualdir" => $actualdir,
+                            "filename" => $file
+                        )
                 );
             }
         } else {

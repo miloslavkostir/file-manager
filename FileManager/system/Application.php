@@ -5,12 +5,17 @@ namespace Ixtrum\FileManager;
 class Application
 {
 
-    /** @var \Nette\Http\Session */
-    private $session;
+    /** @var \Nette\Http\SessionSection */
+    private $sessionSection;
 
-    public function __construct(\Nette\Http\Session $session)
+    /**
+     * Constructor
+     *
+     * @param \Nette\Http\SessionSection $sessionSection session section
+     */
+    public function __construct(\Nette\Http\SessionSection $sessionSection)
     {
-        $this->session = $session;
+        $this->sessionSection = $sessionSection;
     }
 
     /**
@@ -20,7 +25,7 @@ class Application
      */
     public function getActualDir()
     {
-        return $this->session->getSection("file-manager")->actualdir;
+        return $this->sessionSection->actualdir;
     }
 
     /**
@@ -30,16 +35,7 @@ class Application
      */
     public function setActualDir($dir)
     {
-        $this->session->getSection("file-manager")->actualdir = $dir;
-    }
-
-    /**
-     * Clear all items in clipboard
-     */
-    public function clearClipboard()
-    {
-        $session = $this->session->getSection("file-manager");
-        unset($session->clipboard);
+        $this->sessionSection->actualdir = $dir;
     }
 
 }
