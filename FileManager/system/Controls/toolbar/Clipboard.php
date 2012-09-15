@@ -7,19 +7,19 @@ class Clipboard extends \Ixtrum\FileManager
 
     public function handleClearClipboard()
     {
-        $this->context->clipboard->clear();
+        $this->context->session->clear("clipboard");
     }
 
     public function handlePasteFromClipboard()
     {
-        $actualdir = $this->context->application->getActualDir();
+        $actualdir = $this->context->session->get("actualdir");
         if ($this->context->filesystem->validPath($actualdir)) {
 
             if ($this->context->parameters["readonly"]) {
                 $this->parent->parent->flashMessage($this->context->translator->translate("Read-only mode enabled!"), "warning");
             } else {
 
-                foreach ($this->context->clipboard->get() as $val) {
+                foreach ($this->context->session->get("clipboard") as $val) {
 
                     if ($val["action"] === "copy") {
 
@@ -39,7 +39,7 @@ class Clipboard extends \Ixtrum\FileManager
                         $this->parent->parent->flashMessage($this->context->translator->translate("Unknown action! - %s", $val["action"]), "error");
                     }
                 }
-                $this->context->clipboard->clear();
+                $this->context->session->clear("clipboard");
             }
         } else {
             $this->parent->parent->flashMessage($this->context->translator->translate("Folder %s already does not exist!", $actualdir), "warning");
@@ -48,7 +48,7 @@ class Clipboard extends \Ixtrum\FileManager
 
     public function handleRemoveFromClipboard($actualdir, $filename)
     {
-        $this->context->clipboard->remove($actualdir . $filename);
+        $this->context->session->remove("clipboard", $actualdir . $filename);
     }
 
     public function render()
@@ -56,7 +56,7 @@ class Clipboard extends \Ixtrum\FileManager
         $template = $this->template;
         $template->setFile(__DIR__ . "/Clipboard.latte");
         $template->setTranslator($this->context->translator);
-        $template->clipboard = $this->context->clipboard->get();
+        $template->clipboard = $this->context->session->get("clipboard");
         $template->rootname = $this->context->filesystem->getRootName();
         $template->render();
     }

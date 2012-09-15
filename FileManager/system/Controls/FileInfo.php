@@ -10,12 +10,12 @@ class FileInfo extends \Ixtrum\FileManager
 
     public function render()
     {
-        $actualdir = $this->context->application->getActualDir();
-
         $template = $this->template;
         $template->setFile(__DIR__ . "/FileInfo.latte");
         $template->setTranslator($this->context->translator);
-        $template->fileinfo = $this->context->filesystem->fileDetails($actualdir, $this->filename);
+        $template->fileinfo = $this->context->filesystem->fileDetails(
+                $this->context->session->get("actualdir"), $this->filename
+        );
         $template->render();
     }
 

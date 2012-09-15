@@ -13,8 +13,7 @@ class ViewSelector extends \Ixtrum\FileManager
         $template->setFile(__DIR__ . "/ViewSelector.latte");
         $template->setTranslator($this->context->translator);
 
-        $session = $this->presenter->context->session->getSection("file-manager");
-        $this["changeViewForm"]->setDefaults(array("view" => $session->view));
+        $this["changeViewForm"]->setDefaults(array("view" => $this->context->session->get("view")));
 
         $template->render();
     }
@@ -36,10 +35,7 @@ class ViewSelector extends \Ixtrum\FileManager
 
     public function changeViewFormSubmitted($form)
     {
-        $val = $form->values;
-        $session = $this->presenter->context->session->getSection("file-manager");
-        $session->view = $val["view"];
-        $this->parent->parent->handleShowContent($this->context->application->getActualDir());
+        $this->context->session->set("view", $form->values->view);
     }
 
 }

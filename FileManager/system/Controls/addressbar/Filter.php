@@ -9,13 +9,11 @@ class Filter extends \Ixtrum\FileManager
 
     public function render()
     {
-        $session = $this->presenter->context->session->getSection("file-manager");
-
         $template = $this->template;
         $template->setFile(__DIR__ . "/Filter.latte");
         $template->setTranslator($this->context->translator);
 
-        $this["filterForm"]->setDefaults(array("phrase" => $session->mask));
+        $this["filterForm"]->setDefaults(array("phrase" => $this->context->session->get("mask")));
 
         $template->render();
     }
@@ -31,12 +29,7 @@ class Filter extends \Ixtrum\FileManager
 
     public function filterFormSubmitted($form)
     {
-        $session = $this->presenter->context->session->getSection("file-manager");
-        $actualdir = $this->context->application->getActualDir();
-
-        $val = $form->values;
-        $session->mask = $val["phrase"];
-        $this->parent->parent->handleShowContent($actualdir);
+        $this->context->session->set("mask", $form->values->phrase);
     }
 
 }

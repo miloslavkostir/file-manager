@@ -9,8 +9,7 @@ class Navigation extends \Ixtrum\FileManager
 
     public function handleRefreshContent()
     {
-        $actualdir = $this->context->application->getActualDir();
-
+        $actualdir = $this->context->session->get("actualdir");
         if ($this->context->parameters["cache"]) {
 
             $this->context->caching->deleteItem(NULL, array("tags" => "treeview"));
@@ -25,7 +24,7 @@ class Navigation extends \Ixtrum\FileManager
 
     public function render()
     {
-        $actualdir = $this->context->application->getActualDir();
+        $actualdir = $this->context->session->get("actualdir");
         $rootname = $this->context->filesystem->getRootName();
 
         $template = $this->template;
@@ -62,7 +61,7 @@ class Navigation extends \Ixtrum\FileManager
         } else {
             $folder = $val['location'];
             $this->parent->parent->flashMessage($this->context->translator->translate("Folder %s does not exist!", $folder), 'warning');
-            $this->parent->parent->handleShowContent($this->context->application->getActualDir());
+            $this->parent->parent->handleShowContent($this->context->session->get("actualdir"));
         }
     }
 

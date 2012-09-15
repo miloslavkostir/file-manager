@@ -26,12 +26,12 @@ class FileManager extends \Nette\Application\UI\Control
         $this->context->freeze();
 
         // Get/set actual dir
-        $actualdir = $this->context->application->getActualdir();
+        $actualdir = $this->context->session->get("actualdir");
         if ($actualdir) {
 
             $actualPath = $this->context->filesystem->getAbsolutePath($actualdir);
             if (!is_dir($actualPath)) {
-                $this->context->application->setActualdir(null);
+                $this->context->session->clear("actualdir");
             }
         }
 
@@ -40,7 +40,7 @@ class FileManager extends \Nette\Application\UI\Control
 
     public function handleRefreshContent()
     {
-        $actualdir = $this->context->application->getActualDir();
+        $actualdir = $this->context->session->get("actualdir");
 
         if ($this->context->parameters["cache"]) {
 
@@ -87,7 +87,7 @@ class FileManager extends \Nette\Application\UI\Control
         if ($this->context->filesystem->validPath($actualdir)) {
 
             $this->template->content = $actualdir;
-            $this->context->application->setActualDir($actualdir);
+            $this->context->session->set("actualdir", $actualdir);
         } else {
             $this->flashMessage($this->context->translator->translate("Folder %s does not exist!", $actualdir), "warning");
         }
@@ -111,28 +111,29 @@ class FileManager extends \Nette\Application\UI\Control
         $template->setFile(__DIR__ . "/FileManager.latte");
         $template->setTranslator($this->context->translator);
 
-        $session = $this->presenter->context->session->getSection("file-manager");
-
-        if ($session->clipboard) {
-            $template->clipboard = $session->clipboard;
+        // Get clipboard
+        $clipboard = $this->context->session->get("clipboard");
+        if ($clipboard) {
+            $template->clipboard = $clipboard;
         }
 
-        if ($session->theme) {
-            $template->theme = $session->theme;
+        // Get theme
+        $theme = $this->context->session->get("theme");
+        if ($theme) {
+            $template->theme = $theme;
         } else {
             $template->theme = "default";
         }
 
+        // Get content
         if (!isset($template->content)) {
 
-            if ($session->actualdir) {
-                $template->content = $session->actualdir;
-            } else {
-
-                $rootname = $this->context->filesystem->getRootname();
-                $template->content = $rootname;
-                $this->context->application->setActualDir($rootname);
+            $actualDir = $this->context->session->get("actualdir");
+            if (empty($actualDir)) {
+                $actualDir = $this->context->filesystem->getRootname();
+                $this->context->session->set("actualdir", $actualDir);
             }
+            $template->content = $actualDir;
         }
 
         // Get plugins

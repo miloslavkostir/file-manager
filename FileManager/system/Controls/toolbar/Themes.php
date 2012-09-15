@@ -9,11 +9,12 @@ class Themes extends \Ixtrum\FileManager
     {
         $this->template->setFile(__DIR__ . "/Themes.latte");
         $this->template->setTranslator($this->context->translator);
-        $session = $this->presenter->context->session->getSection("file-manager");
-        if ($session->theme) {
-            $this["themeForm"]->setDefaults(array("theme" => $session->theme));
-        } else {
+
+        $theme = $this->context->session->get("theme");
+        if (empty($theme)) {
             $this["themeForm"]->setDefaults(array("theme" => "default"));
+        } else {
+            $this["themeForm"]->setDefaults(array("theme" => $theme));
         }
 
         $this->template->render();
@@ -30,8 +31,7 @@ class Themes extends \Ixtrum\FileManager
 
     public function themeFormSubmitted(\Nette\Application\UI\Form $form)
     {
-        $session = $this->presenter->context->session->getSection("file-manager");
-        $session->theme = $form->values->theme;
+        $this->context->session->set("theme", $form->values->theme);
         $this->redirect("this");
     }
 

@@ -37,7 +37,6 @@ final class Loader extends \Nette\DI\Container
 
         $this->parameters = $config["parameters"];
         $this->context = $systemContainer;
-        $this->sessionSection = $this->context->session->getSection("file-manager");
 
         $this->checkRequirements();
     }
@@ -99,23 +98,13 @@ final class Loader extends \Nette\DI\Container
     }
 
     /**
-     * Create service application
+     * Create service session
      *
-     * @return \Ixtrum\FileManager\Application
+     * @return \Ixtrum\FileManager\Application\Session
      */
-    protected function createServiceApplication()
+    protected function createServiceSession()
     {
-        return new \Ixtrum\FileManager\Application($this->sessionSection);
-    }
-
-    /**
-     * Create service clipboard
-     *
-     * @return \Ixtrum\FileManager\Application\Clipboard
-     */
-    protected function createServiceClipboard()
-    {
-        return new \Ixtrum\FileManager\Application\Clipboard($this->sessionSection);
+        return new \Ixtrum\FileManager\Application\Session($this->context->session->getSection("file-manager"));
     }
 
     /**

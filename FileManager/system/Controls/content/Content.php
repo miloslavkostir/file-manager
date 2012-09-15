@@ -16,7 +16,7 @@ class Content extends \Ixtrum\FileManager
 
         if ($filename) {
 
-            $actualdir = $this->context->application->getActualDir();
+            $actualdir = $this->context->session->get("actualdir");
             if ($this->context->filesystem->validPath($actualdir, $filename)) {
 
                 $this->parent->parent->template->fileinfo = $actualdir;
@@ -31,7 +31,7 @@ class Content extends \Ixtrum\FileManager
 
     public function handleShowMultiFileInfo($files = array())
     {
-        $actualdir = $this->context->application->getActualDir();
+        $actualdir = $this->context->session->get("actualdir");
 
         // if sended by AJAX
         if (!$files) {
@@ -60,10 +60,11 @@ class Content extends \Ixtrum\FileManager
 
         if ($filename) {
 
-            $actualdir = $this->context->application->getActualDir();
+            $actualdir = $this->context->session->get("actualdir");
             if ($this->context->filesystem->validPath($actualdir, $filename)) {
 
-                $this->context->clipboard->add(
+                $this->context->session->add(
+                        "clipboard",
                         $actualdir . $filename,
                         array(
                             "action" => "copy",
@@ -88,10 +89,11 @@ class Content extends \Ixtrum\FileManager
 
         if (is_array($files) && $files) {
 
-            $actualdir = $this->context->application->getActualDir();
+            $actualdir = $this->context->session->get("actualdir");
             foreach ($files as $file) {
 
-                $this->context->clipboard->add(
+                $this->context->session->add(
+                        "clipboard",
                         $actualdir . $file,
                         array(
                             "action" => "copy",
@@ -114,10 +116,11 @@ class Content extends \Ixtrum\FileManager
 
         if ($filename) {
 
-            $actualdir = $this->context->application->getActualDir();
+            $actualdir = $this->context->session->get("actualdir");
             if ($this->context->filesystem->validPath($actualdir, $filename)) {
 
-                $this->context->clipboard->add(
+                $this->context->session->add(
+                        "clipboard",
                         $actualdir . $filename,
                         array(
                             "action" => "cut",
@@ -142,10 +145,11 @@ class Content extends \Ixtrum\FileManager
 
         if (is_array($files) && $files) {
 
-            $actualdir = $this->context->application->getActualDir();
+            $actualdir = $this->context->session->get("actualdir");
             foreach ($files as $file) {
 
-                $this->context->clipboard->add(
+                $this->context->session->add(
+                        "clipboard",
                         $actualdir . $file,
                         array(
                             "action" => "cut",
@@ -166,7 +170,7 @@ class Content extends \Ixtrum\FileManager
             $filename = $this->presenter->context->httpRequest->getQuery("filename");
         }
 
-        $actualdir = $this->context->application->getActualDir();
+        $actualdir = $this->context->session->get("actualdir");
         if ($this->context->parameters["readonly"]) {
             $this->parent->parent->flashMessage($this->context->translator->translate("Read-only mode enabled!"), "warning");
         } else {
@@ -202,7 +206,7 @@ class Content extends \Ixtrum\FileManager
             $this->parent->parent->flashMessage($this->context->translator->translate("Read-only mode enabled!"), "warning");
         } else {
 
-            $actualdir = $this->context->application->getActualDir();
+            $actualdir = $this->context->session->get("actualdir");
             if (is_array($files) && $files) {
 
                 foreach ($files as $file) {
@@ -232,7 +236,7 @@ class Content extends \Ixtrum\FileManager
             $this->parent->parent->flashMessage($this->context->translator->translate("Read-only mode enabled!"), "warning");
         } else {
 
-            $actualdir = $this->context->application->getActualDir();
+            $actualdir = $this->context->session->get("actualdir");
             $actualPath = $this->context->filesystem->getAbsolutePath($actualdir);
 
             $zip = new \Ixtrum\FileManager\Application\Zip($this->context->parameters, $actualPath);
@@ -249,10 +253,9 @@ class Content extends \Ixtrum\FileManager
 
     public function handleOrderBy($key)
     {
-        $session = $this->presenter->context->session->getSection("file-manager");
-        $session->order = $key;
+        $this->context->session->set("order", $key);
 
-        $actualdir = $this->context->application->getActualDir();
+        $actualdir = $this->context->session->get("actualdir");
         $absPath = $this->context->filesystem->getRealPath($this->context->filesystem->getAbsolutePath($actualdir));
 
         if ($this->context->parameters["cache"]) {
@@ -269,7 +272,7 @@ class Content extends \Ixtrum\FileManager
 
     public function handleDownloadFile($filename = "")
     {
-        $actualdir = $this->context->application->getActualDir();
+        $actualdir = $this->context->session->get("actualdir");
 
         // if sended by AJAX
         if (!$filename) {
@@ -292,7 +295,7 @@ class Content extends \Ixtrum\FileManager
 
     public function handleGoToParent()
     {
-        $actualdir = $this->context->application->getActualDir();
+        $actualdir = $this->context->session->get("actualdir");
         $parent = dirname($actualdir);
 
         if ($parent == "\\" || $parent == ".") {
@@ -321,7 +324,7 @@ class Content extends \Ixtrum\FileManager
             $this->parent->parent->flashMessage($this->context->translator->translate("Read-only mode enabled!"), "warning");
         } else {
 
-            $actualdir = $this->context->application->getActualDir();
+            $actualdir = $this->context->session->get("actualdir");
             if ($targetdir && $filename) {
 
                 if ($this->context->filesystem->move($actualdir, $targetdir, $filename)) {
@@ -352,18 +355,17 @@ class Content extends \Ixtrum\FileManager
     public function render()
     {
         $template = $this->template;
-        $session = $this->presenter->context->session->getSection("file-manager");
-        $actualdir = $this->context->application->getActualDir();
+ 
+        $actualdir = $this->context->session->get("actualdir");
+        $view = $this->context->session->get("view");
+        $mask = $this->context->session->get("mask");
+        $order = $this->context->session->get("order");
 
-        $view = $session->view;
-        $mask = $session->mask;
-        $order = $session->order;
-
-        if (!$mask) {
+        if (empty($mask)) {
             $mask = "*";
         }
 
-        if (!$order) {
+        if (empty($order)) {
             $order = "type";
         }
 
