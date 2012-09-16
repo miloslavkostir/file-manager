@@ -97,7 +97,6 @@ class FileManager extends \Nette\Application\UI\Control
 
             $this->context->session->set("actualdir", $dir);
             $this->actualDir = $dir;
-            $this->template->content = $dir;
         } else {
             $this->flashMessage($this->context->translator->translate("Folder %s does not exist!", $dir), "warning");
         }
@@ -130,11 +129,6 @@ class FileManager extends \Nette\Application\UI\Control
             $this->template->theme = $theme;
         } else {
             $this->template->theme = "default";
-        }
-
-        // Get content
-        if (!isset($this->template->content)) {
-            $this->template->content = $this->actualDir;
         }
 
         // Get plugins
