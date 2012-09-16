@@ -9,13 +9,9 @@ class ViewSelector extends \Ixtrum\FileManager
 
     public function render()
     {
-        $template = $this->template;
-        $template->setFile(__DIR__ . "/ViewSelector.latte");
-        $template->setTranslator($this->context->translator);
-
-        $this["changeViewForm"]->setDefaults(array("view" => $this->context->session->get("view")));
-
-        $template->render();
+        $this->template->setFile(__DIR__ . "/ViewSelector.latte");
+        $this->template->setTranslator($this->context->translator);
+        $this->template->render();
     }
 
     protected function createComponentChangeViewForm()
@@ -28,7 +24,8 @@ class ViewSelector extends \Ixtrum\FileManager
         );
 
         $form = new Form;
-        $form->addSelect("view", NULL, $items);
+        $form->addSelect("view", null, $items)
+                ->setDefaultValue($this->view);
         $form->onSuccess[] = $this->changeViewFormSubmitted;
         return $form;
     }

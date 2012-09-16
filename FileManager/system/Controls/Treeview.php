@@ -10,11 +10,10 @@ class Treeview extends \Ixtrum\FileManager
 
     public function render()
     {
-        $template = $this->template;
-        $template->setFile(__DIR__ . "/Treeview.latte");
-        $template->setTranslator($this->context->translator);
-        $template->treeview = $this->loadData();
-        $template->render();
+        $this->template->setFile(__DIR__ . "/Treeview.latte");
+        $this->template->setTranslator($this->context->translator);
+        $this->template->treeview = $this->loadData();
+        $this->template->render();
     }
 
     private function generateTree($dirs, $superior)

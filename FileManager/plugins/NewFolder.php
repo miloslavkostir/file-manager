@@ -33,21 +33,18 @@ class NewFolder extends \Ixtrum\FileManager
 
     public function newFolderFormSubmitted($form)
     {
-        $values = $form->values;
-        $actualdir = $this->context->session->get("actualdir");
-
         if ($this->context->parameters["readonly"]) {
             $this->parent->parent->flashMessage($this->context->translator->translate("Read-only mode enabled!"), "warning");
         } else {
 
-            if ($this->context->filesystem->validPath($actualdir)) {
+            if ($this->context->filesystem->validPath($this->actualDir)) {
 
-                $foldername = $this->context->filesystem->safeFoldername($values->name);
+                $foldername = $this->context->filesystem->safeFoldername($form->values->name);
                 if (!$foldername) {
-                    $this->parent->parent->flashMessage($this->context->translator->translate("Folder name '%s' can not be used - not allowed characters used.", $values->name), "warning");
+                    $this->parent->parent->flashMessage($this->context->translator->translate("Folder name '%s' can not be used - not allowed characters used.", $form->values->name), "warning");
                 } else {
 
-                    $target_dir = $this->context->filesystem->getAbsolutePath($actualdir) . $foldername;
+                    $target_dir = $this->context->filesystem->getAbsolutePath($this->actualDir) . $foldername;
                     if (is_dir($target_dir)) {
                         $this->parent->parent->flashMessage($this->context->translator->translate("Target name %s already exists!", $foldername), "warning");
                     } else {
@@ -58,7 +55,7 @@ class NewFolder extends \Ixtrum\FileManager
 
                                 $this->context->caching->deleteItem(array(
                                     "content",
-                                    $this->context->filesystem->getRealPath($this->context->filesystem->getAbsolutePath($actualdir))
+                                    $this->context->filesystem->getRealPath($this->context->filesystem->getAbsolutePath($this->actualDir))
                                 ));
                                 $this->context->caching->deleteItem(NULL, array("tags" => "treeview"));
                             }
@@ -70,11 +67,11 @@ class NewFolder extends \Ixtrum\FileManager
                     }
                 }
             } else {
-                $this->parent->parent->flashMessage($this->context->translator->translate("Folder %s already does not exist!", $actualdir), "warning");
+                $this->parent->parent->flashMessage($this->context->translator->translate("Folder %s already does not exist!", $this->actualDir), "warning");
             }
         }
 
-        $this->parent->parent->handleShowContent($actualdir);
+        $this->parent->parent->handleShowContent($this->actualDir);
     }
 
 }

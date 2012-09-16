@@ -5,18 +5,23 @@ namespace Ixtrum\FileManager\Controls;
 class FileInfo extends \Ixtrum\FileManager
 {
 
-    /** @var string */
-    public $filename;
-
     public function render()
     {
-        $template = $this->template;
-        $template->setFile(__DIR__ . "/FileInfo.latte");
-        $template->setTranslator($this->context->translator);
-        $template->fileinfo = $this->context->filesystem->fileDetails(
-                $this->context->session->get("actualdir"), $this->filename
-        );
-        $template->render();
+        $this->template->setFile(__DIR__ . "/FileInfo.latte");
+        $this->template->setTranslator($this->context->translator);
+        $this->template->thumbDir = $this->context->parameters["resDir"] . "img/icons/large/";
+
+        if (count($this->selectedFiles) > 1) {
+            $this->template->files = $this->context->filesystem->filesInfo(
+                    $this->actualDir, $this->selectedFiles, true
+            );
+        } elseif (isset($this->selectedFiles[0])) {
+            $this->template->file = $this->context->filesystem->fileInfo(
+                    $this->actualDir, $this->selectedFiles[0]
+            );
+        }
+
+        $this->template->render();
     }
 
 }

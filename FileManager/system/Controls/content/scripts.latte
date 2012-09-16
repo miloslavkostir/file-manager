@@ -2,213 +2,95 @@
 $(function() {
 
     $(".fm-content-file").contextMenu(function() {
-        var selected = $(".fm-content-files .selected");
-        if ($(selected).size() <= 1 ) {
 
-                        var o1 = {},
-                            o2 = {},
-                            o3 = {},
-                            o4 = {},
-                            o5 = {},
-                            {ifset $plugins}
-                                {foreach $plugins as $plugin}
-                                    o{6 + $iterator->getCounter()} = {},
-                                {/foreach}
-                            {/ifset}
-                            o6 = {};
+        // Get selected files
+        var selected = {};
+        $(".fm-content-files .selected").each(function(i) {
+            selected[i] = $(this).data("filename");
+        });
 
-                        o1[{_'Details'}] = function(menuItem, menuObject, e) {
-                                var filename = $(this).data("filename");
-                                $(this).addClass("selected");
-                                $.getJSON({link showFileInfo!},  { filename: filename });
-                                $.animateProgress(".file-manager", e);
-                        }
+        var items = [];
 
-                        o2[{_'Delete'}] = function(menuItem, menuObject, e) {
-                                var filename = $(this).data("filename");
-                                $(this).addClass("selected");
-                                if (confirm({_'Do you really want to delete '} + filename + "?")) {
-                                    $.getJSON({link delete!},  { filename: filename });
-                                    $.animateProgress(".file-manager", e);
-                                }
-                        }
+        items.push({ {_'Details'} : function(menuItem, menuObject, event) {
+                $.post({link info!}, { files: selected });
+                $.animateProgress(".file-manager", event);
+        }});
 
-                        o3[{_'Copy'}] = function(menuItem, menuObject, e) {
-                                var filename = $(this).data("filename");
-                                $(this).addClass("selected");
-                                $.post({link copyToClipboard!},  { filename: filename });
-                                $.animateProgress(".file-manager", e);
-                        }
+        items.push({ {_'Copy'} : function(menuItem, menuObject, event) {
+                $.post({link copy!}, { files: selected });
+                $.animateProgress(".file-manager", event);
+        }});
 
-                        o4[{_'Cut'}] = function(menuItem, menuObject, e) {
-                                var filename = $(this).data("filename");
-                                $(this).addClass("selected");
-                                $.post({link cutToClipboard!},  { filename: filename });
-                                $.animateProgress(".file-manager", e);
-                        }
+        items.push({ {_'Cut'} : function(menuItem, menuObject, event) {
+                $.post({link cut!}, { files: selected });
+                $.animateProgress(".file-manager", event);
+        }});
 
-                        o5[{_'Download'}] = function(menuItem, menuObject, e) {
-                                var filename = $(this).data("filename");
-                                $(this).addClass("selected");
-                                window.location.href={link downloadFile!} + "&filename=" + filename;
-                        }
+        items.push({ {_'Delete'} : function(menuItem, menuObject, event) {
+                if (confirm({_'Do you really want to delete all these files?'})) {
+                    $.post({link delete!}, { files: selected });
+                    $.animateProgress(".file-manager", event);
+                }
+        }});
 
-                        o6[{_'Add to ZIP'}] = function(menuItem, menuObject, e) {
-                                var files = {};
-                                files[0] = $(this).data("filename");
-                                $.post({link zip!},  { files: files });
-                                $.animateProgress(".file-manager", e);
-                        }
+        items.push({ {_'Add to ZIP'} : function(menuItem, menuObject, event) {
+                $.post({link zip!}, { files: selected });
+                $.animateProgress(".file-manager", event);
+        }});
 
-                        {ifset $plugins}
-                            {foreach $plugins as $plugin}
-                                o{6 + $iterator->getCounter()}[{$plugin['title']}] = function(menuItem, menuObject, e) {
-                                    var filename = $(this).data("filename");
-                                    $(this).addClass("selected");
-                                    $.post({link runPlugin!, $plugin['name']},  { files: filename });
-                                    $.animateProgress(".file-manager", e);
-                                }
-                            {/foreach}
-                        {/ifset}
+        items.push({ {_'Download'} : function(menuItem, menuObject, event) {
+                $.post({link download!}, { files: selected });
+                $.animateProgress(".file-manager", event);
+        }});
 
-                        return [ o1,
-                                    o2,
-                                    o3,
-                                    o4,
-                                    o5,
-                                    {ifset $plugins}
-                                    {foreach $plugins as $plugin}
-                                        o{6 + $iterator->getCounter()},
-                                    {/foreach}
-                                    {/ifset}
-                                    o6 ];
-        } else {
-                        var o1 = {},
-                            o2 = {},
-                            o3 = {},
-                            o4 = {},
-                            {ifset $plugins}
-                                {foreach $plugins as $plugin}
-                                    o{5 + $iterator->getCounter()} = {},
-                                {/foreach}
-                            {/ifset}
-                            o5 = {};
+        {ifset $plugins}
+            {foreach $plugins as $plugin}
+                items.push({ {$plugin['title']} : function(menuItem, menuObject, event) {
+                    $.post({link runPlugin!, $plugin['name']}, { files: selected });
+                    $.animateProgress(".file-manager", event);
+                }});
+            {/foreach}
+        {/ifset}
 
-                        o1[{_'Properties'}] = function(menuItem, menuObject, e) {
-                                var files = {};
-                                $.each(selected, function(i) {
-                                    files[i] = $(this).data("filename");
-                                });
-                                $.post({link showMultiFileInfo!},  { files: files }, function(payload) {
-                                    if (payload.result === 'success')
-                                        alert(
-                                            {_'Files count: '} + payload.fileCount + "\n" +
-                                            {_'Folders count: '} + payload.dirCount + "\n" +
-                                            {_'Total size: '} + payload.size
-                                        );
-                                });
-                        }
+        return items;
 
-                        o2[{_'Copy'}] = function(menuItem, menuObject, e) {
-                                var files = {};
-                                $.each(selected, function(i) {
-                                    files[i] = $(this).data("filename");
-                                });
-                                $.post({link multiCopyToClipboard!},  { files: files });
-                                $.animateProgress(".file-manager", e);
-                        }
-
-                        o3[{_'Cut'}] = function(menuItem, menuObject, e) {
-                                var files = {};
-                                $.each(selected, function(i) {
-                                    files[i] = $(this).data("filename");
-                                });
-                                $.post({link multiCutToClipboard!},  { files: files });
-                                $.animateProgress(".file-manager", e);
-                        }
-
-                        o4[{_'Delete'}] = function(menuItem, menuObject, e) {
-                                var files = {};
-                                $.each(selected, function(i) {
-                                    files[i] = $(this).data("filename");
-                                });
-                                if (confirm({_'Do you really want to delete all these files?'})) {
-                                    $.post({link multiDelete!},  { files: files });
-                                    $.animateProgress(".file-manager", e);
-                                }
-                        }
-
-                        o5[{_'Add to ZIP'}] = function(menuItem, menuObject, e) {
-                                var files = {};
-                                $.each(selected, function(i) {
-                                    files[i] = $(this).data("filename");
-                                });
-                                $.post({link zip!}, { files: files });
-                                $.animateProgress(".file-manager", e);
-                        }
-
-                        {ifset $plugins}
-                            {foreach $plugins as $plugin}
-                                o{5 + $iterator->getCounter()}[{$plugin['title']}] = function(menuItem, menuObject, e) {
-                                    var files = {};
-                                    $.each(selected, function(i) {
-                                        files[i] = $(this).data("filename");
-                                    });
-                                    $.post({link runPlugin!, $plugin['name']},  { files: files });
-                                    $.animateProgress(".file-manager", e);
-                                }
-                            {/foreach}
-                        {/ifset}
-
-                        return [ o1,
-                                    o2,
-                                    o3,
-                                    o4,
-                                    {ifset $plugins}
-                                    {foreach $plugins as $plugin}
-                                        o{5 + $iterator->getCounter()},
-                                    {/foreach}
-                                    {/ifset}
-                                    o5 ];
-        }
     }, {
+        beforeShow: function() {
+            $(this.target).addClass("selected");
+            return true;
+        },
         theme: "vista",
         constrainToScreen: true
     });
 
-    $('.fm-content-files').contextMenu(function() {
+    $(".fm-content-files").contextMenu(function() {
+        var items = [];
 
-        var o1 = {},
-            o2 = {},
-            o3 = {},
-            o4 = {},
-            o5 = {};
-
-        o1[{_'Select all'}] = function(menuItem, menuObject) {
+        items.push({ {_'Select all'} : function(menuItem, menuObject) {
                 $(".fm-content-file").addClass("selected");
-        }
+        }});
 
-        o2[{_'Sort by name'}] = function(menuItem, menuObject, e) {
+        items.push({ {_'Sort by name'} : function(menuItem, menuObject, event) {
                 $.getJSON({link orderBy!, 'name'});
-                $.animateProgress(".file-manager", e);
-        }
+                $.animateProgress(".file-manager", event);
+        }});
 
-        o3[{_'Sort by size'}] = function(menuItem, menuObject, e) {
+        items.push({ {_'Sort by size'} : function(menuItem, menuObject, event) {
                 $.getJSON({link orderBy!, 'size'});
-                $.animateProgress(".file-manager", e);
-        }
+                $.animateProgress(".file-manager", event);
+        }});
 
-        o3[{_'Sort by time'}] = function(menuItem, menuObject, e) {
+        items.push({ {_'Sort by time'} : function(menuItem, menuObject, event) {
                 $.getJSON({link orderBy!, 'time'});
-                $.animateProgress(".file-manager", e);
-        }
+                $.animateProgress(".file-manager", event);
+        }});
 
-        o5[{_'Sort by type'}] = function(menuItem, menuObject, e) {
+        items.push({ {_'Sort by type'} : function(menuItem, menuObject, event) {
                 $.getJSON({link orderBy!, 'type'});
-                $.animateProgress(".file-manager", e);
-        }
+                $.animateProgress(".file-manager", event);
+        }});
 
-        return [o1, o2, o3, o4, o5, o5];
+        return items;
     }, {
         theme: "vista",
         constrainToScreen: true

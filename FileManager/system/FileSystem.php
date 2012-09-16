@@ -353,21 +353,21 @@ class FileSystem
     /**
      * Get file details
      *
-     * @param string $actualdir
+     * @param string $dir
      * @param string $filename
      *
      * @return array
      */
-    public function fileDetails($actualdir, $filename)
+    public function fileInfo($dir, $filename)
     {
         $thumbDir = $this->config["resDir"] . "img/icons/large/";
-        $path = $this->getAbsolutePath($actualdir) . $filename;
+        $path = $this->getAbsolutePath($dir) . $filename;
 
         $info = array();
         if (!is_dir($path)) {
 
             $info["path"] = $path;
-            $info["actualdir"] = $actualdir;
+            $info["actualdir"] = $dir;
             $info["filename"] = $filename;
             $info["type"] = pathinfo($path, PATHINFO_EXTENSION);
             $info["size"] = $this->filesize($path);
@@ -383,7 +383,7 @@ class FileSystem
 
             $folder_info = $this->getFolderInfo($path);
             $info["path"] = $path;
-            $info["actualdir"] = $actualdir;
+            $info["actualdir"] = $dir;
             $info["filename"] = $filename;
             $info["type"] = "folder";
             $info["size"] = $folder_info["size"];
@@ -399,12 +399,13 @@ class FileSystem
     /**
      * Get info about files
      *
-     * @param string $dir
-     * @param array $files
-     * @param bool $iterate
+     * @param string  $dir
+     * @param array   $files
+     * @param boolean $iterate
+     *
      * @return array
      */
-    public function getFilesInfo($dir, $files, $iterate = false)
+    public function filesInfo($dir, $files, $iterate = false)
     {
         $path = $this->getAbsolutePath($dir);
         $info = array(
@@ -454,10 +455,6 @@ class FileSystem
 
         if (!is_file($path)) {
             Debugger::log("File is not file.", Debugger::WARNING);
-        }
-
-        if (filesize($path) === 0) {
-            return null;
         }
 
         $filesize = new FileSystem\Filesize;
@@ -590,6 +587,7 @@ class FileSystem
      *
      * @param  string  relative folder path
      * @param  string  filename
+     *
      * @return bool
      */
     public function deleteFile($actualdir, $filename)

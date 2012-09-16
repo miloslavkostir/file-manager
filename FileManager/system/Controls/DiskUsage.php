@@ -7,11 +7,10 @@ class DiskUsage extends \Ixtrum\FileManager
 
     public function render()
     {
-        $template = $this->template;
-        $template->setFile(__DIR__ . '/DiskUsage.latte');
-        $template->setTranslator($this->context->translator);
-        $template->sizeinfo = $this->context->filesystem->diskSizeInfo();
-        $template->render();
+        $this->template->setFile(__DIR__ . '/DiskUsage.latte');
+        $this->template->setTranslator($this->context->translator);
+        $this->template->sizeinfo = $this->context->filesystem->diskSizeInfo();
+        $this->template->render();
     }
 
 }

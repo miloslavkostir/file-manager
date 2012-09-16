@@ -11,6 +11,15 @@ class FileManager extends \Nette\Application\UI\Control
     /** @var \Nette\DI\Container */
     protected $context;
 
+    /** @var array */
+    protected $selectedFiles = array();
+
+    /** @var string */
+    protected $actualDir;
+
+    /** @var string */
+    protected $view;
+    
     /**
      * Constructor
      *
@@ -25,14 +34,28 @@ class FileManager extends \Nette\Application\UI\Control
         $this->context = new FileManager\Services\Loader($systemContainer, $config, __DIR__);
         $this->context->freeze();
 
-        // Get/set actual dir
-        $actualdir = $this->context->session->get("actualdir");
-        if ($actualdir) {
+        // Get & validate actual dir
+        $actualDir = $this->context->session->get("actualdir");
+        $actualPath = $this->context->filesystem->getAbsolutePath($actualDir);
+        if (!is_dir($actualPath) || empty($actualDir)) {
+            $actualDir = $this->context->filesystem->getRootname();
+            $this->context->session->set("actualdir", $actualDir);
+        }
+        $this->actualDir = $actualDir;
 
-            $actualPath = $this->context->filesystem->getAbsolutePath($actualdir);
-            if (!is_dir($actualPath)) {
-                $this->context->session->clear("actualdir");
-            }
+        // Get selected files via POST
+        $selectedFiles = $systemContainer->httpRequest->getPost("files");
+        if (is_array($selectedFiles)) {
+            $this->selectedFiles = $selectedFiles;
+        }
+
+        // Get & validate selected view
+        $view = $this->context->session->get("view");
+        $allowedViews = array("details", "large", "list", "small");
+        if (!empty($view) && in_array($view, $allowedViews)) {
+            $this->view = $view;
+        } else {
+            $this->view = "large";
         }
 
         $this->invalidateControl();
@@ -40,29 +63,20 @@ class FileManager extends \Nette\Application\UI\Control
 
     public function handleRefreshContent()
     {
-        $actualdir = $this->context->session->get("actualdir");
-
         if ($this->context->parameters["cache"]) {
 
             $this->context->caching->deleteItem(NULL, array("tags" => "treeview"));
             $this->context->caching->deleteItem(array(
                 "content",
                 $this->context->filesystem->getRealPath(
-                    $this->context->filesystem->getAbsolutePath($actualdir)
+                        $this->context->filesystem->getAbsolutePath($this->actualDir)
                 )
             ));
         }
-
-        $this->handleShowContent($actualdir);
     }
 
-    public function handleRunPlugin($name, $files = "")
+    public function handleRunPlugin($name)
     {
-        // if sended by AJAX
-        if (!$files) {
-            $files = $this->presenter->context->httpRequest->getPost("files");
-        }
-
         // Find valid plugin
         foreach ($this->context->parameters["plugins"] as $plugin) {
             if ($name === $plugin["name"]) {
@@ -71,69 +85,56 @@ class FileManager extends \Nette\Application\UI\Control
         }
 
         if (isset($validPlugin)) {
-            $control = $this["plugin-$name"];
-            if (property_exists($control, "files") && $files) {
-                $control->files = $files;
-            }
-
             $this->template->plugin = $name;
         } else {
             $this->flashMessage($this->context->translator->translate("Plugin '%s' not found!", $name), "warning");
         }
     }
 
-    public function handleShowContent($actualdir)
+    public function handleShowContent($dir)
     {
-        if ($this->context->filesystem->validPath($actualdir)) {
+        if ($this->context->filesystem->validPath($dir)) {
 
-            $this->template->content = $actualdir;
-            $this->context->session->set("actualdir", $actualdir);
+            $this->context->session->set("actualdir", $dir);
+            $this->actualDir = $dir;
+            $this->template->content = $dir;
         } else {
-            $this->flashMessage($this->context->translator->translate("Folder %s does not exist!", $actualdir), "warning");
+            $this->flashMessage($this->context->translator->translate("Folder %s does not exist!", $dir), "warning");
         }
     }
 
     public function render()
     {
-        \Nette\Diagnostics\Debugger::barDump($this, "Ixtrum File Manager");
+        $this->template->setFile(__DIR__ . "/FileManager.latte");
+        $this->template->setTranslator($this->context->translator);
 
         // Load resources
         if ($this->context->parameters["synchronizeResDir"] === true) {
             $resources = new FileManager\Application\Resources(
-                    $this->context->parameters["wwwDir"] . $this->context->parameters["resDir"],
-                    $this->context->parameters["rootPath"]
+                            $this->context->parameters["wwwDir"] . $this->context->parameters["resDir"],
+                            $this->context->parameters["rootPath"]
             );
             $resources->synchronize();
         }
         $this->template->resDir = $this->context->parameters["resDir"];
 
-        $template = $this->template;
-        $template->setFile(__DIR__ . "/FileManager.latte");
-        $template->setTranslator($this->context->translator);
-
         // Get clipboard
         $clipboard = $this->context->session->get("clipboard");
         if ($clipboard) {
-            $template->clipboard = $clipboard;
+            $this->template->clipboard = $clipboard;
         }
 
         // Get theme
         $theme = $this->context->session->get("theme");
         if ($theme) {
-            $template->theme = $theme;
+            $this->template->theme = $theme;
         } else {
-            $template->theme = "default";
+            $this->template->theme = "default";
         }
 
         // Get content
-        if (!isset($template->content)) {
-
-            $actualDir = $this->context->session->get("actualdir");
-            if (empty($actualDir)) {
-                $actualDir = $this->context->filesystem->getRootname();
-                $this->context->session->set("actualdir", $actualDir);
-            }
-            $template->content = $actualDir;
+        if (!isset($this->template->content)) {
+            $this->template->content = $this->actualDir;
         }
 
         // Get plugins
@@ -150,19 +151,19 @@ class FileManager extends \Nette\Application\UI\Control
             }
 
             if (!empty($toolbarPlugins)) {
-                $template->toolbarPlugins = $toolbarPlugins;
+                $this->template->toolbarPlugins = $toolbarPlugins;
             }
             if (!empty($fileInfoPlugins)) {
-                $template->fileInfoPlugins = $fileInfoPlugins;
+                $this->template->fileInfoPlugins = $fileInfoPlugins;
             }
         }
 
         // Sort flash messages; 1=error, 2=warning, 3=info
-        usort($template->flashes, function($flash, $nextFlash) {
-                return ($flash->type === "error") ? -1 : 1;
-            });
+        usort($this->template->flashes, function($flash, $nextFlash) {
+                    return ($flash->type === "error") ? -1 : 1;
+                });
 
-        $template->render();
+        $this->template->render();
     }
 
     /**
@@ -188,11 +189,11 @@ class FileManager extends \Nette\Application\UI\Control
     {
         $container = $this->context->systemContainer;
         return new \Nette\Application\UI\Multiplier(function ($name) use ($container) {
-                    $namespace = __NAMESPACE__;
-                    $namespace .= "\\FileManager\Controls";
-                    $class = "$namespace\\$name";
-                    return new $class($container);
-                });
+                            $namespace = __NAMESPACE__;
+                            $namespace .= "\\FileManager\Controls";
+                            $class = "$namespace\\$name";
+                            return new $class($container);
+                        });
     }
 
     /**
@@ -204,11 +205,11 @@ class FileManager extends \Nette\Application\UI\Control
     {
         $container = $this->context->systemContainer;
         return new \Nette\Application\UI\Multiplier(function ($name) use ($container) {
-                    $namespace = __NAMESPACE__;
-                    $namespace .= "\\FileManager\Plugins";
-                    $class = "$namespace\\$name";
-                    return new $class($container);
-                });
+                            $namespace = __NAMESPACE__;
+                            $namespace .= "\\FileManager\Plugins";
+                            $class = "$namespace\\$name";
+                            return new $class($container);
+                        });
     }
 
 }

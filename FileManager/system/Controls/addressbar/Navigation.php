@@ -9,73 +9,56 @@ class Navigation extends \Ixtrum\FileManager
 
     public function handleRefreshContent()
     {
-        $actualdir = $this->context->session->get("actualdir");
         if ($this->context->parameters["cache"]) {
 
-            $this->context->caching->deleteItem(NULL, array("tags" => "treeview"));
+            $this->context->caching->deleteItem(null, array("tags" => "treeview"));
             $this->context->caching->deleteItem(array(
                 "content",
-                $this->context->filesystem->getRealPath($this->context->filesystem->getAbsolutePath($actualdir))
+                $this->context->filesystem->getRealPath($this->context->filesystem->getAbsolutePath($this->actualDir))
             ));
         }
-
-        $this->parent->parent->handleShowContent($actualdir);
     }
 
     public function render()
     {
-        $actualdir = $this->context->session->get("actualdir");
-        $rootname = $this->context->filesystem->getRootName();
-
-        $template = $this->template;
-        $template->setFile(__DIR__ . '/Navigation.latte');
-        $template->setTranslator($this->context->translator);
-
-        if (!$actualdir) {
-            $template->items = $this->getNav($rootname);
-        } else {
-            $template->items = $this->getNav($actualdir);
-        }
-
-        $this['locationForm']->setDefaults(array('location' => $actualdir));
-
-        $template->render();
+        $this->template->setFile(__DIR__ . "/Navigation.latte");
+        $this->template->setTranslator($this->context->translator);
+        $this->template->items = $this->getNav($this->actualDir);
+        $this->template->render();
     }
 
     protected function createComponentLocationForm()
     {
         $form = new Form;
         $form->setTranslator($this->context->translator);
-        $form->addText('location');
+        $form->addText("location")
+                ->setDefaultValue($this->actualDir);
         $form->onSuccess[] = $this->locationFormSubmitted;
         return $form;
     }
 
     public function locationFormSubmitted($form)
     {
-        $val = $form->values;
-        $path = $this->context->filesystem->getAbsolutePath($val['location']);
-
+        $path = $this->context->filesystem->getAbsolutePath($form->values->location);
         if (is_dir($path)) {
-            $this->parent->parent->handleShowContent($val['location']);
+            $this->parent->parent->handleShowContent($form->values->location);
         } else {
-            $folder = $val['location'];
-            $this->parent->parent->flashMessage($this->context->translator->translate("Folder %s does not exist!", $folder), 'warning');
-            $this->parent->parent->handleShowContent($this->context->session->get("actualdir"));
+            $this->parent->parent->flashMessage($this->context->translator->translate("Folder %s does not exist!", $form->values->location, "warning"));
+            $this->parent->parent->handleShowContent($this->actualDir);
         }
     }
 
-    public function getNav($actualdir)
+    public function getNav($dir)
     {
         $var = array();
         $rootname = $this->context->filesystem->getRootName();
-        if ($actualdir === $rootname)
+        if ($dir === $rootname)
             $var[] = array(
                 "name" => $rootname,
                 "link" => $this->parent->parent->link("showContent", $rootname)
             );
         else {
-            $nav = explode("/", $actualdir);
+            $nav = explode("/", $dir);
             $path = "/";
             foreach ($nav as $item) {
                 if ($item) {

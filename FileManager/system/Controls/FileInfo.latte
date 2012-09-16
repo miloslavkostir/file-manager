@@ -1,23 +1,36 @@
-<ul>
+<ul n:ifset="$file">
     <li>
-        <img src="{$basePath}{$fileinfo['icon']}" alt="" class="fm-thumb" />
+        <img src="{$basePath}{$file['icon']}" alt="" class="fm-thumb" />
     </li>
     <li>
         <ul class="fm-file-info-details">
             <li>
                 <h2>
-                    {if $fileinfo['type'] === 'folder'}
+                    {if $file['type'] === 'folder'}
                         {_'Folder'}
                     {else}
-                        {$fileinfo['type']|upper}
+                        {$file['type']|upper}
                     {/if}
                 </h2>
             </li>
-            <li><span>{$fileinfo['filename']}</span></li>
-            <li n:ifset="$fileinfo['files_count']">{_'Files'}: <strong>{$fileinfo['files_count']}</strong></li>
-            <li>{_'Size'}: <strong>{$fileinfo['size']|bytes}</strong></li>
-            <li>{_'Modificated'}: <strong>{$fileinfo['modificated']}</strong></li>
-            <li>{_'Permissions'}: <strong>{$fileinfo['permissions']}</strong></li>
+            <li><span>{$file['filename']}</span></li>
+            <li n:ifset="$file['files_count']">{_'Files'}: <strong>{$file['files_count']}</strong></li>
+            <li>{_'Size'}: <strong>{$file['size']|bytes}</strong></li>
+            <li>{_'Modificated'}: <strong>{$file['modificated']}</strong></li>
+            <li>{_'Permissions'}: <strong>{$file['permissions']}</strong></li>
+        </ul>
+    </li>
+</ul>
+<ul n:ifset="$files">
+    <li>
+        <img src="{$basePath . $thumbDir}icon.png" alt="" class="fm-thumb" />
+    </li>
+    <li>
+        <ul class="fm-file-info-details">
+            <li><h2>{_"Selected items"}</h2></li>
+            <li>{_"Files"}: <strong>{$files["fileCount"]}</strong></li>
+            <li>{_"Folders"}: <strong>{$files["dirCount"]}</strong></li>
+            <li>{_'Size'}: <strong>{$files["size"]|bytes}</strong></li>
         </ul>
     </li>
 </ul>

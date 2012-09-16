@@ -11,24 +11,24 @@ class Rename extends \Ixtrum\FileManager
     public $contextPlugin = true;
 
     /** @var string */
-    public $files;
-
-    /** @var string */
     public $title = "Rename";
 
     public function render()
     {
-        $template = $this->template;
-        $template->setFile(__DIR__ . "/Rename.latte");
-        $template->setTranslator($this->context->translator);
-        $template->origFile = $this->files;
+        $file = "";
+        if (isset($this->selectedFiles[0])) {
+            $file = $this->selectedFiles[0];
+        }
+        $this->template->setFile(__DIR__ . "/Rename.latte");
+        $this->template->setTranslator($this->context->translator);
+        $this->template->origFile = $file;
 
         $this["renameForm"]->setDefaults(array(
-            "new_filename" => $this->files,
-            "orig_filename" => $this->files,
+            "new_filename" => $file,
+            "orig_filename" => $file,
         ));
 
-        $template->render();
+        $this->template->render();
     }
 
     protected function createComponentRenameForm()
@@ -46,24 +46,22 @@ class Rename extends \Ixtrum\FileManager
 
     public function renameFormSubmitted($form)
     {
-        $values = $form->getValues();
-        $actualdir = $this->context->session->get("actualdir");
-        $path = $this->context->filesystem->getAbsolutePath($actualdir);
+        $path = $this->context->filesystem->getAbsolutePath($this->actualDir);
 
         if ($this->context->parameters["readonly"]) {
             $this->parent->parent->flashMessage($this->context->translator->translate("Read-only mode enabled!"), "warning");
-        } elseif ($values["new_filename"] == $values["orig_filename"]) {
+        } elseif ($form->values->new_filename == $form->values->orig_filename) {
             $this->parent->parent->flashMessage($this->context->translator->translate("New name can not be the same!"), "warning");
-        } elseif (file_exists($path . $values["new_filename"])) {
-            $this->parent->parent->flashMessage($this->context->translator->translate("The name %s was already used.", $values["new_filename"]), "warning");
-        } elseif (!file_exists($path . $values["orig_filename"])) {
-            $this->parent->parent->flashMessage($this->context->translator->translate("File/folder %s does not already exists!", $values["orig_filename"]), "error");
+        } elseif (file_exists($path . $form->values->new_filename)) {
+            $this->parent->parent->flashMessage($this->context->translator->translate("The name %s was already used.", $form->values->new_filename), "warning");
+        } elseif (!file_exists($path . $form->values->orig_filename)) {
+            $this->parent->parent->flashMessage($this->context->translator->translate("File/folder %s does not already exists!", $form->values->orig_filename), "error");
         } else {
 
-            $origPath = $path . $values["orig_filename"];
+            $origPath = $path . $form->values->orig_filename;
             if (is_dir($this->context->filesystem->getRealPath($origPath))) {
 
-                $new_filename = $this->context->filesystem->safeFoldername($values["new_filename"]);
+                $new_filename = $this->context->filesystem->safeFoldername($form->values->new_filename);
                 $this->context->thumbs->deleteDirThumbs($origPath);
 
                 if ($this->context->parameters["cache"]) {
@@ -76,7 +74,7 @@ class Rename extends \Ixtrum\FileManager
                 }
             } else {
 
-                $new_filename = $this->context->filesystem->safeFilename($values["new_filename"]);
+                $new_filename = $this->context->filesystem->safeFilename($form->values->new_filename);
                 $this->context->thumbs->deleteThumb($this->context->filesystem->getRealPath($origPath));
 
                 if ($this->context->parameters["cache"]) {
@@ -93,11 +91,11 @@ class Rename extends \Ixtrum\FileManager
                 $this->parent->parent->flashMessage($this->context->translator->translate("Successfully renamed to %s.", $new_filename), "info");
                 $this->context->session->clear("clipboard");
             } else {
-                $this->parent->parent->flashMessage($this->context->translator->translate("An error occurred during %s renaming!", $values["orig_filename"]), "error");
+                $this->parent->parent->flashMessage($this->context->translator->translate("An error occurred during %s renaming!", $form->values->orig_filename), "error");
             }
         }
 
-        $this->parent->parent->handleShowContent($actualdir);
+        $this->parent->parent->handleShowContent($this->actualDir);
     }
 
 }

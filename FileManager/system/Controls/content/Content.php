@@ -7,327 +7,140 @@ use Nette\Application\Responses\FileResponse;
 class Content extends \Ixtrum\FileManager
 {
 
-    public function handleShowFileInfo($filename = "")
+    public function handleInfo()
     {
-        // if sended by AJAX
-        if (!$filename) {
-            $filename = $this->presenter->context->httpRequest->getQuery("filename");
-        }
+        $this->parent->parent->template->fileinfo = $this->actualDir;
+    }
 
-        if ($filename) {
+    public function handleCopy()
+    {
+        foreach ($this->selectedFiles as $file) {
 
-            $actualdir = $this->context->session->get("actualdir");
-            if ($this->context->filesystem->validPath($actualdir, $filename)) {
-
-                $this->parent->parent->template->fileinfo = $actualdir;
-                $this["control-fileInfo"]->filename = $filename;
-            } else {
-                $this->parent->parent->flashMessage($this->context->translator->translate("File %s not found!", $filename), "warning");
-            }
-        } else {
-            $this->parent->parent->flashMessage($this->context->translator->translate("Incorrect input data!"), "error");
+            $this->context->session->add(
+                    "clipboard",
+                    $this->actualDir . $file,
+                    array(
+                        "action" => "copy",
+                        "actualdir" => $this->actualDir,
+                        "filename" => $file
+                    )
+            );
         }
     }
 
-    public function handleShowMultiFileInfo($files = array())
+    public function handleCut()
     {
-        $actualdir = $this->context->session->get("actualdir");
+        foreach ($this->selectedFiles as $file) {
 
-        // if sended by AJAX
-        if (!$files) {
-            $files = $this->presenter->context->httpRequest->getPost("files");
-        }
-
-        if (is_array($files) && $files) {
-
-            $info = $this->context->filesystem->getFilesInfo($actualdir, $files, true);
-            $this->presenter->payload->result = "success";
-            $this->presenter->payload->size = \Nette\Templating\Helpers::bytes($info["size"]);
-            $this->presenter->payload->dirCount = $info["dirCount"];
-            $this->presenter->payload->fileCount = $info["fileCount"];
-            $this->presenter->sendPayload();
-        } else {
-            $this->parent->parent->flashMessage($this->context->translator->translate("Incorrect input data!"), "error");
+            $this->context->session->add(
+                    "clipboard",
+                    $this->actualDir . $file,
+                    array(
+                        "action" => "cut",
+                        "actualdir" => $this->actualDir,
+                        "filename" => $file
+                    )
+            );
         }
     }
 
-    public function handleCopyToClipboard($filename = "")
+    public function handleDelete()
     {
-        // if sended by AJAX
-        if (!$filename) {
-            $filename = $this->presenter->context->httpRequest->getPost("filename");
-        }
-
-        if ($filename) {
-
-            $actualdir = $this->context->session->get("actualdir");
-            if ($this->context->filesystem->validPath($actualdir, $filename)) {
-
-                $this->context->session->add(
-                        "clipboard",
-                        $actualdir . $filename,
-                        array(
-                            "action" => "copy",
-                            "actualdir" => $actualdir,
-                            "filename" => $filename
-                        )
-                );
-            } else {
-                $this->parent->parent->flashMessage($this->context->translator->translate("File %s not found!", $filename), "warning");
-            }
-        } else {
-            $this->parent->parent->flashMessage($this->context->translator->translate("Incorrect input data!"), "error");
-        }
-    }
-
-    public function handleMultiCopyToClipboard($files = array())
-    {
-        // if sended by AJAX
-        if (!$files) {
-            $files = $this->presenter->context->httpRequest->getPost("files");
-        }
-
-        if (is_array($files) && $files) {
-
-            $actualdir = $this->context->session->get("actualdir");
-            foreach ($files as $file) {
-
-                $this->context->session->add(
-                        "clipboard",
-                        $actualdir . $file,
-                        array(
-                            "action" => "copy",
-                            "actualdir" => $actualdir,
-                            "filename" => $file
-                        )
-                );
-            }
-        } else {
-            $this->parent->parent->flashMessage($this->context->translator->translate("Incorrect input data!"), "error");
-        }
-    }
-
-    public function handleCutToClipboard($filename = "")
-    {
-        // if sended by AJAX
-        if (!$filename) {
-            $filename = $this->presenter->context->httpRequest->getPost("filename");
-        }
-
-        if ($filename) {
-
-            $actualdir = $this->context->session->get("actualdir");
-            if ($this->context->filesystem->validPath($actualdir, $filename)) {
-
-                $this->context->session->add(
-                        "clipboard",
-                        $actualdir . $filename,
-                        array(
-                            "action" => "cut",
-                            "actualdir" => $actualdir,
-                            "filename" => $filename
-                        )
-                );
-            } else {
-                $this->parent->parent->flashMessage($this->context->translator->translate("File %s not found!", $filename), "warning");
-            }
-        } else {
-            $this->parent->parent->flashMessage($this->context->translator->translate("Incorrect input data!"), "error");
-        }
-    }
-
-    public function handleMultiCutToClipboard($files = array())
-    {
-        // if sended by AJAX
-        if (!$files) {
-            $files = $this->presenter->context->httpRequest->getPost("files");
-        }
-
-        if (is_array($files) && $files) {
-
-            $actualdir = $this->context->session->get("actualdir");
-            foreach ($files as $file) {
-
-                $this->context->session->add(
-                        "clipboard",
-                        $actualdir . $file,
-                        array(
-                            "action" => "cut",
-                            "actualdir" => $actualdir,
-                            "filename" => $file
-                        )
-                );
-            }
-        } else {
-            $this->parent->parent->flashMessage($this->context->translator->translate("Incorrect input data!"), "error");
-        }
-    }
-
-    public function handleDelete($filename = "")
-    {
-        // if sended by AJAX
-        if (!$filename) {
-            $filename = $this->presenter->context->httpRequest->getQuery("filename");
-        }
-
-        $actualdir = $this->context->session->get("actualdir");
         if ($this->context->parameters["readonly"]) {
             $this->parent->parent->flashMessage($this->context->translator->translate("Read-only mode enabled!"), "warning");
         } else {
 
-            if ($filename) {
+            foreach ($this->selectedFiles as $file) {
 
-                if ($this->context->filesystem->validPath($actualdir, $filename)) {
-
-                    if ($this->context->filesystem->delete($actualdir, $filename)) {
-                        $this->parent->parent->flashMessage($this->context->translator->translate("Successfuly deleted - %s", $filename), "info");
-                    } else {
-                        $this->parent->parent->flashMessage($this->context->translator->translate("An error occured!"), "error");
-                    }
+                if ($this->context->filesystem->delete($this->actualDir, $file)) {
+                    $this->parent->parent->flashMessage($this->context->translator->translate("Successfuly deleted - %s", $file), "info");
                 } else {
-                    $this->parent->parent->flashMessage($this->context->translator->translate("File %s not found!", $filename), "warning");
+                    $this->parent->parent->flashMessage($this->context->translator->translate("An error occured - %s", $file), "error");
                 }
-            } else {
-                $this->parent->parent->flashMessage($this->context->translator->translate("Incorrect input data!"), "error");
             }
+            $this->handleShowContent($this->actualDir);
         }
-
-        $this->handleShowContent($actualdir);
     }
 
-    public function handleMultiDelete($files = array())
+    public function handleZip()
     {
-        // if sended by AJAX
-        if (!$files) {
-            $files = $this->presenter->context->httpRequest->getPost("files");
-        }
-
         if ($this->context->parameters["readonly"]) {
             $this->parent->parent->flashMessage($this->context->translator->translate("Read-only mode enabled!"), "warning");
         } else {
 
-            $actualdir = $this->context->session->get("actualdir");
-            if (is_array($files) && $files) {
-
-                foreach ($files as $file) {
-
-                    if ($this->context->filesystem->delete($actualdir, $file)) {
-                        $this->parent->parent->flashMessage($this->context->translator->translate("Successfuly deleted - %s", $file), "info");
-                    } else {
-                        $this->parent->parent->flashMessage($this->context->translator->translate("An error occured - %s", $file), "error");
-                    }
-                }
-            } else {
-                $this->parent->parent->flashMessage($this->context->translator->translate("Incorrect input data!"), "error");
-            }
-
-            $this->handleShowContent($actualdir);
-        }
-    }
-
-    public function handleZip($files = array())
-    {
-        // if sended by AJAX
-        if (!$files) {
-            $files = $this->presenter->context->httpRequest->getPost("files");
-        }
-
-        if ($this->context->parameters["readonly"]) {
-            $this->parent->parent->flashMessage($this->context->translator->translate("Read-only mode enabled!"), "warning");
-        } else {
-
-            $actualdir = $this->context->session->get("actualdir");
-            $actualPath = $this->context->filesystem->getAbsolutePath($actualdir);
-
+            $actualPath = $this->context->filesystem->getAbsolutePath($this->actualDir);
             $zip = new \Ixtrum\FileManager\Application\Zip($this->context->parameters, $actualPath);
-            $zip->addFiles($files);
+            $zip->addFiles($this->selectedFiles);
 
             $key = $this->context->filesystem->getRealPath($actualPath);
             if ($this->context->parameters["cache"]) {
                 $this->parent->parent->context->caching->deleteItem(array("content", $key));
             }
         }
-
-        $this->handleShowContent($actualdir);
+        $this->handleShowContent($this->actualDir);
     }
 
     public function handleOrderBy($key)
     {
         $this->context->session->set("order", $key);
 
-        $actualdir = $this->context->session->get("actualdir");
-        $absPath = $this->context->filesystem->getRealPath($this->context->filesystem->getAbsolutePath($actualdir));
-
+        $absPath = $this->context->filesystem->getRealPath($this->context->filesystem->getAbsolutePath($this->actualDir));
         if ($this->context->parameters["cache"]) {
             $this->context->caching->deleteItem(array("content", $absPath));
         }
 
-        $this->handleShowContent($actualdir);
+        $this->handleShowContent($this->actualDir);
     }
 
-    public function handleRunPlugin($plugin, $files = "")
+    public function handleRunPlugin($name)
     {
-        $this->parent->parent->handleRunPlugin($plugin);
+        $this->parent->parent->handleRunPlugin($name);
     }
 
-    public function handleDownloadFile($filename = "")
+    public function handleDownload()
     {
-        $actualdir = $this->context->session->get("actualdir");
+        if (count($this->selectedFiles) === 1) {
 
-        // if sended by AJAX
-        if (!$filename) {
-            $filename = $this->presenter->context->httpRequest->getQuery("filename");
-        }
+            $file = $this->selectedFiles[0];
+            if ($this->context->filesystem->validPath($this->actualDir, $file)) {
 
-        if ($filename) {
-
-            if ($this->context->filesystem->validPath($actualdir, $filename)) {
-
-                $path = $this->context->filesystem->getAbsolutePath($actualdir) . $filename;
-                $this->presenter->sendResponse(new FileResponse($path, NULL, NULL));
+                $path = $this->context->filesystem->getAbsolutePath($this->actualDir) . $file;
+                $this->presenter->sendResponse(new FileResponse($path, $file, null));
             } else {
-                $this->parent->parent->flashMessage($this->context->translator->translate("File %s not found!", $filename), "warning");
+                $this->parent->parent->flashMessage($this->context->translator->translate("File %s not found!", $file), "warning");
             }
-        } else {
-            $this->parent->parent->flashMessage($this->context->translator->translate("Incorrect input data!"), "error");
         }
     }
 
     public function handleGoToParent()
     {
-        $actualdir = $this->context->session->get("actualdir");
-        $parent = dirname($actualdir);
-
+        $parent = dirname($this->actualDir);
         if ($parent == "\\" || $parent == ".") {
-            $parent_path = $this->context->filesystem->getRootname();
+            $parentPath = $this->context->filesystem->getRootname();
         } else {
-            $parent_path = $parent . "/";
+            $parentPath = $parent . "/";
         }
-
-        $this->handleShowContent($parent_path);
+        $this->handleShowContent($parentPath);
     }
 
     public function handleMove($targetdir = "", $filename = "")
     {
-        $request = $this->presenter->context->httpRequest;
-
         // if sended by AJAX
         if (!$targetdir) {
-            $targetdir = $request->getQuery("targetdir");
+            $targetdir = $this->presenter->context->httpRequest->getQuery("targetdir");
         }
 
         if (!$filename) {
-            $filename = $request->getQuery("filename");
+            $filename = $this->presenter->context->httpRequest->getQuery("filename");
         }
 
         if ($this->context->parameters["readonly"]) {
             $this->parent->parent->flashMessage($this->context->translator->translate("Read-only mode enabled!"), "warning");
         } else {
 
-            $actualdir = $this->context->session->get("actualdir");
             if ($targetdir && $filename) {
 
-                if ($this->context->filesystem->move($actualdir, $targetdir, $filename)) {
+                if ($this->context->filesystem->move($this->actualDir, $targetdir, $filename)) {
 
                     $this->presenter->payload->result = "success";
                     $this->parent->parent->flashMessage($this->context->translator->translate("Successfuly moved - %s", $filename), "info");
@@ -336,13 +149,13 @@ class Content extends \Ixtrum\FileManager
                 }
             }
 
-            $this->handleShowContent($actualdir);
+            $this->handleShowContent($this->actualDir);
         }
     }
 
-    public function handleShowContent($actualdir)
+    public function handleShowContent($dir)
     {
-        $this->parent->parent->handleShowContent($actualdir);
+        $this->parent->parent->handleShowContent($dir);
     }
 
     public function handleShowThumb($dir, $file)
@@ -354,10 +167,6 @@ class Content extends \Ixtrum\FileManager
 
     public function render()
     {
-        $template = $this->template;
- 
-        $actualdir = $this->context->session->get("actualdir");
-        $view = $this->context->session->get("view");
         $mask = $this->context->session->get("mask");
         $order = $this->context->session->get("order");
 
@@ -369,21 +178,12 @@ class Content extends \Ixtrum\FileManager
             $order = "type";
         }
 
-        $allowedViews = array("details", "large", "list", "small");
-        if ($view && in_array($view, $allowedViews)) {
-            $template->setFile(__DIR__ . "/$view.latte");
-        } else {
-
-            $template->setFile(__DIR__ . "/large.latte");
-            $view = "large";
-        }
-
-        $template->setTranslator($this->context->translator);
-
-        $template->files = $this->loadData($actualdir, $mask, $view, $order);
-        $template->actualdir = $actualdir;
-        $template->rootname = $this->context->filesystem->getRootName();
-        $template->thumb_dir = $this->context->parameters["resDir"] . "img/icons/" . $view . "/";
+        $this->template->setFile(__DIR__ . "/$this->view.latte");
+        $this->template->setTranslator($this->context->translator);
+        $this->template->files = $this->loadData($this->actualDir, $mask, $this->view, $order);
+        $this->template->actualdir = $this->actualDir;
+        $this->template->rootname = $this->context->filesystem->getRootName();
+        $this->template->thumb_dir = $this->context->parameters["resDir"] . "img/icons/$this->view/";
 
         // Load plugins
         if ($this->context->parameters["plugins"]) {
@@ -397,11 +197,11 @@ class Content extends \Ixtrum\FileManager
             }
 
             if ($contextPlugins) {
-                $template->plugins = $contextPlugins;
+                $this->template->plugins = $contextPlugins;
             }
         }
 
-        $template->render();
+        $this->template->render();
     }
 
     /**
@@ -409,17 +209,17 @@ class Content extends \Ixtrum\FileManager
      *
      * @todo Nette Finder does not support mask for folders
      *
-     * @param string $actualdir
+     * @param string $dir
      * @param string $mask
      * @param string $view
      * @param string $order
      *
      * @return array
      */
-    private function getDirectoryContent($actualdir, $mask, $view, $order)
+    private function getDirectoryContent($dir, $mask, $view, $order)
     {
         $supportedThumbs = $this->context->thumbs->supported;
-        $absolutePath = $this->context->filesystem->getAbsolutePath($actualdir);
+        $absolutePath = $this->context->filesystem->getAbsolutePath($dir);
 
         $files = \Ixtrum\FileManager\Application\FileSystem\Finder::find($mask)
                 ->in($absolutePath)
@@ -471,29 +271,29 @@ class Content extends \Ixtrum\FileManager
      * Load data from actual directory
      *
      * @internal
-     * @param string $actualdir
+     * @param string $dir
      * @param string $mask
      * @param string $view
      * @param string $order
      * @return array
      */
-    private function loadData($actualdir, $mask, $view, $order)
+    private function loadData($dir, $mask, $view, $order)
     {
         if ($this->context->parameters["cache"]) {
 
-            $absDir = $this->context->filesystem->getRealPath($this->context->filesystem->getAbsolutePath($actualdir));
+            $absDir = $this->context->filesystem->getRealPath($this->context->filesystem->getAbsolutePath($dir));
             $cacheData = $this->context->caching->getItem(array("content", $absDir));
 
             if (!$cacheData) {
 
-                $output = $this->getDirectoryContent($actualdir, $mask, $view, $order);
+                $output = $this->getDirectoryContent($dir, $mask, $view, $order);
                 $this->context->caching->saveItem(array("content", $absDir), $output);
                 return $output;
             } else {
                 return $cacheData;
             }
         } else {
-            return $this->getDirectoryContent($actualdir, $mask, $view, $order);
+            return $this->getDirectoryContent($dir, $mask, $view, $order);
         }
     }
 

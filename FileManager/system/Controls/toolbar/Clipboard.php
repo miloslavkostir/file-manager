@@ -12,8 +12,7 @@ class Clipboard extends \Ixtrum\FileManager
 
     public function handlePasteFromClipboard()
     {
-        $actualdir = $this->context->session->get("actualdir");
-        if ($this->context->filesystem->validPath($actualdir)) {
+        if ($this->context->filesystem->validPath($this->actualDir)) {
 
             if ($this->context->parameters["readonly"]) {
                 $this->parent->parent->flashMessage($this->context->translator->translate("Read-only mode enabled!"), "warning");
@@ -23,14 +22,14 @@ class Clipboard extends \Ixtrum\FileManager
 
                     if ($val["action"] === "copy") {
 
-                        if ($this->context->filesystem->copy($val['actualdir'], $actualdir, $val['filename'])) {
+                        if ($this->context->filesystem->copy($val['actualdir'], $this->actualDir, $val['filename'])) {
                             $this->parent->parent->flashMessage($this->context->translator->translate("Succesfully copied - %s", $val['filename']), "info");
                         } else {
                             $this->parent->parent->flashMessage($this->context->translator->translate("An error occured - %s", $val['filename']), "error");
                         }
                     } elseif ($val["action"] === "cut") {
 
-                        if ($this->context->filesystem->move($val["actualdir"], $actualdir, $val["filename"])) {
+                        if ($this->context->filesystem->move($val["actualdir"], $this->actualDir, $val["filename"])) {
                             $this->parent->parent->flashMessage($this->context->translator->translate("Succesfully moved - %s", $val["filename"]), "info");
                         } else {
                             $this->parent->parent->flashMessage($this->context->translator->translate("An error occured - %s", $val["filename"]), "error");
@@ -42,23 +41,22 @@ class Clipboard extends \Ixtrum\FileManager
                 $this->context->session->clear("clipboard");
             }
         } else {
-            $this->parent->parent->flashMessage($this->context->translator->translate("Folder %s already does not exist!", $actualdir), "warning");
+            $this->parent->parent->flashMessage($this->context->translator->translate("Folder %s already does not exist!", $this->actualDir), "warning");
         }
     }
 
-    public function handleRemoveFromClipboard($actualdir, $filename)
+    public function handleRemoveFromClipboard($dir, $filename)
     {
-        $this->context->session->remove("clipboard", $actualdir . $filename);
+        $this->context->session->remove("clipboard", $dir . $filename);
     }
 
     public function render()
     {
-        $template = $this->template;
-        $template->setFile(__DIR__ . "/Clipboard.latte");
-        $template->setTranslator($this->context->translator);
-        $template->clipboard = $this->context->session->get("clipboard");
-        $template->rootname = $this->context->filesystem->getRootName();
-        $template->render();
+        $this->template->setFile(__DIR__ . "/Clipboard.latte");
+        $this->template->setTranslator($this->context->translator);
+        $this->template->clipboard = $this->context->session->get("clipboard");
+        $this->template->rootname = $this->context->filesystem->getRootName();
+        $this->template->render();
     }
 
 }
