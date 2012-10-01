@@ -444,42 +444,35 @@ class FileSystem
     /**
      * Get file size for files > 2 GB
      *
-     * @param string
-     * @return integer | false
+     * @param string $path file path
+     *
+     * @return mixed
      */
     public function filesize($path)
     {
-        if (!file_exists($path)) {
-            Debugger::log("File does not exist.", Debugger::WARNING);
-        }
+        $filesize = new FileSystem\Filesize($path);
 
-        if (!is_file($path)) {
-            Debugger::log("File is not file.", Debugger::WARNING);
-        }
-
-        $filesize = new FileSystem\Filesize;
-
-        $return = $filesize->sizeCurl($path);
+        $return = $filesize->sizeCurl();
         if ($return) {
             return $return;
         }
 
-        $return = $filesize->sizeNativeSeek($path);
+        $return = $filesize->sizeNativeSeek();
         if ($return) {
             return $return;
         }
 
-        $return = $filesize->sizeCom($path);
+        $return = $filesize->sizeCom();
         if ($return) {
             return $return;
         }
 
-        $return = $filesize->sizeExec($path);
+        $return = $filesize->sizeExec();
         if ($return) {
             return $return;
         }
 
-        $return = $filesize->sizeNativeRead($path);
+        $return = $filesize->sizeNativeRead();
         if ($return) {
             return $return;
         }

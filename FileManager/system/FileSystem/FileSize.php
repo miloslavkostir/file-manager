@@ -2,7 +2,7 @@
 
 namespace Ixtrum\FileManager\Application\FileSystem;
 
-class Filesize
+class FileSize
 {
 
     const MATH_BCMATH = "BCMath";
@@ -15,15 +15,28 @@ class Filesize
      */
     private static $mathLib;
 
-    function __construct()
+    /** @var $path */
+    private $path;
+
+    function __construct($path)
     {
         if (function_exists("bcadd")) {
             self::$mathLib = self::MATH_BCMATH;
         } elseif (function_exists("gmp_add")) {
             self::$mathLib = self::MATH_GMP;
         } else {
-            throw new \Nette\Application\ApplicationException("You must have installed at least one of mathematical libraries - BC Math or GMP!");
+            throw new \Exception("You must have installed at least one of mathematical libraries - BC Math or GMP!");
         }
+
+        if (!file_exists($path)) {
+            throw new \Exception("File $path does not exist");
+        }
+
+        if (is_dir($path)) {
+            throw new \Exception("Can not get file size, because $path is directory");
+        }
+
+        $this->path = $path;
     }
 
     /**
@@ -33,10 +46,10 @@ class Filesize
      * @see http://www.php.net/manual/en/function.filesize.php#102135
      * @return string | bool (false when fail)
      */
-    public function sizeNativeSeek($path)
+    public function sizeNativeSeek()
     {
         // This should work for large files on 64bit platforms and for small files every where
-        $fp = fopen($path, "rb");
+        $fp = fopen($this->path, "rb");
         flock($fp, LOCK_SH);
 
         if (!$fp) {
@@ -69,9 +82,9 @@ class Filesize
      * @see http://stackoverflow.com/questions/5501451/php-x86-how-to-get-filesize-of-2gb-file-without-external-program/5504829#5504829
      * @return string | bool (false when fail)
      */
-    public function sizeNativeRead($path)
+    public function sizeNativeRead()
     {
-        $fp = fopen($path, "rb");
+        $fp = fopen($this->path, "rb");
         flock($fp, LOCK_SH);
 
         if (!$fp) {
@@ -99,7 +112,7 @@ class Filesize
             } elseif (self::$mathLib == self::MATH_GMP) {
                 $size = gmp_add($size, $readed);
             } else {
-                throw new \Nette\Application\ApplicationException("No mathematical library available");
+                throw new \Exception("No mathematical library available");
             }
         }
 
@@ -117,15 +130,16 @@ class Filesize
      * Returns file size using curl module
      *
      * @see http://www.php.net/manual/en/function.filesize.php#100434
+     *
      * @return string | bool (false when fail or cUrl module not available)
      */
-    public function sizeCurl($path)
+    public function sizeCurl()
     {
         // If program goes here, file must be larger than 2GB
         // curl solution - cross platform and really cool :)
         if (function_exists("curl_init")) {
 
-            $ch = @curl_init("file://" . realpath($path));
+            $ch = @curl_init("file://" . realpath($this->path));
             if (!$ch) {
                 return false;
             }
@@ -148,13 +162,14 @@ class Filesize
      * Returns file size by using external program (exec needed)
      *
      * @see http://stackoverflow.com/questions/5501451/php-x86-how-to-get-filesize-of-2gb-file-without-external-program/5502328#5502328
+     *
      * @return string | bool (false when fail or exec is disabled)
      */
-    public function sizeExec($path)
+    public function sizeExec()
     {
         // filesize using exec
         if (function_exists("exec")) {
-            $escapedPath = escapeshellarg($path);
+            $escapedPath = escapeshellarg($this->path);
 
             if (strtoupper(substr(PHP_OS, 0, 3)) == 'WIN') { // Windows
                 // Try using the NT substition modifier %~z
@@ -178,13 +193,14 @@ class Filesize
      * @see http://stackoverflow.com/questions/5501451/php-x86-how-to-get-filesize-of-2gb-file-without-external-program/5502328#5502328
      * @return string | bool (false when fail or COM not available)
      */
-    public function sizeCom($path)
+    public function sizeCom()
     {
         if (class_exists("COM")) {
             // Use the Windows COM interface
             $fsobj = new \COM('Scripting.FileSystemObject');
+            $path = $this->path;
             if (dirname($path) == '.') {
-                $path = ((substr(getcwd(), -1) == DIRECTORY_SEPARATOR) ? getcwd() . basename($path) : getcwd() . DIRECTORY_SEPARATOR . basename($path));
+                $path = ((substr(getcwd(), -1) == DIRECTORY_SEPARATOR) ? getcwd() . basename($this->path) : getcwd() . DIRECTORY_SEPARATOR . basename($this->path));
             }
             $f = $fsobj->GetFile($path);
 
