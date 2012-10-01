@@ -38,6 +38,7 @@ class FileManager extends \Nette\Application\UI\Control
         $actualDir = $this->context->session->get("actualdir");
         $actualPath = $this->context->filesystem->getAbsolutePath($actualDir);
         if (!is_dir($actualPath) || empty($actualDir)) {
+            // Set root dir as default
             $actualDir = $this->context->filesystem->getRootname();
             $this->context->session->set("actualdir", $actualDir);
         }
