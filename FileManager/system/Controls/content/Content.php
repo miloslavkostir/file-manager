@@ -161,20 +161,14 @@ class Content extends \Ixtrum\FileManager
 
     public function render()
     {
-        $mask = $this->context->session->get("mask");
-        $order = $this->context->session->get("order");
-
-        if (empty($mask)) {
-            $mask = "*";
-        }
-
-        if (empty($order)) {
-            $order = "type";
-        }
-
         $this->template->setFile(__DIR__ . "/$this->view.latte");
         $this->template->setTranslator($this->context->translator);
-        $this->template->files = $this->loadData($this->actualDir, $mask, $this->view, $order);
+        $this->template->files = $this->loadData(
+            $this->actualDir,
+            $this->context->session->get("mask"),
+            $this->view,
+            $this->context->session->get("order")
+        );
         $this->template->actualdir = $this->actualDir;
         $this->template->rootname = $this->context->filesystem->getRootName();
         $this->template->thumb_dir = $this->context->parameters["resDir"] . "img/icons/$this->view/";
@@ -212,7 +206,6 @@ class Content extends \Ixtrum\FileManager
      */
     private function getDirectoryContent($dir, $mask, $view, $order)
     {
-        $supportedThumbs = $this->context->thumbs->supported;
         $absolutePath = $this->context->filesystem->getAbsolutePath($dir);
 
         $files = \Ixtrum\FileManager\Application\FileSystem\Finder::find($mask)
@@ -241,7 +234,7 @@ class Content extends \Ixtrum\FileManager
                         $dir_array[$name]["icon"] = "$filetype.png";
                     }
 
-                    if (in_array($filetype, $supportedThumbs)) {
+                    if (in_array($filetype, $this->context->thumbs->supported)) {
                         $dir_array[$name]["create_thumb"] = true;
                     } else {
                         $dir_array[$name]["create_thumb"] = false;
@@ -264,18 +257,25 @@ class Content extends \Ixtrum\FileManager
     /**
      * Load data from actual directory
      *
-     * @internal
      * @param string $dir
      * @param string $mask
      * @param string $view
      * @param string $order
+     *
      * @return array
      */
     private function loadData($dir, $mask, $view, $order)
     {
-        if ($this->context->parameters["cache"]) {
+        // Default filter mask
+        if (empty($mask)) {
+            $mask = "*";
+        }
 
-            $absDir = $this->context->filesystem->getRealPath($this->context->filesystem->getAbsolutePath($dir));
+        if ($this->context->parameters["cache"] && $mask === "*") {
+
+            $absDir = $this->context->filesystem->getRealPath(
+                $this->context->filesystem->getAbsolutePath($dir)
+            );
             $cacheData = $this->context->caching->getItem(array("content", $absDir));
 
             if (!$cacheData) {
