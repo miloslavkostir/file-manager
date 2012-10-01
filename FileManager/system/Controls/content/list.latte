@@ -22,7 +22,7 @@
                         {else}
                             {var $targetpath = $actualdir . $item['filename'] . '/'}
                         {/if}
-                        <a n:href="showContent!, $targetpath"
+                        <a n:href="openDir!, $targetpath"
                            class="fm-ajax-dbl fm-thumb"
                            title="{_'Open folder'}">
                             <img src="{$basePath . $thumb_dir . $item['icon']}"

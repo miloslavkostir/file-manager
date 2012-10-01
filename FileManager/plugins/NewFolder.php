@@ -70,8 +70,6 @@ class NewFolder extends \Ixtrum\FileManager
                 $this->parent->parent->flashMessage($this->context->translator->translate("Folder %s already does not exist!", $this->actualDir), "warning");
             }
         }
-
-        $this->parent->parent->handleShowContent($this->actualDir);
     }
 
 }

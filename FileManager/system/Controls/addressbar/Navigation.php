@@ -7,6 +7,11 @@ use Nette\Application\UI\Form;
 class Navigation extends \Ixtrum\FileManager
 {
 
+    public function handleOpenDir($dir)
+    {
+        $this->setActualDir($dir);
+    }
+
     public function handleRefreshContent()
     {
         if ($this->context->parameters["cache"]) {
@@ -39,13 +44,7 @@ class Navigation extends \Ixtrum\FileManager
 
     public function locationFormSubmitted($form)
     {
-        $path = $this->context->filesystem->getAbsolutePath($form->values->location);
-        if (is_dir($path)) {
-            $this->parent->parent->handleShowContent($form->values->location);
-        } else {
-            $this->parent->parent->flashMessage($this->context->translator->translate("Folder %s does not exist!", $form->values->location, "warning"));
-            $this->parent->parent->handleShowContent($this->actualDir);
-        }
+        $this->setActualDir($form->values->location);
     }
 
     public function getNav($dir)
@@ -55,7 +54,7 @@ class Navigation extends \Ixtrum\FileManager
         if ($dir === $rootname)
             $var[] = array(
                 "name" => $rootname,
-                "link" => $this->parent->parent->link("showContent", $rootname)
+                "link" => $this->link("openDir", $rootname)
             );
         else {
             $nav = explode("/", $dir);
@@ -65,7 +64,7 @@ class Navigation extends \Ixtrum\FileManager
                     $path .= "$item/";
                     $var[] = array(
                         "name" => $item,
-                        "link" => $this->parent->parent->link("showContent", $path)
+                        "link" => $this->link("openDir", $path)
                     );
                 }
             }

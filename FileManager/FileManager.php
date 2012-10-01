@@ -19,7 +19,7 @@ class FileManager extends \Nette\Application\UI\Control
 
     /** @var string */
     protected $view;
-    
+
     /**
      * Constructor
      *
@@ -70,7 +70,7 @@ class FileManager extends \Nette\Application\UI\Control
             $this->context->caching->deleteItem(array(
                 "content",
                 $this->context->filesystem->getRealPath(
-                        $this->context->filesystem->getAbsolutePath($this->actualDir)
+                    $this->context->filesystem->getAbsolutePath($this->actualDir)
                 )
             ));
         }
@@ -92,7 +92,12 @@ class FileManager extends \Nette\Application\UI\Control
         }
     }
 
-    public function handleShowContent($dir)
+    /**
+     * Setter for actualDir
+     *
+     * @param string $dir relative dir path
+     */
+    public function setActualDir($dir)
     {
         if ($this->context->filesystem->validPath($dir)) {
 
@@ -111,8 +116,8 @@ class FileManager extends \Nette\Application\UI\Control
         // Load resources
         if ($this->context->parameters["synchronizeResDir"] === true) {
             $resources = new FileManager\Application\Resources(
-                            $this->context->parameters["wwwDir"] . $this->context->parameters["resDir"],
-                            $this->context->parameters["rootPath"]
+                    $this->context->parameters["wwwDir"] . $this->context->parameters["resDir"],
+                    $this->context->parameters["rootPath"]
             );
             $resources->synchronize();
         }
@@ -155,8 +160,8 @@ class FileManager extends \Nette\Application\UI\Control
 
         // Sort flash messages; 1=error, 2=warning, 3=info
         usort($this->template->flashes, function($flash, $nextFlash) {
-                    return ($flash->type === "error") ? -1 : 1;
-                });
+                return ($flash->type === "error") ? -1 : 1;
+            });
 
         $this->template->render();
     }
@@ -184,11 +189,11 @@ class FileManager extends \Nette\Application\UI\Control
     {
         $container = $this->context->systemContainer;
         return new \Nette\Application\UI\Multiplier(function ($name) use ($container) {
-                            $namespace = __NAMESPACE__;
-                            $namespace .= "\\FileManager\Controls";
-                            $class = "$namespace\\$name";
-                            return new $class($container);
-                        });
+                    $namespace = __NAMESPACE__;
+                    $namespace .= "\\FileManager\Controls";
+                    $class = "$namespace\\$name";
+                    return new $class($container);
+                });
     }
 
     /**
@@ -200,11 +205,11 @@ class FileManager extends \Nette\Application\UI\Control
     {
         $container = $this->context->systemContainer;
         return new \Nette\Application\UI\Multiplier(function ($name) use ($container) {
-                            $namespace = __NAMESPACE__;
-                            $namespace .= "\\FileManager\Plugins";
-                            $class = "$namespace\\$name";
-                            return new $class($container);
-                        });
+                    $namespace = __NAMESPACE__;
+                    $namespace .= "\\FileManager\Plugins";
+                    $class = "$namespace\\$name";
+                    return new $class($container);
+                });
     }
 
 }

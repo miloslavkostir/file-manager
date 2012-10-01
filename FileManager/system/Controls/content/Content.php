@@ -58,7 +58,6 @@ class Content extends \Ixtrum\FileManager
                     $this->parent->parent->flashMessage($this->context->translator->translate("An error occured - %s", $file), "error");
                 }
             }
-            $this->handleShowContent($this->actualDir);
         }
     }
 
@@ -77,7 +76,6 @@ class Content extends \Ixtrum\FileManager
                 $this->parent->parent->context->caching->deleteItem(array("content", $key));
             }
         }
-        $this->handleShowContent($this->actualDir);
     }
 
     public function handleOrderBy($key)
@@ -88,8 +86,6 @@ class Content extends \Ixtrum\FileManager
         if ($this->context->parameters["cache"]) {
             $this->context->caching->deleteItem(array("content", $absPath));
         }
-
-        $this->handleShowContent($this->actualDir);
     }
 
     public function handleRunPlugin($name)
@@ -116,11 +112,11 @@ class Content extends \Ixtrum\FileManager
     {
         $parent = dirname($this->actualDir);
         if ($parent == "\\" || $parent == ".") {
-            $parentPath = $this->context->filesystem->getRootname();
+            $parentDir = $this->context->filesystem->getRootname();
         } else {
-            $parentPath = $parent . "/";
+            $parentDir = $parent . "/";
         }
-        $this->handleShowContent($parentPath);
+        $this->setActualDir($parentDir);
     }
 
     public function handleMove($targetdir = "", $filename = "")
@@ -148,14 +144,12 @@ class Content extends \Ixtrum\FileManager
                     $this->parent->parent->flashMessage($this->context->translator->translate("An error occured. File %s was not moved.", $filename), "error");
                 }
             }
-
-            $this->handleShowContent($this->actualDir);
         }
     }
 
-    public function handleShowContent($dir)
+    public function handleOpenDir($dir)
     {
-        $this->parent->parent->handleShowContent($dir);
+        $this->setActualDir($dir);
     }
 
     public function handleShowThumb($dir, $file)

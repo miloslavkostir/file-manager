@@ -94,8 +94,6 @@ class Rename extends \Ixtrum\FileManager
                 $this->parent->parent->flashMessage($this->context->translator->translate("An error occurred during %s renaming!", $form->values->orig_filename), "error");
             }
         }
-
-        $this->parent->parent->handleShowContent($this->actualDir);
     }
 
 }
