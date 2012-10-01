@@ -2,7 +2,7 @@
 	"name": "bauer01/ixtrum-file-manager",
 	"type": "library",
 	"description": "Comfortable PHP & AJAX file manager component for Nette framework",
-	"keywords": ["php", "component", "ajax", "nette", "file", "manager"],
+	"keywords": ["php", "component", "ajax", "nette", "file manager"],
 	"homepage": "http://ixtrum.com",
 	"license": ["GPL-2.0"],
 	"authors": [
