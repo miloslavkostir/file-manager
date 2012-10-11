@@ -9,7 +9,7 @@ class DiskUsage extends \Ixtrum\FileManager
     {
         $this->template->setFile(__DIR__ . '/DiskUsage.latte');
         $this->template->setTranslator($this->context->translator);
-        $this->template->sizeinfo = $this->context->filesystem->diskSizeInfo();
+        $this->template->sizeinfo = $this->getDiskInfo();
         $this->template->render();
     }
 

@@ -212,4 +212,14 @@ class FileManager extends \Nette\Application\UI\Control
                 });
     }
 
+    /**
+     * Get info about disk usage
+     *
+     * @return array
+     */
+    public function getDiskInfo()
+    {
+        return $this->context->filesystem->diskSizeInfo();
+    }
+
 }
