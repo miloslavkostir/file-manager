@@ -83,7 +83,8 @@
         </div>
         <div n:ifset="$fileInfoPlugins" class="fm-file-info-plugins">
             <div n:foreach="$fileInfoPlugins as $plugin" class="fm-file-info-plugin">
-                {control plugin-$plugin["name"]}
+                {var $pluginName = $plugin["name"]}
+                {control plugin-$pluginName}
             </div>
         </div>
     </div>
