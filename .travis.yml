@@ -6,4 +6,4 @@ script: phpunit --bootstrap tests/bootstrap.php
 
 before_script:
 # Install
-  - composer install
+  - composer install --dev
