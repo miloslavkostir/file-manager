@@ -26,6 +26,8 @@ class FileManagerTest extends TestCase
         $presenter = new MockPresenter();
         $presenter->injectPrimary($this->context);
         $presenter->addComponent($this->control, "testControl");
+        $presenter->run(new Nette\Application\Request("Homepage", "GET", array()));
+
         $control = $presenter["testControl"];
         $this->renderComponent($control);
         $this->assertInstanceOf("Nette\Templating\FileTemplate", $control->template);
