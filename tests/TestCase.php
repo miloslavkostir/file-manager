@@ -15,13 +15,19 @@ class TestCase extends PHPUnit_Framework_TestCase
     {
         parent::__construct();
 
+        // Create tempDir
+        $tempDir = __DIR__ . "/temp";
+        if (!is_dir($tempDir)) {
+            $this->mkdir($tempDir);
+        }
+
         // Set up configuration
         $configurator = new Nette\Config\Configurator;
-        $configurator->setTempDirectory(__DIR__ . "/temp");
+        $configurator->setTempDirectory($tempDir);
         $container = $configurator->createContainer();
 
         // Create wwwDir
-        $wwwDir = $container->parameters["tempDir"] . "/www";
+        $wwwDir = "$tempDir/www";
         if (!is_dir($wwwDir)) {
             $this->mkdir($wwwDir);
         }
