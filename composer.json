@@ -10,5 +10,9 @@
 			"name": "Bronislav Sedlák",
 			"homepage": "http://bauer01.cz"
 		}
-	]
+	],
+	"require-dev": {
+        "nette/nette": "2.0.6",
+		"phpunit/phpunit": "3.7.8"
+	}
 }
