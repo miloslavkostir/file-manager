@@ -3,3 +3,7 @@ php:
     - "5.3"
 
 script: phpunit --bootstrap tests/bootstrap.php
+
+before_script:
+# Install
+  - composer install
