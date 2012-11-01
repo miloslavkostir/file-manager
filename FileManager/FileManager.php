@@ -23,15 +23,15 @@ class FileManager extends \Nette\Application\UI\Control
     /**
      * Constructor
      *
-     * @param \Nette\DI\Container $systemContainer System container
-     * @param array               $config          User configuration
+     * @param \Nette\DI\Container $container System container
+     * @param array               $config    User configuration
      */
-    public function __construct(\Nette\DI\Container $systemContainer, $config = array())
+    public function __construct(\Nette\DI\Container $container, $config = array())
     {
         parent::__construct();
 
         // Load system container with services and configuration
-        $this->context = new FileManager\Services\Loader($systemContainer, $config, __DIR__);
+        $this->context = new FileManager\Services\Loader($container, $config, __DIR__);
         $this->context->freeze();
 
         // Get & validate actual dir
@@ -45,7 +45,7 @@ class FileManager extends \Nette\Application\UI\Control
         $this->actualDir = $actualDir;
 
         // Get selected files via POST
-        $selectedFiles = $systemContainer->httpRequest->getPost("files");
+        $selectedFiles = $container->httpRequest->getPost("files");
         if (is_array($selectedFiles)) {
             $this->selectedFiles = $selectedFiles;
         }
