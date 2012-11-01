@@ -12,9 +12,9 @@ class Themes extends \Ixtrum\FileManager
 
         $theme = $this->context->session->get("theme");
         if (empty($theme)) {
-            $this["themeForm"]->setDefaults(array("theme" => "default"));
+            $this->getComponent("themeForm")->setDefaults(array("theme" => "default"));
         } else {
-            $this["themeForm"]->setDefaults(array("theme" => $theme));
+            $this->getComponent("themeForm")->setDefaults(array("theme" => $theme));
         }
 
         $this->template->render();

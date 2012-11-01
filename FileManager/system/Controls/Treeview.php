@@ -24,7 +24,7 @@ class Treeview extends \Ixtrum\FileManager
         foreach ($dirs as $key => $value) {
 
             $html .= "<li>";
-            $html .= '<span class="fm-droppable" data-move-url="'.$this["control-content"]->link("move").'" data-targetdir="' . $superior . '/' . $key . '/' . '">';
+            $html .= '<span class="fm-droppable" data-move-url="' . $this->getComponent("control-content")->link("move") . '" data-targetdir="' . $superior . '/' . $key . '/' . '">';
             $html .= '<a href="' . $this->link("openDir", "$superior/$key/") . '" class="treeview-folder fm-ajax fm-folder-icon" title="' . $this->context->filesystem->getRootName() . $superior . '/' . $key . '/">';
             $html .= $key;
             $html .= '</a></span>';
@@ -60,7 +60,7 @@ class Treeview extends \Ixtrum\FileManager
         $rootname = $this->context->filesystem->getRootName();
 
         $output = '<ul class="filetree">';
-        $output .= '<span class="fm-droppable" data-move-url="'.$this["control-content"]->link("move").'" data-targetdir="' . $rootname . '">';
+        $output .= '<span class="fm-droppable" data-move-url="' . $this->getComponent("control-content")->link("move") . '" data-targetdir="' . $rootname . '">';
         $output .= '<a href="' . $this->link("openDir", $rootname) . '" class="fm-ajax treeview-folder fm-root-icon" title="' . $rootname . '">';
         $output .= $rootname;
         $output .= '</a></span>';

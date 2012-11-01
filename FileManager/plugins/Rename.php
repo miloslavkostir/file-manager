@@ -23,7 +23,7 @@ class Rename extends \Ixtrum\FileManager
         $this->template->setTranslator($this->context->translator);
         $this->template->origFile = $file;
 
-        $this["renameForm"]->setDefaults(array(
+        $this->getComponent("renameForm")->setDefaults(array(
             "new_filename" => $file,
             "orig_filename" => $file,
         ));
