@@ -17,8 +17,4 @@ foreach ($loader->getIndexedClasses() as $className => $classFile) {
 }
 
 // Run tests
-ob_start();
 PHPUnit_TextUI_TestRunner::run($suite);
-
-// Print results
-dump(ob_get_clean());
