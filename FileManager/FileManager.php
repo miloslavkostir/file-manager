@@ -15,9 +15,6 @@ class FileManager extends \Nette\Application\UI\Control
     protected $selectedFiles = array();
 
     /** @var string */
-    protected $actualDir;
-
-    /** @var string */
     protected $view;
 
     /**
@@ -40,9 +37,8 @@ class FileManager extends \Nette\Application\UI\Control
         if (!is_dir($actualPath) || empty($actualDir)) {
             // Set root dir as default
             $actualDir = $this->context->filesystem->getRootname();
-            $this->context->session->set("actualdir", $actualDir);
         }
-        $this->actualDir = $actualDir;
+        $this->setActualDir($actualDir);
 
         // Get selected files via POST
         $selectedFiles = $container->httpRequest->getPost("files");
@@ -70,7 +66,7 @@ class FileManager extends \Nette\Application\UI\Control
             $this->context->caching->deleteItem(array(
                 "content",
                 $this->context->filesystem->getRealPath(
-                    $this->context->filesystem->getAbsolutePath($this->actualDir)
+                    $this->context->filesystem->getAbsolutePath($this->getActualDir())
                 )
             ));
         }
@@ -93,6 +89,16 @@ class FileManager extends \Nette\Application\UI\Control
     }
 
     /**
+     * Getter for actualDir
+     *
+     * @return string Actual directory
+     */
+    public function getActualDir()
+    {
+        return $this->context->session->get("actualdir");
+    }
+
+    /**
      * Setter for actualDir
      *
      * @param string $dir relative dir path
@@ -100,9 +106,7 @@ class FileManager extends \Nette\Application\UI\Control
     public function setActualDir($dir)
     {
         if ($this->context->filesystem->validPath($dir)) {
-
             $this->context->session->set("actualdir", $dir);
-            $this->actualDir = $dir;
         } else {
             $this->flashMessage($this->context->translator->translate("Folder %s does not exist!", $dir), "warning");
         }

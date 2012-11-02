@@ -9,7 +9,7 @@ class Content extends \Ixtrum\FileManager
 
     public function handleInfo()
     {
-        $this->parent->parent->template->fileinfo = $this->actualDir;
+        $this->parent->parent->template->fileinfo = $this->getActualDir();
     }
 
     public function handleCopy()
@@ -18,10 +18,10 @@ class Content extends \Ixtrum\FileManager
 
             $this->context->session->add(
                     "clipboard",
-                    $this->actualDir . $file,
+                    $this->getActualDir() . $file,
                     array(
                         "action" => "copy",
-                        "actualdir" => $this->actualDir,
+                        "actualdir" => $this->getActualDir(),
                         "filename" => $file
                     )
             );
@@ -34,10 +34,10 @@ class Content extends \Ixtrum\FileManager
 
             $this->context->session->add(
                     "clipboard",
-                    $this->actualDir . $file,
+                    $this->getActualDir() . $file,
                     array(
                         "action" => "cut",
-                        "actualdir" => $this->actualDir,
+                        "actualdir" => $this->getActualDir(),
                         "filename" => $file
                     )
             );
@@ -52,7 +52,7 @@ class Content extends \Ixtrum\FileManager
 
             foreach ($this->selectedFiles as $file) {
 
-                if ($this->context->filesystem->delete($this->actualDir, $file)) {
+                if ($this->context->filesystem->delete($this->getActualDir(), $file)) {
                     $this->parent->parent->flashMessage($this->context->translator->translate("Successfuly deleted - %s", $file), "info");
                 } else {
                     $this->parent->parent->flashMessage($this->context->translator->translate("An error occured - %s", $file), "error");
@@ -67,7 +67,7 @@ class Content extends \Ixtrum\FileManager
             $this->parent->parent->flashMessage($this->context->translator->translate("Read-only mode enabled!"), "warning");
         } else {
 
-            $actualPath = $this->context->filesystem->getAbsolutePath($this->actualDir);
+            $actualPath = $this->context->filesystem->getAbsolutePath($this->getActualDir());
             $zip = new \Ixtrum\FileManager\Application\Zip($this->context->parameters, $actualPath);
             $zip->addFiles($this->selectedFiles);
 
@@ -82,7 +82,7 @@ class Content extends \Ixtrum\FileManager
     {
         $this->context->session->set("order", $key);
 
-        $absPath = $this->context->filesystem->getRealPath($this->context->filesystem->getAbsolutePath($this->actualDir));
+        $absPath = $this->context->filesystem->getRealPath($this->context->filesystem->getAbsolutePath($this->getActualDir()));
         if ($this->context->parameters["cache"]) {
             $this->context->caching->deleteItem(array("content", $absPath));
         }
@@ -98,9 +98,9 @@ class Content extends \Ixtrum\FileManager
         if (count($this->selectedFiles) === 1) {
 
             $file = $this->selectedFiles[0];
-            if ($this->context->filesystem->validPath($this->actualDir, $file)) {
+            if ($this->context->filesystem->validPath($this->getActualDir(), $file)) {
 
-                $path = $this->context->filesystem->getAbsolutePath($this->actualDir) . $file;
+                $path = $this->context->filesystem->getAbsolutePath($this->getActualDir()) . $file;
                 $this->presenter->sendResponse(new FileResponse($path, $file, null));
             } else {
                 $this->parent->parent->flashMessage($this->context->translator->translate("File %s not found!", $file), "warning");
@@ -110,7 +110,7 @@ class Content extends \Ixtrum\FileManager
 
     public function handleGoToParent()
     {
-        $parent = dirname($this->actualDir);
+        $parent = dirname($this->getActualDir());
         if ($parent == "\\" || $parent == ".") {
             $parentDir = $this->context->filesystem->getRootname();
         } else {
@@ -136,7 +136,7 @@ class Content extends \Ixtrum\FileManager
 
             if ($targetdir && $filename) {
 
-                if ($this->context->filesystem->move($this->actualDir, $targetdir, $filename)) {
+                if ($this->context->filesystem->move($this->getActualDir(), $targetdir, $filename)) {
 
                     $this->presenter->payload->result = "success";
                     $this->parent->parent->flashMessage($this->context->translator->translate("Successfuly moved - %s", $filename), "info");
@@ -164,12 +164,12 @@ class Content extends \Ixtrum\FileManager
         $this->template->setFile(__DIR__ . "/$this->view.latte");
         $this->template->setTranslator($this->context->translator);
         $this->template->files = $this->loadData(
-            $this->actualDir,
+            $this->getActualDir(),
             $this->context->session->get("mask"),
             $this->view,
             $this->context->session->get("order")
         );
-        $this->template->actualdir = $this->actualDir;
+        $this->template->actualdir = $this->getActualDir();
         $this->template->rootname = $this->context->filesystem->getRootName();
         $this->template->thumb_dir = $this->context->parameters["resDir"] . "img/icons/$this->view/";
 

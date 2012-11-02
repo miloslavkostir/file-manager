@@ -12,7 +12,7 @@ class Clipboard extends \Ixtrum\FileManager
 
     public function handlePasteFromClipboard()
     {
-        if ($this->context->filesystem->validPath($this->actualDir)) {
+        if ($this->context->filesystem->validPath($this->getActualDir())) {
 
             if ($this->context->parameters["readonly"]) {
                 $this->parent->parent->flashMessage($this->context->translator->translate("Read-only mode enabled!"), "warning");
@@ -22,14 +22,14 @@ class Clipboard extends \Ixtrum\FileManager
 
                     if ($val["action"] === "copy") {
 
-                        if ($this->context->filesystem->copy($val['actualdir'], $this->actualDir, $val['filename'])) {
+                        if ($this->context->filesystem->copy($val['actualdir'], $this->getActualDir(), $val['filename'])) {
                             $this->parent->parent->flashMessage($this->context->translator->translate("Succesfully copied - %s", $val['filename']), "info");
                         } else {
                             $this->parent->parent->flashMessage($this->context->translator->translate("An error occured - %s", $val['filename']), "error");
                         }
                     } elseif ($val["action"] === "cut") {
 
-                        if ($this->context->filesystem->move($val["actualdir"], $this->actualDir, $val["filename"])) {
+                        if ($this->context->filesystem->move($val["actualdir"], $this->getActualDir(), $val["filename"])) {
                             $this->parent->parent->flashMessage($this->context->translator->translate("Succesfully moved - %s", $val["filename"]), "info");
                         } else {
                             $this->parent->parent->flashMessage($this->context->translator->translate("An error occured - %s", $val["filename"]), "error");
@@ -41,7 +41,7 @@ class Clipboard extends \Ixtrum\FileManager
                 $this->context->session->clear("clipboard");
             }
         } else {
-            $this->parent->parent->flashMessage($this->context->translator->translate("Folder %s already does not exist!", $this->actualDir), "warning");
+            $this->parent->parent->flashMessage($this->context->translator->translate("Folder %s already does not exist!", $this->getActualDir()), "warning");
         }
     }
 

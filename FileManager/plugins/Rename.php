@@ -46,7 +46,7 @@ class Rename extends \Ixtrum\FileManager
 
     public function renameFormSubmitted($form)
     {
-        $path = $this->context->filesystem->getAbsolutePath($this->actualDir);
+        $path = $this->context->filesystem->getAbsolutePath($this->getActualDir());
 
         if ($this->context->parameters["readonly"]) {
             $this->parent->parent->flashMessage($this->context->translator->translate("Read-only mode enabled!"), "warning");
