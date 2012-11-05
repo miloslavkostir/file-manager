@@ -6,6 +6,12 @@ class TestCase extends PHPUnit_Framework_TestCase
     /**  @var Nette\DI\Container */
     public $context;
 
+    /** @var string */
+    public $uploadRoot;
+
+    /** @var string */
+    public $uploadPath = "tests";
+
     /**
      * Constructor
      *
@@ -37,6 +43,10 @@ class TestCase extends PHPUnit_Framework_TestCase
         $container->router = new Nette\Application\Routers\SimpleRouter();
 
         $this->context = $container;
+
+        // Set up upload root dirs
+        $this->uploadRoot = $container->parameters["tempDir"] . "/tests";
+        $this->uploadPath = "/testupload/";
     }
 
     /**
@@ -61,9 +71,65 @@ class TestCase extends PHPUnit_Framework_TestCase
      */
     public function mkdir($path)
     {
-        $oldumask = umask(0);
-        mkdir($path, 0777);
-        umask($oldumask);
+        if (!is_dir($path)) {
+            $oldumask = umask(0);
+            mkdir($path, 0777);
+            umask($oldumask);
+        }
+    }
+
+    /**
+     * Remove directory recursively
+     *
+     * @param string  $directory Path to directory
+     * @param boolean $empty     Only empty directory
+     *
+     * @return boolean
+     */
+    public function rmdir($directory, $empty = false)
+    {
+        if (substr($directory, -1) == "/") {
+            $directory = substr($directory, 0, -1);
+        }
+        if (!file_exists($directory) || !is_dir($directory)) {
+            return false;
+        } elseif (is_readable($directory)) {
+            $handle = opendir($directory);
+            while (false !== ($item = readdir($handle))) {
+                if ($item != "." && $item != "..") {
+                    $path = $directory . "/" . $item;
+                    if (is_dir($path)) {
+                        recursive_remove_directory($path);
+                    } else {
+                        unlink($path);
+                    }
+                }
+            }
+            closedir($handle);
+            if ($empty == false) {
+                if (!rmdir($directory)) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
+    /**
+     * Initialize testing directory in temp
+     */
+    public function initTestDir()
+    {
+        $this->mkdir($this->uploadRoot);
+        $this->mkdir($this->uploadRoot . $this->uploadPath);
+    }
+
+    /**
+     * Deinitialize testing directory in temp
+     */
+    public function deInitTestDir()
+    {
+        $this->rmdir($this->uploadRoot);
     }
 
 }

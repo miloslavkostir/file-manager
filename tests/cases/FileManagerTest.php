@@ -3,8 +3,8 @@
 class FileManagerTest extends TestCase
 {
 
-    /** @var Nette\Application\UI\Control */
-    private $control;
+    /** @var Nette\Application\UI\Presenter */
+    private $presenter;
 
     /**
      * Set up test
@@ -13,11 +13,11 @@ class FileManagerTest extends TestCase
      */
     public function setUp()
     {
-        $this->control = new Ixtrum\FileManager($this->context);
+
     }
 
     /**
-     * Test default render
+     * Test default render method
      *
      * @return void
      */
@@ -25,12 +25,38 @@ class FileManagerTest extends TestCase
     {
         $presenter = new MockPresenter();
         $presenter->injectPrimary($this->context);
-        $presenter->addComponent($this->control, "testControl");
+        $control = new Ixtrum\FileManager($this->context, array("uploadroot" => $this->uploadRoot, "uploadpath" => $this->uploadPath));
+        $presenter->addComponent($control, "testControl");
         $presenter->run(new Nette\Application\Request("Homepage", "GET", array()));
 
-        $control = $presenter->getComponent("testControl");
-        $this->renderComponent($control);
-        $this->assertInstanceOf("Nette\Templating\FileTemplate", $control->template);
+        $fileManager = $presenter->getComponent("testControl");
+        $this->renderComponent($fileManager);
+        $this->assertInstanceOf("Nette\Templating\FileTemplate", $fileManager->template);
+    }
+
+    /**
+     * Test method setActualDir
+     *
+     * @return void
+     */
+    public function testSetActualDir()
+    {
+        $this->initTestDir();
+
+        $presenter = new MockPresenter();
+        $presenter->injectPrimary($this->context);
+
+        $this->mkdir($this->uploadRoot . $this->uploadPath . "testing");
+        $control = new Ixtrum\FileManager($this->context, array("uploadroot" => $this->uploadRoot, "uploadpath" => $this->uploadPath));
+        $presenter->addComponent($control, "testControl");
+        $presenter->run(new Nette\Application\Request("Homepage", "GET", array()));
+
+        $fileManager = $presenter->getComponent("testControl");
+        $fileManager->setActualDir("/testing/");
+
+        $this->assertEquals("/testing/", $fileManager->getActualDir());
+
+        $this->deInitTestDir();
     }
 
 }
