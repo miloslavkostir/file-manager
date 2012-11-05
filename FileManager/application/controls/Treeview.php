@@ -1,6 +1,6 @@
 <?php
 
-namespace Ixtrum\FileManager\Controls;
+namespace Ixtrum\FileManager\Application\Controls;
 
 class Treeview extends \Ixtrum\FileManager
 {

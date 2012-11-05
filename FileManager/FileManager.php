@@ -28,7 +28,7 @@ class FileManager extends \Nette\Application\UI\Control
         parent::__construct();
 
         // Load system container with services and configuration
-        $this->context = new FileManager\Services\Loader($container, $config, __DIR__);
+        $this->context = new FileManager\Application\Loader($container, $config, __DIR__);
         $this->context->freeze();
 
         // Get & validate actual dir
@@ -194,7 +194,7 @@ class FileManager extends \Nette\Application\UI\Control
         $container = $this->context->systemContainer;
         return new \Nette\Application\UI\Multiplier(function ($name) use ($container) {
                     $namespace = __NAMESPACE__;
-                    $namespace .= "\\FileManager\Controls";
+                    $namespace .= "\\FileManager\Application\Controls";
                     $class = "$namespace\\$name";
                     return new $class($container);
                 });

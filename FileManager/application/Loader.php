@@ -1,15 +1,9 @@
 <?php
 
-namespace Ixtrum\FileManager\Services;
+namespace Ixtrum\FileManager\Application;
 
 use Nette\DirectoryNotFoundException,
-    Nette\Application\ApplicationException,
-    Ixtrum\FileManager\Application\Plugins,
-    Ixtrum\FileManager\Application\Caching,
-    Ixtrum\FileManager\Application\Session,
-    Ixtrum\FileManager\Application\FileSystem,
-    Ixtrum\FileManager\Application\Thumbs,
-    Ixtrum\FileManager\Application\Translator\GettextTranslator;
+    Nette\Application\ApplicationException;
 
 final class Loader extends \Nette\DI\Container
 {
@@ -114,7 +108,7 @@ final class Loader extends \Nette\DI\Container
      */
     protected function createServiceTranslator()
     {
-        return new GettextTranslator(
+        return new Translator\GettextTranslator(
                 $this->parameters["appPath"] . $this->parameters["langDir"] . $this->parameters["lang"] . ".mo",
                 new Caching($this->parameters),
                 $this->parameters["lang"]
