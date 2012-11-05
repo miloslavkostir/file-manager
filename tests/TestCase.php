@@ -99,7 +99,7 @@ class TestCase extends PHPUnit_Framework_TestCase
                 if ($item != "." && $item != "..") {
                     $path = $directory . "/" . $item;
                     if (is_dir($path)) {
-                        recursive_remove_directory($path);
+                        $this->rmdir($path);
                     } else {
                         unlink($path);
                     }
