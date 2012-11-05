@@ -2,6 +2,15 @@
 
 namespace Ixtrum\FileManager\Services;
 
+use Nette\DirectoryNotFoundException,
+    Nette\Application\ApplicationException,
+    Ixtrum\FileManager\Application\Plugins,
+    Ixtrum\FileManager\Application\Caching,
+    Ixtrum\FileManager\Application\Session,
+    Ixtrum\FileManager\Application\FileSystem,
+    Ixtrum\FileManager\Application\Thumbs,
+    Ixtrum\FileManager\Application\Translator\GettextTranslator;
+
 final class Loader extends \Nette\DI\Container
 {
 
@@ -11,34 +20,49 @@ final class Loader extends \Nette\DI\Container
     /**
      * Constructor
      *
-     * @param \Nette\DI\Container $systemContainer System container
-     * @param array               $config          Custom configuration
-     * @param string              $rootPath        Path to application
+     * @param \Nette\DI\Container $container System container
+     * @param array               $config    Custom configuration
+     * @param string              $appPath   Path to file manager application
      */
-    public function __construct(\Nette\DI\Container $systemContainer, $config, $rootPath)
+    public function __construct(\Nette\DI\Container $container, $config, $appPath)
     {
-        $loader = new \Nette\Config\Loader;
-        $config = $loader->load("$rootPath/config/config.neon");
-        array_merge($config["parameters"], $config);
-        $config["parameters"]["rootPath"] = $rootPath;
-        $config["parameters"]["wwwDir"] = $systemContainer->parameters["wwwDir"];
-        $config["parameters"]["tempDir"] = $systemContainer->parameters["tempDir"];
+        $this->context = $container;
+        $this->parameters = $this->createConfiguration($config, $appPath);
+        $this->checkRequirements();
+    }
 
-        if (!isset($config["parameters"]["uploadroot"])) {
-            $config["parameters"]["uploadroot"] = $rootPath;
+    /**
+     * Create application configuration
+     *
+     * @param array  $config  User configuration
+     * @param string $appPath Path to applciation itself
+     *
+     * @return array Configuration
+     */
+    private function createConfiguration($config, $appPath)
+    {
+        // Get default config
+        $loader = new \Nette\Config\Loader;
+        $defaultConfig = $loader->load("$appPath/config/default.neon");
+
+        // Merge user config with default config
+        $config = array_merge($defaultConfig["parameters"], $config);
+
+        // Define system paths
+        $config["appPath"] = $appPath;
+        $config["wwwDir"] = $this->context->parameters["wwwDir"];
+        $config["tempDir"] = $this->context->parameters["tempDir"];
+
+        // Set default root path if not defined
+        if (!isset($config["uploadroot"])) {
+            $config["uploadroot"] = $appPath;
         }
 
-        // Merge plugins with configuration
-        $plugins = new \Ixtrum\FileManager\Application\Plugins(
-                        $config["parameters"]["rootPath"] . $config["parameters"]["pluginDir"],
-                        new \Ixtrum\FileManager\Application\Caching($config["parameters"])
-        );
-        $config["parameters"]["plugins"] = $plugins->loadPlugins();
+        // Get plugins
+        $plugins = new Plugins($config["appPath"] . $config["pluginDir"], new Caching($config));
+        $config["plugins"] = $plugins->loadPlugins();
 
-        $this->parameters = $config["parameters"];
-        $this->context = $systemContainer;
-
-        $this->checkRequirements();
+        return $config;
     }
 
     /**
@@ -51,15 +75,15 @@ final class Loader extends \Nette\DI\Container
     {
         $uploadPath = $this->parameters["uploadroot"] . $this->parameters["uploadpath"];
         if (!is_dir($uploadPath)) {
-            throw new \Nette\DirectoryNotFoundException("Upload path '$uploadPath' doesn't exist!");
+            throw new DirectoryNotFoundException("Upload path '$uploadPath' doesn't exist!");
         }
 
         if (!is_writable($uploadPath)) {
-            throw new \Nette\Application\ApplicationException("Upload path '$uploadPath' must be writable!");
+            throw new ApplicationException("Upload path '$uploadPath' must be writable!");
         }
 
         if (!is_dir($uploadPath)) {
-            throw new \Nette\DirectoryNotFoundException("Resource path '$uploadPath' doesn't exist!");
+            throw new DirectoryNotFoundException("Resource path '$uploadPath' doesn't exist!");
         }
     }
 
@@ -80,7 +104,7 @@ final class Loader extends \Nette\DI\Container
      */
     protected function createServiceCaching()
     {
-        return new \Ixtrum\FileManager\Application\Caching($this->parameters);
+        return new Caching($this->parameters);
     }
 
     /**
@@ -90,10 +114,10 @@ final class Loader extends \Nette\DI\Container
      */
     protected function createServiceTranslator()
     {
-        return new \Ixtrum\FileManager\Application\Translator\GettextTranslator(
-                        $this->parameters["rootPath"] . $this->parameters["langDir"] . $this->parameters["lang"] . ".mo",
-                        new \Ixtrum\FileManager\Application\Caching($this->parameters),
-                        $this->parameters["lang"]
+        return new GettextTranslator(
+                $this->parameters["appPath"] . $this->parameters["langDir"] . $this->parameters["lang"] . ".mo",
+                new Caching($this->parameters),
+                $this->parameters["lang"]
         );
     }
 
@@ -104,7 +128,7 @@ final class Loader extends \Nette\DI\Container
      */
     protected function createServiceSession()
     {
-        return new \Ixtrum\FileManager\Application\Session($this->context->session->getSection("file-manager"));
+        return new Session($this->context->session->getSection("file-manager"));
     }
 
     /**
@@ -114,7 +138,7 @@ final class Loader extends \Nette\DI\Container
      */
     protected function createServiceFilesystem()
     {
-        return new \Ixtrum\FileManager\Application\FileSystem($this->parameters);
+        return new FileSystem($this->parameters);
     }
 
     /**
@@ -124,7 +148,7 @@ final class Loader extends \Nette\DI\Container
      */
     protected function createServiceThumbs()
     {
-        return new \Ixtrum\FileManager\Application\Thumbs($this->parameters);
+        return new Thumbs($this->parameters);
     }
 
 }

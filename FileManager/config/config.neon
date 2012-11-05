@@ -1,7 +1,0 @@
-includes:
-	- default.neon
-
-parameters:
-	resDir: /ixtrum-res/
-	pluginDir: /plugins/
-	langDir: /lang/

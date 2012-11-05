@@ -3,7 +3,10 @@ parameters:
 	uploadpath: /data/
 	cache: true
 	cacheStorage: FileStorage
-	readonly:
+	readonly: false
 	quota:
 	quota_limit: 20 # MB
 	lang: en
+	resDir: /ixtrum-res/
+	pluginDir: /plugins/
+	langDir: /lang/
