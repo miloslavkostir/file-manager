@@ -85,7 +85,6 @@
 .fm-toolbar li a.fm-toolbar-item:hover { background: url(../img/navbar.png) right -79px no-repeat; }
 .fm-toolbar li a.fm-toolbar-item span { display: block; padding: 0 6px; float: left; height: 24px;}
 .fm-toolbar li a.fm-toolbar-item:hover span { background: url(../img/navbar.png) left -55px no-repeat; }
-.fm-toolbar li a.fm-toolbar-item span img { border: 0;}
 .fm-toolbar .fm-clipboard { display: none; width: 200px; padding: 6px; border: 1px solid #fed22f; background: #ffe45c; color: #363636; font-weight: bold; }
 .fm-toolbar .fm-clipboard .fm-clipboard-container {
     width: 100%;
