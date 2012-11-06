@@ -247,7 +247,15 @@
 
 
 /** Info bar at bottom */
-.fm-info-bar { width: 100%; height: 135px; background-color: #F5F5F5; margin: 0; color: #586b7d; }
+.fm-info-bar { 
+    width: 100%; 
+    height: 135px; 
+    background-color: #F5F5F5; 
+    margin: 0; 
+    color: #586b7d; 
+    border: 1px solid #D4D4D4;
+    border-radius: 0 0 4px 4px;
+}
 .fm-info-bar h2 { margin: 2px 0 2px 0; }
 .fm-info-bar ul { list-style: none outside none; margin: 0; padding: 0; }
 .fm-info-bar strong { color: #003366; font-weight: normal; }
