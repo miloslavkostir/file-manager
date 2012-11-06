@@ -5,6 +5,9 @@ namespace Ixtrum\FileManager\Application\Controls;
 class Themes extends \Ixtrum\FileManager
 {
 
+    /**
+     * Default render method
+     */
     public function render()
     {
         $this->template->setFile(__DIR__ . "/Themes.latte");
@@ -20,16 +23,26 @@ class Themes extends \Ixtrum\FileManager
         $this->template->render();
     }
 
+    /**
+     * ThemeForm component factory
+     *
+     * @return \Nette\Application\UI\Form
+     */
     protected function createComponentThemeForm()
     {
         $form = new \Nette\Application\UI\Form;
-        $form->addSelect("theme", NULL, $this->loadThemes())
-                ->setAttribute("onchange", "submit()");
-        $form->onSuccess[] = $this->themeFormSubmitted;
+        $form->addSelect("theme", null, $this->loadThemes())
+            ->setAttribute("onchange", "submit()");
+        $form->onSuccess[] = $this->themeFormSuccess;
         return $form;
     }
 
-    public function themeFormSubmitted(\Nette\Application\UI\Form $form)
+    /**
+     * ThemeForm on success event
+     *
+     * @param \Nette\Application\UI\Form $form Form
+     */
+    public function themeFormSuccess(\Nette\Application\UI\Form $form)
     {
         $this->context->session->set("theme", $form->values->theme);
         $this->redirect("this");
@@ -40,23 +53,14 @@ class Themes extends \Ixtrum\FileManager
      *
      * @return array
      */
-    private function loadThemes()
+    public function loadThemes()
     {
         $themes = array();
-        $files = \Nette\Utils\Finder::findDirectories("*")->in(
-                $this->context->parameters["wwwDir"] . $this->context->parameters["resDir"] . "themes"
+        $dirs = \Nette\Utils\Finder::findDirectories("*")->in(
+            $this->context->parameters["wwwDir"] . $this->context->parameters["resDir"] . "themes"
         );
-        foreach ($files as $file) {
-
-            // Get theme name
-            $themeFile = $file->getPathname() . "/theme.txt";
-            if (file_exists($themeFile)) {
-                $themeName = file_get_contents($themeFile);
-            } else {
-                $themeName = $file->getFilename();
-            }
-
-            $themes[$file->getFilename()] = $themeName;
+        foreach ($dirs as $dir) {
+            $themes[$dir->getFilename()] = ucfirst($dir->getFilename());
         }
         return $themes;
     }
