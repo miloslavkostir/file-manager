@@ -35,7 +35,12 @@
 
 
 /* Alert messages */
-
+.fm-alert-message { width: 100%; position: relative; }
+.fm-alert-message .fm-alert { padding: 8px 35px 8px 14px; text-shadow: 0 1px 0 rgba(255, 255, 255, 0.5); border: 1px solid; }
+.fm-alert-message .error { background-color: #F2DEDE; border-color: #EED3D7; color: #B94A48; }
+.fm-alert-message .info { background-color: #D9EDF7; border-color: #BCE8F1; color: #3A87AD; }
+.fm-alert-message .warning { background-color: #FCF8E3; border-color: #FBEED5; color: #C09853; }
+.fm-alert-message .fm-close { position: relative; top: -2px; right: -21px; line-height: 20px; }
 
 
 
