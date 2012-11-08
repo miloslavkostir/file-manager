@@ -30,11 +30,9 @@
                     <span>{$plugin['title']}</span>
                 </a>
             </li>
-            <li n:snippet="clipboard">
-                {ifset $clipboard}
-                    {control control-clipboard}
-                {/ifset}
-            </li>
+            {ifset $clipboard}
+                {control control-clipboard}
+            {/ifset}
             <li class="fm-right">
                 {control control-themes}
                 {control control-viewSelector}

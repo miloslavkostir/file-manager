@@ -28,7 +28,11 @@
 
 
 /** Icons */
-
+.fm-icon { width: 16px; height: 16px; display: block; text-indent: -99999px; overflow: hidden; background-repeat: no-repeat; padding-right: 5px; }
+.fm-icon-remove { background-image: url('../img/icons/remove.png'); }
+.fm-icon-info { float: left; background-image: url('../img/icons/info.png'); }
+.fm-icon-error { float: left; background-image: url('../img/icons/error.png'); }
+.fm-icon-warning { float: left; background-image: url('../img/icons/warning.png'); }
 
 
 
@@ -145,7 +149,7 @@
 .fm-toolbar li a.fm-toolbar-item:hover { background: url('../img/navbar.png') right -79px no-repeat; border-color: #D4D4D4; }
 .fm-toolbar li a.fm-toolbar-item span { display: block; padding: 0 6px; float: left; height: 24px;}
 .fm-toolbar li a.fm-toolbar-item:hover span { background: url('../img/navbar.png') left -55px no-repeat; }
-.fm-toolbar .fm-clipboard { display: none; width: 200px; padding: 6px; border: 1px solid #fed22f; background: #ffe45c; color: #363636; font-weight: bold; }
+.fm-toolbar .fm-clipboard { position: absolute; display: none; width: 200px; padding: 6px; border: 1px solid #fed22f; background: #ffe45c; color: #363636; font-weight: bold; }
 .fm-toolbar .fm-clipboard .fm-clipboard-container {
     width: 100%;
     max-height: 250px;

@@ -58,7 +58,6 @@ $(function() {
 
         /** Clipboard */
         $('.fm-clipboard').css({
-            position: 'absolute',
             top: $('.fm-toolbar').height()
         });
 
@@ -220,7 +219,6 @@ $(function() {
 
     /** Clipboard */
     $('.fm-clipboard').css({
-        position: 'absolute',
         top: $('.fm-toolbar').height()
     });
 
