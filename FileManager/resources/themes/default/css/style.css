@@ -162,7 +162,7 @@
 .fm-toolbar .fm-clipboard a:hover { background: none; text-decoration: underline; }
 .fm-toolbar .fm-clipboard h3 { margin: 0; padding: 0; }
 .fm-toolbar .fm-clipboard #fm-clipboard-hide, .fm-toolbar .fm-clipboard #fm-clipboard-clear { font-weight: bold; }
-.fm-toolbar .fm-clipboard .fm-clipboard-item { width: 100%; border: 1px solid transparent; }
+.fm-toolbar .fm-clipboard .fm-clipboard-item { font-size: 11px; width: 100%; border: 1px solid transparent; }
 .fm-toolbar .fm-clipboard .fm-clipboard-item .fm-clipboard-item-left { float: left; width: 70%; word-wrap: break-word; }
 .fm-toolbar .fm-clipboard .fm-clipboard-item .fm-clipboard-item-right { float: right; font-weight: bold; }
 .fm-toolbar .fm-clipboard .fm-delimiter { border-top: 1px solid #D4D4D4; }
