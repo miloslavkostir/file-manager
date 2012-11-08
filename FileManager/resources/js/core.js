@@ -62,10 +62,6 @@ $(function() {
         });
 
 
-        /* Filter mask */
-        $(".fm-filter input").blur();
-
-
         /* Treeview */
         $(".file-manager .filetree").treeview({
             persist: "cookie"
@@ -170,23 +166,6 @@ $(function() {
             $(this).removeClass("fm-state-highlight");
         }
     });
-
-    /* Filter mask */
-    $('body').delegate('.fm-filter input', 'focusin', function() {
-        if ($(this).val() == $(this)[0].title) {
-            $(this).removeClass('active');
-            $(this).val("");
-        }
-    });
-
-    $('body').delegate('.fm-filter input', 'focusout', function() {
-        if ($(this).val() == '') {
-            $(this).addClass('active');
-            $(this).val($(this)[0].title);
-        }
-    });
-
-    $(".fm-filter input").blur();
 
 
     /* Navigation */

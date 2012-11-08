@@ -1,9 +1,29 @@
 /** Base style */
-.file-manager { width: 100%; font-family: "Helvetica Neue",Helvetica,Arial,sans-serif; font-size: 14px; min-width: 450px; z-index: 0; }
+.file-manager { 
+    width: 100%; 
+    font-family: "Helvetica Neue",Helvetica,Arial,sans-serif; 
+    font-size: 14px;
+    min-width: 450px; 
+    z-index: 0;
+    display: block;
+}
 .file-manager a { text-decoration: none; color: black; }
 .file-manager h2 { font-size: 20px; font-weight: normal; }
 .file-manager h3 { font-size: 15px; font-weight: normal; height: 25px; line-height: 25px; margin: 5px 0 10px; padding: 0 7px; }
-
+.file-manager input { 
+    height: 24px; 
+    line-height: 24px; 
+    border-radius: 4px 4px 4px 4px;
+    vertical-align: middle; 
+}
+.file-manager select {
+    height: 30px; 
+    line-height: 30px; 
+    border-radius: 4px 4px 4px 4px;  
+    padding: 4px 6px;
+    vertical-align: middle;
+    border: 1px solid #5FB0D9;
+}
 
 
 
@@ -55,24 +75,28 @@
     background-color: #0E90D2;
     background-image: linear-gradient(to bottom, #149BDF, #0480BE);
     background-repeat: repeat-x;
-    border: 1px solid #D4D4D4;
+    border: 1px solid #5FB0D9;
     border-radius: 4px 4px 0 0;
     box-shadow: 0 1px 4px rgba(0, 0, 0, 0.067);
 }
 .fm-adressbar .fm-location { width: 75%; float: left; margin-left: 5px; margin-top: 7px; margin-bottom: 7px; position: relative; }
-.fm-adressbar .fm-location form { width: 100%; height: 24px; margin: 0; padding: 0; }
+.fm-adressbar .fm-location form { width: 100%; margin: 0; padding: 0; }
 .fm-adressbar .fm-location input {
     padding-left: 25px;
     width: 100%; 
-    height: 24px;
-    border: 1px solid #CCCCCC;
+    border: 1px solid #5FB0D9;
 }
-.fm-adressbar .fm-location input.active { background: url('../img/icons/folder.png') no-repeat 0 50% #FFFFFF; }
+.fm-adressbar .fm-location input.active {
+    background-image: url('../img/icons/folder.png');
+    background-position: 6px 50%;
+    background-repeat: no-repeat;
+}
 .fm-adressbar .fm-navigation { 
-    position: absolute; 
-    border-top: 1px solid #CCCCCC;
-    border-bottom: 1px solid #CCCCCC;
-    border-left: 1px solid #CCCCCC;
+    position: absolute;
+    border-top: 1px solid #5FB0D9;
+    border-bottom: 1px solid #5FB0D9;
+    border-left: 1px solid #5FB0D9;
+    border-radius: 4px 0 0 4px;
     height: 26px;
     line-height: 26px;
     background-color: #FFFFFF;
@@ -97,7 +121,7 @@
     height: 26px; 
     float: left; 
     background: url('../img/adressbar-bg.png') repeat transparent;
-    border: 1px solid #CCCCCC; 
+    border: 1px solid #5FB0D9; 
     cursor: pointer; 
     margin-top: 7px; 
     margin-bottom: 7px; 
@@ -114,12 +138,11 @@
 .fm-adressbar .fm-filter { float: left; margin-top: 7px; margin-bottom: 7px; position: relative; }
 .fm-adressbar .fm-filter input { 
     height: 24px;
-    border: 1px solid #CCCCCC;
+    border: 1px solid #5FB0D9;
     background: #FFFFFF url('../img/icons/search.png') no-repeat right;
     padding-left: 5px;
     padding-right: 25px;
 }
-.fm-adressbar .fm-filter input.active { color: #a1a1a1; }
 
 
 
@@ -127,39 +150,43 @@
 
 /** Toolbar */
 .fm-toolbar {
+    color: #FFFFFF;
+    position: relative;
+    height: 40px;
     width: 100%;
-    background-color: #5FB0D9;
-    height: 31px;
-    padding: 0 3px;
-    border-left: 1px solid #D4D4D4;
-    border-right: 1px solid #D4D4D4;
-    border-bottom: 1px solid #D4D4D4;
+    background-color: #000000;
+    padding: 7px;
 }
-.fm-toolbar ul { width: 100%; list-style: none outside none; margin: 0; padding: 0; }
+.fm-toolbar ul { list-style: none outside none; margin: 0; padding: 0; }
 .fm-toolbar ul form { padding-left: 5px; }
-.fm-toolbar li { float: left; padding: 3px 3px 4px; position: relative; }
+.fm-toolbar li { float: left; padding: 3px 3px 4px; }
 .fm-toolbar li a.fm-toolbar-item {
     float: left; 
-    line-height: 24px;
+    line-height: 31px;
+    height: 31px;
     border-width: 1px; 
     border-color: transparent; 
     border-style: solid;
     border-radius: 3px;
 }
-.fm-toolbar li a.fm-toolbar-item:hover { background: url('../img/navbar.png') right -79px no-repeat; border-color: #D4D4D4; }
+.fm-toolbar li a.fm-toolbar-item:hover { background-color: #2F96B4; }
 .fm-toolbar li a.fm-toolbar-item span {
+    vertical-align: middle;
+    font-size: 14px;
+    display: inline-block;
     display: block; 
     padding: 0 6px; 
     float: left;
-    height: 24px;
-    background-color: #F5F5F5;
-    background-image: linear-gradient(to bottom, #FFFFFF, #E6E6E6);
+    height: 31px;
+    background-color: #49AFCD;
+    background-image: linear-gradient(to bottom, #5BC0DE, #2F96B4);
     background-repeat: repeat-x;
+    border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
+    color: #FFFFFF;
+    text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
     border-radius: 4px 4px 4px 4px;
     border-style: solid;
     border-width: 1px;
-    box-shadow: 0 1px 0 rgba(255, 255, 255, 0.2) inset, 0 1px 2px rgba(0, 0, 0, 0.05);
-    border-color: rgba(0, 0, 0, 0.15) rgba(0, 0, 0, 0.15) rgba(0, 0, 0, 0.25);
 }
 .fm-toolbar li a.fm-toolbar-item:hover span { background: url('../img/navbar.png') left -55px no-repeat; }
 .fm-toolbar .fm-clipboard { 
@@ -192,7 +219,19 @@
 .fm-toolbar .fm-clipboard .fm-delimiter { border-top: 1px solid #D4D4D4; }
 .fm-toolbar .fm-clipboard .fm-delimiter #fm-clipboard-hide { float: right; font-size: 11px; color: #3B5998; cursor: pointer; }
 .fm-toolbar .fm-clipboard .fm-delimiter #fm-clipboard-clear { float: left; font-size: 11px; color: #3B5998; cursor: pointer; }
-
+.fm-toolbar form {
+    border-radius: 4px;
+    margin-left: 15px;
+    background-color: #49AFCD;
+    background-image: linear-gradient(to bottom, #5BC0DE, #2F96B4);
+    background-repeat: repeat-x;
+    border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
+    text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
+    border: 1px solid #5FB0D9;
+}
+.fm-toolbar form select {
+    border-radius: 0 4px 4px 0;
+}
 
 
 
@@ -201,8 +240,8 @@
 .fm-body { width: 100%; }
 .fm-body .fm-treeview { width: 20%; height: 465px; float: left; margin: 0; padding: 0; background-color: #FFFFFF; overflow: auto; }
 .fm-body .fm-treeview ul { background-color: white; margin-top: 4px; padding: 0; margin: 0; list-style: none; }
-.fm-body .fm-treeview span { display: block; border: 1px solid #ffffff; -webkit-border-radius: 4px; -moz-border-radius: 4px; border-radius: 4px; }
-.fm-body .fm-treeview span:hover { border-color: #4FC4FF; background-color: #0E90D2; }
+.fm-body .fm-treeview span { display: block; border: 1px solid #ffffff; border-radius: 4px; }
+.fm-body .fm-treeview span:hover { border-color: #5FB0D9; background-color: #0E90D2; }
 .fm-body .fm-treeview span:hover a { color: #FFFFFF; }
 .fm-body .fm-treeview .treeview .hitarea { background: url(../img/treeview/minus.gif) 0 0 no-repeat; height: 16px; width: 16px; margin-left: -15px; margin-top: 2px; float: left; }
 .fm-body .fm-treeview .treeview li { margin: 0;	padding: 3px 0pt 3px 16px; }
