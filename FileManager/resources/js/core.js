@@ -58,7 +58,7 @@ $(function() {
 
         /** Clipboard */
         $('.fm-clipboard').css({
-            top: $('.fm-toolbar').height()
+            top: $('.fm-toolbar').outerHeight()
         });
 
 
@@ -198,7 +198,7 @@ $(function() {
 
     /** Clipboard */
     $('.fm-clipboard').css({
-        top: $('.fm-toolbar').height()
+        top: $('.fm-toolbar').outerHeight()
     });
 
     $(document).delegate('#fm-clipboard-hide', 'click', function() {
