@@ -3,43 +3,39 @@
         <span>{_'Clipboard'} ({? echo count($clipboard); })</span>
     </a>
     <div class="fm-clipboard">
-        <h3>Clipboard</h3>
-    <div class="fm-delimiter"></div>
-    <div class="fm-clipboard-container">
-        <div n:foreach="$clipboard as $item" class="fm-clipboard-item">
-            <div class="fm-clipboard-item-left">
-                            {if $item['actualdir'] == $rootname}
-                                    {$item['actualdir']}/{$item['filename']}
-                            {else}
-                                    {$item['actualdir']}
-                                    {$item['filename']}
-                            {/if}
-            </div>
-            <div class="fm-clipboard-item-right">
-                <div class="fm-left">
-                                {$item['action']|upper}
+        <div class="fm-clipboard-container">
+            <div n:foreach="$clipboard as $item" class="fm-clipboard-item">
+                <div class="fm-clipboard-item-left">
+                {if $item['actualdir'] == $rootname}
+                        {$item['actualdir']}/{$item['filename']}
+                {else}
+                        {$item['actualdir']}
+                        {$item['filename']}
+                {/if}
                 </div>
-                <div class="fm-right">
-                    <a n:href="removeFromClipboard!, $item['actualdir'], $item['filename']" class="fm-ajax" title="{_'Remove item from clipboard'}">
-                        <span class="fm-icon fm-icon-remove"></span>
-                    </a>
+                <div class="fm-clipboard-item-right">
+                    <div class="fm-left">{$item['action']|upper}</div>
+                    <div class="fm-right">
+                        <a n:href="removeFromClipboard!, $item['actualdir'], $item['filename']" class="fm-ajax" title="{_'Remove item from clipboard'}">
+                            <span class="fm-icon fm-icon-remove"></span>
+                        </a>
+                    </div>
+                    <div class="fm-clear"></div>
                 </div>
                 <div class="fm-clear"></div>
             </div>
-            <div class="fm-clear"></div>
         </div>
-    </div>
-    <div class="fm-delimiter">
-        <div id="fm-clipboard-clear">
-            <a n:href="clearClipboard!" title="{_'Delete all items from clipboard'}" class="fm-ajax">
+        <div class="fm-delimiter">
+            <div id="fm-clipboard-clear">
+                <a n:href="clearClipboard!" title="{_'Delete all items from clipboard'}" class="fm-ajax">
             {_'Clear all'}
-            </a>
-        </div>
-        <div id="fm-clipboard-hide">
-            <a href="#" title="{_'Hide clipboard'}">{_'Hide'}</a>
+                </a>
+            </div>
+            <div id="fm-clipboard-hide">
+                <a href="#" title="{_'Hide clipboard'}">{_'Hide'}</a>
+            </div>
         </div>
     </div>
-</div>
 </li>
 <li>
     <a n:href="clearClipboard!" title="{_'Delete all items from clipboard'}" class="fm-ajax fm-toolbar-item">
