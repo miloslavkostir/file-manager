@@ -3,8 +3,9 @@
     width: 100%; 
     font-family: "Helvetica Neue",Helvetica,Arial,sans-serif; 
     font-size: 14px;
-    min-width: 450px; 
+    min-width: 450px;
     z-index: 0;
+    position: relative;
     display: block;
 }
 .file-manager a { text-decoration: none; color: black; }
@@ -68,7 +69,6 @@
 
 /** Address bar */
 .fm-adressbar { 
-    width: 100%;
     background-color: #6891E7;
     background-image: linear-gradient(to bottom, #4495E7 0px, #0053A6 100%);
     border-color: #0053A6 #0053A6 #000000;
@@ -150,10 +150,10 @@
 
 /** Toolbar */
 .fm-toolbar {
+    display: block;
     color: #FFFFFF;
     position: relative;
     height: 31px;
-    width: 100%;
     background-color: #6A6A6A;
     padding: 7px;
 }
@@ -245,7 +245,6 @@
 
 
 /** Files & content */
-.fm-body { width: 100%; }
 .fm-body .fm-treeview { width: 20%; height: 465px; float: left; margin: 0; padding: 0; background-color: #000000; overflow: auto; }
 .fm-body .fm-treeview ul { background-color: #000000; margin-top: 4px; padding: 0; margin: 0; list-style: none; }
 .fm-body .fm-treeview span { display: block; border: 1px solid transparent; border-radius: 4px; }
@@ -267,7 +266,7 @@
 .fm-body .fm-treeview .filetree li { padding: 3px 0 2px 16px; white-space: nowrap; }
 .fm-body .fm-treeview .fm-folder-icon { padding-left: 23px; background: url('../img/icons/folder.png') no-repeat 0 0 }
 .fm-body .fm-treeview .fm-root-icon { padding-left: 23px; background: url('../img/icons/root.png') no-repeat 0 0; }
-.fm-body .fm-content { width: auto; height: 465px; background-color: #EBEBEB; border-left: 1px solid #D4D4D4; overflow: hidden; }
+.fm-body .fm-content { height: 465px; background-color: #EBEBEB; border-left: 1px solid #D4D4D4; overflow: hidden; }
 .fm-body .fm-content h2 { color: #586B7D; font-size: 18px; margin: 5px; float: left; }
 .fm-body .fm-content .fm-link-parent { color: #586B7D; float: right; }
 .fm-body .fm-content .fm-delimiter { clear: both; border-bottom: 1px solid #D4D4D4; }
@@ -338,8 +337,7 @@
 
 
 /** Info bar at bottom */
-.fm-info-bar { 
-    width: 100%; 
+.fm-info-bar {
     height: 135px; 
     background-color: #F5F5F5; 
     margin: 0; 
