@@ -11,11 +11,30 @@
 .file-manager a { text-decoration: none; color: black; }
 .file-manager h2 { font-size: 20px; font-weight: normal; }
 .file-manager h3 { font-size: 15px; font-weight: normal; height: 25px; line-height: 25px; margin: 5px 0 10px; padding: 0 7px; }
-.file-manager input { 
+.file-manager input[type='text'] { 
     height: 24px; 
     line-height: 24px; 
     border-radius: 4px 4px 4px 4px;
     vertical-align: middle; 
+}
+.file-manager input[type='submit'] {
+    cursor: pointer;
+    text-align: center;
+    vertical-align: middle;
+    font-size: 14px;
+    line-height: 20px;
+    display: inline-block;
+    padding: 4px 12px;
+    background-color: #6891E7;
+    background-image: linear-gradient(to bottom, #4495E7 0px, #0053A6 100%);
+    box-shadow: 0 1px 0 rgba(255, 255, 255, 0.35) inset;
+    text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.5);
+    color: #FFFFFF;
+    border-radius: 4px 4px 4px 4px;
+    border-style: solid;
+    border-width: 1px;
+    border-color: #0053A6 #0053A6 #000000;
+    margin-bottom: 0;
 }
 .file-manager select {
     border-width: 1px;
@@ -272,7 +291,7 @@
 .fm-body .fm-treeview .filetree li { padding: 3px 0 2px 16px; white-space: nowrap; }
 .fm-body .fm-treeview .fm-folder-icon { padding-left: 23px; background: url('../img/icons/folder.png') no-repeat 0 0 }
 .fm-body .fm-treeview .fm-root-icon { padding-left: 23px; background: url('../img/icons/root.png') no-repeat 0 0; }
-.fm-body .fm-content { height: 465px; background-color: #EBEBEB; border-left: 1px solid #D4D4D4; overflow: hidden; }
+.fm-body .fm-content { color: #555555; height: 465px; background-color: #EBEBEB; border-left: 1px solid #D4D4D4; overflow: hidden; }
 .fm-body .fm-content h2 { color: #586B7D; font-size: 18px; margin: 5px; float: left; }
 .fm-body .fm-content .fm-link-parent { color: #586B7D; float: right; }
 .fm-body .fm-content .fm-delimiter { clear: both; border-bottom: 1px solid #D4D4D4; }
