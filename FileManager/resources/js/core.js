@@ -282,27 +282,24 @@ $(function() {
         dataType: "json"
     });
 
-    // disable file manager and show ajax loader
+    // Disable file manager and show ajax loader
     $.animateProgress = function(selector, e) {
         var fm = $(selector);
         $('<div class="fm-inactive"></div>').css({
             top: fm.position().top,
             left: fm.position().left,
-            width: fm.width(),
-            height: fm.height()
+            width: fm.outerWidth(),
+            height: fm.outerHeight()
         }).ajaxStop(function() {
             $(this).remove();
-
         }).appendTo(fm);
 
         $('<div class="fm-ajax-loader"></div>').css({
             position: "absolute",
             left: e.pageX + 20,
             top: e.pageY + 40
-
         }).ajaxStop(function() {
             $(this).remove();
-
         }).appendTo("body");
     };
 

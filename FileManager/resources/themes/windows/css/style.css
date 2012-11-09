@@ -14,7 +14,7 @@
                  background: white url(../img/ajax-loader.gif) no-repeat 50% 50%;
                  padding: 13px; border: 2px solid #CCC; font-size: 0; z-index: 2;
 }
-.fm-inactive { position: absolute; background-color: #ffffff; opacity: 0.6; filter: alpha(opacity = 60); z-index: 1; }
+.fm-inactive { position: absolute; background-color: #ffffff; opacity: 0.6; filter: alpha(opacity = 60); z-index: 999; }
 .fm-draggable { cursor: pointer; }
 .fm-state-highlight { border: 1px solid #fed22f; background: #ffe45c; color: #363636; font-weight: bold; }
 .fm-left { float: left; }
