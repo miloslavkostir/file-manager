@@ -33,7 +33,13 @@
 }
 .fm-inactive { position: absolute; background-color: #000000; opacity: 0.6; filter: alpha(opacity = 60); z-index: 999; }
 .fm-draggable { cursor: pointer; }
-.fm-state-highlight { border: 1px solid #fed22f; background: #ffe45c; color: #363636; font-weight: bold; }
+.fm-state-highlight {
+    background-color: #6891E7;
+    background-image: linear-gradient(to bottom, #4495E7 0px, #0053A6 100%);
+    border-color: #0053A6 #0053A6 #000000;
+    border: 1px solid #5FB0D9;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.067);
+}
 .fm-left { float: left; }
 .fm-right { float: right !important; }
 .fm-clear { clear: both; }
