@@ -20,8 +20,7 @@ class Filter extends \Ixtrum\FileManager
         $form->setTranslator($this->context->translator);
         $form->addText("phrase")
                 ->setDefaultValue($this->context->session->get("mask"))
-                ->getControlPrototype()
-                ->setTitle($this->context->translator->translate("Filter"));
+                ->setAttribute("placeholder", $this->context->translator->translate("Filter"));
         $form->onSuccess[] = $this->filterFormSubmitted;
         return $form;
     }

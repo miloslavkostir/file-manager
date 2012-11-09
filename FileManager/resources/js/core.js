@@ -58,13 +58,8 @@ $(function() {
 
         /** Clipboard */
         $('.fm-clipboard').css({
-            position: 'absolute',
-            top: $('.fm-toolbar').height()
+            top: $('.fm-toolbar').outerHeight()
         });
-
-
-        /* Filter mask */
-        $(".fm-filter input").blur();
 
 
         /* Treeview */
@@ -172,23 +167,6 @@ $(function() {
         }
     });
 
-    /* Filter mask */
-    $('body').delegate('.fm-filter input', 'focusin', function() {
-        if ($(this).val() == $(this)[0].title) {
-            $(this).removeClass('active');
-            $(this).val("");
-        }
-    });
-
-    $('body').delegate('.fm-filter input', 'focusout', function() {
-        if ($(this).val() == '') {
-            $(this).addClass('active');
-            $(this).val($(this)[0].title);
-        }
-    });
-
-    $(".fm-filter input").blur();
-
 
     /* Navigation */
     $('body').delegate('.fm-location input', 'focusin', function() {
@@ -220,8 +198,7 @@ $(function() {
 
     /** Clipboard */
     $('.fm-clipboard').css({
-        position: 'absolute',
-        top: $('.fm-toolbar').height()
+        top: $('.fm-toolbar').outerHeight()
     });
 
     $(document).delegate('#fm-clipboard-hide', 'click', function() {
@@ -305,27 +282,24 @@ $(function() {
         dataType: "json"
     });
 
-    // disable file manager and show ajax loader
+    // Disable file manager and show ajax loader
     $.animateProgress = function(selector, e) {
         var fm = $(selector);
         $('<div class="fm-inactive"></div>').css({
             top: fm.position().top,
             left: fm.position().left,
-            width: fm.width(),
-            height: fm.height()
+            width: fm.outerWidth(),
+            height: fm.outerHeight()
         }).ajaxStop(function() {
             $(this).remove();
-
         }).appendTo(fm);
 
         $('<div class="fm-ajax-loader"></div>').css({
             position: "absolute",
             left: e.pageX + 20,
             top: e.pageY + 40
-
         }).ajaxStop(function() {
             $(this).remove();
-
         }).appendTo("body");
     };
 
