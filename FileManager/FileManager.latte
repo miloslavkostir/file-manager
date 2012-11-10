@@ -24,11 +24,13 @@
     </div>
     <div n:snippet="toolbar" class="fm-toolbar">
         <ul>
-            <li n:ifset="$toolbarPlugins">
-                <a n:foreach="$toolbarPlugins as $plugin" n:href="runPlugin!, $plugin['name']" class="fm-ajax fm-toolbar-item">
-                    <span>{$plugin['title']}</span>
-                </a>
-            </li>
+            {ifset $toolbarPlugins}
+                <li n:foreach="$toolbarPlugins as $plugin">
+                    <a n:href="runPlugin!, $plugin['name']" class="fm-ajax fm-toolbar-item">
+                        <span>{$plugin['title']}</span>
+                    </a>
+                </li>
+            {/ifset}
             {ifset $clipboard}
                 {control control-clipboard}
             {/ifset}
