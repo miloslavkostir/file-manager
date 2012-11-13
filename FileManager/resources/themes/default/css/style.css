@@ -5,8 +5,6 @@
     font-size: 14px;
     min-width: 450px;
     z-index: 0;
-    position: relative;
-    display: block;
 }
 .file-manager a { text-decoration: none; color: black; }
 .file-manager h2 { font-size: 20px; font-weight: normal; }
@@ -58,9 +56,9 @@
     border: 2px solid #CCC;
     border-radius: 5px;
     font-size: 0;
-    z-index: 2;
+    z-index: 999;
 }
-.fm-inactive { position: absolute; background-color: #000000; opacity: 0.6; filter: alpha(opacity = 60); z-index: 999; }
+.fm-inactive { position: absolute; background-color: #000000; opacity: 0.6; filter: alpha(opacity = 60); z-index: 998; }
 .fm-draggable { cursor: pointer; }
 .fm-state-highlight {
     background-color: #6891E7;
