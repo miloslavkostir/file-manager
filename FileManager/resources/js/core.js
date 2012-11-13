@@ -16,11 +16,9 @@
 
 $(function() {
 
-    $(".file-manager").bind("snippetUpdated", function() {
+    // Define scripts to initializate after page loaded
+    function initScripts() {
 
-        /** Main */
-
-        // http://stackoverflow.com/questions/2884221/how-to-start-stop-restart-jquery-animation
         var mb = $(".fm-alert").stop(true, true).fadeIn();
         if(mb.data("delay")) clearTimeout(mb.data("delay"));
         mb.data("delay", setTimeout(function() {
@@ -72,7 +70,6 @@ $(function() {
 
         /* Content */
         $(".fm-content-files ul").shiftClick("li", "selected");
-
         $.ctrl("A", function() {
             $(".fm-content-file").addClass("selected");
         });
@@ -86,17 +83,15 @@ $(function() {
                 $(ui.unselecting).removeClass("selected");
             }
         });
+    }
+
+    // Fire init scripts after page loaded
+    initScripts();
+
+    // Bind init scripts when snippet updated
+    $(".file-manager").bind("snippetUpdated", function() {
+        initScripts();
     });
-
-
-
-    /** Main */
-    // http://stackoverflow.com/questions/2884221/how-to-start-stop-restart-jquery-animation
-    var mb = $(".fm-alert").stop(true, true).fadeIn();
-    if(mb.data("delay")) clearTimeout(mb.data("delay"));
-    mb.data("delay", setTimeout(function() {
-        mb.fadeOut(500);
-    }, 15000));
 
     $(".file-manager").delegate(".fm-show-messages", "click", function() {
         $(".fm-alert-message-text").toggleClass("fm-hide");
@@ -138,34 +133,7 @@ $(function() {
         $.animateProgress(".file-manager", event);
     });
 
-    $(".fm-draggable").draggable({
-        revert: true,
-        cursor: "pointer",
-        helper: "clone",
-        scroll: false,
-        opacity : 0.6
-    });
 
-    $(".fm-droppable").droppable({
-        hoverClass: "fm-state-highlight",
-        drop: function(event, ui) {
-            var filename = ui.draggable.data("filename");
-            var targetdir = $(this).data("targetdir");
-            var moveUrl = $(this).data("move-url");
-            $(this).addClass("fm-state-highlight");
-            $.getJSON(moveUrl, {
-                filename: filename,
-                targetdir: targetdir
-            }, function (payload) {
-                $.nette.success(payload);
-                if (payload.result === "success") {
-                    ui.draggable.remove();
-                }
-            });
-            $.animateProgress(".file-manager", event);
-            $(this).removeClass("fm-state-highlight");
-        }
-    });
 
 
     /* Navigation */
@@ -181,12 +149,6 @@ $(function() {
 
 
     /* Treeview */
-    $(".file-manager .filetree").treeview({
-        persist: "cookie"
-    });
-
-    $(".file-manager .hitarea").hide();
-
     $(".file-manager").delegate('.fm-treeview', 'hover', function(e) {
         if( e.type === 'mouseenter' ) {
             $(".file-manager .hitarea").stop(true, true)
@@ -197,10 +159,6 @@ $(function() {
 
 
     /** Clipboard */
-    $('.fm-clipboard').css({
-        top: $('.fm-toolbar').outerHeight()
-    });
-
     $(document).delegate('#fm-clipboard-hide', 'click', function() {
         $('.fm-clipboard').slideToggle('slow');
     });
@@ -208,24 +166,6 @@ $(function() {
     $(document).delegate('#show-clipboard', 'click', function() {
         $('.fm-clipboard').slideToggle('slow');
         return false;
-    });
-
-
-    /* Content */
-    $(".fm-content-files ul").shiftClick("li", "selected");
-
-    $.ctrl("A", function() {
-        $(".fm-content-file").addClass("selected");
-    });
-
-    $(".fm-content-files").selectable({
-        filter: ".fm-content-file",
-        selecting: function(event, ui) {
-            $(ui.selecting).addClass("selected");
-        },
-        unselecting: function(event, ui) {
-            $(ui.unselecting).removeClass("selected");
-        }
     });
 });
 
