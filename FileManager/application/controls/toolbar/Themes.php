@@ -30,9 +30,10 @@ class Themes extends \Ixtrum\FileManager
      */
     protected function createComponentThemeForm()
     {
+        $themeDir = $this->context->parameters["wwwDir"] . $this->context->parameters["resDir"] . "themes";
         $form = new \Nette\Application\UI\Form;
-        $form->addSelect("theme", null, $this->loadThemes())
-            ->setAttribute("onchange", "submit()");
+        $form->addSelect("theme", null, $this->loadThemes($themeDir))
+                ->setAttribute("onchange", "submit()");
         $form->onSuccess[] = $this->themeFormSuccess;
         return $form;
     }
@@ -51,14 +52,18 @@ class Themes extends \Ixtrum\FileManager
     /**
      * Load themes from theme dir
      *
+     * @param string $themeDir Dir with themes
+     *
      * @return array
      */
-    public function loadThemes()
+    public function loadThemes($themeDir)
     {
         $themes = array();
-        $dirs = \Nette\Utils\Finder::findDirectories("*")->in(
-            $this->context->parameters["wwwDir"] . $this->context->parameters["resDir"] . "themes"
-        );
+        if (!is_dir($themeDir)) {
+            return $themes;
+        }
+
+        $dirs = \Nette\Utils\Finder::findDirectories("*")->in($themeDir);
         foreach ($dirs as $dir) {
             $themes[$dir->getFilename()] = ucfirst($dir->getFilename());
         }
