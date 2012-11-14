@@ -2,9 +2,6 @@
 
 namespace Ixtrum\FileManager\Application;
 
-use Nette\DirectoryNotFoundException,
-    Nette\Application\ApplicationException;
-
 final class Loader extends \Nette\DI\Container
 {
 
@@ -47,11 +44,6 @@ final class Loader extends \Nette\DI\Container
         $config["wwwDir"] = $this->context->parameters["wwwDir"];
         $config["tempDir"] = $this->context->parameters["tempDir"];
 
-        // Set default root path if not defined
-        if (!isset($config["uploadroot"])) {
-            $config["uploadroot"] = $appPath;
-        }
-
         // Get plugins
         $plugins = new Plugins($config["appPath"] . $config["pluginDir"], new Caching($config));
         $config["plugins"] = $plugins->loadPlugins();
@@ -67,17 +59,12 @@ final class Loader extends \Nette\DI\Container
      */
     private function checkRequirements()
     {
-        $uploadPath = $this->parameters["uploadroot"] . $this->parameters["uploadpath"];
-        if (!is_dir($uploadPath)) {
-            throw new DirectoryNotFoundException("Upload path '$uploadPath' doesn't exist!");
+        if (!isset($this->parameters["uploadroot"]) || empty($this->parameters["uploadroot"])) {
+            throw new \Nette\InvalidArgumentException("Parameter 'uploadroot' not defined!");
         }
 
-        if (!is_writable($uploadPath)) {
-            throw new ApplicationException("Upload path '$uploadPath' must be writable!");
-        }
-
-        if (!is_dir($uploadPath)) {
-            throw new DirectoryNotFoundException("Resource path '$uploadPath' doesn't exist!");
+        if (!is_dir($this->parameters["uploadroot"])) {
+            throw new \Nette\DirectoryNotFoundException("Upload root '" . $this->parameters["uploadroot"] . "' doesn't exist!");
         }
     }
 

@@ -1,6 +1,6 @@
 parameters:
 	synchronizeResDir: true
-	uploadpath: /data/
+	uploadroot:
 	cache: true
 	cacheStorage: FileStorage
 	readonly: false

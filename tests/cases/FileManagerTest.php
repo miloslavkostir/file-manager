@@ -27,7 +27,7 @@ class FileManagerTest extends TestCase
      */
     public function testRender()
     {
-        $control = new Ixtrum\FileManager($this->context, array("uploadroot" => $this->uploadRoot, "uploadpath" => $this->uploadPath));
+        $control = new Ixtrum\FileManager($this->context, array("uploadroot" => $this->uploadRoot));
         $this->presenter->addComponent($control, "testControl");
         $this->presenter->run(new Nette\Application\Request("Homepage", "GET", array()));
 
@@ -43,8 +43,8 @@ class FileManagerTest extends TestCase
      */
     public function testSetActualDir()
     {
-        $this->mkdir($this->uploadRoot . $this->uploadPath . "testing");
-        $control = new Ixtrum\FileManager($this->context, array("uploadroot" => $this->uploadRoot, "uploadpath" => $this->uploadPath));
+        $this->mkdir($this->uploadRoot . "/testing");
+        $control = new Ixtrum\FileManager($this->context, array("uploadroot" => $this->uploadRoot));
         $this->presenter->addComponent($control, "testControl");
         $this->presenter->run(new Nette\Application\Request("Homepage", "GET", array()));
 

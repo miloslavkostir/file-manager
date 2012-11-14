@@ -56,7 +56,7 @@ class Treeview extends \Ixtrum\FileManager
 
     private function generateTreeview()
     {
-        $dirs = $this->getDirTree($this->context->parameters["uploadroot"] . $this->context->parameters["uploadpath"]);
+        $dirs = $this->getDirTree($this->context->parameters["uploadroot"]);
         $rootname = $this->context->filesystem->getRootName();
 
         $output = '<ul class="filetree">';
@@ -79,7 +79,7 @@ class Treeview extends \Ixtrum\FileManager
     {
         if ($this->context->parameters["cache"]) {
 
-            $path = $this->context->filesystem->getRealPath($this->context->parameters["uploadroot"] . $this->context->parameters["uploadpath"]);
+            $path = $this->context->filesystem->getRealPath($this->context->parameters["uploadroot"]);
 
             $cacheData = $this->context->caching->getItem($path);
 

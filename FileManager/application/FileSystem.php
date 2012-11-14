@@ -666,16 +666,13 @@ class FileSystem
     /**
      * Get absolute path from relative path
      *
-     * @param string $actualdir
+     * @param string $actualdir Actual dir in relative format
+     *
      * @return string
      */
     public function getAbsolutePath($actualdir)
     {
-        if ($actualdir == $this->getRootname()) {
-            return $this->config["uploadroot"] . $this->config["uploadpath"];
-        }
-
-        return $this->config["uploadroot"] . substr($this->config["uploadpath"], 0, -1) . $actualdir;
+        return $this->config["uploadroot"] . $actualdir;
     }
 
     /**
@@ -720,17 +717,7 @@ class FileSystem
      */
     public function getRootname()
     {
-        $path = $this->config["uploadpath"];
-        $first = substr($path, 0, 1);
-        $last = substr($path, -1, 1);
-
-        if (($first === "/" || $first === "\\") && ($last === "/" || $last === "\\")) {
-            $path = substr($path, 1, strlen($path) - 2);
-        } else {
-            throw new \Nette\InvalidArgumentException("Invalid upload path '$path' given! Correct path starts & ends with \ (Windows) or / (Unix).");
-        }
-
-        return $path;
+        return "/";
     }
 
     /**
@@ -741,7 +728,7 @@ class FileSystem
     public function getUsedSize()
     {
         $size = 0;
-        $files = Finder::findFiles("*")->from($this->config["uploadroot"] . $this->config["uploadpath"]);
+        $files = Finder::findFiles("*")->from($this->config["uploadroot"]);
 
         foreach ($files as $file) {
             $size += $this->filesize($file->getPathName());
@@ -766,9 +753,8 @@ class FileSystem
             $info["percentused"] = round(($size / ($this->config["quota_limit"] * 1048576)) * 100);
         } else {
 
-            $path = $this->config["uploadroot"] . $this->config["uploadpath"];
-            $freesize = disk_free_space($path);
-            $totalsize = disk_total_space($path);
+            $freesize = disk_free_space($this->config["uploadroot"]);
+            $totalsize = disk_total_space($this->config["uploadroot"]);
             $info["usedsize"] = $totalsize - $freesize;
             $info["spaceleft"] = $freesize;
             $info["percentused"] = round(($info["usedsize"] / $totalsize ) * 100);

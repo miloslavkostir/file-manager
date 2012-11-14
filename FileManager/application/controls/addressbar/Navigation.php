@@ -47,7 +47,14 @@ class Navigation extends \Ixtrum\FileManager
         $this->setActualDir($form->values->location);
     }
 
-    public function getNav($dir)
+    /**
+     * Create navigation structure
+     *
+     * @param string $dir Source directory in relative format
+     *
+     * @return array
+     */
+    protected function getNav($dir)
     {
         $var = array();
         $rootname = $this->context->filesystem->getRootName();

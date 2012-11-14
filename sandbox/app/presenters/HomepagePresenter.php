@@ -5,7 +5,10 @@ class HomepagePresenter extends Nette\Application\UI\Presenter
 
     public function createComponentFileManager()
     {
-        return new Ixtrum\FileManager($this->context);
+        $config = array(
+            "uploadroot" => $this->context->parameters["wwwDir"]
+        );
+        return new Ixtrum\FileManager($this->context, $config);
     }
 
 }

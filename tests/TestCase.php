@@ -9,9 +9,6 @@ class TestCase extends PHPUnit_Framework_TestCase
     /** @var string */
     public $uploadRoot;
 
-    /** @var string */
-    public $uploadPath = "tests";
-
     /**
      * Constructor
      *
@@ -46,7 +43,6 @@ class TestCase extends PHPUnit_Framework_TestCase
 
         // Set up upload root dirs
         $this->uploadRoot = $container->parameters["tempDir"] . "/tests";
-        $this->uploadPath = "/testupload/";
     }
 
     /**
@@ -121,7 +117,6 @@ class TestCase extends PHPUnit_Framework_TestCase
     public function initTestDir()
     {
         $this->mkdir($this->uploadRoot);
-        $this->mkdir($this->uploadRoot . $this->uploadPath);
     }
 
     /**
