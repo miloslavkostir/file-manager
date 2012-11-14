@@ -17,6 +17,12 @@ class FileManager extends \Nette\Application\UI\Control
     /** @var string */
     protected $view;
 
+    /** @var array */
+    private $userConfig;
+
+    /** @var \Nette\DI\Container */
+    private $systemContainer;
+
     /**
      * Constructor
      *
@@ -26,6 +32,10 @@ class FileManager extends \Nette\Application\UI\Control
     public function __construct(\Nette\DI\Container $container, $config = array())
     {
         parent::__construct();
+
+        // Set up class properties
+        $this->userConfig = $config;
+        $this->systemContainer = $container;
 
         // Load system container with services and configuration
         $this->context = new FileManager\Application\Loader($container, $config, __DIR__);
@@ -191,12 +201,13 @@ class FileManager extends \Nette\Application\UI\Control
      */
     protected function createComponentControl()
     {
-        $container = $this->context->systemContainer;
-        return new \Nette\Application\UI\Multiplier(function ($name) use ($container) {
+        $container = $this->systemContainer;
+        $config = $this->userConfig;
+        return new \Nette\Application\UI\Multiplier(function ($name) use ($container, $config) {
                     $namespace = __NAMESPACE__;
                     $namespace .= "\\FileManager\Application\Controls";
                     $class = "$namespace\\$name";
-                    return new $class($container);
+                    return new $class($container, $config);
                 });
     }
 
@@ -207,12 +218,13 @@ class FileManager extends \Nette\Application\UI\Control
      */
     protected function createComponentPlugin()
     {
-        $container = $this->context->systemContainer;
-        return new \Nette\Application\UI\Multiplier(function ($name) use ($container) {
+        $container = $this->systemContainer;
+        $config = $this->userConfig;
+        return new \Nette\Application\UI\Multiplier(function ($name) use ($container, $config) {
                     $namespace = __NAMESPACE__;
                     $namespace .= "\\FileManager\Plugins";
                     $class = "$namespace\\$name";
-                    return new $class($container);
+                    return new $class($container, $config);
                 });
     }
 

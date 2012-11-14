@@ -82,16 +82,6 @@ final class Loader extends \Nette\DI\Container
     }
 
     /**
-     * Create service systemContainer
-     *
-     * @return \Nette\DI\Container
-     */
-    protected function createServiceSystemContainer()
-    {
-        return $this->context;
-    }
-
-    /**
      * Create service caching
      *
      * @return \Ixtrum\FileManager\Application\Caching
