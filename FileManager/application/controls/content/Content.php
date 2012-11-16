@@ -2,7 +2,8 @@
 
 namespace Ixtrum\FileManager\Application\Controls;
 
-use Nette\Application\Responses\FileResponse;
+use Nette\Application\Responses\FileResponse,
+    Ixtrum\FileManager\Application\FileSystem\Finder;
 
 class Content extends \Ixtrum\FileManager
 {
@@ -208,7 +209,7 @@ class Content extends \Ixtrum\FileManager
     {
         $absolutePath = $this->context->filesystem->getAbsolutePath($dir);
 
-        $files = \Ixtrum\FileManager\Application\FileSystem\Finder::find($mask)
+        $files = Finder::find($mask)
                 ->in($absolutePath)
                 ->orderBy($order);
 

@@ -6,7 +6,7 @@ use Nette\Caching\Cache,
     Nette\Caching\Storages\FileJournal,
     Nette\Caching\Storages\FileStorage,
     Nette\Caching\Storages\MemcachedStorage,
-    Nette\Utils\Finder;
+    Ixtrum\FileManager\Application\FileSystem\Finder;
 
 class Caching
 {

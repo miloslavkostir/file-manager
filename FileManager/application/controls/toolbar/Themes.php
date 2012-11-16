@@ -2,6 +2,8 @@
 
 namespace Ixtrum\FileManager\Application\Controls;
 
+use Ixtrum\FileManager\Application\FileSystem\Finder;
+
 class Themes extends \Ixtrum\FileManager
 {
 
@@ -63,7 +65,7 @@ class Themes extends \Ixtrum\FileManager
             return $themes;
         }
 
-        $dirs = \Nette\Utils\Finder::findDirectories("*")->in($themeDir);
+        $dirs = Finder::findDirectories("*")->in($themeDir);
         foreach ($dirs as $dir) {
             $themes[$dir->getFilename()] = ucfirst($dir->getFilename());
         }

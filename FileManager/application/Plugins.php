@@ -2,6 +2,8 @@
 
 namespace Ixtrum\FileManager\Application;
 
+use Ixtrum\FileManager\Application\FileSystem\Finder;
+
 class Plugins
 {
 
@@ -30,7 +32,7 @@ class Plugins
      */
     public function loadPlugins()
     {
-        $files = \Nette\Utils\Finder::findFiles("*.php")->from($this->pluginDir);
+        $files = Finder::findFiles("*.php")->from($this->pluginDir);
 
         $cache = $this->cache;
         $plugins = array();

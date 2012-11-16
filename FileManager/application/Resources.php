@@ -2,6 +2,8 @@
 
 namespace Ixtrum\FileManager\Application;
 
+use Ixtrum\FileManager\Application\FileSystem\Finder;
+
 class Resources
 {
 
@@ -52,7 +54,7 @@ class Resources
             umask($oldumask);
         }
 
-        $files = \Nette\Utils\Finder::find("*")->in($src);
+        $files = Finder::find("*")->in($src);
         foreach ($files as $file) {
             $sourceFile = $file->getPathname();
             $targetFile = "$dst/" . $file->getFilename();

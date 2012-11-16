@@ -2,7 +2,7 @@
 
 namespace Ixtrum\FileManager\Application;
 
-use Nette\Utils\Finder,
+use Ixtrum\FileManager\Application\FileSystem\Finder,
     Nette\Diagnostics\Debugger;
 
 class FileSystem

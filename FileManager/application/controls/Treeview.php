@@ -2,6 +2,8 @@
 
 namespace Ixtrum\FileManager\Application\Controls;
 
+use Ixtrum\FileManager\Application\FileSystem\Finder;
+
 class Treeview extends \Ixtrum\FileManager
 {
 
@@ -45,7 +47,7 @@ class Treeview extends \Ixtrum\FileManager
     private function getDirTree($dir)
     {
         $x = array();
-        $dirs = \Nette\Utils\Finder::findDirectories("*")->in($dir);
+        $dirs = Finder::findDirectories("*")->in($dir);
 
         foreach ($dirs as $dir) {
             $x[$dir->getFilename()] = $this->getDirTree($dir->getPathName());

@@ -4,7 +4,7 @@ namespace Ixtrum\FileManager\Application;
 
 use Nette\Image,
     Nette\Diagnostics\Debugger,
-    Nette\Utils\Finder;
+    Ixtrum\FileManager\Application\FileSystem\Finder;
 
 class Thumbs
 {
