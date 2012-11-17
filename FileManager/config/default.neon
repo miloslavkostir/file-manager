@@ -5,7 +5,7 @@ parameters:
 	cacheStorage: FileStorage
 	readonly: false
 	quota:
-	quota_limit: 20 # MB
+	quotaLimit: 20 # MB
 	lang: en
 	resDir: /ixtrum-res/
 	pluginDir: /plugins/

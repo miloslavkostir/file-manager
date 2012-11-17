@@ -749,8 +749,8 @@ class FileSystem
 
             $size = $this->getUsedSize();
             $info["usedsize"] = $size;
-            $info["spaceleft"] = ($this->config["quota_limit"] * 1048576) - $size;
-            $info["percentused"] = round(($size / ($this->config["quota_limit"] * 1048576)) * 100);
+            $info["spaceleft"] = ($this->config["quotaLimit"] * 1048576) - $size;
+            $info["percentused"] = round(($size / ($this->config["quotaLimit"] * 1048576)) * 100);
         } else {
 
             $freesize = disk_free_space($this->config["uploadroot"]);
