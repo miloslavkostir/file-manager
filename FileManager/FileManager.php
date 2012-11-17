@@ -128,7 +128,7 @@ class FileManager extends \Nette\Application\UI\Control
         $this->template->setTranslator($this->context->translator);
 
         // Load resources
-        if ($this->context->parameters["syncResDir"] === true) {
+        if ($this->context->parameters["syncResDir"] == true) {
             $resources = new FileManager\Application\Resources(
                             $this->context->parameters["wwwDir"] . $this->context->parameters["resDir"],
                             $this->context->parameters["appPath"]
