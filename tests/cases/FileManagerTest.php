@@ -66,7 +66,7 @@ class FileManagerTest extends TestCase
         $this->presenter->run(new Nette\Application\Request("Homepage", "GET", array()));
         $fileManager = $this->presenter->getComponent("testControl");
 
-        $this->assertEquals(array("en", "cs"), $fileManager->getLanguages());
+        $this->assertEquals(array("en" => "en", "cs" => "cs"), $fileManager->getLanguages());
     }
 
     public function tearDown()
