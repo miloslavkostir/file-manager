@@ -54,6 +54,21 @@ class FileManagerTest extends TestCase
         $this->assertEquals("/testing/", $fileManager->getActualDir());
     }
 
+    /**
+     * Test method getLanguages
+     *
+     * @return void
+     */
+    public function testGetLanguages()
+    {
+        $control = new Ixtrum\FileManager($this->context, array("uploadroot" => $this->uploadRoot));
+        $this->presenter->addComponent($control, "testControl");
+        $this->presenter->run(new Nette\Application\Request("Homepage", "GET", array()));
+        $fileManager = $this->presenter->getComponent("testControl");
+
+        $this->assertEquals(array("en", "cs"), $fileManager->getLanguages());
+    }
+
     public function tearDown()
     {
         $this->deInitTestDir();

@@ -2,6 +2,8 @@
 
 namespace Ixtrum;
 
+use Ixtrum\FileManager\Application\FileSystem\Finder;
+
 class FileManager extends \Nette\Application\UI\Control
 {
 
@@ -22,6 +24,9 @@ class FileManager extends \Nette\Application\UI\Control
 
     /** @var \Nette\DI\Container */
     private $systemContainer;
+
+    /** @var string */
+    protected $defaultLang = "en";
 
     /**
      * Constructor
@@ -106,6 +111,21 @@ class FileManager extends \Nette\Application\UI\Control
     public function getActualDir()
     {
         return $this->context->session->get("actualdir");
+    }
+
+    /**
+     * Get available languages
+     *
+     * @return array
+     */
+    public function getLanguages()
+    {
+        $languages = array($this->defaultLang);
+        $files = Finder::findFiles("*.mo")->in($this->context->parameters["appPath"] . $this->context->parameters["langDir"]);
+        foreach ($files as $file) {
+            $languages[] = $file->getBasename(".mo");
+        }
+        return $languages;
     }
 
     /**
