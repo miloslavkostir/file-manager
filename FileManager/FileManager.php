@@ -10,8 +10,8 @@ class FileManager extends \Nette\Application\UI\Control
     const NAME = "iXtrum File Manager";
     const VERSION = "0.5 dev";
 
-    /** @var \Nette\DI\Container */
-    protected $context;
+    /** @var \Ixtrum\FileManager\Application\Loader */
+    protected $system;
 
     /** @var array */
     protected $selectedFiles = array();
@@ -43,21 +43,21 @@ class FileManager extends \Nette\Application\UI\Control
         $this->systemContainer = $container;
 
         // Load system container with services and configuration
-        $this->context = new FileManager\Application\Loader(
+        $this->system = new FileManager\Application\Loader(
                 $container->session,
                 $container->parameters["tempDir"],
                 $container->parameters["wwwDir"],
                 $config,
                 __DIR__
         );
-        $this->context->freeze();
+        $this->system->freeze();
 
         // Get & validate actual dir
-        $actualDir = $this->context->session->get("actualdir");
-        $actualPath = $this->context->filesystem->getAbsolutePath($actualDir);
+        $actualDir = $this->system->session->get("actualdir");
+        $actualPath = $this->system->filesystem->getAbsolutePath($actualDir);
         if (!is_dir($actualPath) || empty($actualDir)) {
             // Set root dir as default
-            $actualDir = $this->context->filesystem->getRootname();
+            $actualDir = $this->system->filesystem->getRootname();
         }
         $this->setActualDir($actualDir);
 
@@ -68,7 +68,7 @@ class FileManager extends \Nette\Application\UI\Control
         }
 
         // Get & validate selected view
-        $view = $this->context->session->get("view");
+        $view = $this->system->session->get("view");
         $allowedViews = array("details", "large", "list", "small");
         if (!empty($view) && in_array($view, $allowedViews)) {
             $this->view = $view;
@@ -81,13 +81,13 @@ class FileManager extends \Nette\Application\UI\Control
 
     public function handleRefreshContent()
     {
-        if ($this->context->parameters["cache"]) {
+        if ($this->system->parameters["cache"]) {
 
-            $this->context->caching->deleteItem(NULL, array("tags" => "treeview"));
-            $this->context->caching->deleteItem(array(
+            $this->system->caching->deleteItem(NULL, array("tags" => "treeview"));
+            $this->system->caching->deleteItem(array(
                 "content",
-                $this->context->filesystem->getRealPath(
-                        $this->context->filesystem->getAbsolutePath($this->getActualDir())
+                $this->system->filesystem->getRealPath(
+                        $this->system->filesystem->getAbsolutePath($this->getActualDir())
                 )
             ));
         }
@@ -96,7 +96,7 @@ class FileManager extends \Nette\Application\UI\Control
     public function handleRunPlugin($name)
     {
         // Find valid plugin
-        foreach ($this->context->parameters["plugins"] as $plugin) {
+        foreach ($this->system->parameters["plugins"] as $plugin) {
             if ($name === $plugin["name"]) {
                 $validPlugin = true;
             }
@@ -105,7 +105,7 @@ class FileManager extends \Nette\Application\UI\Control
         if (isset($validPlugin)) {
             $this->template->plugin = $name;
         } else {
-            $this->flashMessage($this->context->translator->translate("Plugin '%s' not found!", $name), "warning");
+            $this->flashMessage($this->system->translator->translate("Plugin '%s' not found!", $name), "warning");
         }
     }
 
@@ -116,7 +116,7 @@ class FileManager extends \Nette\Application\UI\Control
      */
     public function getActualDir()
     {
-        return $this->context->session->get("actualdir");
+        return $this->system->session->get("actualdir");
     }
 
     /**
@@ -127,7 +127,7 @@ class FileManager extends \Nette\Application\UI\Control
     public function getLanguages()
     {
         $languages = array($this->defaultLang => $this->defaultLang);
-        $files = Finder::findFiles("*.mo")->in($this->context->parameters["appPath"] . $this->context->parameters["langDir"]);
+        $files = Finder::findFiles("*.mo")->in($this->system->parameters["appPath"] . $this->system->parameters["langDir"]);
         foreach ($files as $file) {
             $baseName = $file->getBasename(".mo");
             $languages[$baseName] = $baseName;
@@ -142,36 +142,36 @@ class FileManager extends \Nette\Application\UI\Control
      */
     public function setActualDir($dir)
     {
-        if ($this->context->filesystem->validPath($dir)) {
-            $this->context->session->set("actualdir", $dir);
+        if ($this->system->filesystem->validPath($dir)) {
+            $this->system->session->set("actualdir", $dir);
         } else {
-            $this->flashMessage($this->context->translator->translate("Folder %s does not exist!", $dir), "warning");
+            $this->flashMessage($this->system->translator->translate("Folder %s does not exist!", $dir), "warning");
         }
     }
 
     public function render()
     {
         $this->template->setFile(__DIR__ . "/FileManager.latte");
-        $this->template->setTranslator($this->context->translator);
+        $this->template->setTranslator($this->system->translator);
 
         // Load resources
-        if ($this->context->parameters["syncResDir"] == true) {
+        if ($this->system->parameters["syncResDir"] == true) {
             $resources = new FileManager\Application\Resources(
-                            $this->context->parameters["wwwDir"] . $this->context->parameters["resDir"],
-                            $this->context->parameters["appPath"]
+                            $this->system->parameters["wwwDir"] . $this->system->parameters["resDir"],
+                            $this->system->parameters["appPath"]
             );
             $resources->synchronize();
         }
-        $this->template->resDir = $this->context->parameters["resDir"];
+        $this->template->resDir = $this->system->parameters["resDir"];
 
         // Get clipboard
-        $clipboard = $this->context->session->get("clipboard");
+        $clipboard = $this->system->session->get("clipboard");
         if ($clipboard) {
             $this->template->clipboard = $clipboard;
         }
 
         // Get theme
-        $theme = $this->context->session->get("theme");
+        $theme = $this->system->session->get("theme");
         if ($theme) {
             $this->template->theme = $theme;
         } else {
@@ -179,10 +179,10 @@ class FileManager extends \Nette\Application\UI\Control
         }
 
         // Get plugins
-        if ($this->context->parameters["plugins"]) {
+        if ($this->system->parameters["plugins"]) {
 
             $toolbarPlugins = $fileInfoPlugins = array();
-            foreach ($this->context->parameters["plugins"] as $plugin) {
+            foreach ($this->system->parameters["plugins"] as $plugin) {
                 if ($plugin["toolbarPlugin"]) {
                     $toolbarPlugins[] = $plugin;
                 }
@@ -262,7 +262,7 @@ class FileManager extends \Nette\Application\UI\Control
      */
     public function getDiskInfo()
     {
-        return $this->context->filesystem->diskSizeInfo();
+        return $this->system->filesystem->diskSizeInfo();
     }
 
 }

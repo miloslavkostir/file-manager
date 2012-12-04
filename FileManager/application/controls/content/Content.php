@@ -17,7 +17,7 @@ class Content extends \Ixtrum\FileManager
     {
         foreach ($this->selectedFiles as $file) {
 
-            $this->context->session->add(
+            $this->system->session->add(
                     "clipboard",
                     $this->getActualDir() . $file,
                     array(
@@ -33,7 +33,7 @@ class Content extends \Ixtrum\FileManager
     {
         foreach ($this->selectedFiles as $file) {
 
-            $this->context->session->add(
+            $this->system->session->add(
                     "clipboard",
                     $this->getActualDir() . $file,
                     array(
@@ -47,16 +47,16 @@ class Content extends \Ixtrum\FileManager
 
     public function handleDelete()
     {
-        if ($this->context->parameters["readonly"]) {
-            $this->parent->parent->flashMessage($this->context->translator->translate("Read-only mode enabled!"), "warning");
+        if ($this->system->parameters["readonly"]) {
+            $this->parent->parent->flashMessage($this->system->translator->translate("Read-only mode enabled!"), "warning");
         } else {
 
             foreach ($this->selectedFiles as $file) {
 
-                if ($this->context->filesystem->delete($this->getActualDir(), $file)) {
-                    $this->parent->parent->flashMessage($this->context->translator->translate("Successfuly deleted - %s", $file), "info");
+                if ($this->system->filesystem->delete($this->getActualDir(), $file)) {
+                    $this->parent->parent->flashMessage($this->system->translator->translate("Successfuly deleted - %s", $file), "info");
                 } else {
-                    $this->parent->parent->flashMessage($this->context->translator->translate("An error occured - %s", $file), "error");
+                    $this->parent->parent->flashMessage($this->system->translator->translate("An error occured - %s", $file), "error");
                 }
             }
         }
@@ -64,28 +64,28 @@ class Content extends \Ixtrum\FileManager
 
     public function handleZip()
     {
-        if ($this->context->parameters["readonly"]) {
-            $this->parent->parent->flashMessage($this->context->translator->translate("Read-only mode enabled!"), "warning");
+        if ($this->system->parameters["readonly"]) {
+            $this->parent->parent->flashMessage($this->system->translator->translate("Read-only mode enabled!"), "warning");
         } else {
 
-            $actualPath = $this->context->filesystem->getAbsolutePath($this->getActualDir());
-            $zip = new \Ixtrum\FileManager\Application\Zip($this->context->parameters, $actualPath);
+            $actualPath = $this->system->filesystem->getAbsolutePath($this->getActualDir());
+            $zip = new \Ixtrum\FileManager\Application\Zip($this->system->parameters, $actualPath);
             $zip->addFiles($this->selectedFiles);
 
-            $key = $this->context->filesystem->getRealPath($actualPath);
-            if ($this->context->parameters["cache"]) {
-                $this->parent->parent->context->caching->deleteItem(array("content", $key));
+            $key = $this->system->filesystem->getRealPath($actualPath);
+            if ($this->system->parameters["cache"]) {
+                $this->parent->parent->system->caching->deleteItem(array("content", $key));
             }
         }
     }
 
     public function handleOrderBy($key)
     {
-        $this->context->session->set("order", $key);
+        $this->system->session->set("order", $key);
 
-        $absPath = $this->context->filesystem->getRealPath($this->context->filesystem->getAbsolutePath($this->getActualDir()));
-        if ($this->context->parameters["cache"]) {
-            $this->context->caching->deleteItem(array("content", $absPath));
+        $absPath = $this->system->filesystem->getRealPath($this->system->filesystem->getAbsolutePath($this->getActualDir()));
+        if ($this->system->parameters["cache"]) {
+            $this->system->caching->deleteItem(array("content", $absPath));
         }
     }
 
@@ -99,12 +99,12 @@ class Content extends \Ixtrum\FileManager
         if (count($this->selectedFiles) === 1) {
 
             $file = $this->selectedFiles[0];
-            if ($this->context->filesystem->validPath($this->getActualDir(), $file)) {
+            if ($this->system->filesystem->validPath($this->getActualDir(), $file)) {
 
-                $path = $this->context->filesystem->getAbsolutePath($this->getActualDir()) . $file;
+                $path = $this->system->filesystem->getAbsolutePath($this->getActualDir()) . $file;
                 $this->presenter->sendResponse(new FileResponse($path, $file, null));
             } else {
-                $this->parent->parent->flashMessage($this->context->translator->translate("File %s not found!", $file), "warning");
+                $this->parent->parent->flashMessage($this->system->translator->translate("File %s not found!", $file), "warning");
             }
         }
     }
@@ -113,7 +113,7 @@ class Content extends \Ixtrum\FileManager
     {
         $parent = dirname($this->getActualDir());
         if ($parent == "\\" || $parent == ".") {
-            $parentDir = $this->context->filesystem->getRootname();
+            $parentDir = $this->system->filesystem->getRootname();
         } else {
             $parentDir = $parent . "/";
         }
@@ -131,18 +131,18 @@ class Content extends \Ixtrum\FileManager
             $filename = $this->presenter->context->httpRequest->getQuery("filename");
         }
 
-        if ($this->context->parameters["readonly"]) {
-            $this->parent->parent->flashMessage($this->context->translator->translate("Read-only mode enabled!"), "warning");
+        if ($this->system->parameters["readonly"]) {
+            $this->parent->parent->flashMessage($this->system->translator->translate("Read-only mode enabled!"), "warning");
         } else {
 
             if ($targetdir && $filename) {
 
-                if ($this->context->filesystem->move($this->getActualDir(), $targetdir, $filename)) {
+                if ($this->system->filesystem->move($this->getActualDir(), $targetdir, $filename)) {
 
                     $this->presenter->payload->result = "success";
-                    $this->parent->parent->flashMessage($this->context->translator->translate("Successfuly moved - %s", $filename), "info");
+                    $this->parent->parent->flashMessage($this->system->translator->translate("Successfuly moved - %s", $filename), "info");
                 } else {
-                    $this->parent->parent->flashMessage($this->context->translator->translate("An error occured. File %s was not moved.", $filename), "error");
+                    $this->parent->parent->flashMessage($this->system->translator->translate("An error occured. File %s was not moved.", $filename), "error");
                 }
             }
         }
@@ -155,30 +155,30 @@ class Content extends \Ixtrum\FileManager
 
     public function handleShowThumb($dir, $file)
     {
-        $path = $this->context->filesystem->getAbsolutePath($dir) . $file;
-        $thumb = $this->context->thumbs->getThumbFile($path);
+        $path = $this->system->filesystem->getAbsolutePath($dir) . $file;
+        $thumb = $this->system->thumbs->getThumbFile($path);
         $thumb->send();
     }
 
     public function render()
     {
         $this->template->setFile(__DIR__ . "/$this->view.latte");
-        $this->template->setTranslator($this->context->translator);
+        $this->template->setTranslator($this->system->translator);
         $this->template->files = $this->loadData(
             $this->getActualDir(),
-            $this->context->session->get("mask"),
+            $this->system->session->get("mask"),
             $this->view,
-            $this->context->session->get("order")
+            $this->system->session->get("order")
         );
         $this->template->actualdir = $this->getActualDir();
-        $this->template->rootname = $this->context->filesystem->getRootName();
-        $this->template->thumb_dir = $this->context->parameters["resDir"] . "img/icons/$this->view/";
+        $this->template->rootname = $this->system->filesystem->getRootName();
+        $this->template->thumb_dir = $this->system->parameters["resDir"] . "img/icons/$this->view/";
 
         // Load plugins
-        if ($this->context->parameters["plugins"]) {
+        if ($this->system->parameters["plugins"]) {
 
             $contextPlugins = array();
-            foreach ($this->context->parameters["plugins"] as $plugin) {
+            foreach ($this->system->parameters["plugins"] as $plugin) {
 
                 if ($plugin["contextPlugin"]) {
                     $contextPlugins[] = $plugin;
@@ -207,7 +207,7 @@ class Content extends \Ixtrum\FileManager
      */
     private function getDirectoryContent($dir, $mask, $view, $order)
     {
-        $absolutePath = $this->context->filesystem->getAbsolutePath($dir);
+        $absolutePath = $this->system->filesystem->getAbsolutePath($dir);
 
         $files = Finder::find($mask)
                 ->in($absolutePath)
@@ -223,11 +223,11 @@ class Content extends \Ixtrum\FileManager
             if (!is_dir($file->getPath() . "/$name")) {
 
                 $dir_array[$name]["type"] = "file";
-                $dir_array[$name]["size"] = $this->context->filesystem->filesize($file->getPathName());
+                $dir_array[$name]["size"] = $this->system->filesystem->filesize($file->getPathName());
                 $filetype = strtolower(pathinfo($name, PATHINFO_EXTENSION));
                 $dir_array[$name]["filetype"] = $filetype;
 
-                if (file_exists($this->context->parameters["wwwDir"] . $this->context->parameters["resDir"] . "img/icons/$view/$filetype.png")) {
+                if (file_exists($this->system->parameters["wwwDir"] . $this->system->parameters["resDir"] . "img/icons/$view/$filetype.png")) {
 
                     if ($filetype === "folder") {
                         $dir_array[$name]["icon"] = "icon.png";
@@ -235,7 +235,7 @@ class Content extends \Ixtrum\FileManager
                         $dir_array[$name]["icon"] = "$filetype.png";
                     }
 
-                    if (in_array($filetype, $this->context->thumbs->supported)) {
+                    if (in_array($filetype, $this->system->thumbs->supported)) {
                         $dir_array[$name]["create_thumb"] = true;
                     } else {
                         $dir_array[$name]["create_thumb"] = false;
@@ -272,17 +272,17 @@ class Content extends \Ixtrum\FileManager
             $mask = "*";
         }
 
-        if ($this->context->parameters["cache"] && $mask === "*") {
+        if ($this->system->parameters["cache"] && $mask === "*") {
 
-            $absDir = $this->context->filesystem->getRealPath(
-                $this->context->filesystem->getAbsolutePath($dir)
+            $absDir = $this->system->filesystem->getRealPath(
+                $this->system->filesystem->getAbsolutePath($dir)
             );
-            $cacheData = $this->context->caching->getItem(array("content", $absDir));
+            $cacheData = $this->system->caching->getItem(array("content", $absDir));
 
             if (!$cacheData) {
 
                 $output = $this->getDirectoryContent($dir, $mask, $view, $order);
-                $this->context->caching->saveItem(array("content", $absDir), $output);
+                $this->system->caching->saveItem(array("content", $absDir), $output);
                 return $output;
             } else {
                 return $cacheData;

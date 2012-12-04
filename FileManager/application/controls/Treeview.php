@@ -15,7 +15,7 @@ class Treeview extends \Ixtrum\FileManager
     public function render()
     {
         $this->template->setFile(__DIR__ . "/Treeview.latte");
-        $this->template->setTranslator($this->context->translator);
+        $this->template->setTranslator($this->system->translator);
         $this->template->treeview = $this->loadData();
         $this->template->render();
     }
@@ -27,7 +27,7 @@ class Treeview extends \Ixtrum\FileManager
 
             $html .= "<li>";
             $html .= '<span class="fm-droppable" data-move-url="' . $this->getComponent("control-content")->link("move") . '" data-targetdir="' . $superior . '/' . $key . '/' . '">';
-            $html .= '<a href="' . $this->link("openDir", "$superior/$key/") . '" class="treeview-folder fm-ajax fm-folder-icon" title="' . $this->context->filesystem->getRootName() . $superior . '/' . $key . '/">';
+            $html .= '<a href="' . $this->link("openDir", "$superior/$key/") . '" class="treeview-folder fm-ajax fm-folder-icon" title="' . $this->system->filesystem->getRootName() . $superior . '/' . $key . '/">';
             $html .= $key;
             $html .= '</a></span>';
 
@@ -58,8 +58,8 @@ class Treeview extends \Ixtrum\FileManager
 
     private function generateTreeview()
     {
-        $dirs = $this->getDirTree($this->context->parameters["uploadroot"]);
-        $rootname = $this->context->filesystem->getRootName();
+        $dirs = $this->getDirTree($this->system->parameters["uploadroot"]);
+        $rootname = $this->system->filesystem->getRootName();
 
         $output = '<ul class="filetree">';
         $output .= '<span class="fm-droppable" data-move-url="' . $this->getComponent("control-content")->link("move") . '" data-targetdir="' . $rootname . '">';
@@ -79,16 +79,16 @@ class Treeview extends \Ixtrum\FileManager
      */
     public function loadData()
     {
-        if ($this->context->parameters["cache"]) {
+        if ($this->system->parameters["cache"]) {
 
-            $path = $this->context->filesystem->getRealPath($this->context->parameters["uploadroot"]);
+            $path = $this->system->filesystem->getRealPath($this->system->parameters["uploadroot"]);
 
-            $cacheData = $this->context->caching->getItem($path);
+            $cacheData = $this->system->caching->getItem($path);
 
             if (!$cacheData) {
 
                 $output = $this->generateTreeview();
-                $this->context->caching->saveItem($path, $output, array("tags" => array("treeview")));
+                $this->system->caching->saveItem($path, $output, array("tags" => array("treeview")));
                 return $output;
             } else {
                 return $cacheData;

@@ -15,14 +15,14 @@ class NewFolder extends \Ixtrum\FileManager
     {
         $template = $this->template;
         $template->setFile(__DIR__ . "/NewFolder.latte");
-        $template->setTranslator($this->context->translator);
+        $template->setTranslator($this->system->translator);
         $template->render();
     }
 
     protected function createComponentNewFolderForm()
     {
         $form = new \Nette\Application\UI\Form;
-        $form->setTranslator($this->context->translator);
+        $form->setTranslator($this->system->translator);
         $form->addText("name", "Name:")
             ->setRequired("Folder name required.");
         $form->addSubmit("send", "Create");
@@ -33,41 +33,41 @@ class NewFolder extends \Ixtrum\FileManager
 
     public function newFolderFormSubmitted($form)
     {
-        if ($this->context->parameters["readonly"]) {
-            $this->parent->parent->flashMessage($this->context->translator->translate("Read-only mode enabled!"), "warning");
+        if ($this->system->parameters["readonly"]) {
+            $this->parent->parent->flashMessage($this->system->translator->translate("Read-only mode enabled!"), "warning");
         } else {
 
-            if ($this->context->filesystem->validPath($this->getActualDir())) {
+            if ($this->system->filesystem->validPath($this->getActualDir())) {
 
-                $foldername = $this->context->filesystem->safeFoldername($form->values->name);
+                $foldername = $this->system->filesystem->safeFoldername($form->values->name);
                 if (!$foldername) {
-                    $this->parent->parent->flashMessage($this->context->translator->translate("Folder name '%s' can not be used - not allowed characters used.", $form->values->name), "warning");
+                    $this->parent->parent->flashMessage($this->system->translator->translate("Folder name '%s' can not be used - not allowed characters used.", $form->values->name), "warning");
                 } else {
 
-                    $target_dir = $this->context->filesystem->getAbsolutePath($this->getActualDir()) . $foldername;
+                    $target_dir = $this->system->filesystem->getAbsolutePath($this->getActualDir()) . $foldername;
                     if (is_dir($target_dir)) {
-                        $this->parent->parent->flashMessage($this->context->translator->translate("Target name %s already exists!", $foldername), "warning");
+                        $this->parent->parent->flashMessage($this->system->translator->translate("Target name %s already exists!", $foldername), "warning");
                     } else {
 
-                        if ($this->context->filesystem->mkdir($target_dir)) {
+                        if ($this->system->filesystem->mkdir($target_dir)) {
 
-                            if ($this->context->parameters["cache"]) {
+                            if ($this->system->parameters["cache"]) {
 
-                                $this->context->caching->deleteItem(array(
+                                $this->system->caching->deleteItem(array(
                                     "content",
-                                    $this->context->filesystem->getRealPath($this->context->filesystem->getAbsolutePath($this->getActualDir()))
+                                    $this->system->filesystem->getRealPath($this->system->filesystem->getAbsolutePath($this->getActualDir()))
                                 ));
-                                $this->context->caching->deleteItem(NULL, array("tags" => "treeview"));
+                                $this->system->caching->deleteItem(NULL, array("tags" => "treeview"));
                             }
 
-                            $this->parent->parent->flashMessage($this->context->translator->translate("Folder %s successfully created", $foldername), "info");
+                            $this->parent->parent->flashMessage($this->system->translator->translate("Folder %s successfully created", $foldername), "info");
                         } else {
-                            $this->parent->parent->flashMessage($this->context->translator->translate("An unkonwn error occurred during folder %s creation", $foldername), "info");
+                            $this->parent->parent->flashMessage($this->system->translator->translate("An unkonwn error occurred during folder %s creation", $foldername), "info");
                         }
                     }
                 }
             } else {
-                $this->parent->parent->flashMessage($this->context->translator->translate("Folder %s already does not exist!", $this->getActualDir()), "warning");
+                $this->parent->parent->flashMessage($this->system->translator->translate("Folder %s already does not exist!", $this->getActualDir()), "warning");
             }
         }
     }
