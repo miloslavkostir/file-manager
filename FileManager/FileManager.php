@@ -43,7 +43,13 @@ class FileManager extends \Nette\Application\UI\Control
         $this->systemContainer = $container;
 
         // Load system container with services and configuration
-        $this->context = new FileManager\Application\Loader($container, $config, __DIR__);
+        $this->context = new FileManager\Application\Loader(
+                $container->session,
+                $container->parameters["tempDir"],
+                $container->parameters["wwwDir"],
+                $config,
+                __DIR__
+        );
         $this->context->freeze();
 
         // Get & validate actual dir
