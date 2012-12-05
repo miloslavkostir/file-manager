@@ -42,14 +42,13 @@ class FileManager extends \Nette\Application\UI\Control
         $this->userConfig = $config;
         $this->systemContainer = $container;
 
+        // Add important base parameters to config
+        $config["wwwDir"] = $container->parameters["wwwDir"];
+        $config["tempDir"] = $container->parameters["tempDir"];
+        $config["appDir"] = __DIR__;
+
         // Load system container with services and configuration
-        $this->system = new FileManager\Application\Loader(
-                $container->session,
-                $container->parameters["tempDir"],
-                $container->parameters["wwwDir"],
-                $config,
-                __DIR__
-        );
+        $this->system = new FileManager\Application\Loader($container->session, $config);
         $this->system->freeze();
 
         // Get & validate actual dir
@@ -127,7 +126,7 @@ class FileManager extends \Nette\Application\UI\Control
     public function getLanguages()
     {
         $languages = array($this->defaultLang => $this->defaultLang);
-        $files = Finder::findFiles("*.mo")->in($this->system->parameters["appPath"] . $this->system->parameters["langDir"]);
+        $files = Finder::findFiles("*.mo")->in($this->system->parameters["appDir"] . $this->system->parameters["langDir"]);
         foreach ($files as $file) {
             $baseName = $file->getBasename(".mo");
             $languages[$baseName] = $baseName;
@@ -158,7 +157,7 @@ class FileManager extends \Nette\Application\UI\Control
         if ($this->system->parameters["syncResDir"] == true) {
             $resources = new FileManager\Application\Resources(
                             $this->system->parameters["wwwDir"] . $this->system->parameters["resDir"],
-                            $this->system->parameters["appPath"]
+                            $this->system->parameters["appDir"]
             );
             $resources->synchronize();
         }

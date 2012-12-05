@@ -5,12 +5,6 @@ namespace Ixtrum\FileManager\Application;
 final class Loader extends \Nette\DI\Container
 {
 
-    /** @var string */
-    private $tempDir;
-
-    /** @var string */
-    private $wwwDir;
-
     /** @var \Nette\Http\Session */
     private $session;
 
@@ -18,17 +12,12 @@ final class Loader extends \Nette\DI\Container
      * Constructor
      *
      * @param \Nette\Http\Session $session Session
-     * @param string              $tempDir Temp directory
-     * @param string              $wwwDir  Application WWW directory
      * @param array               $config  Custom configuration
-     * @param string              $appPath Path to application componnet itself
      */
-    public function __construct(\Nette\Http\Session $session, $tempDir, $wwwDir, $config, $appPath)
+    public function __construct(\Nette\Http\Session $session, $config)
     {
         $this->session = $session;
-        $this->tempDir = $tempDir;
-        $this->wwwDir = $wwwDir;
-        $this->parameters = $this->createConfiguration($config, $appPath);
+        $this->parameters = $this->createConfiguration($config);
         $this->checkRequirements();
     }
 
@@ -36,26 +25,20 @@ final class Loader extends \Nette\DI\Container
      * Create application configuration
      *
      * @param array  $config  User configuration
-     * @param string $appPath Path to applciation itself
      *
      * @return array Configuration
      */
-    private function createConfiguration($config, $appPath)
+    private function createConfiguration($config)
     {
         // Get default config
         $loader = new \Nette\Config\Loader;
-        $defaultConfig = $loader->load("$appPath/config/default.neon");
+        $defaultConfig = $loader->load($config["appDir"] . "/config/default.neon");
 
         // Merge user config with default config
         $config = array_merge($defaultConfig["parameters"], $config);
 
-        // Define system paths
-        $config["appPath"] = $appPath;
-        $config["wwwDir"] = $this->wwwDir;
-        $config["tempDir"] = $this->tempDir;
-
         // Get plugins
-        $plugins = new Plugins($config["appPath"] . $config["pluginDir"], new Caching($config));
+        $plugins = new Plugins($config["appDir"] . $config["pluginDir"], new Caching($config));
         $config["plugins"] = $plugins->loadPlugins();
 
         return $config;
@@ -96,7 +79,7 @@ final class Loader extends \Nette\DI\Container
     protected function createServiceTranslator()
     {
         return new Translator\GettextTranslator(
-                        $this->parameters["appPath"] . $this->parameters["langDir"] . $this->parameters["lang"] . ".mo",
+                        $this->parameters["appDir"] . $this->parameters["langDir"] . $this->parameters["lang"] . ".mo",
                         new Caching($this->parameters),
                         $this->parameters["lang"]
         );
