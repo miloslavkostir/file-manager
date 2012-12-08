@@ -135,7 +135,7 @@ class FileManager extends \Nette\Application\UI\Control
     }
 
     /**
-     * Setter for actualDir
+     * Set actual dir
      *
      * @param string $dir relative dir path
      */
@@ -143,8 +143,6 @@ class FileManager extends \Nette\Application\UI\Control
     {
         if ($this->system->filesystem->validPath($dir)) {
             $this->system->session->set("actualdir", $dir);
-        } else {
-            $this->flashMessage($this->system->translator->translate("Folder %s does not exist!", $dir), "warning");
         }
     }
 
