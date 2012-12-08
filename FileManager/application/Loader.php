@@ -41,6 +41,9 @@ final class Loader extends \Nette\DI\Container
         $plugins = new Plugins($config["appDir"] . $config["pluginDir"], new Caching($config));
         $config["plugins"] = $plugins->loadPlugins();
 
+        // Canonicalize uploadroot
+        $config["uploadroot"] = realpath($config["uploadroot"]);
+
         return $config;
     }
 
