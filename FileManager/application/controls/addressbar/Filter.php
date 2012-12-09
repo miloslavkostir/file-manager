@@ -4,7 +4,7 @@ namespace Ixtrum\FileManager\Application\Controls;
 
 use Nette\Application\UI\Form;
 
-class Filter extends \Ixtrum\FileManager
+class Filter extends \Ixtrum\FileManager\Application\Controls
 {
 
     public function render()

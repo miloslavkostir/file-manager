@@ -17,15 +17,6 @@ class FileManager extends \Nette\Application\UI\Control
     protected $selectedFiles = array();
 
     /** @var string */
-    protected $view;
-
-    /** @var array */
-    private $userConfig;
-
-    /** @var \Nette\DI\Container */
-    private $systemContainer;
-
-    /** @var string */
     protected $defaultLang = "en";
 
     /**
@@ -37,10 +28,6 @@ class FileManager extends \Nette\Application\UI\Control
     public function __construct(\Nette\DI\Container $container, $config = array())
     {
         parent::__construct();
-
-        // Set up class properties
-        $this->userConfig = $config;
-        $this->systemContainer = $container;
 
         // Add important base parameters to config
         $config["wwwDir"] = $container->parameters["wwwDir"];
@@ -64,15 +51,6 @@ class FileManager extends \Nette\Application\UI\Control
         $selectedFiles = $container->httpRequest->getPost("files");
         if (is_array($selectedFiles)) {
             $this->selectedFiles = $selectedFiles;
-        }
-
-        // Get & validate selected view
-        $view = $this->system->session->get("view");
-        $allowedViews = array("details", "large", "list", "small");
-        if (!empty($view) && in_array($view, $allowedViews)) {
-            $this->view = $view;
-        } else {
-            $this->view = "large";
         }
 
         $this->invalidateControl();
@@ -225,13 +203,13 @@ class FileManager extends \Nette\Application\UI\Control
      */
     protected function createComponentControl()
     {
-        $container = $this->systemContainer;
-        $config = $this->userConfig;
-        return new \Nette\Application\UI\Multiplier(function ($name) use ($container, $config) {
+        $system = $this->system;
+        $selectedFiles = $this->selectedFiles;
+        return new \Nette\Application\UI\Multiplier(function ($name) use ($system, $selectedFiles) {
                             $namespace = __NAMESPACE__;
                             $namespace .= "\\FileManager\Application\Controls";
                             $class = "$namespace\\$name";
-                            return new $class($container, $config);
+                            return new $class($system, $selectedFiles);
                         });
     }
 
@@ -242,13 +220,13 @@ class FileManager extends \Nette\Application\UI\Control
      */
     protected function createComponentPlugin()
     {
-        $container = $this->systemContainer;
-        $config = $this->userConfig;
-        return new \Nette\Application\UI\Multiplier(function ($name) use ($container, $config) {
+        $system = $this->system;
+        $selectedFiles = $this->selectedFiles;
+        return new \Nette\Application\UI\Multiplier(function ($name) use ($system, $selectedFiles) {
                             $namespace = __NAMESPACE__;
-                            $namespace .= "\\FileManager\Plugins";
+                            $namespace .= "\\FileManager\Application\Plugins";
                             $class = "$namespace\\$name";
-                            return new $class($container, $config);
+                            return new $class($system, $selectedFiles);
                         });
     }
 

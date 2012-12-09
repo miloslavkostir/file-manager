@@ -1,10 +1,10 @@
 <?php
 
-namespace Ixtrum\FileManager\Plugins;
+namespace Ixtrum\FileManager\Application\Plugins;
 
 use Nette\Application\UI\Form;
 
-class Rename extends \Ixtrum\FileManager
+class Rename extends \Ixtrum\FileManager\Application\Plugins
 {
 
     /** @var boolean */

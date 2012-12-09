@@ -1,8 +1,8 @@
 <?php
 
-namespace Ixtrum\FileManager\Plugins;
+namespace Ixtrum\FileManager\Application\Plugins;
 
-class NewFolder extends \Ixtrum\FileManager
+class NewFolder extends \Ixtrum\FileManager\Application\Plugins
 {
 
     /** @var string */

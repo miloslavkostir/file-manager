@@ -4,7 +4,7 @@ namespace Ixtrum\FileManager\Application\Controls;
 
 use Nette\Application\UI\Form;
 
-class Navigation extends \Ixtrum\FileManager
+class Navigation extends \Ixtrum\FileManager\Application\Controls
 {
 
     public function handleOpenDir($dir)

@@ -4,7 +4,7 @@ namespace Ixtrum\FileManager\Application\Controls;
 
 use Nette\Application\UI\Form;
 
-class ViewSelector extends \Ixtrum\FileManager
+class ViewSelector extends \Ixtrum\FileManager\Application\Controls
 {
 
     public function render()

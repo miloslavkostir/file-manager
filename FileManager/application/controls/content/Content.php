@@ -5,7 +5,7 @@ namespace Ixtrum\FileManager\Application\Controls;
 use Nette\Application\Responses\FileResponse,
     Ixtrum\FileManager\Application\FileSystem\Finder;
 
-class Content extends \Ixtrum\FileManager
+class Content extends \Ixtrum\FileManager\Application\Controls
 {
 
     public function handleInfo()

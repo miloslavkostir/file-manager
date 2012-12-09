@@ -4,7 +4,7 @@ namespace Ixtrum\FileManager\Application\Controls;
 
 use Ixtrum\FileManager\Application\FileSystem\Finder;
 
-class Treeview extends \Ixtrum\FileManager
+class Treeview extends \Ixtrum\FileManager\Application\Controls
 {
 
     public function handleOpenDir($dir)

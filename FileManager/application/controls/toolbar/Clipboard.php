@@ -2,7 +2,7 @@
 
 namespace Ixtrum\FileManager\Application\Controls;
 
-class Clipboard extends \Ixtrum\FileManager
+class Clipboard extends \Ixtrum\FileManager\Application\Controls
 {
 
     public function handleClearClipboard()
