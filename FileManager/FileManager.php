@@ -129,15 +129,6 @@ class FileManager extends \Nette\Application\UI\Control
     {
         $this->template->setFile(__DIR__ . "/FileManager.latte");
         $this->template->setTranslator($this->system->translator);
-
-        // Load resources
-        if ($this->system->parameters["syncResDir"] == true) {
-            $resources = new FileManager\Application\Resources(
-                            $this->system->parameters["wwwDir"] . $this->system->parameters["resDir"],
-                            $this->system->parameters["appDir"]
-            );
-            $resources->synchronize();
-        }
         $this->template->resDir = $this->system->parameters["resDir"];
 
         // Get clipboard

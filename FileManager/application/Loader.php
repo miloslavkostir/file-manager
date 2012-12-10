@@ -20,7 +20,15 @@ final class Loader extends \Nette\DI\Container
     {
         $this->session = $session;
         $this->parameters = $this->createConfiguration($config);
+
         $this->checkRequirements();
+
+        // Synchronize resources if enabled
+        if ($this->parameters["syncResDir"]) {
+            $this->syncResources(
+                    $this->parameters["wwwDir"] . $this->parameters["resDir"], $this->parameters["appDir"]
+            );
+        }
     }
 
     /**
@@ -194,6 +202,19 @@ final class Loader extends \Nette\DI\Container
         }
 
         return $classes;
+    }
+
+    /**
+     * Synchronize resources
+     *
+     * @param string $resPath Absolute path to resources, must be located in
+     *                        public document root.
+     * @param string $appDir  Path to file manager root
+     */
+    public function syncResources($resPath, $appDir)
+    {
+        $resources = new Resources($resPath, $appDir);
+        $resources->synchronize();
     }
 
 }
