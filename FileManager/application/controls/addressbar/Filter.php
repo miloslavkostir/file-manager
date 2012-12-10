@@ -21,11 +21,11 @@ class Filter extends \Ixtrum\FileManager\Application\Controls
         $form->addText("phrase")
                 ->setDefaultValue($this->system->session->get("mask"))
                 ->setAttribute("placeholder", $this->system->translator->translate("Filter"));
-        $form->onSuccess[] = $this->filterFormSubmitted;
+        $form->onSuccess[] = $this->filterFormSuccess;
         return $form;
     }
 
-    public function filterFormSubmitted($form)
+    public function filterFormSuccess($form)
     {
         $this->system->session->set("mask", $form->values->phrase);
     }

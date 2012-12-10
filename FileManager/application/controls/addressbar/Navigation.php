@@ -38,11 +38,11 @@ class Navigation extends \Ixtrum\FileManager\Application\Controls
         $form->setTranslator($this->system->translator);
         $form->addText("location")
                 ->setDefaultValue($this->getActualDir());
-        $form->onSuccess[] = $this->locationFormSubmitted;
+        $form->onSuccess[] = $this->locationFormSuccess;
         return $form;
     }
 
-    public function locationFormSubmitted($form)
+    public function locationFormSuccess($form)
     {
         $this->setActualDir($form->values->location);
     }

@@ -39,12 +39,12 @@ class Rename extends \Ixtrum\FileManager\Application\Plugins
             ->setRequired("New name required.");
         $form->addHidden("orig_filename");
         $form->addSubmit("send", "OK");
-        $form->onSuccess[] = $this->renameFormSubmitted;
+        $form->onSuccess[] = $this->renameFormSuccess;
         $form->onError[] = $this->parent->parent->onFormError;
         return $form;
     }
 
-    public function renameFormSubmitted($form)
+    public function renameFormSuccess($form)
     {
         $path = $this->system->filesystem->getAbsolutePath($this->getActualDir());
 

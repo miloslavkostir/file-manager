@@ -26,12 +26,12 @@ class NewFolder extends \Ixtrum\FileManager\Application\Plugins
         $form->addText("name", "Name:")
             ->setRequired("Folder name required.");
         $form->addSubmit("send", "Create");
-        $form->onSuccess[] = $this->newFolderFormSubmitted;
+        $form->onSuccess[] = $this->newFolderFormSuccess;
         $form->onError[] = $this->parent->parent->onFormError;
         return $form;
     }
 
-    public function newFolderFormSubmitted($form)
+    public function newFolderFormSuccess($form)
     {
         if ($this->system->parameters["readonly"]) {
             $this->parent->parent->flashMessage($this->system->translator->translate("Read-only mode enabled!"), "warning");

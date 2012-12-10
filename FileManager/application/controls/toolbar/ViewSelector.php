@@ -26,11 +26,11 @@ class ViewSelector extends \Ixtrum\FileManager\Application\Controls
         $form = new Form;
         $form->addSelect("view", null, $items)
                 ->setDefaultValue($this->view);
-        $form->onSuccess[] = $this->changeViewFormSubmitted;
+        $form->onSuccess[] = $this->changeViewFormSuccess;
         return $form;
     }
 
-    public function changeViewFormSubmitted($form)
+    public function changeViewFormSuccess($form)
     {
         $this->system->session->set("view", $form->values->view);
     }
