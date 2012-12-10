@@ -108,9 +108,7 @@ class Thumbs
      */
     private function getName($path)
     {
-        $filesystem = new FileSystem($this->config);
-        $path = $filesystem->getRealPath($path);
-
+        $path = realpath($path);
         return md5($path) . "." . pathinfo($path, PATHINFO_EXTENSION);
     }
 

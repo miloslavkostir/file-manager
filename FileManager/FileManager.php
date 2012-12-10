@@ -64,9 +64,7 @@ class FileManager extends \Nette\Application\UI\Control
             $this->system->caching->deleteItem(NULL, array("tags" => "treeview"));
             $this->system->caching->deleteItem(array(
                 "content",
-                $this->system->filesystem->getRealPath(
-                        $this->system->filesystem->getAbsolutePath($this->getActualDir())
-                )
+                realpath($this->system->filesystem->getAbsolutePath($this->getActualDir()))
             ));
         }
     }
