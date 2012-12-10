@@ -103,9 +103,9 @@ class FileManager extends \Nette\Application\UI\Control
     public function getLanguages()
     {
         $languages = array($this->defaultLang => $this->defaultLang);
-        $files = Finder::findFiles("*.mo")->in($this->system->parameters["appDir"] . $this->system->parameters["langDir"]);
+        $files = Finder::findFiles("*.json")->in($this->system->parameters["appDir"] . $this->system->parameters["langDir"]);
         foreach ($files as $file) {
-            $baseName = $file->getBasename(".mo");
+            $baseName = $file->getBasename(".json");
             $languages[$baseName] = $baseName;
         }
         return $languages;

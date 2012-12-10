@@ -90,11 +90,7 @@ final class Loader extends \Nette\DI\Container
      */
     protected function createServiceTranslator()
     {
-        return new Translator\GettextTranslator(
-                        $this->parameters["appDir"] . $this->parameters["langDir"] . $this->parameters["lang"] . ".mo",
-                        new Caching($this->parameters),
-                        $this->parameters["lang"]
-        );
+        return new Translator($this->parameters["appDir"] . $this->parameters["langDir"] . $this->parameters["lang"] . ".json");
     }
 
     /**
