@@ -43,6 +43,11 @@ $(function() {
                 $.animateProgress(".file-manager", event);
         }});
 
+        items.push({ {_'Rename'} : function(menuItem, menuObject, event) {
+                $.post({$control->parent->parent->link('rename')}, { files: selected });
+                $.animateProgress(".file-manager", event);
+        }});
+
         {ifset $plugins}
             {foreach $plugins as $plugin}
                 items.push({ {$plugin['title']} : function(menuItem, menuObject, event) {

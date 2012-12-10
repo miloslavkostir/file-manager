@@ -57,6 +57,22 @@ class FileManager extends \Nette\Application\UI\Control
         $this->invalidateControl();
     }
 
+    /**
+     * New folder signal
+     */
+    public function handleNewFolder()
+    {
+        $this->template->newFolder = true;
+    }
+
+    /**
+     * Rename signal
+     */
+    public function handleRename()
+    {
+        $this->template->rename = true;
+    }
+
     public function handleRefreshContent()
     {
         if ($this->system->parameters["cache"]) {

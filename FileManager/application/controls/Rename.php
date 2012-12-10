@@ -1,17 +1,11 @@
 <?php
 
-namespace Ixtrum\FileManager\Application\Plugins;
+namespace Ixtrum\FileManager\Application\Controls;
 
 use Nette\Application\UI\Form;
 
 class Rename extends \Ixtrum\FileManager\Application\Plugins
 {
-
-    /** @var boolean */
-    public $contextPlugin = true;
-
-    /** @var string */
-    public $title = "Rename";
 
     public function render()
     {
@@ -44,7 +38,7 @@ class Rename extends \Ixtrum\FileManager\Application\Plugins
         return $form;
     }
 
-    public function renameFormSuccess($form)
+    public function renameFormSuccess(Form $form)
     {
         $path = $this->system->filesystem->getAbsolutePath($this->getActualDir());
 
