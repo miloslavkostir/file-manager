@@ -19,7 +19,7 @@ class Navigation extends \Ixtrum\FileManager\Application\Controls
             $this->system->caching->deleteItem(null, array("tags" => "treeview"));
             $this->system->caching->deleteItem(array(
                 "content",
-                $this->system->filesystem->getRealPath($this->system->filesystem->getAbsolutePath($this->getActualDir()))
+                realpath($this->system->filesystem->getAbsolutePath($this->getActualDir()))
             ));
         }
     }

@@ -64,7 +64,7 @@ class FileSystem
             if ($this->config["cache"]) {
 
                 $caching = new Caching($this->config);
-                $caching->deleteItem(array("content", $this->getRealPath($targetpath)));
+                $caching->deleteItem(array("content", realpath($targetpath)));
             }
 
             if (is_dir($actualpath . $filename)) {
@@ -72,7 +72,7 @@ class FileSystem
                 if ($this->config["cache"]) {
 
                     $caching->deleteItem(NULL, array("tags" => "treeview"));
-                    $caching->deleteItem(array('content', $this->getRealPath($targetpath)));
+                    $caching->deleteItem(array('content', realpath($targetpath)));
                 }
 
                 $dirinfo = $this->getFolderInfo(realpath($actualpath . $filename));
@@ -174,7 +174,7 @@ class FileSystem
         $folders = Finder::findDirectories('*')->from(realpath($actualpath . $filename));
         foreach ($folders as $folder) {
 
-            if ($folder->getRealPath() == $this->getRealPath($targetpath)) {
+            if ($folder->getRealPath() === realpath($targetpath)) {
                 $state = true;
             }
         }
@@ -211,8 +211,8 @@ class FileSystem
 
                         $caching = new Caching($this->config);
                         $caching->deleteItemsRecursive($actualpath . $filename);
-                        $caching->deleteItem(array("content", $this->getRealPath($actualpath)));
-                        $caching->deleteItem(array("content", $this->getRealPath($targetpath)));
+                        $caching->deleteItem(array("content", realpath($actualpath)));
+                        $caching->deleteItem(array("content", realpath($targetpath)));
                     }
 
                     if ($this->deleteFolder($actualpath . $filename)) {
@@ -233,8 +233,8 @@ class FileSystem
                     if ($this->config["cache"]) {
 
                         $caching = new Caching($this->config);
-                        $caching->deleteItem(array("content", $this->getRealPath($actualpath)));
-                        $caching->deleteItem(array("content", $this->getRealPath($targetpath)));
+                        $caching->deleteItem(array("content", realpath($actualpath)));
+                        $caching->deleteItem(array("content", realpath($targetpath)));
                     }
 
                     return true;
@@ -599,7 +599,7 @@ class FileSystem
                 if ($this->config["cache"]) {
 
                     $caching = new Caching($this->config);
-                    $caching->deleteItem(array("content", $this->getRealPath($path)));
+                    $caching->deleteItem(array("content", realpath($path)));
                 }
 
                 return true;
@@ -673,41 +673,6 @@ class FileSystem
     public function getAbsolutePath($actualdir)
     {
         return $this->config["uploadroot"] . $actualdir;
-    }
-
-    /**
-     * Repair (back)slashes according to OS
-     *
-     * @param string $path
-     * @return string
-     */
-    public function getRealPath($path)
-    {
-        $os = strtoupper(substr(PHP_OS, 0, 3));
-        if ($os === "WIN") {
-            $path = str_replace("/", "\\", $path);
-        } else {
-            $path = str_replace("\\", "/", $path);
-        }
-
-        if (realpath($path)) {
-
-            $path = realpath($path);
-            if (is_dir($path)) {
-
-                if ($os === "WIN" && substr($path, -1) <> "\\") {
-                    $path .= "\\";
-                }
-
-                if ($os <> "WIN" && substr($path, -1) <> "/") {
-                    $path .= "/";
-                }
-            }
-
-            return $path;
-        } else {
-            throw new \Nette\InvalidArgumentException("Invalid path '$path' given!");
-        }
     }
 
     /**

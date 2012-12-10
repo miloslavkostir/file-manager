@@ -59,7 +59,7 @@ class Rename extends \Ixtrum\FileManager\Application\Plugins
         } else {
 
             $origPath = $path . $form->values->orig_filename;
-            if (is_dir($this->system->filesystem->getRealPath($origPath))) {
+            if (is_dir(realpath($origPath))) {
 
                 $new_filename = $this->system->filesystem->safeFoldername($form->values->new_filename);
                 $this->system->thumbs->deleteDirThumbs($origPath);
@@ -68,20 +68,20 @@ class Rename extends \Ixtrum\FileManager\Application\Plugins
 
                     $this->system->caching->deleteItem(array(
                         "content",
-                        $this->system->filesystem->getRealPath($path)
+                        realpath($path)
                     ));
                     $this->system->caching->deleteItemsRecursive($origPath);
                 }
             } else {
 
                 $new_filename = $this->system->filesystem->safeFilename($form->values->new_filename);
-                $this->system->thumbs->deleteThumb($this->system->filesystem->getRealPath($origPath));
+                $this->system->thumbs->deleteThumb(realpath($origPath));
 
                 if ($this->system->parameters["cache"]) {
 
                     $this->system->caching->deleteItem(array(
                         "content",
-                        $this->system->filesystem->getRealPath($path)
+                        realpath($path)
                     ));
                 }
             }

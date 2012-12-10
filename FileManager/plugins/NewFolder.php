@@ -55,7 +55,7 @@ class NewFolder extends \Ixtrum\FileManager\Application\Plugins
 
                                 $this->system->caching->deleteItem(array(
                                     "content",
-                                    $this->system->filesystem->getRealPath($this->system->filesystem->getAbsolutePath($this->getActualDir()))
+                                    realpath($this->system->filesystem->getAbsolutePath($this->getActualDir()))
                                 ));
                                 $this->system->caching->deleteItem(NULL, array("tags" => "treeview"));
                             }
