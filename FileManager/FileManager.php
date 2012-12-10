@@ -2,7 +2,8 @@
 
 namespace Ixtrum;
 
-use Ixtrum\FileManager\Application\FileSystem\Finder;
+use Ixtrum\FileManager\Application\FileSystem\Finder,
+    Nette\Application\UI\Multiplier;
 
 class FileManager extends \Nette\Application\UI\Control
 {
@@ -205,7 +206,7 @@ class FileManager extends \Nette\Application\UI\Control
     {
         $system = $this->system;
         $selectedFiles = $this->selectedFiles;
-        return new \Nette\Application\UI\Multiplier(function ($name) use ($system, $selectedFiles) {
+        return new Multiplier(function ($name) use ($system, $selectedFiles) {
                             $namespace = __NAMESPACE__;
                             $namespace .= "\\FileManager\Application\Controls";
                             $class = "$namespace\\$name";
@@ -222,7 +223,7 @@ class FileManager extends \Nette\Application\UI\Control
     {
         $system = $this->system;
         $selectedFiles = $this->selectedFiles;
-        return new \Nette\Application\UI\Multiplier(function ($name) use ($system, $selectedFiles) {
+        return new Multiplier(function ($name) use ($system, $selectedFiles) {
                             $namespace = __NAMESPACE__;
                             $namespace .= "\\FileManager\Application\Plugins";
                             $class = "$namespace\\$name";
