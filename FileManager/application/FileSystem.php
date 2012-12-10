@@ -747,23 +747,19 @@ class FileSystem
     }
 
     /**
-     * Check if realtive path is valid
+     * Check if path is valid and is located in uploadroot
      *
-     * @param string $dir
-     * @param string $file (optional)
-     * @return bool
+     * @param string $dir  Dirname as relative path
+     * @param string $file Filename
+     *
+     * @return boolean
      */
-    public function validPath($dir, $file = NULL)
+    public function validPath($dir, $file = null)
     {
-        $path = $this->getAbsolutePath($dir);
-        if ($file) {
-            $path .= $file;
-        }
-
-        if (file_exists($path)) {
+        $path = realpath($this->getAbsolutePath($dir . $file));
+        if (strpos($path, $this->config["uploadroot"]) === 0) {
             return true;
         }
-
         return false;
     }
 
