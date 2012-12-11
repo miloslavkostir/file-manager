@@ -1,37 +1,32 @@
 <?php
 
-namespace Ixtrum\FileManager\Plugins;
+namespace Ixtrum\FileManager\Application\Controls;
 
-class NewFolder extends \Ixtrum\FileManager
+use Nette\Application\UI\Form;
+
+class NewFolder extends \Ixtrum\FileManager\Application\Plugins
 {
-
-    /** @var string */
-    public $title = "New folder";
-
-    /** @var bool */
-    public $toolbarPlugin = true;
 
     public function render()
     {
-        $template = $this->template;
-        $template->setFile(__DIR__ . "/NewFolder.latte");
-        $template->setTranslator($this->system->translator);
-        $template->render();
+        $this->template->setFile(__DIR__ . "/NewFolder.latte");
+        $this->template->setTranslator($this->system->translator);
+        $this->template->render();
     }
 
     protected function createComponentNewFolderForm()
     {
-        $form = new \Nette\Application\UI\Form;
+        $form = new Form;
         $form->setTranslator($this->system->translator);
         $form->addText("name", "Name:")
-            ->setRequired("Folder name required.");
+                ->setRequired("Folder name required.");
         $form->addSubmit("send", "Create");
-        $form->onSuccess[] = $this->newFolderFormSubmitted;
+        $form->onSuccess[] = $this->newFolderFormSuccess;
         $form->onError[] = $this->parent->parent->onFormError;
         return $form;
     }
 
-    public function newFolderFormSubmitted($form)
+    public function newFolderFormSuccess(Form $form)
     {
         if ($this->system->parameters["readonly"]) {
             $this->parent->parent->flashMessage($this->system->translator->translate("Read-only mode enabled!"), "warning");
@@ -55,7 +50,7 @@ class NewFolder extends \Ixtrum\FileManager
 
                                 $this->system->caching->deleteItem(array(
                                     "content",
-                                    $this->system->filesystem->getRealPath($this->system->filesystem->getAbsolutePath($this->getActualDir()))
+                                    realpath($this->system->filesystem->getAbsolutePath($this->getActualDir()))
                                 ));
                                 $this->system->caching->deleteItem(NULL, array("tags" => "treeview"));
                             }

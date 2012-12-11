@@ -2,7 +2,7 @@
 
 namespace Ixtrum\FileManager\Application;
 
-abstract class Plugins extends \Ixtrum\FileManager
+abstract class Controls extends \Ixtrum\FileManager
 {
 
     /** @var \Ixtrum\FileManager\Application\Loader */

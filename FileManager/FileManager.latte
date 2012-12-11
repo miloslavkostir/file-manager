@@ -24,6 +24,11 @@
     </div>
     <div n:snippet="toolbar" class="fm-toolbar">
         <ul>
+            <li>
+                <a n:href="newFolder!" class="fm-ajax fm-toolbar-item">
+                    <span>{_'New folder'}</span>
+                </a>
+            </li>
             {ifset $toolbarPlugins}
                 <li n:foreach="$toolbarPlugins as $plugin">
                     <a n:href="runPlugin!, $plugin['name']" class="fm-ajax fm-toolbar-item">
@@ -47,7 +52,7 @@
         <div n:if="$flashes" n:class="$flashes[0]->type, fm-alert">
             <span class="fm-close fm-right" title="{_'Close'}">&times;</span>
             {if count($flashes) > 1}
-                <strong>{_'%d messages', count($flashes)}</strong>
+                <strong>{_'Messages'} - {count($flashes)}</strong>
                 <a class="fm-show-messages">{_'View all'}</a>
                 <div n:foreach="$flashes as $flash" class="fm-alert-message-text fm-hide">
                     <i class="fm-icon fm-icon-{$flash->type}"></i>
@@ -70,6 +75,8 @@
                     {/ifset}
                 </div>
                 <div n:snippet="content">
+                    {ifset $newFolder}{control control-NewFolder}{/ifset}
+                    {ifset $rename}{control control-Rename}{/ifset}
                     {control control-content}
                 </div>
             </div>

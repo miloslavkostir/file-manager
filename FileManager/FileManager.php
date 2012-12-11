@@ -2,7 +2,8 @@
 
 namespace Ixtrum;
 
-use Ixtrum\FileManager\Application\FileSystem\Finder;
+use Ixtrum\FileManager\Application\FileSystem\Finder,
+    Nette\Application\UI\Multiplier;
 
 class FileManager extends \Nette\Application\UI\Control
 {
@@ -17,15 +18,6 @@ class FileManager extends \Nette\Application\UI\Control
     protected $selectedFiles = array();
 
     /** @var string */
-    protected $view;
-
-    /** @var array */
-    private $userConfig;
-
-    /** @var \Nette\DI\Container */
-    private $systemContainer;
-
-    /** @var string */
     protected $defaultLang = "en";
 
     /**
@@ -37,10 +29,6 @@ class FileManager extends \Nette\Application\UI\Control
     public function __construct(\Nette\DI\Container $container, $config = array())
     {
         parent::__construct();
-
-        // Set up class properties
-        $this->userConfig = $config;
-        $this->systemContainer = $container;
 
         // Add important base parameters to config
         $config["wwwDir"] = $container->parameters["wwwDir"];
@@ -66,16 +54,23 @@ class FileManager extends \Nette\Application\UI\Control
             $this->selectedFiles = $selectedFiles;
         }
 
-        // Get & validate selected view
-        $view = $this->system->session->get("view");
-        $allowedViews = array("details", "large", "list", "small");
-        if (!empty($view) && in_array($view, $allowedViews)) {
-            $this->view = $view;
-        } else {
-            $this->view = "large";
-        }
-
         $this->invalidateControl();
+    }
+
+    /**
+     * New folder signal
+     */
+    public function handleNewFolder()
+    {
+        $this->template->newFolder = true;
+    }
+
+    /**
+     * Rename signal
+     */
+    public function handleRename()
+    {
+        $this->template->rename = true;
     }
 
     public function handleRefreshContent()
@@ -85,9 +80,7 @@ class FileManager extends \Nette\Application\UI\Control
             $this->system->caching->deleteItem(NULL, array("tags" => "treeview"));
             $this->system->caching->deleteItem(array(
                 "content",
-                $this->system->filesystem->getRealPath(
-                        $this->system->filesystem->getAbsolutePath($this->getActualDir())
-                )
+                realpath($this->system->filesystem->getAbsolutePath($this->getActualDir()))
             ));
         }
     }
@@ -126,16 +119,16 @@ class FileManager extends \Nette\Application\UI\Control
     public function getLanguages()
     {
         $languages = array($this->defaultLang => $this->defaultLang);
-        $files = Finder::findFiles("*.mo")->in($this->system->parameters["appDir"] . $this->system->parameters["langDir"]);
+        $files = Finder::findFiles("*.json")->in($this->system->parameters["appDir"] . $this->system->parameters["langDir"]);
         foreach ($files as $file) {
-            $baseName = $file->getBasename(".mo");
+            $baseName = $file->getBasename(".json");
             $languages[$baseName] = $baseName;
         }
         return $languages;
     }
 
     /**
-     * Setter for actualDir
+     * Set actual dir
      *
      * @param string $dir relative dir path
      */
@@ -150,15 +143,6 @@ class FileManager extends \Nette\Application\UI\Control
     {
         $this->template->setFile(__DIR__ . "/FileManager.latte");
         $this->template->setTranslator($this->system->translator);
-
-        // Load resources
-        if ($this->system->parameters["syncResDir"] == true) {
-            $resources = new FileManager\Application\Resources(
-                            $this->system->parameters["wwwDir"] . $this->system->parameters["resDir"],
-                            $this->system->parameters["appDir"]
-            );
-            $resources->synchronize();
-        }
         $this->template->resDir = $this->system->parameters["resDir"];
 
         // Get clipboard
@@ -225,13 +209,13 @@ class FileManager extends \Nette\Application\UI\Control
      */
     protected function createComponentControl()
     {
-        $container = $this->systemContainer;
-        $config = $this->userConfig;
-        return new \Nette\Application\UI\Multiplier(function ($name) use ($container, $config) {
+        $system = $this->system;
+        $selectedFiles = $this->selectedFiles;
+        return new Multiplier(function ($name) use ($system, $selectedFiles) {
                             $namespace = __NAMESPACE__;
                             $namespace .= "\\FileManager\Application\Controls";
                             $class = "$namespace\\$name";
-                            return new $class($container, $config);
+                            return new $class($system, $selectedFiles);
                         });
     }
 
@@ -242,13 +226,13 @@ class FileManager extends \Nette\Application\UI\Control
      */
     protected function createComponentPlugin()
     {
-        $container = $this->systemContainer;
-        $config = $this->userConfig;
-        return new \Nette\Application\UI\Multiplier(function ($name) use ($container, $config) {
+        $system = $this->system;
+        $selectedFiles = $this->selectedFiles;
+        return new Multiplier(function ($name) use ($system, $selectedFiles) {
                             $namespace = __NAMESPACE__;
-                            $namespace .= "\\FileManager\Plugins";
+                            $namespace .= "\\FileManager\Application\Plugins";
                             $class = "$namespace\\$name";
-                            return new $class($container, $config);
+                            return new $class($system, $selectedFiles);
                         });
     }
 

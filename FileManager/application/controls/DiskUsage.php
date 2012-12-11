@@ -2,7 +2,7 @@
 
 namespace Ixtrum\FileManager\Application\Controls;
 
-class DiskUsage extends \Ixtrum\FileManager
+class DiskUsage extends \Ixtrum\FileManager\Application\Controls
 {
 
     public function render()

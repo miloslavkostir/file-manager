@@ -2,7 +2,7 @@
 
 namespace Ixtrum\FileManager\Application\Controls;
 
-class FileInfo extends \Ixtrum\FileManager
+class FileInfo extends \Ixtrum\FileManager\Application\Controls
 {
 
     public function render()

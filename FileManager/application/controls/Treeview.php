@@ -4,7 +4,7 @@ namespace Ixtrum\FileManager\Application\Controls;
 
 use Ixtrum\FileManager\Application\FileSystem\Finder;
 
-class Treeview extends \Ixtrum\FileManager
+class Treeview extends \Ixtrum\FileManager\Application\Controls
 {
 
     public function handleOpenDir($dir)
@@ -81,7 +81,7 @@ class Treeview extends \Ixtrum\FileManager
     {
         if ($this->system->parameters["cache"]) {
 
-            $path = $this->system->filesystem->getRealPath($this->system->parameters["uploadroot"]);
+            $path = realpath($this->system->parameters["uploadroot"]);
 
             $cacheData = $this->system->caching->getItem($path);
 

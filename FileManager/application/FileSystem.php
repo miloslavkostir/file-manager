@@ -64,7 +64,7 @@ class FileSystem
             if ($this->config["cache"]) {
 
                 $caching = new Caching($this->config);
-                $caching->deleteItem(array("content", $this->getRealPath($targetpath)));
+                $caching->deleteItem(array("content", realpath($targetpath)));
             }
 
             if (is_dir($actualpath . $filename)) {
@@ -72,7 +72,7 @@ class FileSystem
                 if ($this->config["cache"]) {
 
                     $caching->deleteItem(NULL, array("tags" => "treeview"));
-                    $caching->deleteItem(array('content', $this->getRealPath($targetpath)));
+                    $caching->deleteItem(array('content', realpath($targetpath)));
                 }
 
                 $dirinfo = $this->getFolderInfo(realpath($actualpath . $filename));
@@ -174,7 +174,7 @@ class FileSystem
         $folders = Finder::findDirectories('*')->from(realpath($actualpath . $filename));
         foreach ($folders as $folder) {
 
-            if ($folder->getRealPath() == $this->getRealPath($targetpath)) {
+            if ($folder->getRealPath() === realpath($targetpath)) {
                 $state = true;
             }
         }
@@ -211,8 +211,8 @@ class FileSystem
 
                         $caching = new Caching($this->config);
                         $caching->deleteItemsRecursive($actualpath . $filename);
-                        $caching->deleteItem(array("content", $this->getRealPath($actualpath)));
-                        $caching->deleteItem(array("content", $this->getRealPath($targetpath)));
+                        $caching->deleteItem(array("content", realpath($actualpath)));
+                        $caching->deleteItem(array("content", realpath($targetpath)));
                     }
 
                     if ($this->deleteFolder($actualpath . $filename)) {
@@ -233,8 +233,8 @@ class FileSystem
                     if ($this->config["cache"]) {
 
                         $caching = new Caching($this->config);
-                        $caching->deleteItem(array("content", $this->getRealPath($actualpath)));
-                        $caching->deleteItem(array("content", $this->getRealPath($targetpath)));
+                        $caching->deleteItem(array("content", realpath($actualpath)));
+                        $caching->deleteItem(array("content", realpath($targetpath)));
                     }
 
                     return true;
@@ -599,7 +599,7 @@ class FileSystem
                 if ($this->config["cache"]) {
 
                     $caching = new Caching($this->config);
-                    $caching->deleteItem(array("content", $this->getRealPath($path)));
+                    $caching->deleteItem(array("content", realpath($path)));
                 }
 
                 return true;
@@ -676,41 +676,6 @@ class FileSystem
     }
 
     /**
-     * Repair (back)slashes according to OS
-     *
-     * @param string $path
-     * @return string
-     */
-    public function getRealPath($path)
-    {
-        $os = strtoupper(substr(PHP_OS, 0, 3));
-        if ($os === "WIN") {
-            $path = str_replace("/", "\\", $path);
-        } else {
-            $path = str_replace("\\", "/", $path);
-        }
-
-        if (realpath($path)) {
-
-            $path = realpath($path);
-            if (is_dir($path)) {
-
-                if ($os === "WIN" && substr($path, -1) <> "\\") {
-                    $path .= "\\";
-                }
-
-                if ($os <> "WIN" && substr($path, -1) <> "/") {
-                    $path .= "/";
-                }
-            }
-
-            return $path;
-        } else {
-            throw new \Nette\InvalidArgumentException("Invalid path '$path' given!");
-        }
-    }
-
-    /**
      * Get root folder name
      *
      * @return string
@@ -782,23 +747,19 @@ class FileSystem
     }
 
     /**
-     * Check if realtive path is valid
+     * Check if path is valid and is located in uploadroot
      *
-     * @param string $dir
-     * @param string $file (optional)
-     * @return bool
+     * @param string $dir  Dirname as relative path
+     * @param string $file Filename
+     *
+     * @return boolean
      */
-    public function validPath($dir, $file = NULL)
+    public function validPath($dir, $file = null)
     {
-        $path = $this->getAbsolutePath($dir);
-        if ($file) {
-            $path .= $file;
-        }
-
-        if (file_exists($path)) {
+        $path = realpath($this->getAbsolutePath($dir . $file));
+        if (strpos($path, $this->config["uploadroot"]) === 0) {
             return true;
         }
-
         return false;
     }
 

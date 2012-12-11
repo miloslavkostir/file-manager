@@ -4,7 +4,7 @@ namespace Ixtrum\FileManager\Application\Controls;
 
 use Nette\Application\UI\Form;
 
-class ViewSelector extends \Ixtrum\FileManager
+class ViewSelector extends \Ixtrum\FileManager\Application\Controls
 {
 
     public function render()
@@ -26,11 +26,11 @@ class ViewSelector extends \Ixtrum\FileManager
         $form = new Form;
         $form->addSelect("view", null, $items)
                 ->setDefaultValue($this->view);
-        $form->onSuccess[] = $this->changeViewFormSubmitted;
+        $form->onSuccess[] = $this->changeViewFormSuccess;
         return $form;
     }
 
-    public function changeViewFormSubmitted($form)
+    public function changeViewFormSuccess($form)
     {
         $this->system->session->set("view", $form->values->view);
     }

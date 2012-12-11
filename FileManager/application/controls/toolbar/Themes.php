@@ -4,7 +4,7 @@ namespace Ixtrum\FileManager\Application\Controls;
 
 use Ixtrum\FileManager\Application\FileSystem\Finder;
 
-class Themes extends \Ixtrum\FileManager
+class Themes extends \Ixtrum\FileManager\Application\Controls
 {
 
     /**

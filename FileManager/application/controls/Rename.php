@@ -1,17 +1,11 @@
 <?php
 
-namespace Ixtrum\FileManager\Plugins;
+namespace Ixtrum\FileManager\Application\Controls;
 
 use Nette\Application\UI\Form;
 
-class Rename extends \Ixtrum\FileManager
+class Rename extends \Ixtrum\FileManager\Application\Plugins
 {
-
-    /** @var boolean */
-    public $contextPlugin = true;
-
-    /** @var string */
-    public $title = "Rename";
 
     public function render()
     {
@@ -39,12 +33,12 @@ class Rename extends \Ixtrum\FileManager
             ->setRequired("New name required.");
         $form->addHidden("orig_filename");
         $form->addSubmit("send", "OK");
-        $form->onSuccess[] = $this->renameFormSubmitted;
+        $form->onSuccess[] = $this->renameFormSuccess;
         $form->onError[] = $this->parent->parent->onFormError;
         return $form;
     }
 
-    public function renameFormSubmitted($form)
+    public function renameFormSuccess(Form $form)
     {
         $path = $this->system->filesystem->getAbsolutePath($this->getActualDir());
 
@@ -59,7 +53,7 @@ class Rename extends \Ixtrum\FileManager
         } else {
 
             $origPath = $path . $form->values->orig_filename;
-            if (is_dir($this->system->filesystem->getRealPath($origPath))) {
+            if (is_dir(realpath($origPath))) {
 
                 $new_filename = $this->system->filesystem->safeFoldername($form->values->new_filename);
                 $this->system->thumbs->deleteDirThumbs($origPath);
@@ -68,20 +62,20 @@ class Rename extends \Ixtrum\FileManager
 
                     $this->system->caching->deleteItem(array(
                         "content",
-                        $this->system->filesystem->getRealPath($path)
+                        realpath($path)
                     ));
                     $this->system->caching->deleteItemsRecursive($origPath);
                 }
             } else {
 
                 $new_filename = $this->system->filesystem->safeFilename($form->values->new_filename);
-                $this->system->thumbs->deleteThumb($this->system->filesystem->getRealPath($origPath));
+                $this->system->thumbs->deleteThumb(realpath($origPath));
 
                 if ($this->system->parameters["cache"]) {
 
                     $this->system->caching->deleteItem(array(
                         "content",
-                        $this->system->filesystem->getRealPath($path)
+                        realpath($path)
                     ));
                 }
             }

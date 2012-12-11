@@ -4,7 +4,7 @@ namespace Ixtrum\FileManager\Application\Controls;
 
 use Nette\Application\UI\Form;
 
-class Navigation extends \Ixtrum\FileManager
+class Navigation extends \Ixtrum\FileManager\Application\Controls
 {
 
     public function handleOpenDir($dir)
@@ -19,7 +19,7 @@ class Navigation extends \Ixtrum\FileManager
             $this->system->caching->deleteItem(null, array("tags" => "treeview"));
             $this->system->caching->deleteItem(array(
                 "content",
-                $this->system->filesystem->getRealPath($this->system->filesystem->getAbsolutePath($this->getActualDir()))
+                realpath($this->system->filesystem->getAbsolutePath($this->getActualDir()))
             ));
         }
     }
@@ -38,11 +38,11 @@ class Navigation extends \Ixtrum\FileManager
         $form->setTranslator($this->system->translator);
         $form->addText("location")
                 ->setDefaultValue($this->getActualDir());
-        $form->onSuccess[] = $this->locationFormSubmitted;
+        $form->onSuccess[] = $this->locationFormSuccess;
         return $form;
     }
 
-    public function locationFormSubmitted($form)
+    public function locationFormSuccess($form)
     {
         $this->setActualDir($form->values->location);
     }

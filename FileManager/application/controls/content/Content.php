@@ -5,7 +5,7 @@ namespace Ixtrum\FileManager\Application\Controls;
 use Nette\Application\Responses\FileResponse,
     Ixtrum\FileManager\Application\FileSystem\Finder;
 
-class Content extends \Ixtrum\FileManager
+class Content extends \Ixtrum\FileManager\Application\Controls
 {
 
     public function handleInfo()
@@ -72,7 +72,7 @@ class Content extends \Ixtrum\FileManager
             $zip = new \Ixtrum\FileManager\Application\Zip($this->system->parameters, $actualPath);
             $zip->addFiles($this->selectedFiles);
 
-            $key = $this->system->filesystem->getRealPath($actualPath);
+            $key = realpath($actualPath);
             if ($this->system->parameters["cache"]) {
                 $this->parent->parent->system->caching->deleteItem(array("content", $key));
             }
@@ -83,7 +83,7 @@ class Content extends \Ixtrum\FileManager
     {
         $this->system->session->set("order", $key);
 
-        $absPath = $this->system->filesystem->getRealPath($this->system->filesystem->getAbsolutePath($this->getActualDir()));
+        $absPath = realpath($this->system->filesystem->getAbsolutePath($this->getActualDir()));
         if ($this->system->parameters["cache"]) {
             $this->system->caching->deleteItem(array("content", $absPath));
         }
@@ -274,9 +274,7 @@ class Content extends \Ixtrum\FileManager
 
         if ($this->system->parameters["cache"] && $mask === "*") {
 
-            $absDir = $this->system->filesystem->getRealPath(
-                $this->system->filesystem->getAbsolutePath($dir)
-            );
+            $absDir = realpath($this->system->filesystem->getAbsolutePath($dir));
             $cacheData = $this->system->caching->getItem(array("content", $absDir));
 
             if (!$cacheData) {

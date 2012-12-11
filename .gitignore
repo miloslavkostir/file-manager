@@ -1,7 +1,6 @@
 /nbproject
-
 /data
-
-/plugins
-!plugins/plugins.txt
-/FileManager/data/
+/tests/temp/
+/sandbox/temp/
+/sandbox/ixtrum-res/
+/vendor/
