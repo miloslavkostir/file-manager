@@ -27,7 +27,7 @@ class Treeview extends \Ixtrum\FileManager\Application\Controls
 
             $html .= "<li>";
             $html .= '<span class="fm-droppable" data-move-url="' . $this->getComponent("control-content")->link("move") . '" data-targetdir="' . $superior . '/' . $key . '/' . '">';
-            $html .= '<a href="' . $this->link("openDir", "$superior/$key/") . '" class="treeview-folder fm-ajax fm-folder-icon" title="' . $this->system->filesystem->getRootName() . $superior . '/' . $key . '/">';
+            $html .= '<a href="' . $this->link("openDir", "$superior/$key/") . '" class="treeview-folder fm-ajax fm-folder-icon" title="' . $superior . '/' . $key . '/">';
             $html .= $key;
             $html .= '</a></span>';
 
