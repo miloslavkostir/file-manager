@@ -10,7 +10,7 @@
 <div class="file-manager">
     <div class="fm-adressbar">
         <div n:snippet="addressbar" class="fm-location">
-            {control control-navigation}
+            {control control-Navigation}
         </div>
         <div class="fm-refresh">
             <a n:href="refreshContent!" title="{_'Refresh content'}" class="fm-ajax">
@@ -18,7 +18,7 @@
             </a>
         </div>
         <div n:snippet="filter" class="fm-filter">
-            {control control-filter}
+            {control control-Filter}
         </div>
         <div class="fm-clear"></div>
     </div>
@@ -37,13 +37,13 @@
                 </li>
             {/ifset}
             {ifset $clipboard}
-                {control control-clipboard}
+                {control control-Clipboard}
             {/ifset}
             <li class="fm-theme-roller">
-                {control control-themes}
+                {control control-Themes}
             </li>
             <li class="fm-view-roller">
-                {control control-viewSelector}
+                {control control-ViewSelector}
             </li>
         </ul>
     </div>
@@ -66,7 +66,7 @@
     </div>
     <div class="fm-body">
             <div n:snippet="treeview" class="fm-treeview">
-                {control control-treeview}
+                {control control-Treeview}
             </div>
             <div class="fm-content">
                 <div n:snippet="plugin">
@@ -77,17 +77,17 @@
                 <div n:snippet="content">
                     {ifset $newFolder}{control control-NewFolder}{/ifset}
                     {ifset $rename}{control control-Rename}{/ifset}
-                    {control control-content}
+                    {control control-Content}
                 </div>
             </div>
     </div>
     <div class="fm-info-bar">
         <div n:snippet="diskusage" class="fm-disk-usage">
-            {control control-diskUsage}
+            {control control-DiskUsage}
         </div>
         <div n:snippet="fileinfo" class="fm-file-info">
             {ifset $fileinfo}
-                {control control-fileInfo}
+                {control control-FileInfo}
             {/ifset}
         </div>
         <div n:ifset="$fileInfoPlugins" class="fm-file-info-plugins">
