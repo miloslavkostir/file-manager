@@ -450,7 +450,7 @@ class FileSystem
      */
     public function filesize($path)
     {
-        $filesize = new FileSystem\Filesize($path);
+        $filesize = new FileSystem\FileSize($path);
 
         $return = $filesize->sizeCurl();
         if ($return) {
