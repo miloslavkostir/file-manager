@@ -2,7 +2,11 @@
     <li><h2>{_'Disk usage'}</h2></li>
     <li>
         <div class="fm-disk-status">
-            <span style="width: {$sizeinfo['percentused']}%;"></span>
+            {if $sizeinfo['percentused'] > 100}
+                <span style="width: 100%;"></span>
+            {else}
+                <span style="width: {$sizeinfo['percentused']}%;"></span>
+            {/if}
         </div>
     </li>
     <li>{_'Used'}: <strong>{$sizeinfo['usedsize']|bytes}</strong></li>
