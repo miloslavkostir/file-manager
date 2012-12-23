@@ -145,7 +145,7 @@ class FileSystem
 
             if (( $file != "." ) && ( $file != '..' )) {
 
-                if (is_dir("$dst/$file")) {
+                if (is_dir("$src/$file")) {
                     $this->copyFolder("$src/$file", "$dst/$file");
                 } else {
                     if (!$this->copyFile("$src/$file", "$dst/$file")) {
