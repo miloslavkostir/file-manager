@@ -160,23 +160,16 @@ class FileManager extends \Nette\Application\UI\Control
         }
 
         // Get plugins
-        if ($this->system->parameters["plugins"]) {
+        $this->template->toolbarPlugins = array();
+        $this->template->fileInfoPlugins = array();
 
-            $toolbarPlugins = $fileInfoPlugins = array();
-            foreach ($this->system->parameters["plugins"] as $plugin) {
-                if ($plugin["toolbarPlugin"]) {
-                    $toolbarPlugins[] = $plugin;
-                }
-                if ($plugin["fileInfoPlugin"]) {
-                    $fileInfoPlugins[] = $plugin;
-                }
-            }
+        foreach ($this->system->parameters["plugins"] as $plugin) {
 
-            if (!empty($toolbarPlugins)) {
-                $this->template->toolbarPlugins = $toolbarPlugins;
+            if (in_array("toolbar", $plugin["integration"])) {
+                $this->template->toolbarPlugins[] = $plugin;
             }
-            if (!empty($fileInfoPlugins)) {
-                $this->template->fileInfoPlugins = $fileInfoPlugins;
+            if (in_array("fileinfo", $plugin["integration"])) {
+                $this->template->fileInfoPlugins[] = $plugin;
             }
         }
 

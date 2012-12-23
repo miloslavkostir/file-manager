@@ -177,16 +177,12 @@ class Content extends \Ixtrum\FileManager\Application\Controls
         // Load plugins
         if ($this->system->parameters["plugins"]) {
 
-            $contextPlugins = array();
+            $this->template->plugins = array();
             foreach ($this->system->parameters["plugins"] as $plugin) {
 
-                if ($plugin["contextPlugin"]) {
-                    $contextPlugins[] = $plugin;
+                if (in_array("context", $plugin["integration"])) {
+                    $this->template->plugins[] = $plugin;
                 }
-            }
-
-            if ($contextPlugins) {
-                $this->template->plugins = $contextPlugins;
             }
         }
 

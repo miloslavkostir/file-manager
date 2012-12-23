@@ -29,13 +29,13 @@
                     <span>{_'New folder'}</span>
                 </a>
             </li>
-            {ifset $toolbarPlugins}
-                <li n:foreach="$toolbarPlugins as $plugin">
+            {foreach $toolbarPlugins as $plugin}
+                <li>
                     <a n:href="runPlugin!, $plugin['name']" class="fm-ajax fm-toolbar-item">
                         <span>{$plugin['title']}</span>
                     </a>
                 </li>
-            {/ifset}
+            {/foreach}
             {ifset $clipboard}
                 {control control-Clipboard}
             {/ifset}
@@ -90,11 +90,13 @@
                 {control control-FileInfo}
             {/ifset}
         </div>
-        <div n:ifset="$fileInfoPlugins" class="fm-file-info-plugins">
-            <div n:foreach="$fileInfoPlugins as $plugin" class="fm-file-info-plugin">
-                {var $pluginName = $plugin["name"]}
-                {control plugin-$pluginName}
-            </div>
+        <div class="fm-file-info-plugins">
+            {foreach $fileInfoPlugins as $plugin}
+                <div class="fm-file-info-plugin">
+                    {var $pluginName = $plugin["name"]}
+                    {control plugin-$pluginName}
+                </div>
+            {/foreach}
         </div>
     </div>
 </div>

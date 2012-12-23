@@ -2,7 +2,8 @@
 
 namespace Ixtrum\FileManager\Application;
 
-use Ixtrum\FileManager\Application\FileSystem\Finder;
+use Ixtrum\FileManager\Application\FileSystem\Finder,
+    Nette\Utils\Json;
 
 final class Loader extends \Nette\DI\Container
 {
@@ -48,7 +49,7 @@ final class Loader extends \Nette\DI\Container
         $config = array_merge($defaultConfig["parameters"], $config);
 
         // Get plugins
-        $config["plugins"] = $this->getPlugins($config["appDir"] . $config["pluginDir"], new Caching($config));
+        $config["plugins"] = $this->getPlugins($config["appDir"] . $config["pluginDir"]);
 
         // Canonicalize uploadroot
         $config["uploadroot"] = realpath($config["uploadroot"]);
@@ -126,79 +127,22 @@ final class Loader extends \Nette\DI\Container
     /**
      * Get plugins
      *
-     * @param string                                  $pluginDir Plugins directory
-     * @param \Ixtrum\FileManager\Application\Caching $cache     Cache object
+     * @param string $pluginDir Plugins directory
      *
      * @return array
      */
-    public function getPlugins($pluginDir, \Ixtrum\FileManager\Application\Caching $cache)
+    public function getPlugins($pluginDir)
     {
-        $files = Finder::findFiles("*.php")->from($pluginDir);
+        $files = Finder::findFiles("plugin.json")->from($pluginDir);
         $plugins = array();
 
         foreach ($files as $file) {
 
-            $filePath = $file->getRealPath();
-            $cacheData = $cache->getItem(array("plugins", $filePath));
-
-            if ($cacheData) {
-                $plugins[$filePath] = $cacheData;
-            } else {
-
-                $php_code = file_get_contents($filePath);
-                $classes = $this->get_php_classes($php_code);
-                $class = $classes[0];
-
-                require_once($filePath);
-                $vars = get_class_vars("\Ixtrum\FileManager\Application\Plugins\\$class");
-
-                $plugins[$filePath]["name"] = $class;
-                $plugins[$filePath]["title"] = $vars["title"];
-                $plugins[$filePath]["toolbarPlugin"] = false;
-                $plugins[$filePath]["contextPlugin"] = false;
-                $plugins[$filePath]["fileInfoPlugin"] = false;
-
-                if (isset($vars["toolbarPlugin"])) {
-                    $plugins[$filePath]["toolbarPlugin"] = $vars["toolbarPlugin"];
-                }
-                if (isset($vars["contextPlugin"])) {
-                    $plugins[$filePath]["contextPlugin"] = $vars["contextPlugin"];
-                }
-                if (isset($vars["fileInfoPlugin"])) {
-                    $plugins[$filePath]["fileInfoPlugin"] = $vars["fileInfoPlugin"];
-                }
-
-                $cache->saveItem(array("plugins", $filePath), $plugins[$filePath], array(\Nette\Caching\Cache::FILES => $filePath));
-            }
+            $configPath = $file->getRealPath();
+            $plugins[$configPath] = Json::decode(file_get_contents($configPath), 1);
         }
 
         return $plugins;
-    }
-
-    /**
-     * Get classes from PHP code
-     *
-     * @internal
-     * @param string $php_code
-     * @return array
-     */
-    private function get_php_classes($php_code)
-    {
-        $classes = array();
-        $tokens = token_get_all($php_code);
-        $count = count($tokens);
-        for ($i = 2; $i < $count; $i++) {
-
-            if ($tokens[$i - 2][0] == T_CLASS
-                    && $tokens[$i - 1][0] == T_WHITESPACE
-                    && $tokens[$i][0] == T_STRING) {
-
-                $class_name = $tokens[$i][1];
-                $classes[] = $class_name;
-            }
-        }
-
-        return $classes;
     }
 
     /**
