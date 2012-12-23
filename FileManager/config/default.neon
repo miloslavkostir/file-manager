@@ -1,5 +1,4 @@
 parameters:
-	syncResDir: false
 	uploadroot:
 	cache: true
 	cacheStorage: FileStorage

@@ -3,6 +3,7 @@
 namespace Ixtrum;
 
 use Ixtrum\FileManager\Application\FileSystem\Finder,
+    Ixtrum\FileManager\Application\Resources,
     Nette\Application\UI\Multiplier;
 
 class FileManager extends \Nette\Application\UI\Control
@@ -237,6 +238,18 @@ class FileManager extends \Nette\Application\UI\Control
     public function getDiskInfo()
     {
         return $this->system->filesystem->diskSizeInfo();
+    }
+
+    /**
+     * Synchronize all resources such as CSS, JS, images from 'resources'
+     * directory located in file manager root to defined resource directory
+     * located in web root.
+     */
+    public function syncResources()
+    {
+        $this->system->filesystem->copyFolder(
+                realpath($this->system->parameters["appDir"] . "/resources/"), $this->system->parameters["wwwDir"] . $this->system->parameters["resDir"]
+        );
     }
 
 }
