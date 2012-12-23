@@ -149,6 +149,7 @@ final class Loader extends \Nette\DI\Container
                 $classes = $this->get_php_classes($php_code);
                 $class = $classes[0];
 
+                require_once($filePath);
                 $vars = get_class_vars("\Ixtrum\FileManager\Application\Plugins\\$class");
 
                 $plugins[$filePath]["name"] = $class;
