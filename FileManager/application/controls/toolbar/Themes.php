@@ -14,14 +14,6 @@ class Themes extends \Ixtrum\FileManager\Application\Controls
     {
         $this->template->setFile(__DIR__ . "/Themes.latte");
         $this->template->setTranslator($this->system->translator);
-
-        $theme = $this->system->session->get("theme");
-        if (empty($theme)) {
-            $this->getComponent("themeForm")->setDefaults(array("theme" => "default"));
-        } else {
-            $this->getComponent("themeForm")->setDefaults(array("theme" => $theme));
-        }
-
         $this->template->render();
     }
 
@@ -32,10 +24,16 @@ class Themes extends \Ixtrum\FileManager\Application\Controls
      */
     protected function createComponentThemeForm()
     {
+        $default = $this->system->session->get("theme");
+        if (empty($default)) {
+            $default = "default";
+        }
+
         $themeDir = $this->system->parameters["wwwDir"] . $this->system->parameters["resDir"] . "themes";
         $form = new \Nette\Application\UI\Form;
         $form->addSelect("theme", null, $this->loadThemes($themeDir))
-                ->setAttribute("onchange", "submit()");
+                ->setAttribute("onchange", "submit()")
+                ->setDefaultValue($default);
         $form->onSuccess[] = $this->themeFormSuccess;
         return $form;
     }
