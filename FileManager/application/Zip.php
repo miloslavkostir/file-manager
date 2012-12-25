@@ -49,9 +49,7 @@ class Zip
     {
         $zip = new \ZipArchive;
         $fileSystem = new FileSystem($this->config);
-
-        $name = $fileSystem->checkDuplName($this->targetDir, Date("Ymd_H-m-s") . ".zip");
-        $zipPath = "$this->targetDir/$name";
+        $zipPath = $fileSystem->checkDuplName($this->targetDir . Date("Ymd_H-m-s") . ".zip");
 
         if ($zip->open($zipPath, \ZipArchive::CREATE)) {
 

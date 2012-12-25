@@ -43,7 +43,7 @@ class Finder extends \Nette\Utils\Finder
                             return;
                         }
                         $fileSystem = new \Ixtrum\FileManager\Application\FileSystem(array());
-                        return $fileSystem->filesize($f2->getPathName()) - $fileSystem->filesize($f1->getPathName());
+                        return $fileSystem->getSize($f2->getPathName()) - $fileSystem->getSize($f1->getPathName());
                     };
                 break;
             default:

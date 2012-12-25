@@ -2,13 +2,13 @@
     <li><h2>{_'Disk usage'}</h2></li>
     <li>
         <div class="fm-disk-status">
-            {if $sizeinfo['percentused'] > 100}
+            {if $usedPercent > 100}
                 <span style="width: 100%;"></span>
             {else}
-                <span style="width: {$sizeinfo['percentused']}%;"></span>
+                <span style="width: {$usedPercent}%;"></span>
             {/if}
         </div>
     </li>
-    <li>{_'Used'}: <strong>{$sizeinfo['usedsize']|bytes}</strong></li>
-    <li>{_'Available'}: <strong>{$sizeinfo['spaceleft']|bytes}</strong></li>
+    <li>{_'Used'}: <strong>{$usedSize|bytes}</strong></li>
+    <li>{_'Available'}: <strong>{$spaceLeft|bytes}</strong></li>
 </ul>

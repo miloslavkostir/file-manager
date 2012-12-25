@@ -3,7 +3,6 @@
 namespace Ixtrum\FileManager\Application;
 
 use Nette\Image,
-    Nette\Diagnostics\Debugger,
     Ixtrum\FileManager\Application\FileSystem\Finder;
 
 class Thumbs
@@ -66,37 +65,28 @@ class Thumbs
             return Image::fromFile($thumbPath);
         } else {
 
-            $filesystem = new FileSystem($this->config);
-            $disksize = $filesystem->diskSizeInfo();
-
-            if ($disksize["spaceleft"] > 50) {
-
-                $status = true;
-                if (function_exists("exec")) {
-                    exec("convert -version", $results, $status);
-                }
-
-                if (class_exists("\Nette\ImageMagick") && !$status) {
-                    $image = new \Nette\ImageMagick($path);
-                } elseif (class_exists("\Imagick")) {
-                    $thumb = new \Imagick($path);
-                    $thumb->resizeImage(96, NULL, \Imagick::FILTER_LANCZOS, 1);
-                    $thumb->writeImage($thumbPath);
-                    $thumb->destroy();
-
-                    return Image::fromFile($path);
-                } else {
-                    $image = Image::fromFile($path);
-                }
-
-                $image->resize(96, NULL);
-                $image->save($thumbPath, 80);
-
-                return $image;
-            } else {
-                Debugger::fireLog("Thumb can not be created, there is no free space on disk.", Debugger::WARNING);
-                return Image::fromBlank(50, 25);
+            $status = true;
+            if (function_exists("exec")) {
+                exec("convert -version", $results, $status);
             }
+
+            if (class_exists("\Nette\ImageMagick") && !$status) {
+                $image = new \Nette\ImageMagick($path);
+            } elseif (class_exists("\Imagick")) {
+                $thumb = new \Imagick($path);
+                $thumb->resizeImage(96, null, \Imagick::FILTER_LANCZOS, 1);
+                $thumb->writeImage($thumbPath);
+                $thumb->destroy();
+
+                return Image::fromFile($path);
+            } else {
+                $image = Image::fromFile($path);
+            }
+
+            $image->resize(96, NULL);
+            $image->save($thumbPath, 80);
+
+            return $image;
         }
     }
 

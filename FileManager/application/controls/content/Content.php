@@ -18,12 +18,10 @@ class Content extends \Ixtrum\FileManager\Application\Controls
         foreach ($this->selectedFiles as $file) {
 
             $this->system->session->add(
-                    "clipboard",
-                    $this->getActualDir() . $file,
-                    array(
-                        "action" => "copy",
-                        "actualdir" => $this->getActualDir(),
-                        "filename" => $file
+                    "clipboard", $this->getActualDir() . $file, array(
+                "action" => "copy",
+                "actualdir" => $this->getActualDir(),
+                "filename" => $file
                     )
             );
         }
@@ -34,12 +32,10 @@ class Content extends \Ixtrum\FileManager\Application\Controls
         foreach ($this->selectedFiles as $file) {
 
             $this->system->session->add(
-                    "clipboard",
-                    $this->getActualDir() . $file,
-                    array(
-                        "action" => "cut",
-                        "actualdir" => $this->getActualDir(),
-                        "filename" => $file
+                    "clipboard", $this->getActualDir() . $file, array(
+                "action" => "cut",
+                "actualdir" => $this->getActualDir(),
+                "filename" => $file
                     )
             );
         }
@@ -49,16 +45,33 @@ class Content extends \Ixtrum\FileManager\Application\Controls
     {
         if ($this->system->parameters["readonly"]) {
             $this->parent->parent->flashMessage($this->system->translator->translate("Read-only mode enabled!"), "warning");
-        } else {
+            return;
+        }
 
-            foreach ($this->selectedFiles as $file) {
+        foreach ($this->selectedFiles as $file) {
 
-                if ($this->system->filesystem->delete($this->getActualDir(), $file)) {
-                    $this->parent->parent->flashMessage($this->system->translator->translate("Successfuly deleted - %s", $file), "info");
-                } else {
-                    $this->parent->parent->flashMessage($this->system->translator->translate("An error occured - %s", $file), "error");
-                }
+            $path = $this->getAbsolutePath($this->getActualDir()) . DIRECTORY_SEPARATOR . $file;
+            if (!file_exists($path)) {
+                $this->parent->parent->flashMessage($this->system->translator->translate("'%s' already does not exist!", $file), "warning");
+                continue;
             }
+
+            if (!$this->system->filesystem->delete($path)) {
+                $this->parent->parent->flashMessage($this->system->translator->translate("It's not possible to delete '%s'!", $file), "warning");
+                continue;
+            }
+
+            // Clear cache if needed
+            if ($this->system->parameters["cache"]) {
+
+                if (is_dir($path)) {
+                    $this->system->caching->deleteItemsRecursive($path);
+                }
+                $this->system->caching->deleteItem(null, array("tags" => "treeview"));
+                $this->system->caching->deleteItem(array("content", dirname($path)));
+            }
+
+            $this->parent->parent->flashMessage($this->system->translator->translate("'%s' successfuly deleted.", $file));
         }
     }
 
@@ -66,26 +79,23 @@ class Content extends \Ixtrum\FileManager\Application\Controls
     {
         if ($this->system->parameters["readonly"]) {
             $this->parent->parent->flashMessage($this->system->translator->translate("Read-only mode enabled!"), "warning");
-        } else {
+            return;
+        }
 
-            $actualPath = $this->system->filesystem->getAbsolutePath($this->getActualDir());
-            $zip = new \Ixtrum\FileManager\Application\Zip($this->system->parameters, $actualPath);
-            $zip->addFiles($this->selectedFiles);
+        $path = $this->getAbsolutePath($this->getActualDir());
+        $zip = new \Ixtrum\FileManager\Application\Zip($this->system->parameters, $path);
+        $zip->addFiles($this->selectedFiles);
 
-            $key = realpath($actualPath);
-            if ($this->system->parameters["cache"]) {
-                $this->parent->parent->system->caching->deleteItem(array("content", $key));
-            }
+        if ($this->system->parameters["cache"]) {
+            $this->system->caching->deleteItem(array("content", $path));
         }
     }
 
     public function handleOrderBy($key)
     {
         $this->system->session->set("order", $key);
-
-        $absPath = realpath($this->system->filesystem->getAbsolutePath($this->getActualDir()));
         if ($this->system->parameters["cache"]) {
-            $this->system->caching->deleteItem(array("content", $absPath));
+            $this->system->caching->deleteItem(array("content", $this->getAbsolutePath($this->getActualDir())));
         }
     }
 
@@ -99,9 +109,9 @@ class Content extends \Ixtrum\FileManager\Application\Controls
         if (count($this->selectedFiles) === 1) {
 
             $file = $this->selectedFiles[0];
-            if ($this->system->filesystem->validPath($this->getActualDir(), $file)) {
+            if ($this->isPathValid($this->getActualDir(), $file)) {
 
-                $path = $this->system->filesystem->getAbsolutePath($this->getActualDir()) . $file;
+                $path = $this->getAbsolutePath($this->getActualDir()) . DIRECTORY_SEPARATOR . $file;
                 $this->presenter->sendResponse(new FileResponse($path, $file, null));
             } else {
                 $this->parent->parent->flashMessage($this->system->translator->translate("File %s not found!", $file), "warning");
@@ -120,11 +130,11 @@ class Content extends \Ixtrum\FileManager\Application\Controls
         $this->setActualDir($parentDir);
     }
 
-    public function handleMove($targetdir = "", $filename = "")
+    public function handleMove($targetDir = null, $filename = null)
     {
         // if sended by AJAX
-        if (!$targetdir) {
-            $targetdir = $this->presenter->context->httpRequest->getQuery("targetdir");
+        if (!$targetDir) {
+            $targetDir = $this->presenter->context->httpRequest->getQuery("targetdir");
         }
 
         if (!$filename) {
@@ -133,18 +143,15 @@ class Content extends \Ixtrum\FileManager\Application\Controls
 
         if ($this->system->parameters["readonly"]) {
             $this->parent->parent->flashMessage($this->system->translator->translate("Read-only mode enabled!"), "warning");
-        } else {
+            return;
+        }
 
-            if ($targetdir && $filename) {
+        if ($targetDir && $filename) {
 
-                if ($this->system->filesystem->move($this->getActualDir(), $targetdir, $filename)) {
-
-                    $this->presenter->payload->result = "success";
-                    $this->parent->parent->flashMessage($this->system->translator->translate("Successfuly moved - %s", $filename), "info");
-                } else {
-                    $this->parent->parent->flashMessage($this->system->translator->translate("An error occured. File %s was not moved.", $filename), "error");
-                }
-            }
+            $sourcePath = $this->getAbsolutePath($this->getActualDir()) . DIRECTORY_SEPARATOR . $filename;
+            $targetPath = $this->getAbsolutePath($targetDir) . DIRECTORY_SEPARATOR . $filename;
+            $this->move($sourcePath, $targetPath);
+            $this->presenter->payload->result = "success";
         }
     }
 
@@ -153,10 +160,9 @@ class Content extends \Ixtrum\FileManager\Application\Controls
         $this->setActualDir($dir);
     }
 
-    public function handleShowThumb($dir, $file)
+    public function handleShowThumb($dir, $fileName)
     {
-        $path = $this->system->filesystem->getAbsolutePath($dir) . $file;
-        $thumb = $this->system->thumbs->getThumbFile($path);
+        $thumb = $this->getAbsolutePath($dir) . DIRECTORY_SEPARATOR . $fileName;
         $thumb->send();
     }
 
@@ -165,10 +171,7 @@ class Content extends \Ixtrum\FileManager\Application\Controls
         $this->template->setFile(__DIR__ . "/$this->view.latte");
         $this->template->setTranslator($this->system->translator);
         $this->template->files = $this->loadData(
-            $this->getActualDir(),
-            $this->system->session->get("mask"),
-            $this->view,
-            $this->system->session->get("order")
+                $this->getActualDir(), $this->system->session->get("mask"), $this->view, $this->system->session->get("order")
         );
         $this->template->actualdir = $this->getActualDir();
         $this->template->rootname = $this->system->filesystem->getRootName();
@@ -203,10 +206,8 @@ class Content extends \Ixtrum\FileManager\Application\Controls
      */
     private function getDirectoryContent($dir, $mask, $view, $order)
     {
-        $absolutePath = $this->system->filesystem->getAbsolutePath($dir);
-
         $files = Finder::find($mask)
-                ->in($absolutePath)
+                ->in($this->getAbsolutePath($dir))
                 ->orderBy($order);
 
         $dir_array = array();
@@ -219,7 +220,7 @@ class Content extends \Ixtrum\FileManager\Application\Controls
             if (!is_dir($file->getPath() . "/$name")) {
 
                 $dir_array[$name]["type"] = "file";
-                $dir_array[$name]["size"] = $this->system->filesystem->filesize($file->getPathName());
+                $dir_array[$name]["size"] = $this->system->filesystem->getSize($file->getPathName());
                 $filetype = strtolower(pathinfo($name, PATHINFO_EXTENSION));
                 $dir_array[$name]["filetype"] = $filetype;
 
@@ -270,7 +271,7 @@ class Content extends \Ixtrum\FileManager\Application\Controls
 
         if ($this->system->parameters["cache"] && $mask === "*") {
 
-            $absDir = realpath($this->system->filesystem->getAbsolutePath($dir));
+            $absDir = $this->getAbsolutePath($dir);
             $cacheData = $this->system->caching->getItem(array("content", $absDir));
 
             if (!$cacheData) {
@@ -284,6 +285,54 @@ class Content extends \Ixtrum\FileManager\Application\Controls
         } else {
             return $this->getDirectoryContent($dir, $mask, $view, $order);
         }
+    }
+
+    /**
+     * Move file/folder
+     *
+     * @param string $source Source path
+     * @param string $target Target path
+     *
+     * @todo it can be in file manager class, accessible fot other controls
+     */
+    private function move($source, $target)
+    {
+        // Validate free space
+        if ($this->getFreeSpace() < $this->system->filesystem->getSize($source)) {
+            $this->flashMessage($this->system->translator->translate("Disk full, can not continue!", "warning"));
+            return;
+        }
+
+        // Target folder can not be it's subfolder
+        if (is_dir($source) && $this->system->filesystem->isSubFolder($source, $target)) {
+            $this->flashMessage($this->system->translator->translate("Target folder is it's subfolder, can not continue!", "warning"));
+            return;
+        }
+
+        $this->system->filesystem->copy($source, $target);
+        if (!$this->system->filesystem->delete($source)) {
+            $this->flashMessage($this->system->translator->translate("System was is not able to remove some original files.", "warning"));
+        }
+
+        // Remove thumbs
+        if (is_dir($source)) {
+            $this->system->thumbs->deleteDirThumbs($source);
+        } else {
+            $this->system->thumbs->deleteThumb($source);
+        }
+
+        // Clear cache if needed
+        if ($this->system->parameters["cache"]) {
+
+            if (is_dir($source)) {
+                $this->system->caching->deleteItemsRecursive($source);
+            }
+            $this->system->caching->deleteItem(null, array("tags" => "treeview"));
+            $this->system->caching->deleteItem(array("content", dirname($source)));
+            $this->system->caching->deleteItem(array("content", dirname($target)));
+        }
+
+        $this->parent->parent->flashMessage($this->system->translator->translate("Succesfully moved."));
     }
 
 }

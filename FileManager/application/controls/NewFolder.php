@@ -30,41 +30,41 @@ class NewFolder extends \Ixtrum\FileManager\Application\Plugins
     {
         if ($this->system->parameters["readonly"]) {
             $this->parent->parent->flashMessage($this->system->translator->translate("Read-only mode enabled!"), "warning");
-        } else {
-
-            if ($this->system->filesystem->validPath($this->getActualDir())) {
-
-                $foldername = $this->system->filesystem->safeFoldername($form->values->name);
-                if (!$foldername) {
-                    $this->parent->parent->flashMessage($this->system->translator->translate("Folder name '%s' can not be used - not allowed characters used.", $form->values->name), "warning");
-                } else {
-
-                    $target_dir = $this->system->filesystem->getAbsolutePath($this->getActualDir()) . $foldername;
-                    if (is_dir($target_dir)) {
-                        $this->parent->parent->flashMessage($this->system->translator->translate("Target name %s already exists!", $foldername), "warning");
-                    } else {
-
-                        if ($this->system->filesystem->mkdir($target_dir)) {
-
-                            if ($this->system->parameters["cache"]) {
-
-                                $this->system->caching->deleteItem(array(
-                                    "content",
-                                    realpath($this->system->filesystem->getAbsolutePath($this->getActualDir()))
-                                ));
-                                $this->system->caching->deleteItem(NULL, array("tags" => "treeview"));
-                            }
-
-                            $this->parent->parent->flashMessage($this->system->translator->translate("Folder %s successfully created", $foldername), "info");
-                        } else {
-                            $this->parent->parent->flashMessage($this->system->translator->translate("An unkonwn error occurred during folder %s creation", $foldername), "info");
-                        }
-                    }
-                }
-            } else {
-                $this->parent->parent->flashMessage($this->system->translator->translate("Folder %s already does not exist!", $this->getActualDir()), "warning");
-            }
+            return;
         }
+
+        if (!$this->isPathValid($this->getActualDir())) {
+            $this->parent->parent->flashMessage($this->system->translator->translate("Folder %s already does not exist!", $this->getActualDir()), "warning");
+            return;
+        }
+
+        $foldername = $this->system->filesystem->safeFoldername($form->values->name);
+        if (!$foldername) {
+            $this->parent->parent->flashMessage($this->system->translator->translate("Folder name '%s' can not be used, not allowed characters used!", $form->values->name), "warning");
+            return;
+        }
+
+        $targetPath = $this->getAbsolutePath($this->getActualDir()) . DIRECTORY_SEPARATOR . $foldername;
+        if (is_dir($targetPath)) {
+            $this->parent->parent->flashMessage($this->system->translator->translate("Destination folder '%s' already exists!", $foldername), "warning");
+            return;
+        }
+
+        if (!$this->system->filesystem->mkdir($targetPath)) {
+            $this->parent->parent->flashMessage($this->system->translator->translate("An unkonwn error occurred during folder %s creation.", $foldername));
+            return;
+        }
+
+        if ($this->system->parameters["cache"]) {
+
+            $this->system->caching->deleteItem(array(
+                "content",
+                $this->getAbsolutePath($this->getActualDir())
+            ));
+            $this->system->caching->deleteItem(null, array("tags" => "treeview"));
+        }
+
+        $this->parent->parent->flashMessage($this->system->translator->translate("Folder '%s' successfully created.", $foldername));
     }
 
 }

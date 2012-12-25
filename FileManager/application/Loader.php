@@ -103,7 +103,7 @@ final class Loader extends \Nette\DI\Container
      */
     protected function createServiceFilesystem()
     {
-        return new FileSystem($this->parameters);
+        return new FileSystem;
     }
 
     /**

@@ -2,118 +2,73 @@
 
 namespace Ixtrum\FileManager\Application;
 
-use Ixtrum\FileManager\Application\FileSystem\Finder,
-    Nette\Diagnostics\Debugger;
+use Ixtrum\FileManager\Application\FileSystem\Finder;
 
 class FileSystem
 {
 
-    /** @var array */
-    private $config;
-
     /**
-     * Constructor
+     * Check if file/folder exists and give alternative path name
      *
-     * @param array $config application configuration
-     */
-    public function __construct($config)
-    {
-        $this->config = $config;
-    }
-
-    /**
-     * Check if file exists and give alternative name
-     *
-     * @param  string  actual dir (absolute path)
-     * @param  string  filename
+     * @param string Path to file/folder
      *
      * @return string
      */
-    public function checkDuplName($targetpath, $filename)
+    public function checkDuplName($path)
     {
-        if (file_exists($targetpath . $filename)) {
+        if (file_exists($path)) {
 
+            $filename = pathinfo($path, PATHINFO_BASENAME);
+            $dirname = pathinfo($path, PATHINFO_DIRNAME);
             $i = 1;
-            while (file_exists($targetpath . $i . "_$filename")) {
+            while (file_exists("$dirname/$i" . "_$filename")) {
                 $i++;
             }
-
-            return $i . "_$filename";
+            return "$dirname/$i" . "_$filename";
         } else {
-            return $filename;
+            return $path;
         }
     }
 
     /**
-     * Copy file or folder from disk
+     * Copy file/folder from one location to another location
      *
-     * @param  string  actual dir (relative path)
-     * @param  string  target dir (relative path)
-     * @param  string  filename
-     * @return bool
+     * @param string  $source      Source
+     * @param string  $destination Destination
+     * @param boolean $overwrite   Overwrite file/folder if exist
      */
-    public function copy($actualdir, $targetdir, $filename)
+    public function copy($source, $destination, $overwrite = false)
     {
-        $actualpath = $this->getAbsolutePath($actualdir);
-        $targetpath = $this->getAbsolutePath($targetdir);
+        if (!$overwrite) {
+            $destination = $this->checkDuplName($destination);
+        }
 
-        if (is_writable($targetpath)) {
+        if (is_dir($source)) {
 
-            $disksize = $this->diskSizeInfo();
-
-            if ($this->config["cache"]) {
-
-                $caching = new Caching($this->config);
-                $caching->deleteItem(array("content", realpath($targetpath)));
+            // Create destination folder if not exists
+            if (!is_dir($destination)) {
+                $this->mkdir($destination);
             }
 
-            if (is_dir($actualpath . $filename)) {
+            $files = Finder::find("*")->in($source);
+            foreach ($files as $file) {
 
-                if ($this->config["cache"]) {
-
-                    $caching->deleteItem(NULL, array("tags" => "treeview"));
-                    $caching->deleteItem(array('content', realpath($targetpath)));
-                }
-
-                $dirinfo = $this->getFolderInfo(realpath($actualpath . $filename));
-                if ($disksize["spaceleft"] < $dirinfo["size"]) {
-                    return false;
-                } else {
-
-                    if (!$this->isSubFolder($actualpath, $targetpath, $filename)) {
-
-                        if (!$this->copyFolder($actualpath . $filename, $targetpath . $this->checkDuplName($targetpath, $filename))) {
-                            return false;
-                        };
-                    }
-                    return false;
-                }
-            } else {
-
-                if ($this->copyFile($actualpath . $filename, $targetpath . $this->checkDuplName($targetpath, $filename))) {
-                    return true;
-                }
-                return false;
+                $filename = $file->getFilename();
+                $this->copy($file->getRealPath(), "$destination/$filename", $overwrite);
             }
         } else {
-            return false;
+            $this->copyFile($source, $destination);
         }
     }
 
     /**
      * Copy file (chunked)
      *
-     * @param string $src (absolute path)
-     * @param string $dest (absolute path)
-     * @return integer bytes written
-     * @return bool
+     * @param string $src  Source file
+     * @param string $dest Destination file
      */
-    public function copyFile($src, $dest)
+    private function copyFile($src, $dest)
     {
-        if (!$this->validateFileSize($src)) {
-            return false;
-        }
-
         $buffer_size = 1048576;
         $ret = 0;
         $fin = fopen($src, "rb");
@@ -125,175 +80,34 @@ class FileSystem
 
         fclose($fin);
         fclose($fout);
-
-        return true;
     }
 
     /**
-     * Copy folder recursively
+     * Check if destination folder is located in it's sub-folder
      *
-     * @param  string  actual dir (absolute path)
-     * @param  string  target dir (absolute path)
-     * @return bool
-     */
-    public function copyFolder($src, $dst)
-    {
-        $dir = opendir($src);
-        $this->mkdir($dst);
-
-        while (false !== ($file = readdir($dir))) {
-
-            if (( $file != "." ) && ( $file != '..' )) {
-
-                if (is_dir("$src/$file")) {
-                    $this->copyFolder("$src/$file", "$dst/$file");
-                } else {
-                    if (!$this->copyFile("$src/$file", "$dst/$file")) {
-                        return false;
-                    };
-                }
-            }
-        }
-
-        closedir($dir);
-        return true;
-    }
-
-    /**
-     * Check if target folder is it's sub-folder
-     *
-     * @param  string  actual dir (absolute path)
-     * @param  string  target dir (absolute path)
-     * @param  string  filename
-     * @return bool
-     */
-    public function isSubFolder($actualpath, $targetpath, $filename)
-    {
-        $state = false;
-
-        $folders = Finder::findDirectories('*')->from(realpath($actualpath . $filename));
-        foreach ($folders as $folder) {
-
-            if ($folder->getRealPath() === realpath($targetpath)) {
-                $state = true;
-            }
-        }
-
-        return $state;
-    }
-
-    /**
-     * Move file or folder
-     *
-     * @param  string  actual folder (relative path)
-     * @param  string  target folder (relative path)
-     * @param  string  filename
-     * @return bool
-     */
-    public function move($actualdir, $targetdir, $filename)
-    {
-        $actualpath = $this->getAbsolutePath($actualdir);
-        $targetpath = $this->getAbsolutePath($targetdir);
-
-        if ($actualdir == $targetdir) {
-            return false;
-        } else {
-            if (is_dir($actualpath . $filename)) {
-
-                $thumbs = new Thumbs($this->config);
-                $thumbs->deleteDirThumbs($actualpath . $filename);
-
-                if ($this->isSubFolder($actualpath, $targetpath, $filename)) {
-                    return false;
-                } elseif ($this->moveFolder($actualpath, $targetpath, $filename)) {
-
-                    if ($this->config["cache"]) {
-
-                        $caching = new Caching($this->config);
-                        $caching->deleteItemsRecursive($actualpath . $filename);
-                        $caching->deleteItem(array("content", realpath($actualpath)));
-                        $caching->deleteItem(array("content", realpath($targetpath)));
-                    }
-
-                    if ($this->deleteFolder($actualpath . $filename)) {
-                        return true;
-                    }
-
-                    return false;
-                } else {
-                    return false;
-                }
-            } else {
-
-                $thumbs = new Thumbs($this->config);
-                $thumbs->deleteThumb($actualpath . $filename);
-
-                if ($this->moveFile($actualpath, $targetpath, $filename)) {
-
-                    if ($this->config["cache"]) {
-
-                        $caching = new Caching($this->config);
-                        $caching->deleteItem(array("content", realpath($actualpath)));
-                        $caching->deleteItem(array("content", realpath($targetpath)));
-                    }
-
-                    return true;
-                } else {
-                    return false;
-                }
-            }
-        }
-    }
-
-    /**
-     * Move file
-     *
-     * @param  string  actual folder (absolute path)
-     * @param  string  target folder (absolute path)
-     * @param  string  filename
+     * @param string $root Original folder path
+     * @param string $dir  Tested folder path
      *
      * @return boolean
      */
-    public function moveFile($actualpath, $targetpath, $filename)
+    public function isSubFolder($root, $dir)
     {
-        if (rename($actualpath . $filename, $targetpath . $this->checkDuplName($targetpath, $filename))) {
-            return true;
+        if (!is_dir($root)) {
+            throw new \Exception("'$dir' is not directory!");
         }
 
-        return false;
-    }
-
-    /**
-     * Move folder
-     * @param  string  from (absolute path)
-     * @param  string  to (absolute path)
-     * @param  string  what
-     * @return bool
-     */
-    public function moveFolder($actualPath, $targetPath, $filename)
-    {
-        if (!is_dir($targetPath . $filename)) {
-            $this->mkdir($targetPath . $filename);
+        if ($root === $dir) {
+            return false;
         }
-
-        $files = Finder::find("*")->in($actualPath . $filename);
-        foreach ($files as $file) {
-
-            if ($file->isDir()) {
-                $this->moveFolder($file->getPath() . "/", $targetPath . "$filename/", $file->getFilename());
-            } elseif (!rename($file->getPathName(), $targetPath . "$filename/" . $file->getFileName())) {
-                return false;
-            }
-        }
-
-        return true;
+        return strpos($dir, $root) === 0;
     }
 
     /**
      * Get permissions
      *
      * @see http://php.net/manual/en/function.fileperms.php
-     * @param string $path
+     * @param string $path Path to file
+     *
      * @return string
      */
     public function getFileMod($path)
@@ -351,160 +165,6 @@ class FileSystem
     }
 
     /**
-     * Get file details
-     *
-     * @param string $dir
-     * @param string $filename
-     *
-     * @return array
-     */
-    public function fileInfo($dir, $filename)
-    {
-        $thumbDir = $this->config["resDir"] . "img/icons/large/";
-        $path = $this->getAbsolutePath($dir) . $filename;
-
-        $info = array();
-        if (!is_dir($path)) {
-
-            $info["path"] = $path;
-            $info["actualdir"] = $dir;
-            $info["filename"] = $filename;
-            $info["type"] = pathinfo($path, PATHINFO_EXTENSION);
-            $info["size"] = $this->filesize($path);
-            $info["modificated"] = date("F d Y H:i:s", filemtime($path));
-            $info["permissions"] = $this->getFileMod($path);
-
-            if (file_exists($this->config["wwwDir"] . $thumbDir . strtolower($info["type"]) . ".png" && strtolower($info["type"]) <> "folder")) {
-                $info["icon"] = $thumbDir . $info["type"] . ".png";
-            } else {
-                $info["icon"] = $thumbDir . "icon.png";
-            }
-        } else {
-
-            $folder_info = $this->getFolderInfo($path);
-            $info["path"] = $path;
-            $info["actualdir"] = $dir;
-            $info["filename"] = $filename;
-            $info["type"] = "folder";
-            $info["size"] = $folder_info["size"];
-            $info["files_count"] = $folder_info["count"];
-            $info["modificated"] = date("F d Y H:i:s", filemtime($path));
-            $info["permissions"] = $this->getFileMod($path);
-            $info["icon"] = $thumbDir . "folder.png";
-        }
-
-        return $info;
-    }
-
-    /**
-     * Get info about files
-     *
-     * @param string  $dir
-     * @param array   $files
-     * @param boolean $iterate
-     *
-     * @return array
-     */
-    public function filesInfo($dir, $files, $iterate = false)
-    {
-        $path = $this->getAbsolutePath($dir);
-        $info = array(
-            "size" => 0,
-            "dirCount" => 0,
-            "fileCount" => 0
-        );
-
-        foreach ($files as $file) {
-
-            $filepath = $path . $file;
-            if (!is_dir($filepath)) {
-
-                $info['size'] += $this->filesize($filepath);
-                $info['fileCount']++;
-            } elseif ($iterate) {
-
-                $info['dirCount']++;
-                $items = Finder::find('*')->from($filepath);
-
-                foreach ($items as $item) {
-
-                    if ($item->isDir()) {
-                        $info['dirCount']++;
-                    } else {
-                        $info['size'] += $this->filesize($item->getPathName());
-                        $info['fileCount']++;
-                    }
-                }
-            }
-        }
-
-        return $info;
-    }
-
-    /**
-     * Get file size for files > 2 GB
-     *
-     * @param string $path file path
-     *
-     * @return mixed
-     */
-    public function filesize($path)
-    {
-        $filesize = new FileSystem\FileSize($path);
-
-        $return = $filesize->sizeCurl();
-        if ($return) {
-            return $return;
-        }
-
-        $return = $filesize->sizeNativeSeek();
-        if ($return) {
-            return $return;
-        }
-
-        $return = $filesize->sizeCom();
-        if ($return) {
-            return $return;
-        }
-
-        $return = $filesize->sizeExec();
-        if ($return) {
-            return $return;
-        }
-
-        $return = $filesize->sizeNativeRead();
-        if ($return) {
-            return $return;
-        }
-
-        Debugger::log("File size error at file $path.", Debugger::WARNING);
-
-        return false;
-    }
-
-    /**
-     * Get full dir info about size and subfolders count
-     *
-     * @param string $path
-     * @return array
-     */
-    public function getFolderInfo($path)
-    {
-        $info = array();
-        $info["size"] = 0;
-        $info["count"] = 0;
-        $files = Finder::findFiles("*")->from($path);
-
-        foreach ($files as $file) {
-
-            $info["size"] += $this->filesize($file->getPathName());
-            $info["count"]++;
-        }
-
-        return $info;
-    }
-
-    /**
      * Get safe folder name
      *
      * @param string $name
@@ -527,7 +187,8 @@ class FileSystem
     /**
      * Get safe file name
      *
-     * @param string $name
+     * @param string $name File name
+     *
      * @return string
      */
     public function safeFilename($name)
@@ -539,140 +200,57 @@ class FileSystem
     }
 
     /**
-     * Delete file or folder from disk
+     * Delete file or folder
      *
-     * @param  string  folder (relative path)
-     * @param  string  filename - optional
-     * @return bool
+     * @param string $path Path to file/folder
+     *
+     * @return boolean
      */
-    public function delete($dir, $file = "")
+    public function delete($path)
     {
-        $absDir = $this->getAbsolutePath($dir);
-
-        if (is_dir($absDir . $file)) {
-
-            if ($this->config["cache"]) {
-
-                $caching = new Caching($this->config);
-                $caching->deleteItemsRecursive($absDir);
-            }
-
-            $thumbs = new Thumbs($this->config);
-            $thumbs->deleteDirThumbs($absDir . $file);
-
-            if ($this->deleteFolder($absDir . $file)) {
-                return true;
-            }
-
-            return false;
-        } else {
-
-            if ($this->deleteFile($dir, $file)) {
-                return true;
-            }
-
-            return false;
-        }
-    }
-
-    /**
-     * Delete file
-     *
-     * @param  string  relative folder path
-     * @param  string  filename
-     *
-     * @return bool
-     */
-    public function deleteFile($actualdir, $filename)
-    {
-        $path = $this->getAbsolutePath($actualdir);
-
-        if (is_writable($path)) {
-
-            // delete thumb
-            $thumbs = new Thumbs($this->config);
-            $thumbs->deleteThumb($path . $filename);
-
-            // delete source file
-            if (@unlink($path . $filename)) {
-
-                if ($this->config["cache"]) {
-
-                    $caching = new Caching($this->config);
-                    $caching->deleteItem(array("content", realpath($path)));
-                }
-
-                return true;
-            }
-
-            return false;
-        } else {
-            return false;
-        }
-    }
-
-    /**
-     * Delete folder recursively
-     *
-     * @param string absolute path
-     * @return bool
-     */
-    public function deleteFolder($directory)
-    {
-        if (!is_dir($directory) || !is_readable($directory)) {
+        if (!is_writable($path) || !is_readable($path)) {
             return false;
         }
 
-        $contents = Finder::find("*")->in($directory);
-        foreach ($contents as $item) {
+        if (is_dir($path)) {
 
-            if ($item->isDir()) {
-                $this->deleteFolder($item->getPathName());
-            } else {
+            foreach (Finder::find("*")->in($path) as $item) {
 
-                if ($item->isWritable()) {
-                    unlink($item->getPathName());
+                if ($item->isDir()) {
+                    $this->delete($item->getRealPath());
                 } else {
-                    return false;
+                    unlink($item->getPathName());
                 }
             }
-        }
 
-        if (!@rmdir($directory)) {
-            return false;
+            if (!@rmdir($path)) {
+                return false;
+            }
+        } else {
+            unlink($path);
+            return true;
         }
 
         return true;
     }
 
     /**
-     * Create dir
+     * Create folder
      *
-     * @param string $targetPath (absolute)
+     * @param string  $path Path to folder
+     * @param integer $mask Folder mask
+     *
      * @return boolean
      */
-    public function mkdir($targetPath)
+    public function mkdir($path, $mask = 0777)
     {
         $oldumask = umask(0);
-        if (mkdir($targetPath, 0777)) {
+        if (mkdir($path, $mask)) {
+            umask($oldumask);
             return true;
         }
-
         umask($oldumask);
-
         return false;
-    }
-
-    /**
-     * Get absolute path from relative path
-     *
-     * @param string $actualdir Actual dir in relative format
-     *
-     * @return string
-     */
-    public function getAbsolutePath($actualdir)
-    {
-        return $this->config["uploadroot"] . $actualdir;
     }
 
     /**
@@ -686,81 +264,50 @@ class FileSystem
     }
 
     /**
-     * Get used disk space
+     * Get file/folder size
      *
-     * @return integer bytes
-     */
-    public function getUsedSize()
-    {
-        $size = 0;
-        $files = Finder::findFiles("*")->from($this->config["uploadroot"]);
-
-        foreach ($files as $file) {
-            $size += $this->filesize($file->getPathName());
-        }
-
-        return $size;
-    }
-
-    /**
-     * Get details about used disk size
+     * @param string $path Path to file/folder
      *
-     * @return array
+     * @return integer
+     *
+     * @throws \Exception
      */
-    public function diskSizeInfo()
+    public function getSize($path)
     {
-        $info = array();
-        if ($this->config["quota"]) {
+        if (is_dir($path)) {
 
-            $size = $this->getUsedSize();
-            $info["usedsize"] = $size;
-            $info["spaceleft"] = ($this->config["quotaLimit"] * 1048576) - $size;
-            $info["percentused"] = round(($size / ($this->config["quotaLimit"] * 1048576)) * 100);
+            $size = 0;
+            $files = Finder::findFiles("*")->from($path);
+            foreach ($files as $file) {
+                $size += $this->getSize($file->getPathName());
+            }
+            return $size;
         } else {
 
-            $freesize = disk_free_space($this->config["uploadroot"]);
-            $totalsize = disk_total_space($this->config["uploadroot"]);
-            $info["usedsize"] = $totalsize - $freesize;
-            $info["spaceleft"] = $freesize;
-            $info["percentused"] = round(($info["usedsize"] / $totalsize ) * 100);
+            $fileSize = new FileSystem\FileSize($path);
+
+            $size = $fileSize->sizeCurl();
+            if ($size)
+                return $size;
+
+            $size = $fileSize->sizeNativeSeek();
+            if ($size)
+                return $size;
+
+            $size = $fileSize->sizeCom();
+            if ($size)
+                return $size;
+
+            $size = $fileSize->sizeExec();
+            if ($size)
+                return $size;
+
+            $size = $fileSize->sizeNativeRead();
+            if ($size)
+                return $size;
+
+            throw new \Exception("File size error at file '$path'");
         }
-
-        return $info;
-    }
-
-    /**
-     * Check if is enough space on disk for file
-     *
-     * @param string $path
-     * @return bool
-     */
-    public function validateFileSize($path)
-    {
-        $diskInfo = $this->diskSizeInfo();
-        $needSpace = $diskInfo["spaceleft"] - $this->filesize($path);
-
-        if ($needSpace > 0) {
-            return true;
-        }
-
-        return false;
-    }
-
-    /**
-     * Check if path is valid and is located in uploadroot
-     *
-     * @param string $dir  Dirname as relative path
-     * @param string $file Filename
-     *
-     * @return boolean
-     */
-    public function validPath($dir, $file = null)
-    {
-        $path = realpath($this->getAbsolutePath($dir . $file));
-        if (strpos($path, $this->config["uploadroot"]) === 0) {
-            return true;
-        }
-        return false;
     }
 
 }

@@ -36,7 +36,7 @@ class FileSize
             throw new \Exception("Can not get file size, because $path is directory");
         }
 
-        $this->path = $path;
+        $this->path = realpath($path);
     }
 
     /**
@@ -139,7 +139,7 @@ class FileSize
         // curl solution - cross platform and really cool :)
         if (function_exists("curl_init")) {
 
-            $ch = @curl_init("file://" . realpath($this->path));
+            $ch = @curl_init("file://" . $this->path);
             if (!$ch) {
                 return false;
             }

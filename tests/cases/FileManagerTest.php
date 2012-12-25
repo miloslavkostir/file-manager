@@ -20,6 +20,49 @@ class FileManagerTest extends TestCase
         $this->presenter = $presenter;
     }
 
+    public function testIsPathValid()
+    {
+        $control = new Ixtrum\FileManager($this->context, array("uploadroot" => $this->uploadRoot));
+        $this->presenter->addComponent($control, "testControl");
+        $this->presenter->run(new Nette\Application\Request("Homepage", "GET", array()));
+        $fileManager = $this->presenter->getComponent("testControl");
+
+        $dir = "/test/";
+        $this->mkdir($this->uploadRoot . $dir);
+        $this->assertTrue($fileManager->isPathValid($dir));
+
+        // Non-existing files are not valid
+        $this->assertFalse($fileManager->isPathValid("/test/", "non-existing-file"));
+
+        // Folders in uploadroot superior are not valid
+        $this->assertFalse($fileManager->isPathValid("/../"));
+
+        // Uploadroot is valid
+        $this->assertTrue($fileManager->isPathValid("/"));
+
+        // Non-existing folders are not valid
+        $this->assertFalse($fileManager->isPathValid("/missing/"));
+
+        // Files in uploadroot subfolder are valid
+        $dir = "/test/";
+        $file = "test.txt";
+        file_put_contents($this->uploadRoot . $dir . $file, "data");
+        $this->assertTrue($fileManager->isPathValid($dir, $file));
+
+        // Files in uploadroot are valid
+        $dir = "/";
+        $file = "test.txt";
+        file_put_contents($this->uploadRoot . $dir . $file, "data");
+        $this->assertTrue($fileManager->isPathValid($dir, $file));
+
+        // Files in uploadroot superior are not valid
+        $dir = "/../";
+        $file = "test.txt";
+        file_put_contents($this->uploadRoot . $dir . $file, "data");
+        $this->assertFalse($fileManager->isPathValid($dir, $file));
+        unlink($this->uploadRoot . $dir . $file);
+    }
+
     /**
      * Test default render method
      *

@@ -12,37 +12,34 @@ class Clipboard extends \Ixtrum\FileManager\Application\Controls
 
     public function handlePasteFromClipboard()
     {
-        if ($this->system->filesystem->validPath($this->getActualDir())) {
-
-            if ($this->system->parameters["readonly"]) {
-                $this->parent->parent->flashMessage($this->system->translator->translate("Read-only mode enabled!"), "warning");
-            } else {
-
-                foreach ($this->system->session->get("clipboard") as $val) {
-
-                    if ($val["action"] === "copy") {
-
-                        if ($this->system->filesystem->copy($val['actualdir'], $this->getActualDir(), $val['filename'])) {
-                            $this->parent->parent->flashMessage($this->system->translator->translate("Succesfully copied - %s", $val['filename']), "info");
-                        } else {
-                            $this->parent->parent->flashMessage($this->system->translator->translate("An error occured - %s", $val['filename']), "error");
-                        }
-                    } elseif ($val["action"] === "cut") {
-
-                        if ($this->system->filesystem->move($val["actualdir"], $this->getActualDir(), $val["filename"])) {
-                            $this->parent->parent->flashMessage($this->system->translator->translate("Succesfully moved - %s", $val["filename"]), "info");
-                        } else {
-                            $this->parent->parent->flashMessage($this->system->translator->translate("An error occured - %s", $val["filename"]), "error");
-                        }
-                    } else {
-                        $this->parent->parent->flashMessage($this->system->translator->translate("Unknown action! - %s", $val["action"]), "error");
-                    }
-                }
-                $this->system->session->clear("clipboard");
-            }
-        } else {
-            $this->parent->parent->flashMessage($this->system->translator->translate("Folder %s already does not exist!", $this->getActualDir()), "warning");
+        $actualDir = $this->getActualDir();
+        if (!$this->isPathValid($actualDir)) {
+            $this->parent->parent->flashMessage($this->system->translator->translate("Target folder '%s' is not valid!", $actualDir), "warning");
+            return;
         }
+
+        if ($this->system->parameters["readonly"]) {
+            $this->parent->parent->flashMessage($this->system->translator->translate("Read-only mode enabled!"), "warning");
+            return;
+        }
+
+        foreach ($this->system->session->get("clipboard") as $action) {
+
+            $source = $this->getAbsolutePath($action["actualdir"]) . DIRECTORY_SEPARATOR . $action["filename"];
+            if (!file_exists($source)) {
+                $this->parent->parent->flashMessage($this->system->translator->translate("Source '%s' already does not exist!", $actualDir), "warning");
+                continue;
+            }
+
+            $target = $this->getAbsolutePath($actualDir) . DIRECTORY_SEPARATOR . $action["filename"];
+            if ($action["action"] === "copy") {
+                $this->copy($source, $target);
+            }
+            if ($action["action"] === "cut") {
+                $this->move($source, $target);
+            }
+        }
+        $this->system->session->clear("clipboard");
     }
 
     public function handleRemoveFromClipboard($dir, $filename)
@@ -57,6 +54,87 @@ class Clipboard extends \Ixtrum\FileManager\Application\Controls
         $this->template->clipboard = $this->system->session->get("clipboard");
         $this->template->rootname = $this->system->filesystem->getRootName();
         $this->template->render();
+    }
+
+    /**
+     * Move file/folder
+     *
+     * @param string $source Source path
+     * @param string $target Target path
+     *
+     * @todo it can be in file manager class, accessible fot other controls
+     */
+    private function move($source, $target)
+    {
+        // Validate free space
+        if ($this->getFreeSpace() < $this->system->filesystem->getSize($source)) {
+            $this->flashMessage($this->system->translator->translate("Disk full, can not continue!", "warning"));
+            return;
+        }
+
+        // Target folder can not be it's subfolder
+        if (is_dir($source) && $this->system->filesystem->isSubFolder($source, $target)) {
+            $this->flashMessage($this->system->translator->translate("Target folder is it's subfolder, can not continue!", "warning"));
+            return;
+        }
+
+        $this->system->filesystem->copy($source, $target);
+        if (!$this->system->filesystem->delete($source)) {
+            $this->flashMessage($this->system->translator->translate("System was is not able to remove some original files.", "warning"));
+        }
+
+        // Remove thumbs
+        if (is_dir($source)) {
+            $this->system->thumbs->deleteDirThumbs($source);
+        } else {
+            $this->system->thumbs->deleteThumb($source);
+        }
+
+        // Clear cache if needed
+        if ($this->system->parameters["cache"]) {
+
+            if (is_dir($source)) {
+                $this->system->caching->deleteItemsRecursive($source);
+            }
+            $this->system->caching->deleteItem(null, array("tags" => "treeview"));
+            $this->system->caching->deleteItem(array("content", dirname($source)));
+            $this->system->caching->deleteItem(array("content", dirname($target)));
+        }
+
+        $this->parent->parent->flashMessage($this->system->translator->translate("Succesfully moved."));
+    }
+
+    /**
+     * Copy file/folder
+     *
+     * @param string $source Source file/folder
+     * @param string $target Target file/folder
+     *
+     * @todo it can be in file manager class, accessible fot other controls
+     */
+    private function copy($source, $target)
+    {
+        // Validate disk size left
+        if ($this->getFreeSpace() < $this->system->filesystem->getSize($source)) {
+            $this->parent->parent->flashMessage($this->system->translator->translate("Disk full, can not continue!", "warning"));
+            return;
+        }
+
+        // Targer folder can not be subfolder of source folder
+        if (is_dir($source) && $this->system->filesystem->isSubFolder($source, $target)) {
+            $this->parent->parent->flashMessage($this->system->translator->translate("Target folder is it's subfolder, can not continue!", "warning"));
+            return;
+        }
+
+        $this->system->filesystem->copy($source, $target);
+        $this->parent->parent->flashMessage($this->system->translator->translate("Succesfully copied."));
+
+        // Clear cache if needed
+        if ($this->system->parameters["cache"]) {
+
+            $this->system->caching->deleteItem(array("content", dirname($target)));
+            $this->system->caching->deleteItem(null, array("tags" => "treeview"));
+        }
     }
 
 }

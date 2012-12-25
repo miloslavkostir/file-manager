@@ -3,7 +3,6 @@
 namespace Ixtrum;
 
 use Ixtrum\FileManager\Application\FileSystem\Finder,
-    Ixtrum\FileManager\Application\Resources,
     Nette\Application\UI\Multiplier;
 
 class FileManager extends \Nette\Application\UI\Control
@@ -42,7 +41,7 @@ class FileManager extends \Nette\Application\UI\Control
 
         // Get & validate actual dir
         $actualDir = $this->system->session->get("actualdir");
-        $actualPath = $this->system->filesystem->getAbsolutePath($actualDir);
+        $actualPath = $this->getAbsolutePath($actualDir);
         if (!is_dir($actualPath) || empty($actualDir)) {
             // Set root dir as default
             $actualDir = $this->system->filesystem->getRootname();
@@ -78,10 +77,10 @@ class FileManager extends \Nette\Application\UI\Control
     {
         if ($this->system->parameters["cache"]) {
 
-            $this->system->caching->deleteItem(NULL, array("tags" => "treeview"));
+            $this->system->caching->deleteItem(null, array("tags" => "treeview"));
             $this->system->caching->deleteItem(array(
                 "content",
-                realpath($this->system->filesystem->getAbsolutePath($this->getActualDir()))
+                $this->getAbsolutePath($this->getActualDir())
             ));
         }
     }
@@ -122,6 +121,7 @@ class FileManager extends \Nette\Application\UI\Control
         $languages = array($this->defaultLang => $this->defaultLang);
         $files = Finder::findFiles("*.json")->in($this->system->parameters["appDir"] . $this->system->parameters["langDir"]);
         foreach ($files as $file) {
+
             $baseName = $file->getBasename(".json");
             $languages[$baseName] = $baseName;
         }
@@ -135,7 +135,7 @@ class FileManager extends \Nette\Application\UI\Control
      */
     public function setActualDir($dir)
     {
-        if ($this->system->filesystem->validPath($dir)) {
+        if ($this->isPathValid($dir)) {
             $this->system->session->set("actualdir", $dir);
         }
     }
@@ -231,13 +231,17 @@ class FileManager extends \Nette\Application\UI\Control
     }
 
     /**
-     * Get info about disk usage
+     * Get free space available
      *
-     * @return array
+     * @return integer
      */
-    public function getDiskInfo()
+    public function getFreeSpace()
     {
-        return $this->system->filesystem->diskSizeInfo();
+        if ($this->system->parameters["quota"]) {
+            return $this->system->parameters["quotaLimit"] * 1048576 - $this->system->filesystem->getSize($this->system->parameters["uploadroot"]);
+        } else {
+            return disk_free_space($this->system->parameters["uploadroot"]);
+        }
     }
 
     /**
@@ -247,9 +251,47 @@ class FileManager extends \Nette\Application\UI\Control
      */
     public function syncResources()
     {
-        $this->system->filesystem->copyFolder(
-                realpath($this->system->parameters["appDir"] . "/resources/"), $this->system->parameters["wwwDir"] . $this->system->parameters["resDir"]
+        $this->system->filesystem->copy(
+                realpath($this->system->parameters["appDir"] . "/resources/"), $this->system->parameters["wwwDir"] . $this->system->parameters["resDir"], true
         );
+    }
+
+    /**
+     * Path validator
+     *
+     * @param string $dir  Dirname as relative path
+     * @param string $file Filename (optional)
+     *
+     * @return boolean
+     */
+    public function isPathValid($dir, $file = null)
+    {
+        $path = $this->getAbsolutePath($dir);
+        if ($file) {
+            $path .= DIRECTORY_SEPARATOR . $file;
+        }
+
+        if (!file_exists($path)) {
+            return false;
+        }
+
+        if ($this->system->parameters["uploadroot"] === $path) {
+            return true;
+        }
+
+        return $this->system->filesystem->isSubFolder($this->system->parameters["uploadroot"], $path);
+    }
+
+    /**
+     * Get absolute path from relative path
+     *
+     * @param string $actualdir Actual dir in relative format
+     *
+     * @return string
+     */
+    public function getAbsolutePath($actualdir)
+    {
+        return realpath($this->system->parameters["uploadroot"] . $actualdir);
     }
 
 }
