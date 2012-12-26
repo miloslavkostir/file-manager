@@ -130,8 +130,8 @@ final class Loader extends \Nette\DI\Container
 
         foreach ($files as $file) {
 
-            $configPath = $file->getRealPath();
-            $plugins[$configPath] = Json::decode(file_get_contents($configPath), 1);
+            $config = Json::decode(file_get_contents($file->getRealPath()), 1);
+            $plugins[$config["name"]] = $config;
         }
 
         return $plugins;

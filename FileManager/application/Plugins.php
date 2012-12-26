@@ -2,6 +2,8 @@
 
 namespace Ixtrum\FileManager\Application;
 
+use Ixtrum\FileManager\Application\Loader;
+
 abstract class Plugins extends \Ixtrum\FileManager
 {
 
@@ -14,16 +16,25 @@ abstract class Plugins extends \Ixtrum\FileManager
     /** @var array */
     protected $selectedFiles;
 
+    /** @var string */
+    protected $resDir;
+
+    /** @var array */
+    protected $config;
+
     /**
      * Constructor
      *
+     * @param string $name Plugin name
      * @param \Ixtrum\FileManager\Application\Loader $system        Application container
      * @param array                                  $selectedFiles Selected files from POST request
      */
-    public function __construct(\Ixtrum\FileManager\Application\Loader $system, array $selectedFiles = array())
+    public function __construct($name, Loader $system, array $selectedFiles = array())
     {
         $this->system = $system;
         $this->selectedFiles = $selectedFiles;
+        $this->config = $this->system->parameters["plugins"][$name];
+        $this->resDir = $this->system->parameters["resDir"] . "/plugins/$name";
 
         // Get & validate selected view
         $view = $system->session->get("view");

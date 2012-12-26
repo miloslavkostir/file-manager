@@ -223,10 +223,10 @@ class FileManager extends \Nette\Application\UI\Control
         $system = $this->system;
         $selectedFiles = $this->selectedFiles;
         return new Multiplier(function ($name) use ($system, $selectedFiles) {
-                            $namespace = __NAMESPACE__;
-                            $namespace .= "\\FileManager\Application\Plugins";
-                            $class = "$namespace\\$name";
-                            return new $class($system, $selectedFiles);
+
+                            $class = "\Ixtrum\FileManager\Application\Plugins\\";
+                            $class .= $system->parameters["plugins"][$name]["class"];
+                            return new $class($name, $system, $selectedFiles);
                         });
     }
 
