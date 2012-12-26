@@ -224,8 +224,7 @@ class FileManager extends \Nette\Application\UI\Control
         $selectedFiles = $this->selectedFiles;
         return new Multiplier(function ($name) use ($system, $selectedFiles) {
 
-                            $class = "\Ixtrum\FileManager\Application\Plugins\\";
-                            $class .= $system->parameters["plugins"][$name]["class"];
+                            $class = $system->parameters["plugins"][$name]["class"];
                             return new $class($name, $system, $selectedFiles);
                         });
     }
