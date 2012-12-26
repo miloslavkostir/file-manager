@@ -11,7 +11,7 @@ class FileInfo extends \Ixtrum\FileManager\Application\Controls
     {
         $this->template->setFile(__DIR__ . "/FileInfo.latte");
         $this->template->setTranslator($this->system->translator);
-        $this->template->thumbDir = $this->system->parameters["resDir"] . "img/icons/large/";
+        $this->template->thumbDir = $this->system->parameters["resDir"] . "/img/icons/large";
 
         if (count($this->selectedFiles) > 1) {
 
@@ -43,7 +43,7 @@ class FileInfo extends \Ixtrum\FileManager\Application\Controls
      */
     private function getFileInfo($dir, $filename)
     {
-        $thumbDir = $this->system->parameters["resDir"] . "img/icons/large/";
+        $thumbDir = $this->system->parameters["resDir"] . "/img/icons/large";
         $path = $this->getAbsolutePath($dir) . DIRECTORY_SEPARATOR . $filename;
 
         $info = array();
@@ -57,10 +57,10 @@ class FileInfo extends \Ixtrum\FileManager\Application\Controls
             $info["modificated"] = date("F d Y H:i:s", filemtime($path));
             $info["permissions"] = $this->system->filesystem->getFileMod($path);
 
-            if (file_exists($this->system->parameters["wwwDir"] . $thumbDir . strtolower($info["type"]) . ".png" && strtolower($info["type"]) <> "folder")) {
-                $info["icon"] = $thumbDir . $info["type"] . ".png";
+            if (file_exists($this->system->parameters["wwwDir"] . "/$thumbDir/" . strtolower($info["type"]) . ".png" && strtolower($info["type"]) <> "folder")) {
+                $info["icon"] = "/$thumbDir/" . $info["type"] . ".png";
             } else {
-                $info["icon"] = $thumbDir . "icon.png";
+                $info["icon"] = "/$thumbDir/" . "icon.png";
             }
         } else {
 

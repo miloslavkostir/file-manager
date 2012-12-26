@@ -175,7 +175,7 @@ class Content extends \Ixtrum\FileManager\Application\Controls
         );
         $this->template->actualdir = $this->getActualDir();
         $this->template->rootname = $this->system->filesystem->getRootName();
-        $this->template->thumb_dir = $this->system->parameters["resDir"] . "img/icons/$this->view/";
+        $this->template->thumbDir = $this->system->parameters["resDir"] . "/img/icons/$this->view";
 
         // Load plugins
         if ($this->system->parameters["plugins"]) {
@@ -224,7 +224,7 @@ class Content extends \Ixtrum\FileManager\Application\Controls
                 $filetype = strtolower(pathinfo($name, PATHINFO_EXTENSION));
                 $dir_array[$name]["filetype"] = $filetype;
 
-                if (file_exists($this->system->parameters["wwwDir"] . $this->system->parameters["resDir"] . "img/icons/$view/$filetype.png")) {
+                if (file_exists($this->system->parameters["wwwDir"] . "/" . $this->system->parameters["resDir"] . "/img/icons/$view/$filetype.png")) {
 
                     if ($filetype === "folder") {
                         $dir_array[$name]["icon"] = "icon.png";

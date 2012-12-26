@@ -29,7 +29,7 @@ class Themes extends \Ixtrum\FileManager\Application\Controls
             $default = "default";
         }
 
-        $themeDir = $this->system->parameters["wwwDir"] . $this->system->parameters["resDir"] . "themes";
+        $themeDir = $this->system->parameters["wwwDir"] . "/" . $this->system->parameters["resDir"] . "/themes";
         $form = new \Nette\Application\UI\Form;
         $form->addSelect("theme", null, $this->loadThemes($themeDir))
                 ->setAttribute("onchange", "submit()")

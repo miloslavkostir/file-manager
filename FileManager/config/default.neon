@@ -6,6 +6,6 @@ parameters:
 	quota:
 	quotaLimit: 20 # MB
 	lang: en
-	resDir: /ixtrum-res/
+	resDir: ixtrum-res
 	pluginDir: /plugins/
 	langDir: /lang/

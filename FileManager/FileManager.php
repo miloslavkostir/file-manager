@@ -252,7 +252,7 @@ class FileManager extends \Nette\Application\UI\Control
     public function syncResources()
     {
         $this->system->filesystem->copy(
-                realpath($this->system->parameters["appDir"] . "/resources/"), $this->system->parameters["wwwDir"] . $this->system->parameters["resDir"], true
+                realpath($this->system->parameters["appDir"] . "/resources/"), $this->system->parameters["wwwDir"] . "/" . $this->system->parameters["resDir"], true
         );
     }
 
