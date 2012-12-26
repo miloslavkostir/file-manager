@@ -27,6 +27,7 @@ class Themes extends \Ixtrum\FileManager\Application\Controls
         $default = $this->system->session->get("theme");
         if (empty($default)) {
             $default = "default";
+            $this->system->session->set("theme", $default);
         }
 
         $themeDir = $this->system->parameters["wwwDir"] . "/" . $this->system->parameters["resDir"] . "/themes";
