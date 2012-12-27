@@ -42,7 +42,7 @@ class Finder extends \Nette\Utils\Finder
                         if ($f2->isDir() || $f1->isDir()) {
                             return;
                         }
-                        $fileSystem = new \Ixtrum\FileManager\Application\FileSystem(array());
+                        $fileSystem = new \Ixtrum\FileManager\Application\FileSystem;
                         return $fileSystem->getSize($f2->getPathName()) - $fileSystem->getSize($f1->getPathName());
                     };
                 break;
