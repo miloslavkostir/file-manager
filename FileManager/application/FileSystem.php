@@ -10,7 +10,7 @@ class FileSystem
     /**
      * Check if file/folder exists and give alternative path name
      *
-     * @param string Path to file/folder
+     * @param string $path Path to file/folder
      *
      * @return string
      */
@@ -105,7 +105,8 @@ class FileSystem
     /**
      * Get permissions
      *
-     * @see http://php.net/manual/en/function.fileperms.php
+     * @link http://php.net/manual/en/function.fileperms.php
+     *
      * @param string $path Path to file
      *
      * @return string
@@ -167,7 +168,8 @@ class FileSystem
     /**
      * Get safe folder name
      *
-     * @param string $name
+     * @param string $name Folder name
+     *
      * @return string
      */
     public function safeFoldername($name)
