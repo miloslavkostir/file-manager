@@ -40,7 +40,8 @@ class Rename extends \Ixtrum\FileManager\Application\Controls
 
     public function renameFormSuccess(Form $form)
     {
-        $path = $this->getAbsolutePath($this->getActualDir());
+        $actualDir = $this->getActualDir();
+        $path = $this->getAbsolutePath($actualDir);
 
         if ($this->system->parameters["readonly"]) {
             $this->parent->parent->flashMessage($this->system->translator->translate("Read-only mode enabled!"), "warning");
@@ -57,7 +58,7 @@ class Rename extends \Ixtrum\FileManager\Application\Controls
             return;
         }
 
-        if (!file_exists($path . $form->values->orig_filename)) {
+        if (!$this->isPathValid($actualDir, $form->values->orig_filename)) {
             $this->parent->parent->flashMessage($this->system->translator->translate("File/folder %s does not already exists!", $form->values->orig_filename), "error");
             return;
         }
@@ -88,7 +89,7 @@ class Rename extends \Ixtrum\FileManager\Application\Controls
             $this->parent->parent->flashMessage($this->system->translator->translate("Successfully renamed to %s.", $newFilename), "info");
             $this->system->session->clear("clipboard");
         } else {
-            $this->parent->parent->flashMessage($this->system->translator->translate("An error occurred during %s renaming!", $form->values->orig_filename), "error");
+            $this->parent->parent->flashMessage($this->system->translator->translate("An error occurred during %s rename!", $form->values->orig_filename), "error");
         }
     }
 
