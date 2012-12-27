@@ -14,11 +14,16 @@ class NewFolder extends \Ixtrum\FileManager\Application\Controls
         $this->template->render();
     }
 
+    /**
+     * NewFolderForm component factory
+     *
+     * @return \Nette\Application\UI\Form
+     */
     protected function createComponentNewFolderForm()
     {
         $form = new Form;
         $form->setTranslator($this->system->translator);
-        $form->addText("name", "Name:")
+        $form->addText("name", "Name")
                 ->setRequired("Folder name required.");
         $form->addSubmit("send", "Create");
         $form->onSuccess[] = $this->newFolderFormSuccess;
@@ -26,6 +31,13 @@ class NewFolder extends \Ixtrum\FileManager\Application\Controls
         return $form;
     }
 
+    /**
+     * NewFolderForm success event
+     *
+     * @param \Nette\Application\UI\Form $form NewFolderForm
+     *
+     * @return void
+     */
     public function newFolderFormSuccess(Form $form)
     {
         if ($this->system->parameters["readonly"]) {
@@ -51,7 +63,7 @@ class NewFolder extends \Ixtrum\FileManager\Application\Controls
         }
 
         if (!$this->system->filesystem->mkdir($targetPath)) {
-            $this->parent->parent->flashMessage($this->system->translator->translate("An unkonwn error occurred during folder %s creation.", $foldername));
+            $this->parent->parent->flashMessage($this->system->translator->translate("An error occurred, can not create folder '%s'.", $foldername), "error");
             return;
         }
 
