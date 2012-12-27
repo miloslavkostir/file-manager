@@ -75,22 +75,6 @@ class Content extends \Ixtrum\FileManager\Application\Controls
         }
     }
 
-    public function handleZip()
-    {
-        if ($this->system->parameters["readonly"]) {
-            $this->parent->parent->flashMessage($this->system->translator->translate("Read-only mode enabled!"), "warning");
-            return;
-        }
-
-        $path = $this->getAbsolutePath($this->getActualDir());
-        $zip = new \Ixtrum\FileManager\Application\Zip($this->system->parameters, $path);
-        $zip->addFiles($this->selectedFiles);
-
-        if ($this->system->parameters["cache"]) {
-            $this->system->caching->deleteItem(array("content", $path));
-        }
-    }
-
     public function handleOrderBy($key)
     {
         $this->system->session->set("order", $key);

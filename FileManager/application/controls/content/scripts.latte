@@ -33,11 +33,6 @@ $(function() {
                 }
         }});
 
-        items.push({ {_'Add to ZIP'} : function(menuItem, menuObject, event) {
-                $.post({link zip!}, { files: selected });
-                $.animateProgress(".file-manager", event);
-        }});
-
         items.push({ {_'Download'} : function(menuItem, menuObject, event) {
                 $.post({link download!}, { files: selected });
                 $.animateProgress(".file-manager", event);
