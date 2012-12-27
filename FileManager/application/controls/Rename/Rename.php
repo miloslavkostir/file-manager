@@ -4,7 +4,7 @@ namespace Ixtrum\FileManager\Application\Controls;
 
 use Nette\Application\UI\Form;
 
-class Rename extends \Ixtrum\FileManager\Application\Plugins
+class Rename extends \Ixtrum\FileManager\Application\Controls
 {
 
     public function render()

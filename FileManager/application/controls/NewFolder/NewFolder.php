@@ -4,7 +4,7 @@ namespace Ixtrum\FileManager\Application\Controls;
 
 use Nette\Application\UI\Form;
 
-class NewFolder extends \Ixtrum\FileManager\Application\Plugins
+class NewFolder extends \Ixtrum\FileManager\Application\Controls
 {
 
     public function render()
