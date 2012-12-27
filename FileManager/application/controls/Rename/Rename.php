@@ -56,17 +56,17 @@ class Rename extends \Ixtrum\FileManager\Application\Controls
         }
 
         if ($form->values->newFilename === $form->values->originalFilename) {
-            $this->parent->parent->flashMessage($this->system->translator->translate("New name can not be the same!"), "warning");
+            $this->parent->parent->flashMessage($this->system->translator->translate("Names are the same!"), "warning");
             return;
         }
 
         if (file_exists($path . DIRECTORY_SEPARATOR . $form->values->newFilename)) {
-            $this->parent->parent->flashMessage($this->system->translator->translate("The name %s was already used.", $form->values->newFilename), "warning");
+            $this->parent->parent->flashMessage($this->system->translator->translate("'%s' already exist!", $form->values->newFilename), "warning");
             return;
         }
 
         if (!$this->isPathValid($actualDir, $form->values->originalFilename)) {
-            $this->parent->parent->flashMessage($this->system->translator->translate("File/folder %s does not already exists!", $form->values->originalFilename), "error");
+            $this->parent->parent->flashMessage($this->system->translator->translate("'%s' does not already exists!", $form->values->originalFilename), "error");
             return;
         }
 
@@ -93,7 +93,7 @@ class Rename extends \Ixtrum\FileManager\Application\Controls
 
         if (rename($origPath, $path . DIRECTORY_SEPARATOR . $newFilename)) {
 
-            $this->parent->parent->flashMessage($this->system->translator->translate("Successfully renamed to %s.", $newFilename), "info");
+            $this->parent->parent->flashMessage($this->system->translator->translate("Successfully renamed to '%s'.", $newFilename));
             $this->system->session->clear("clipboard");
         } else {
             $this->parent->parent->flashMessage($this->system->translator->translate("An error occurred during %s rename!", $form->values->originalFilename), "error");
