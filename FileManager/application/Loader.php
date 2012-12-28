@@ -40,8 +40,13 @@ final class Loader extends \Nette\DI\Container
         // Merge user config with default config
         $config = array_merge($defaultConfig["parameters"], $config);
 
+        // Set default pluginDir
+        if (!isset($config["pluginDir"])) {
+            $config["pluginDir"] = $config["appDir"] . DIRECTORY_SEPARATOR . "plugins";
+        }
+
         // Get plugins
-        $config["plugins"] = $this->getPlugins($config["appDir"] . $config["pluginDir"]);
+        $config["plugins"] = $this->getPlugins($config["pluginDir"]);
 
         // Canonicalize uploadroot
         $config["uploadroot"] = realpath($config["uploadroot"]);
@@ -63,6 +68,10 @@ final class Loader extends \Nette\DI\Container
 
         if (!is_dir($this->parameters["uploadroot"])) {
             throw new \Nette\DirectoryNotFoundException("Upload root '" . $this->parameters["uploadroot"] . "' doesn't exist!");
+        }
+
+        if (!is_dir($this->parameters["pluginDir"])) {
+            throw new \Nette\DirectoryNotFoundException("Plugin dir '" . $this->parameters["pluginDir"] . "' doesn't exist!");
         }
     }
 
