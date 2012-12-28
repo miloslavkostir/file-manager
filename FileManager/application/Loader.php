@@ -43,6 +43,8 @@ final class Loader extends \Nette\DI\Container
         // Set default pluginDir
         if (!isset($config["pluginDir"])) {
             $config["pluginDir"] = $config["appDir"] . DIRECTORY_SEPARATOR . "plugins";
+        } else {
+            $config["pluginDir"] = realpath($config["pluginDir"]);
         }
 
         // Get plugins
