@@ -13,8 +13,7 @@ class ContentTest extends TestCase
      */
     public function setUp()
     {
-        $this->initTestDir();
-
+        parent::setUp();
         $presenter = new MockPresenter();
         $presenter->injectPrimary($this->context);
         $this->presenter = $presenter;
@@ -34,11 +33,6 @@ class ContentTest extends TestCase
         $fileManager = $this->presenter->getComponent("testControl");
         $this->renderComponent($fileManager["control-content"]);
         $this->assertInstanceOf("Nette\Templating\FileTemplate", $fileManager["control-content"]->template);
-    }
-
-    public function tearDown()
-    {
-        $this->deInitTestDir();
     }
 
 }

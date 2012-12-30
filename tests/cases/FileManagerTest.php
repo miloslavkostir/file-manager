@@ -13,8 +13,7 @@ class FileManagerTest extends TestCase
      */
     public function setUp()
     {
-        $this->initTestDir();
-
+        parent::setUp();
         $presenter = new MockPresenter();
         $presenter->injectPrimary($this->context);
         $this->presenter = $presenter;
@@ -110,11 +109,6 @@ class FileManagerTest extends TestCase
         $fileManager = $this->presenter->getComponent("testControl");
 
         $this->assertEquals(array("en" => "en", "cs" => "cs"), $fileManager->getLanguages());
-    }
-
-    public function tearDown()
-    {
-        $this->deInitTestDir();
     }
 
 }

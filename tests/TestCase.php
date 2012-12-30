@@ -42,7 +42,7 @@ class TestCase extends PHPUnit_Framework_TestCase
         $this->context = $container;
 
         // Set up upload root dirs
-        $this->uploadRoot = $container->parameters["tempDir"] . "/tests";
+        $this->uploadRoot = $container->parameters["tempDir"] . "/uploadroot";
     }
 
     /**
@@ -111,20 +111,13 @@ class TestCase extends PHPUnit_Framework_TestCase
         return true;
     }
 
-    /**
-     * Initialize testing directory in temp
-     */
-    public function initTestDir()
+    public function setUp()
     {
         $this->mkdir($this->uploadRoot);
     }
-
-    /**
-     * Deinitialize testing directory in temp
-     */
-    public function deInitTestDir()
+    
+    public function tearDown()
     {
         $this->rmdir($this->uploadRoot);
     }
-
 }

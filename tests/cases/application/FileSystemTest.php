@@ -8,7 +8,7 @@ class FileSystemTest extends TestCase
 
     public function setUp()
     {
-        $this->initTestDir();
+        parent::setUp();
         $this->library = new Ixtrum\FileManager\Application\FileSystem;
     }
 
@@ -39,11 +39,6 @@ class FileSystemTest extends TestCase
     public function testGetRootName()
     {
         $this->assertEquals("/", $this->library->getRootName());
-    }
-
-    public function tearDown()
-    {
-        $this->deInitTestDir();
     }
 
 }
