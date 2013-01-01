@@ -243,10 +243,6 @@ class FileSystem
      */
     public function delete($path)
     {
-        if (!is_writable($path) || !is_readable($path)) {
-            return false;
-        }
-
         if (is_dir($path)) {
 
             foreach (Finder::find("*")->in($path) as $item) {
@@ -263,7 +259,6 @@ class FileSystem
             }
         } else {
             unlink($path);
-            return true;
         }
 
         return true;
