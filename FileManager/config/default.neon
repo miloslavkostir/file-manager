@@ -7,4 +7,3 @@ parameters:
 	quotaLimit: 20 # MB
 	lang: en
 	resDir: ixtrum-res
-	langDir: /lang/

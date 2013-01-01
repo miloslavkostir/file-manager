@@ -47,6 +47,13 @@ final class Loader extends \Nette\DI\Container
             $config["pluginDir"] = realpath($config["pluginDir"]);
         }
 
+        // Set default langDir
+        if (!isset($config["langDir"])) {
+            $config["langDir"] = $config["appDir"] . DIRECTORY_SEPARATOR . "lang";
+        } else {
+            $config["langDir"] = realpath($config["langDir"]);
+        }
+
         // Get plugins
         $config["plugins"] = $this->getPlugins($config["pluginDir"]);
 
@@ -75,6 +82,10 @@ final class Loader extends \Nette\DI\Container
         if (!is_dir($this->parameters["pluginDir"])) {
             throw new \Nette\DirectoryNotFoundException("Plugin dir '" . $this->parameters["pluginDir"] . "' doesn't exist!");
         }
+
+        if (!is_dir($this->parameters["langDir"])) {
+            throw new \Nette\DirectoryNotFoundException("Language dir '" . $this->parameters["langDir"] . "' doesn't exist!");
+        }
     }
 
     /**
@@ -94,7 +105,7 @@ final class Loader extends \Nette\DI\Container
      */
     protected function createServiceTranslator()
     {
-        return new Translator($this->parameters["appDir"] . $this->parameters["langDir"] . $this->parameters["lang"] . ".json");
+        return new Translator($this->parameters["langDir"] . DIRECTORY_SEPARATOR . $this->parameters["lang"] . ".json");
     }
 
     /**
