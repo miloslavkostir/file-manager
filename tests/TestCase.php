@@ -113,6 +113,9 @@ class TestCase extends PHPUnit_Framework_TestCase
 
     public function setUp()
     {
+        if (is_dir($this->uploadRoot)) {
+            $this->rmdir($this->uploadRoot);
+        }
         $this->mkdir($this->uploadRoot);
     }
     
