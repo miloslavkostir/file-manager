@@ -72,7 +72,7 @@ class FileInfo extends \Ixtrum\FileManager\Application\Controls
             $info["files_count"] = $this->getDirFilesCount($path);
             $info["modificated"] = date("F d Y H:i:s", filemtime($path));
             $info["permissions"] = $this->system->filesystem->getFileMod($path);
-            $info["icon"] = $thumbDir . "folder.png";
+            $info["icon"] = "/$thumbDir/folder.png";
         }
 
         return $info;
