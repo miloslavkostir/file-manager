@@ -80,7 +80,7 @@ class Clipboard extends \Ixtrum\FileManager\Application\Controls
 
         $this->system->filesystem->copy($source, $target);
         if (!$this->system->filesystem->delete($source)) {
-            $this->flashMessage($this->system->translator->translate("System was is not able to remove some original files.", "warning"));
+            $this->flashMessage($this->system->translator->translate("System is not able to remove some original files.", "warning"));
         }
 
         // Remove thumbs
