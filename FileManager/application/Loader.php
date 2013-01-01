@@ -151,7 +151,7 @@ final class Loader extends \Nette\DI\Container
         foreach (Finder::findFiles("plugin.json")->from($pluginDir) as $plugin) {
 
             $config = Json::decode(file_get_contents($plugin->getRealPath()), 1);
-            $config["path"] = $plugin->getRealPath();
+            $config["path"] = dirname($plugin->getRealPath());
             $plugins[$config["name"]] = $config;
         }
 
