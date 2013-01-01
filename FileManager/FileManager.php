@@ -255,15 +255,28 @@ class FileManager extends \Nette\Application\UI\Control
     }
 
     /**
-     * Synchronize all resources such as CSS, JS, images from 'resources'
-     * directory located in file manager root to defined resource directory
-     * located in web root.
+     * Synchronize all resources file manager & it's plugin resources to
+     * defined resource directory located in web root.
      */
     public function syncResources()
     {
+        $sep = DIRECTORY_SEPARATOR;
+
+        // Copy main resources
         $this->system->filesystem->copyDir(
-                realpath($this->system->parameters["appDir"] . DIRECTORY_SEPARATOR . "resources"), $this->system->parameters["wwwDir"] . DIRECTORY_SEPARATOR . $this->system->parameters["resDir"]
+                realpath($this->system->parameters["appDir"] . "{$sep}resources"), $this->system->parameters["wwwDir"] . $sep . $this->system->parameters["resDir"]
         );
+
+        // Copy plugins resources
+        foreach ($this->system->parameters["plugins"] as $plugin) {
+
+            if (isset($plugin["resources"]) && !empty($plugin["resources"])) {
+
+                $from = $plugin["path"] . $sep . $plugin["resources"];
+                $to = $this->system->parameters["wwwDir"] . $sep . $this->system->parameters["resDir"] . "{$sep}plugins{$sep}" . $plugin["name"];
+                $this->system->filesystem->copyDir($from, $to);
+            }
+        }
     }
 
     /**
