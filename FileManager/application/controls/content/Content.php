@@ -133,8 +133,7 @@ class Content extends \Ixtrum\FileManager\Application\Controls
         if ($targetDir && $filename) {
 
             $sourcePath = $this->getAbsolutePath($this->getActualDir()) . DIRECTORY_SEPARATOR . $filename;
-            $targetPath = $this->getAbsolutePath($targetDir) . DIRECTORY_SEPARATOR . $filename;
-            $this->move($sourcePath, $targetPath);
+            $this->move($sourcePath, $this->getAbsolutePath($targetDir));
             $this->presenter->payload->result = "success";
         }
     }
@@ -275,7 +274,7 @@ class Content extends \Ixtrum\FileManager\Application\Controls
      * Move file/folder
      *
      * @param string $source Source path
-     * @param string $target Target path
+     * @param string $target Target folder
      *
      * @todo it can be in file manager class, accessible fot other controls
      */
@@ -313,7 +312,7 @@ class Content extends \Ixtrum\FileManager\Application\Controls
             }
             $this->system->caching->deleteItem(null, array("tags" => "treeview"));
             $this->system->caching->deleteItem(array("content", dirname($source)));
-            $this->system->caching->deleteItem(array("content", dirname($target)));
+            $this->system->caching->deleteItem(array("content", $target));
         }
 
         $this->parent->parent->flashMessage($this->system->translator->translate("Succesfully moved."));

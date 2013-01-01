@@ -31,7 +31,7 @@ class Clipboard extends \Ixtrum\FileManager\Application\Controls
                 continue;
             }
 
-            $target = $this->getAbsolutePath($actualDir) . DIRECTORY_SEPARATOR . $action["filename"];
+            $target = $this->getAbsolutePath($actualDir);
             if ($action["action"] === "copy") {
                 $this->copy($source, $target);
             }
@@ -60,7 +60,7 @@ class Clipboard extends \Ixtrum\FileManager\Application\Controls
      * Move file/folder
      *
      * @param string $source Source path
-     * @param string $target Target path
+     * @param string $target Target folder
      *
      * @todo it can be in file manager class, accessible fot other controls
      */
@@ -98,7 +98,7 @@ class Clipboard extends \Ixtrum\FileManager\Application\Controls
             }
             $this->system->caching->deleteItem(null, array("tags" => "treeview"));
             $this->system->caching->deleteItem(array("content", dirname($source)));
-            $this->system->caching->deleteItem(array("content", dirname($target)));
+            $this->system->caching->deleteItem(array("content", $target));
         }
 
         $this->parent->parent->flashMessage($this->system->translator->translate("Succesfully moved."));
@@ -108,7 +108,7 @@ class Clipboard extends \Ixtrum\FileManager\Application\Controls
      * Copy file/folder
      *
      * @param string $source Source file/folder
-     * @param string $target Target file/folder
+     * @param string $target Target folder
      *
      * @todo it can be in file manager class, accessible fot other controls
      */
@@ -132,7 +132,7 @@ class Clipboard extends \Ixtrum\FileManager\Application\Controls
         // Clear cache if needed
         if ($this->system->parameters["cache"]) {
 
-            $this->system->caching->deleteItem(array("content", dirname($target)));
+            $this->system->caching->deleteItem(array("content", $target));
             $this->system->caching->deleteItem(null, array("tags" => "treeview"));
         }
     }

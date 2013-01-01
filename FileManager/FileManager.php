@@ -2,7 +2,8 @@
 
 namespace Ixtrum;
 
-use Ixtrum\FileManager\Application\FileSystem\Finder,
+use Ixtrum\FileManager\Application\FileSystem,
+    Ixtrum\FileManager\Application\FileSystem\Finder,
     Nette\Application\UI\Multiplier;
 
 class FileManager extends \Nette\Application\UI\Control
@@ -260,8 +261,8 @@ class FileManager extends \Nette\Application\UI\Control
      */
     public function syncResources()
     {
-        $this->system->filesystem->copy(
-                realpath($this->system->parameters["appDir"] . "/resources/"), $this->system->parameters["wwwDir"] . "/" . $this->system->parameters["resDir"], true
+        $this->system->filesystem->copyDir(
+                realpath($this->system->parameters["appDir"] . DIRECTORY_SEPARATOR . "resources"), $this->system->parameters["wwwDir"] . DIRECTORY_SEPARATOR . $this->system->parameters["resDir"]
         );
     }
 

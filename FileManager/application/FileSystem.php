@@ -18,46 +18,73 @@ class FileSystem
     {
         if (file_exists($path)) {
 
-            $filename = pathinfo($path, PATHINFO_BASENAME);
-            $dirname = pathinfo($path, PATHINFO_DIRNAME);
+            $filename = basename($path);
+            $dirname = dirname($path);
             $i = 1;
-            while (file_exists("$dirname/$i" . "_$filename")) {
+            while (file_exists($path = "$dirname/$i" . "_$filename")) {
                 $i++;
             }
-            return "$dirname/$i" . "_$filename";
+        }
+        return $path;
+    }
+
+    /**
+     * Copy file/folder to destination folder
+     *
+     * @param string  $source      Source file/folder path
+     * @param string  $destination Destination folder path
+     * @param boolean $overwrite   Overwrite file/folder if exist
+     *
+     * @throws \Exception
+     */
+    public function copy($source, $destination, $overwrite = false)
+    {
+        if (!is_dir($destination)) {
+            throw new \Exception("Destination must be existing folder, but '$destination' given!");
+        }
+
+        // Get destination file/folder path
+        $fileName = basename($source);
+        if ($overwrite) {
+            $destination .= DIRECTORY_SEPARATOR . $fileName;
         } else {
-            return $path;
+            $destination = $this->checkDuplName($destination . DIRECTORY_SEPARATOR . $fileName);
+        }
+
+        if (is_dir($source)) {
+            $this->copyDir($source, $destination);
+        } else {
+            $this->copyFile($source, $destination);
         }
     }
 
     /**
-     * Copy file/folder from one location to another location
+     * Copy directory
      *
-     * @param string  $source      Source
-     * @param string  $destination Destination
-     * @param boolean $overwrite   Overwrite file/folder if exist
+     * @param string $source      Source folder
+     * @param string $destination Destination folder
+     *
+     * @throws \Exception
      */
-    public function copy($source, $destination, $overwrite = false)
+    public function copyDir($source, $destination)
     {
-        if (!$overwrite) {
-            $destination = $this->checkDuplName($destination);
+        if (!is_dir($source)) {
+            throw new \Exception("Source must be existing folder, but '$source' given!");
         }
 
-        if (is_dir($source)) {
+        // Create destination folder if not exists
+        if (!is_dir($destination)) {
+            $this->mkdir($destination);
+        }
 
-            // Create destination folder if not exists
-            if (!is_dir($destination)) {
-                $this->mkdir($destination);
+        foreach (Finder::find("*")->in($source) as $file) {
+
+            $destPath = $destination . DIRECTORY_SEPARATOR . $file->getFilename();
+            if ($file->isDir()) {
+                $this->copyDir($file->getRealPath(), $destPath);
+            } else {
+                $this->copyFile($file->getRealPath(), $destPath);
             }
-
-            $files = Finder::find("*")->in($source);
-            foreach ($files as $file) {
-
-                $filename = $file->getFilename();
-                $this->copy($file->getRealPath(), "$destination/$filename", $overwrite);
-            }
-        } else {
-            $this->copyFile($source, $destination);
         }
     }
 
@@ -66,9 +93,15 @@ class FileSystem
      *
      * @param string $src  Source file
      * @param string $dest Destination file
+     *
+     * @throws \Exception
      */
-    private function copyFile($src, $dest)
+    public function copyFile($src, $dest)
     {
+        if (!is_file($src)) {
+            throw new \Exception("Source must be existing file, but '$src' given!");
+        }
+
         $buffer_size = 1048576;
         $ret = 0;
         $fin = fopen($src, "rb");

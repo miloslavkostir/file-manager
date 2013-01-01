@@ -12,6 +12,31 @@ class FileSystemTest extends TestCase
         $this->library = new Ixtrum\FileManager\Application\FileSystem;
     }
 
+    public function testCopy()
+    {
+        // Create test file
+        $filePath = $this->uploadRoot . DIRECTORY_SEPARATOR . "test_file";
+        file_put_contents($filePath, "data");
+
+        // Test copy file in the same folder
+        $this->library->copy($filePath, $this->uploadRoot);
+        $this->assertFileEquals($filePath, $this->uploadRoot . DIRECTORY_SEPARATOR . "1_test_file");
+
+        // Test copy file to a subfolder
+        $dirPath = $this->uploadRoot . DIRECTORY_SEPARATOR . "test";
+        mkdir($dirPath);
+        $this->library->copy($filePath, $dirPath);
+        $this->assertFileEquals($filePath, $dirPath . DIRECTORY_SEPARATOR . "test_file");
+
+        // Test copy folder in the same folder
+        $this->library->copy($dirPath, $this->uploadRoot);
+        $this->assertFileEquals($this->uploadRoot . DIRECTORY_SEPARATOR . "1_test" . DIRECTORY_SEPARATOR . "test_file", $dirPath . DIRECTORY_SEPARATOR . "test_file");
+
+        // Test copy folder in other folder
+        $this->library->copy($this->uploadRoot . DIRECTORY_SEPARATOR . "1_test", $dirPath);
+        $this->assertFileEquals($dirPath . DIRECTORY_SEPARATOR . "1_test" . DIRECTORY_SEPARATOR . "test_file", $this->uploadRoot . DIRECTORY_SEPARATOR . "1_test" . DIRECTORY_SEPARATOR . "test_file");
+    }
+
     public function testCheckDuplName()
     {
         // Path exist
