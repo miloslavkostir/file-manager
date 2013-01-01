@@ -14,7 +14,7 @@ class FileSystem
      *
      * @return string
      */
-    public function getUniquePath($path)
+    public static function getUniquePath($path)
     {
         if (file_exists($path)) {
 
@@ -48,7 +48,7 @@ class FileSystem
         if ($overwrite) {
             $destination .= DIRECTORY_SEPARATOR . $fileName;
         } else {
-            $destination = $this->getUniquePath($destination . DIRECTORY_SEPARATOR . $fileName);
+            $destination = self::getUniquePath($destination . DIRECTORY_SEPARATOR . $fileName);
         }
 
         if (is_dir($source)) {
