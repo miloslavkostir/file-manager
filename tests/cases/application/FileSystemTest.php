@@ -37,16 +37,16 @@ class FileSystemTest extends TestCase
         $this->assertFileEquals($dirPath . DIRECTORY_SEPARATOR . "1_test" . DIRECTORY_SEPARATOR . "test_file", $this->uploadRoot . DIRECTORY_SEPARATOR . "1_test" . DIRECTORY_SEPARATOR . "test_file");
     }
 
-    public function testCheckDuplName()
+    public function testGetUniquePath()
     {
         // Path exist
         $filename = pathinfo($this->uploadRoot, PATHINFO_BASENAME);
         $dirname = pathinfo($this->uploadRoot, PATHINFO_DIRNAME);
-        $this->assertEquals("$dirname/1_$filename", $this->library->checkDuplName($this->uploadRoot));
+        $this->assertEquals("$dirname/1_$filename", $this->library->getUniquePath($this->uploadRoot));
 
         // Path does not exist
         $path = $this->uploadRoot . DIRECTORY_SEPARATOR . "test";
-        $this->assertEquals($path, $this->library->checkDuplName($path));
+        $this->assertEquals($path, $this->library->getUniquePath($path));
     }
 
     public function testIsSubFolder()

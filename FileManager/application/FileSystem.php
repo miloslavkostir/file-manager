@@ -8,13 +8,13 @@ class FileSystem
 {
 
     /**
-     * Check if file/folder exists and give alternative path name
+     * Get unique file/folder path
      *
      * @param string $path Path to file/folder
      *
      * @return string
      */
-    public function checkDuplName($path)
+    public function getUniquePath($path)
     {
         if (file_exists($path)) {
 
@@ -48,7 +48,7 @@ class FileSystem
         if ($overwrite) {
             $destination .= DIRECTORY_SEPARATOR . $fileName;
         } else {
-            $destination = $this->checkDuplName($destination . DIRECTORY_SEPARATOR . $fileName);
+            $destination = $this->getUniquePath($destination . DIRECTORY_SEPARATOR . $fileName);
         }
 
         if (is_dir($source)) {
