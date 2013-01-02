@@ -2,7 +2,8 @@
 
 namespace Ixtrum\FileManager\Application\Controls;
 
-use Ixtrum\FileManager\Application\FileSystem\Finder;
+use Ixtrum\FileManager\Application\FileSystem,
+    Ixtrum\FileManager\Application\FileSystem\Finder;
 
 class Treeview extends \Ixtrum\FileManager\Application\Controls
 {
@@ -59,7 +60,7 @@ class Treeview extends \Ixtrum\FileManager\Application\Controls
     private function generateTreeview()
     {
         $dirs = $this->getDirTree($this->system->parameters["uploadroot"]);
-        $rootname = $this->system->filesystem->getRootName();
+        $rootname = FileSystem::getRootName();
 
         $output = '<ul class="filetree">';
         $output .= '<span class="fm-droppable" data-move-url="' . $this->getComponent("control-Content")->link("move") . '" data-targetdir="' . $rootname . '">';

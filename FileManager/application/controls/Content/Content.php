@@ -3,7 +3,8 @@
 namespace Ixtrum\FileManager\Application\Controls;
 
 use Nette\Application\Responses\FileResponse,
-    Ixtrum\FileManager\Application\FileSystem\Finder;
+    Ixtrum\FileManager\Application\FileSystem\Finder,
+    Ixtrum\FileManager\Application\FileSystem;
 
 class Content extends \Ixtrum\FileManager\Application\Controls
 {
@@ -107,7 +108,7 @@ class Content extends \Ixtrum\FileManager\Application\Controls
     {
         $parent = dirname($this->getActualDir());
         if ($parent == "\\" || $parent == ".") {
-            $parentDir = $this->system->filesystem->getRootname();
+            $parentDir = FileSystem::getRootname();
         } else {
             $parentDir = $parent . "/";
         }
@@ -157,7 +158,7 @@ class Content extends \Ixtrum\FileManager\Application\Controls
                 $this->getActualDir(), $this->system->session->get("mask"), $this->view, $this->system->session->get("order")
         );
         $this->template->actualdir = $this->getActualDir();
-        $this->template->rootname = $this->system->filesystem->getRootName();
+        $this->template->rootname = FileSystem::getRootName();
         $this->template->thumbDir = $this->system->parameters["resDir"] . "/img/icons/$this->view";
 
         // Load plugins

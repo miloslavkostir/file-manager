@@ -2,7 +2,8 @@
 
 namespace Ixtrum\FileManager\Application\Controls;
 
-use Nette\Application\UI\Form;
+use Nette\Application\UI\Form,
+    Ixtrum\FileManager\Application\FileSystem;
 
 class Navigation extends \Ixtrum\FileManager\Application\Controls
 {
@@ -57,7 +58,7 @@ class Navigation extends \Ixtrum\FileManager\Application\Controls
     protected function getNav($dir)
     {
         $var = array();
-        $rootname = $this->system->filesystem->getRootName();
+        $rootname = FileSystem::getRootName();
         if ($dir === $rootname)
             $var[] = array(
                 "name" => $rootname,

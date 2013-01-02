@@ -2,6 +2,8 @@
 
 namespace Ixtrum\FileManager\Application\Controls;
 
+use Ixtrum\FileManager\Application\FileSystem;
+
 class Clipboard extends \Ixtrum\FileManager\Application\Controls
 {
 
@@ -52,7 +54,7 @@ class Clipboard extends \Ixtrum\FileManager\Application\Controls
         $this->template->setFile(__DIR__ . "/Clipboard.latte");
         $this->template->setTranslator($this->system->translator);
         $this->template->clipboard = $this->system->session->get("clipboard");
-        $this->template->rootname = $this->system->filesystem->getRootName();
+        $this->template->rootname = FileSystem::getRootName();
         $this->template->render();
     }
 

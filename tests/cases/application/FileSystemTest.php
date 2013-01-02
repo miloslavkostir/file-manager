@@ -63,7 +63,7 @@ class FileSystemTest extends TestCase
 
     public function testGetRootName()
     {
-        $this->assertEquals("/", $this->library->getRootName());
+        $this->assertEquals("/", Ixtrum\FileManager\Application\FileSystem::getRootName());
     }
 
 }

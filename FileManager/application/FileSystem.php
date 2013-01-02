@@ -288,7 +288,7 @@ class FileSystem
      *
      * @return string
      */
-    public function getRootname()
+    public static function getRootname()
     {
         return "/";
     }
