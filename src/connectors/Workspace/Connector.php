@@ -13,6 +13,14 @@ class Connector extends Object implements IApplication
     /** @var \Nette\DI\Container */
     private $context;
 
+    /** @var string */
+    private $name = "filemanager";
+
+    /**
+     * Constructor
+     *
+     * @param \Nette\DI\Container $container
+     */
     public function __construct(Container $container)
     {
         $this->context = $container;
@@ -27,6 +35,16 @@ class Connector extends Object implements IApplication
     }
 
     /**
+     * Get application name
+     *
+     * @return string
+     */
+    public function getAppName()
+    {
+        return $this->name;
+    }
+
+    /**
      * Get application version
      */
     public function getVersion()
@@ -34,6 +52,13 @@ class Connector extends Object implements IApplication
         return FileManager::VERSION;
     }
 
+    /**
+     * Create application instance
+     *
+     * @param mixed $configuration Application configuration
+     *
+     * @return \Ixtrum\FileManager
+     */
     public function createInstance($configuration)
     {
         return new FileManager($this->context, $configuration);
