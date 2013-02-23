@@ -16,6 +16,6 @@
         "phpunit/phpunit": "3.7.10"
     },
     "autoload": {
-        "classmap": ["FileManager/"]
+        "classmap": ["src/"]
     }
 }
