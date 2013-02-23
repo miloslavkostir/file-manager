@@ -1,0 +1,78 @@
+<style type="text/css">
+    form .add-on, .path-selector li { cursor: pointer; }
+    .path-selector .opening { font-style: italic; }
+</style>
+<div class="path-selector">
+    <span class="add-on"
+          data-toggle="modal"
+          data-target="#path-selector-{$inputID}-modal"
+          title="Browse">
+        <i class="icon-folder-close"></i>
+    </span>
+    <div n:ifset="$root" id="path-selector-{$inputID}-modal" class="modal hide">
+        <div class="modal-header">
+            <h3>Select folder</h3>
+            <ul class="breadcrumb">
+                <li><a>{$appPath}</a></li>
+            </ul>
+        </div>
+        <div class="modal-body">{!$root}</div>
+        <div class="modal-footer">
+            <a class="btn" data-dismiss="modal">Close</a>
+            <a class="btn btn-primary" data-dismiss="modal">OK</a>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+$(function () {
+    var input = "#" + {$inputID};
+    var modal = "#path-selector-"+{$inputID}+"-modal";
+
+    // Append browse icon to form input
+    if ($(input).length) {
+        $(input).wrap('<div class="input-prepend"></div>');
+        $(".path-selector .add-on").insertBefore(input);
+    };
+
+    // On select item event
+    $(document).on("click", ".path-selector li a", function () {
+        $(".path-selector li").removeClass("active");
+        $(this).closest("li").addClass("active");
+    });
+
+    // On confirm selected item event
+    $(document).on("click", ".path-selector .btn-primary", function (){
+        var path = $(".path-selector .active a").data("path");
+        if (path) {
+            $(input).val(path);
+            $(modal).modal("hide");
+        }
+    });
+
+    // On folder open event
+    $(".path-selector").on("dblclick", "a", function (e) {
+        var selected$ = $(this);
+        var icon$ = selected$.find("i:first-child");
+
+        if (icon$.hasClass("icon-folder-open")) {
+                icon$.removeClass("icon-folder-open").addClass("icon-folder-close");
+                selected$.next("ul").remove();
+
+        } else {
+                // Change folder status
+                var fileName$ = selected$.children("span");
+                var origFileName = fileName$.text();
+                fileName$.text("opening...").addClass("opening");
+
+                $.post({link getDirContent!}, { path : selected$.data("path") }, function (payload) {
+                    if (payload.subtree != "") {
+                        $(payload.subtree).insertAfter(selected$);
+                        icon$.removeClass("icon-folder-close").addClass("icon-folder-open");
+                    }
+                }).complete(function() {
+                    fileName$.text(origFileName).removeClass("opening");
+                });
+        }
+    });
+});
+</script>

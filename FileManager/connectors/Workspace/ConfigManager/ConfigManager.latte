@@ -1,0 +1,38 @@
+<div class="modal rebind fade">
+    {form configForm class => "ajax form-horizontal"}
+    <div class="modal-header">
+        <a type="button" class="close" data-dismiss="modal">&times;</a>
+        <h3>Edit configuration</h3>
+    </div>
+    <div class="modal-body">
+        <div class="control-group">
+            <label class="control-label">{label lang /}</label>
+            <div class="controls">{input lang}</div>
+        </div>
+        <div class="control-group">
+            <label class="control-label">{label uploadroot /}</label>
+            <div class="controls">{input uploadroot}</div>
+        </div>
+        <div class="control-group">
+            <label class="control-label">{label quota /}</label>
+            <div class="controls">{input quota}</div>
+        </div>
+        <div class="control-group">
+            <label class="control-label">{label quotaLimit /}</label>
+            <div class="controls">{input quotaLimit} MB</div>
+        </div>
+        <div class="control-group">
+            <label class="control-label">{label cache /}</label>
+            <div class="controls">{input cache}</div>
+        </div>
+        <div class="control-group">
+            <label class="control-label">{label readonly /}</label>
+            <div class="controls">{input readonly}</div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <a class="btn" data-dismiss="modal">Close</a>
+        {input save class => "btn btn-primary"}
+    </div>
+    {/form}
+</div>
