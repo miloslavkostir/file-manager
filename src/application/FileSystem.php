@@ -126,7 +126,7 @@ class FileSystem
     public function isSubFolder($root, $dir)
     {
         if (!is_dir($root)) {
-            throw new \Exception("'$dir' is not directory!");
+            throw new \Exception("'$root' is not directory!");
         }
 
         if ($root === $dir) {
