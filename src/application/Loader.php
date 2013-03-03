@@ -86,6 +86,10 @@ final class Loader extends \Nette\DI\Container
         if (!is_dir($this->parameters["langDir"])) {
             throw new \Nette\DirectoryNotFoundException("Language dir '" . $this->parameters["langDir"] . "' doesn't exist!");
         }
+
+        if ($this->parameters["quota"] && (int) $this->parameters["quotaLimit"] === 0) {
+            throw new \Nette\InvalidArgumentException("Quota limit must defined if quota enabled, but '" . $this->parameters["quotaLimit"] . "' given!");
+        }
     }
 
     /**
