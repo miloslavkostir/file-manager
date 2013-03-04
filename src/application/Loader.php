@@ -11,6 +11,18 @@ final class Loader extends \Nette\DI\Container
     /** @var \Nette\Http\Session */
     private $session;
 
+    /** @var array */
+    private $defaults = array(
+        "uploadroot" => null,
+        "cache" => true,
+        "cacheStorage" => "FileStorage",
+        "readonly" => false,
+        "quota" => false,
+        "quotaLimit" => 20, // megabytes
+        "lang" => "en",
+        "resDir" => "ixtrum-res"
+    );
+
     /**
      * Constructor
      *
@@ -33,12 +45,8 @@ final class Loader extends \Nette\DI\Container
      */
     private function createConfiguration($config)
     {
-        // Get default config
-        $loader = new \Nette\Config\Loader;
-        $defaultConfig = $loader->load($config["appDir"] . "/config/default.neon");
-
         // Merge user config with default config
-        $config = array_merge($defaultConfig["parameters"], $config);
+        $config = array_merge($this->defaults, $config);
 
         // Set default pluginDir
         if (!isset($config["pluginDir"])) {
