@@ -33,7 +33,6 @@ final class Loader extends \Nette\DI\Container
     {
         $this->session = $session;
         $this->parameters = $this->createConfiguration($config);
-        $this->checkRequirements();
     }
 
     /**
@@ -65,6 +64,9 @@ final class Loader extends \Nette\DI\Container
         // Get plugins
         $config["plugins"] = $this->getPlugins($config["pluginDir"]);
 
+        // Check requirements
+        $this->checkRequirements($config);
+
         // Canonicalize uploadroot
         $config["uploadroot"] = realpath($config["uploadroot"]);
 
@@ -72,31 +74,33 @@ final class Loader extends \Nette\DI\Container
     }
 
     /**
-     * Check application requirements
+     * Check application requirements with given config
+     *
+     * @param array $config Configuration
      *
      * @throws \Nette\DirectoryNotFoundException
-     * @throws \Nette\Application\ApplicationException
+     * @throws \Nette\InvalidArgumentException
      */
-    private function checkRequirements()
+    private function checkRequirements(array $config)
     {
-        if (!isset($this->parameters["uploadroot"]) || empty($this->parameters["uploadroot"])) {
+        if (!isset($config["uploadroot"]) || empty($config["uploadroot"])) {
             throw new \Nette\InvalidArgumentException("Parameter 'uploadroot' not defined!");
         }
 
-        if (!is_dir($this->parameters["uploadroot"])) {
-            throw new \Nette\DirectoryNotFoundException("Upload root '" . $this->parameters["uploadroot"] . "' doesn't exist!");
+        if (!is_dir($config["uploadroot"])) {
+            throw new \Nette\DirectoryNotFoundException("Upload root '" . $config["uploadroot"] . "' doesn't exist!");
         }
 
-        if (!is_dir($this->parameters["pluginDir"])) {
-            throw new \Nette\DirectoryNotFoundException("Plugin dir '" . $this->parameters["pluginDir"] . "' doesn't exist!");
+        if (!is_dir($config["pluginDir"])) {
+            throw new \Nette\DirectoryNotFoundException("Plugin dir '" . $config["pluginDir"] . "' doesn't exist!");
         }
 
-        if (!is_dir($this->parameters["langDir"])) {
-            throw new \Nette\DirectoryNotFoundException("Language dir '" . $this->parameters["langDir"] . "' doesn't exist!");
+        if (!is_dir($config["langDir"])) {
+            throw new \Nette\DirectoryNotFoundException("Language dir '" . $config["langDir"] . "' doesn't exist!");
         }
 
-        if ($this->parameters["quota"] && (int) $this->parameters["quotaLimit"] === 0) {
-            throw new \Nette\InvalidArgumentException("Quota limit must defined if quota enabled, but '" . $this->parameters["quotaLimit"] . "' given!");
+        if ($config["quota"] && (int) $config["quotaLimit"] === 0) {
+            throw new \Nette\InvalidArgumentException("Quota limit must defined if quota enabled, but '" . $config["quotaLimit"] . "' given!");
         }
     }
 
