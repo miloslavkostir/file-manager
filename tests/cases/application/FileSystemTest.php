@@ -3,7 +3,7 @@
 class FileSystemTest extends TestCase
 {
 
-    /** @var xtrum\FileManager\Application\FileSystem */
+    /** @var Ixtrum\FileManager\Application\FileSystem */
     private $library;
 
     public function setUp()
