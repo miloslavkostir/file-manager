@@ -103,12 +103,9 @@ class FileManagerTest extends TestCase
      */
     public function testGetLanguages()
     {
-        $control = new Ixtrum\FileManager($this->context, array("uploadroot" => $this->uploadRoot));
-        $this->presenter->addComponent($control, "testControl");
-        $this->presenter->run(new Nette\Application\Request("Homepage", "GET", array()));
-        $fileManager = $this->presenter->getComponent("testControl");
-
-        $this->assertEquals(array("en" => "en", "cs" => "cs"), $fileManager->getLanguages());
+        $this->assertEquals(
+            array("en" => "en", "cs" => "cs"), Ixtrum\FileManager::getLanguages(__DIR__ . "/../../src/lang")
+        );
     }
 
 }
