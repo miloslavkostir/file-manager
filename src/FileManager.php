@@ -18,9 +18,6 @@ class FileManager extends \Nette\Application\UI\Control
     /** @var array */
     protected $selectedFiles = array();
 
-    /** @var string */
-    static $defaultLang = "en";
-
     /**
      * Constructor
      *
@@ -116,10 +113,11 @@ class FileManager extends \Nette\Application\UI\Control
      *
      * @return array
      */
-    public static function getLanguages($langDir)
+    public static function getLanguages()
     {
-        $languages = array(self::$defaultLang => self::$defaultLang);
-        $files = Finder::findFiles("*.json")->in($langDir);
+        $config = self::getDefaults();
+        $languages = array($config["lang"] => $config["lang"]);
+        $files = Finder::findFiles("*.json")->in($config["langDir"]);
         foreach ($files as $file) {
 
             $baseName = $file->getBasename(".json");
