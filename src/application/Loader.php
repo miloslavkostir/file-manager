@@ -12,16 +12,7 @@ final class Loader extends \Nette\DI\Container
     private $session;
 
     /** @var array */
-    private $defaults = array(
-        "uploadroot" => null,
-        "cache" => true,
-        "cacheStorage" => "FileStorage",
-        "readonly" => false,
-        "quota" => false,
-        "quotaLimit" => 20, // megabytes
-        "lang" => "en",
-        "resDir" => "ixtrum-res"
-    );
+    private $defaults;
 
     /**
      * Constructor
@@ -31,6 +22,7 @@ final class Loader extends \Nette\DI\Container
      */
     public function __construct(\Nette\Http\Session $session, $config)
     {
+        $this->defaults = \Ixtrum\FileManager::getDefaults();
         $this->session = $session;
         $this->parameters = $this->createConfiguration($config);
     }
@@ -47,28 +39,14 @@ final class Loader extends \Nette\DI\Container
         // Merge user config with default config
         $config = array_merge($this->defaults, $config);
 
-        // Set default pluginDir
-        if (!isset($config["pluginDir"])) {
-            $config["pluginDir"] = $config["appDir"] . DIRECTORY_SEPARATOR . "plugins";
-        } else {
-            $config["pluginDir"] = realpath($config["pluginDir"]);
-        }
-
-        // Set default langDir
-        if (!isset($config["langDir"])) {
-            $config["langDir"] = $config["appDir"] . DIRECTORY_SEPARATOR . "lang";
-        } else {
-            $config["langDir"] = realpath($config["langDir"]);
-        }
-
-        // Get plugins
-        $config["plugins"] = $this->getPlugins($config["pluginDir"]);
-
         // Check requirements
         $this->checkRequirements($config);
 
         // Canonicalize uploadroot
         $config["uploadroot"] = realpath($config["uploadroot"]);
+
+        // Get plugins
+        $config["plugins"] = $this->getPlugins($config["pluginDir"]);
 
         return $config;
     }

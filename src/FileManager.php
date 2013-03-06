@@ -34,7 +34,6 @@ class FileManager extends \Nette\Application\UI\Control
         // Add important base parameters to config
         $config["wwwDir"] = $container->parameters["wwwDir"];
         $config["tempDir"] = $container->parameters["tempDir"];
-        $config["appDir"] = __DIR__;
 
         // Load system container with services and configuration
         $this->system = new FileManager\Application\Loader($container->session, $config);
@@ -252,6 +251,27 @@ class FileManager extends \Nette\Application\UI\Control
         } else {
             return disk_free_space($this->system->parameters["uploadroot"]);
         }
+    }
+
+    /**
+     * Get default parameters
+     *
+     * @return array
+     */
+    public static function getDefaults()
+    {
+        return array(
+            "uploadroot" => null,
+            "cache" => true,
+            "cacheStorage" => "FileStorage",
+            "readonly" => false,
+            "quota" => false,
+            "quotaLimit" => 20, // megabytes
+            "lang" => "en",
+            "resDir" => "ixtrum-res",
+            "pluginDir" => __DIR__ . "/plugins",
+            "langDir" => __DIR__ . "/lang"
+        );
     }
 
     /**
