@@ -256,6 +256,8 @@ class FileManager extends \Nette\Application\UI\Control
             "quota" => false,
             "quotaLimit" => 20, // megabytes
             "lang" => "en",
+            "tempDir" => null,
+            "wwwDir" => null,
             "resDir" => "ixtrum-res",
             "pluginDir" => __DIR__ . "/plugins",
             "langDir" => __DIR__ . "/lang"

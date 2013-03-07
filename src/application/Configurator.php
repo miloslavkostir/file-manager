@@ -27,6 +27,14 @@ class Configurator
             throw new \Nette\DirectoryNotFoundException("Upload root '" . $config["uploadroot"] . "' doesn't exist!");
         }
 
+        if (!is_dir($config["tempDir"])) {
+            throw new \Nette\DirectoryNotFoundException("Temp dir '" . $config["tempDir"] . "' doesn't exist!");
+        }
+
+        if (!is_dir($config["wwwDir"])) {
+            throw new \Nette\DirectoryNotFoundException("WWW dir '" . $config["wwwDir"] . "' doesn't exist!");
+        }
+
         if (!is_dir($config["pluginDir"])) {
             throw new \Nette\DirectoryNotFoundException("Plugin dir '" . $config["pluginDir"] . "' doesn't exist!");
         }

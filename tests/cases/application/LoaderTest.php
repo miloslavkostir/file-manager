@@ -14,7 +14,9 @@ class LoaderTest extends TestCase
             "appDir" => __DIR__,
             "pluginDir" => __DIR__,
             "uploadroot" => __DIR__,
-            "langDir" => __DIR__
+            "langDir" => __DIR__,
+            "tempDir" => __DIR__,
+            "wwwDir" => __DIR__
         );
         $this->createLoader($config);
     }
@@ -29,7 +31,9 @@ class LoaderTest extends TestCase
         $config = array(
             "appDir" => __DIR__,
             "pluginDir" => __DIR__,
-            "uploadroot" => null
+            "uploadroot" => null,
+            "tempDir" => __DIR__,
+            "wwwDir" => __DIR__
         );
         $this->createLoader($config);
     }
