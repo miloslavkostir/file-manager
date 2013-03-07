@@ -127,16 +127,6 @@ class FileManager extends \Nette\Application\UI\Control
     }
 
     /**
-     * Get system parameters
-     *
-     * @return array
-     */
-    public function getSystemParameters()
-    {
-        return $this->system->parameters;
-    }
-
-    /**
      * Set actual dir
      *
      * @param string $dir relative dir path
