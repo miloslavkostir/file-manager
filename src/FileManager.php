@@ -138,9 +138,11 @@ class FileManager extends \Nette\Application\UI\Control
         }
     }
 
-    public function render()
+    /**
+     * Should be called only in renderBody() & render()
+     */
+    private function sharedRender()
     {
-        $this->template->setFile(__DIR__ . "/FileManager.latte");
         $this->template->setTranslator($this->system->translator);
         $this->template->resDir = $this->system->parameters["resDir"];
 
@@ -181,6 +183,43 @@ class FileManager extends \Nette\Application\UI\Control
     }
 
     /**
+     * Render default template
+     */
+    public function render()
+    {
+        $this->template->setFile(__DIR__ . "/default.latte");
+        $this->sharedRender();
+    }
+
+    /**
+     * Render body template
+     */
+    public function renderBody()
+    {
+        $this->template->setFile(__DIR__ . "/body.latte");
+        $this->sharedRender();
+    }
+
+    /**
+     * Render head template
+     */
+    public function renderHead()
+    {
+        $this->template->setFile(__DIR__ . "/head.latte");
+        $this->template->resDir = $this->system->parameters["resDir"];
+
+        // Get theme
+        $theme = $this->system->session->get("theme");
+        if ($theme) {
+            $this->template->theme = $theme;
+        } else {
+            $this->template->theme = "default";
+        }
+
+        $this->template->render();
+    }
+
+    /**
      * Callback for error event in form
      *
      * @param \Nette\Application\UI\Form $form
@@ -204,11 +243,11 @@ class FileManager extends \Nette\Application\UI\Control
         $system = $this->system;
         $selectedFiles = $this->selectedFiles;
         return new Multiplier(function ($name) use ($system, $selectedFiles) {
-                            $namespace = __NAMESPACE__;
-                            $namespace .= "\\FileManager\Application\Controls";
-                            $class = "$namespace\\$name";
-                            return new $class($system, $selectedFiles);
-                        });
+                    $namespace = __NAMESPACE__;
+                    $namespace .= "\\FileManager\Application\Controls";
+                    $class = "$namespace\\$name";
+                    return new $class($system, $selectedFiles);
+                });
     }
 
     /**
@@ -222,9 +261,9 @@ class FileManager extends \Nette\Application\UI\Control
         $selectedFiles = $this->selectedFiles;
         return new Multiplier(function ($name) use ($system, $selectedFiles) {
 
-                            $class = $system->parameters["plugins"][$name]["class"];
-                            return new $class($name, $system, $selectedFiles);
-                        });
+                    $class = $system->parameters["plugins"][$name]["class"];
+                    return new $class($name, $system, $selectedFiles);
+                });
     }
 
     /**

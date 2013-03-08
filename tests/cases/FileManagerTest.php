@@ -63,7 +63,7 @@ class FileManagerTest extends TestCase
     }
 
     /**
-     * Test default render method
+     * Test render default.latte
      *
      * @return void
      */
@@ -75,7 +75,45 @@ class FileManagerTest extends TestCase
 
         $fileManager = $this->presenter->getComponent("testControl");
         $this->renderComponent($fileManager);
+
         $this->assertInstanceOf("Nette\Templating\FileTemplate", $fileManager->template);
+        $this->assertEquals("default.latte", basename($fileManager->template->getFile()));
+    }
+
+    /**
+     * Test render body.latte
+     *
+     * @return void
+     */
+    public function testRenderBody()
+    {
+        $control = new Ixtrum\FileManager($this->context, array("uploadroot" => $this->uploadRoot));
+        $this->presenter->addComponent($control, "testControl");
+        $this->presenter->run(new Nette\Application\Request("Homepage", "GET", array()));
+
+        $fileManager = $this->presenter->getComponent("testControl");
+        $this->renderComponent($fileManager, "body");
+
+        $this->assertInstanceOf("Nette\Templating\FileTemplate", $fileManager->template);
+        $this->assertEquals("body.latte", basename($fileManager->template->getFile()));
+    }
+
+    /**
+     * Test render head.latte
+     *
+     * @return void
+     */
+    public function testRenderHead()
+    {
+        $control = new Ixtrum\FileManager($this->context, array("uploadroot" => $this->uploadRoot));
+        $this->presenter->addComponent($control, "testControl");
+        $this->presenter->run(new Nette\Application\Request("Homepage", "GET", array()));
+
+        $fileManager = $this->presenter->getComponent("testControl");
+        $this->renderComponent($fileManager, "head");
+
+        $this->assertInstanceOf("Nette\Templating\FileTemplate", $fileManager->template);
+        $this->assertEquals("head.latte", basename($fileManager->template->getFile()));
     }
 
     /**
@@ -104,7 +142,7 @@ class FileManagerTest extends TestCase
     public function testGetLanguages()
     {
         $this->assertEquals(
-            array("en" => "en", "cs" => "cs"), Ixtrum\FileManager::getLanguages(__DIR__ . "/../../src/lang")
+                array("en" => "en", "cs" => "cs"), Ixtrum\FileManager::getLanguages(__DIR__ . "/../../src/lang")
         );
     }
 

@@ -49,14 +49,16 @@ class TestCase extends PHPUnit_Framework_TestCase
      * Render method helper for testing components and controls
      *
      * @param Nette\Application\UI\Control $control Component
+     * @param string                       $method  Set different render method
      * @param array                        $args    Arguments
      *
      * @return string
      */
-    public function renderComponent(Nette\Application\UI\Control $control, $args = array())
+    public function renderComponent(Nette\Application\UI\Control $control, $method = null, $args = array())
     {
+        $method = ucfirst($method);
         ob_start();
-        callback($control, "render")->invokeArgs($args);
+        callback($control, "render$method")->invokeArgs($args);
         return ob_get_clean();
     }
 
