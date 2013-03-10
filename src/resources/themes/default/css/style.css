@@ -7,6 +7,10 @@
     z-index: 0;
 }
 .file-manager a { text-decoration: none; color: black; }
+.file-manager form {
+    padding: 0;
+    margin: 0;
+}
 .file-manager h2 { font-size: 20px; font-weight: normal; }
 .file-manager h3 { font-size: 15px; font-weight: normal; height: 25px; line-height: 25px; margin: 5px 0 10px; padding: 0 7px; }
 .file-manager input[type='text'] {
@@ -14,6 +18,8 @@
     line-height: 24px;
     border-radius: 4px;
     vertical-align: middle;
+    margin: 0;
+    width: auto;
 }
 .file-manager input[type='submit'] {
     cursor: pointer;
@@ -39,6 +45,12 @@
     margin-bottom: 0;
 }
 .file-manager select {
+    height: auto;
+    line-height: inherit;
+    margin: 0;
+    padding: 0;
+    width: auto;
+    vertical-align: auto;
     border-width: 1px;
     border-style: solid;
     border-color: #0053A6 #0053A6 #000000;
