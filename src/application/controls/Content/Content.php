@@ -146,8 +146,7 @@ class Content extends \Ixtrum\FileManager\Application\Controls
 
     public function handleShowThumb($dir, $fileName)
     {
-        $thumb = $this->getAbsolutePath($dir) . DIRECTORY_SEPARATOR . $fileName;
-        $thumb->send();
+        $this->system->thumbs->getThumbFile($this->getAbsolutePath($dir) . "/$fileName")->send();
     }
 
     public function render()
