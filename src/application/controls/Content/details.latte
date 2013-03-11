@@ -2,7 +2,7 @@
 <a n:if="$actualdir <> $rootname"
    n:href="goToParent!"
    title="{_'Parent folder'}"
-   class="fm-ajax fm-link-parent">
+   class="ajax fm-link-parent">
     <h2>[..]</h2>
 </a>
 <div class="fm-delimiter"></div>
@@ -10,10 +10,10 @@
     <table cellspacing="0">
         <thead>
             <tr>
-                <th><a n:href="orderBy!, 'name'" class="fm-ajax">{_'Name'}</a></th>
-                <th><a n:href="orderBy!, 'time'" class="fm-ajax">{_'Modified'}</a></th>
-                <th><a n:href="orderBy!, 'type'" class="fm-ajax">{_'Type'}</a></th>
-                <th><a n:href="orderBy!, 'size'" class="fm-ajax">{_'Size'}</a></th>
+                <th><a n:href="orderBy!, 'name'" class="ajax">{_'Name'}</a></th>
+                <th><a n:href="orderBy!, 'time'" class="ajax">{_'Modified'}</a></th>
+                <th><a n:href="orderBy!, 'type'" class="ajax">{_'Type'}</a></th>
+                <th><a n:href="orderBy!, 'size'" class="ajax">{_'Size'}</a></th>
             </tr>
         </thead>
         <tbody>

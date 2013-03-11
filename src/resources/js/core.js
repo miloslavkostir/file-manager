@@ -1,26 +1,40 @@
-/*
- * Copyright (c) 2011 Bronislav Sedlák <bronislav.sedlak@gmail.com>
- *
- * Permission to use, copy, modify, and distribute this software for any
- * purpose with or without fee is hereby granted, provided that the above
- * copyright notice and this permission notice appear in all copies.
- *
- * THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES
- * WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF
- * MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR
- * ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES
- * WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN
- * ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
- * OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
- */
-
 $(function() {
 
-    // Define scripts to initializate after page loaded
+    $.nette.ext("fm-select-onchange", {
+        load: function() {
+            $(".file-manager").on("change", ".ajax-select", function(event) {
+                event.preventDefault();
+                $(this).closest("form").submit();
+            });
+        }
+    });
+
+    $.nette.ext("fm-inactive", {
+        start: function() {
+            $(".file-manager").each(function() {
+                $("<div>", {
+                    class: "fm-inactive",
+                    css: {
+                        top: $(this).position().top,
+                        left: $(this).position().left,
+                        width: $(this).outerWidth(),
+                        height: $(this).outerHeight()
+                    }
+                }).appendTo($(this));
+            });
+        },
+        complete: function() {
+            $(".file-manager .fm-inactive").remove();
+            initScripts();
+        }
+    });
+
+    // Define scripts to initializate after page loaded or snippets refreshed
     function initScripts() {
 
         var mb = $(".fm-alert").stop(true, true).fadeIn();
-        if(mb.data("delay")) clearTimeout(mb.data("delay"));
+        if (mb.data("delay"))
+            clearTimeout(mb.data("delay"));
         mb.data("delay", setTimeout(function() {
             mb.fadeOut(500);
         }, 15000));
@@ -30,7 +44,7 @@ $(function() {
             cursor: "pointer",
             helper: "clone",
             scroll: false,
-            opacity : 0.6
+            opacity: 0.6
         });
 
         $(".fm-droppable").droppable({
@@ -38,25 +52,26 @@ $(function() {
             drop: function(event, ui) {
                 var filename = ui.draggable.data("filename");
                 var targetdir = $(this).data("targetdir");
-                var moveUrl = $(this).data("move-url");
+
                 $(this).addClass("fm-state-highlight");
-                $.getJSON(moveUrl, {
-                    filename: filename,
-                    targetdir: targetdir
-                }, function (payload) {
-                    $.nette.success(payload);
+                $.nette.ajax({
+                    url: $(this).data("move-url"),
+                    data: {
+                        filename: filename,
+                        targetdir: targetdir
+                    }
+                }, this).done(function(payload) {
                     if (payload.result === "success") {
                         ui.draggable.remove();
                     }
                 });
-                $.animateProgress(".file-manager", event);
                 $(this).removeClass("fm-state-highlight");
             }
         });
 
         /** Clipboard */
-        $('.fm-clipboard').css({
-            top: $('.fm-toolbar').outerHeight()
+        $(".fm-clipboard").css({
+            top: $(".fm-toolbar").outerHeight()
         });
 
 
@@ -85,87 +100,60 @@ $(function() {
         });
     }
 
-    // Fire init scripts after page loaded
     initScripts();
 
-    // Bind init scripts when snippet updated
-    $(".file-manager").bind("snippetUpdated", function() {
-        initScripts();
-    });
-
-    $(".file-manager").delegate(".fm-show-messages", "click", function() {
+    $(".file-manager").on("click", ".fm-show-messages", function(event) {
+        event.preventDefault()
         $(".fm-alert-message-text").toggleClass("fm-hide");
     });
 
-    $(".file-manager").delegate(".fm-close", "click", function() {
+    $(".file-manager").on("click", ".fm-close", function(event) {
+        event.preventDefault()
         $(".fm-alert").remove();
     });
 
-    $(".file-manager").delegate("a.fm-ajax", "click", function(e) {
-        $.getJSON(this.href);
-        $.animateProgress(".file-manager", e);
-        return false;
-    });
-
-    $(".file-manager").delegate("a.fm-ajax-dbl", "dblclick", function(e) {
-        $.getJSON(this.href);
-        $.animateProgress(".file-manager", e);
-        return false;
-    }).delegate("a.fm-ajax-dbl", "click", function (e){
-        return false;
-    });
-
-    $(".file-manager").delegate("form.fm-ajax", "submit", function(e) {
-        $.animateProgress(".file-manager", e);
-        $(this).ajaxSubmit();
-        return false;
-    });
-
-    $(".file-manager").delegate("form.fm-ajax :submit", "click", function(e) {
-        $(this).ajaxSubmit();
-        $.animateProgress(".file-manager", e);
-        return false;
-    });
-
-    $(".file-manager").delegate(".ajax-select-form", "change", function(event) {
+    $(".file-manager").on("dblclick", ".fm-ajax-dbl", function(event) {
         event.preventDefault();
-        $(this).ajaxSubmit();
-        $.animateProgress(".file-manager", event);
+        $.nette.ajax({
+            url: this.href
+        });
+    }).on("click", "a.fm-ajax-dbl", function(event) {
+        event.preventDefault()
     });
-
 
 
 
     /* Navigation */
-    $('body').delegate('.fm-location input', 'focusin', function() {
+    $("body").on("focusin", ".fm-location input", function() {
         $(".fm-navigation").hide();
         $(this).addClass("active");
     });
 
-    $('body').delegate('.fm-location input', 'focusout', function() {
+    $("body").on("focusout", ".fm-location input", function() {
         $(this).removeClass("active");
         $('.fm-navigation').show();
     });
 
 
     /* Treeview */
-    $(".file-manager").delegate('.fm-treeview', 'hover', function(e) {
-        if( e.type === 'mouseenter' ) {
+    $(".file-manager").on("hover", ".fm-treeview", function(event) {
+        if (event.type === 'mouseenter') {
             $(".file-manager .hitarea").stop(true, true)
-            $(".file-manager .hitarea").show('fade');
+            $(".file-manager .hitarea").show("fade");
         } else
-            $(".file-manager .hitarea").hide('fade', 700);
+            $(".file-manager .hitarea").hide("fade", 700);
     });
 
 
     /** Clipboard */
-    $(document).delegate('#fm-clipboard-hide', 'click', function() {
-        $('.fm-clipboard').slideToggle('slow');
+    $(document).on("click", "#fm-clipboard-hide", function(event) {
+        event.preventDefault();
+        $(".fm-clipboard").slideToggle("slow");
     });
 
-    $(document).delegate('#show-clipboard', 'click', function() {
-        $('.fm-clipboard').slideToggle('slow');
-        return false;
+    $(document).on("click", "#show-clipboard", function(event) {
+        event.preventDefault();
+        $(".fm-clipboard").slideToggle("slow");
     });
 });
 
@@ -175,88 +163,15 @@ $(function() {
  */
 (function($) {
 
-    /**
-     * Based on AJAX Nette Framework plugin for jQuery
-     *
-     * @copyright   Copyright (c) 2009 Jan Marek
-     * @license     MIT
-     * @link        http://nettephp.com/cs/extras/jquery-ajax
-     * @version     0.2
-     */
-    jQuery.extend({
-        nette: {
-            updateSnippet: function (id, html) {
-                var el = $("#" + id);
-                jQuery.nette.changeContent(el, html);
-                el.trigger("snippetUpdated", [el]);
-            },
-
-            changeContent: function (element, content) {
-                element.html(content);
-            },
-
-            success: function (payload) {
-
-                // empty payload
-                if (payload === null || payload === undefined)
-                    return;
-
-                // redirect
-                if (payload.redirect) {
-                    window.location.href = payload.redirect;
-                    return;
-                }
-
-                // snippets
-                if (payload.snippets) {
-                    for (var i in payload.snippets) {
-                        jQuery.nette.updateSnippet(i, payload.snippets[i]);
-                    }
-                }
-            }
-        }
-    });
-
-    jQuery.ajaxSetup({
-        success: jQuery.nette.success,
-        dataType: "json"
-    });
-
-    // Disable file manager and show ajax loader
-    $.animateProgress = function(selector, event) {
-
-        // Show inactive div over every part
-        $(selector).each(function() {
-            var inactive$ = $('<div class="fm-inactive"></div>');
-            inactive$.css({
-                top: $(this).position().top,
-                left: $(this).position().left,
-                width: $(this).outerWidth(),
-                height: $(this).outerHeight()
-            }).ajaxStop(function() {
-                inactive$.remove();
-            }).appendTo($(this));
-        });
-
-        $('<div class="fm-ajax-loader"></div>').css({
-            position: "absolute",
-            left: event.pageX + 20,
-            top: event.pageY + 40
-        }).ajaxStop(function() {
-            $(this).remove();
-        }).appendTo("body");
-    };
-
-
     /*
      * Based on Arron Bailiss <arron@arronbailiss.com> jQuery Shift-click Plugin
      */
     $.fn.shiftClick = function(tag, clickedClass) {
         var lastSelected;
         var parents = $(this),
-        childs = $(this).children(tag);
+                childs = $(this).children(tag);
         this.children(tag).each(function() {
-            parents.attr('unselectable', 'on');
+            parents.attr("unselectable", "on");
             $(this).click(function(ev) {
                 if (ev.shiftKey) {
                     var first = parents.children().index(this);
@@ -285,83 +200,14 @@ $(function() {
      */
     $.ctrl = function(key, callback, args) {
         $(document).keydown(function(e) {
-            if(!args) args=[]; // IE barks when args is null
-            if(e.keyCode == key.charCodeAt(0) && e.ctrlKey) {
+            if (!args)
+                args = []; // IE barks when args is null
+            if (e.keyCode == key.charCodeAt(0) && e.ctrlKey) {
                 callback.apply(this, args);
                 return false;
             }
         });
     };
 
-
-    /**
-     * AJAX form plugin for jQuery
-     *
-     * @copyright  Copyright (c) 2009 Jan Marek
-     * @license    MIT
-     * @link       http://nettephp.com/cs/extras/ajax-form
-     * @version    0.1
-     */
-    $.fn.ajaxSubmit = function (callback, ajaxOptions) {
-        var form;
-        var sendValues = {};
-
-        if (typeof ajaxOptions === "undefined") {
-            ajaxOptions = {};
-        }
-
-        // submit button
-        if (this.is(":submit")) {
-            form = this.parents("form");
-            sendValues[this.attr("name")] = this.val() || "";
-
-        // form
-        } else if (this.is("form")) {
-            form = this;
-
-        // invalid element, do nothing
-        } else {
-            return null;
-        }
-
-        // validation
-        if (form.get(0).onsubmit && !form.get(0).onsubmit()) {
-            return null;
-        }
-
-        // get values
-        var values = form.serializeArray();
-
-        for (var i = 0; i < values.length; i++) {
-            var name = values[i].name;
-
-            // multi
-            if (name in sendValues) {
-                var val = sendValues[name];
-
-                if (!(val instanceof Array)) {
-                    val = [val];
-                }
-
-                val.push(values[i].value);
-                sendValues[name] = val;
-            } else {
-                sendValues[name] = values[i].value;
-            }
-        }
-
-        // send ajax request
-        var ajaxOptions = {
-            url: form.attr("action"),
-            data: sendValues,
-            type: form.attr("method") || "get"
-        };
-
-        if (callback) {
-            ajaxOptions.success = callback;
-        }
-
-        return $.ajax(ajaxOptions);
-    };
 
 })(jQuery);

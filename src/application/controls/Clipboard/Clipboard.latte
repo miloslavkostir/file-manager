@@ -16,7 +16,7 @@
                 <div class="fm-clipboard-item-right">
                     <div class="fm-left">{$item['action']|upper}</div>
                     <div class="fm-right">
-                        <a n:href="removeFromClipboard!, $item['actualdir'], $item['filename']" class="fm-ajax" title="{_'Remove item from clipboard'}">
+                        <a n:href="removeFromClipboard!, $item['actualdir'], $item['filename']" class="ajax" title="{_'Remove item from clipboard'}">
                             <span class="fm-icon fm-icon-remove"></span>
                         </a>
                     </div>
@@ -27,7 +27,7 @@
         </div>
         <div class="fm-delimiter">
             <div id="fm-clipboard-clear">
-                <a n:href="clearClipboard!" title="{_'Delete all items from clipboard'}" class="fm-ajax">
+                <a n:href="clearClipboard!" title="{_'Delete all items from clipboard'}" class="ajax">
             {_'Clear all'}
                 </a>
             </div>
@@ -38,12 +38,12 @@
     </div>
 </li>
 <li>
-    <a n:href="clearClipboard!" title="{_'Delete all items from clipboard'}" class="fm-ajax fm-toolbar-item">
+    <a n:href="clearClipboard!" title="{_'Delete all items from clipboard'}" class="ajax fm-toolbar-item">
         <span>{_'Clear clipboard'}</span>
     </a>
 </li>
 <li>
-    <a n:href="pasteFromClipboard!" title="{_'Paste from clipboard'}" class="fm-ajax fm-toolbar-item">
+    <a n:href="pasteFromClipboard!" title="{_'Paste from clipboard'}" class="ajax fm-toolbar-item">
         <span>{_'Paste'}</span>
     </a>
 </li>
