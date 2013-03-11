@@ -63,7 +63,7 @@ class FileManagerTest extends TestCase
     }
 
     /**
-     * Test render default.latte
+     * Test render
      *
      * @return void
      */
@@ -75,45 +75,132 @@ class FileManagerTest extends TestCase
 
         $fileManager = $this->presenter->getComponent("testControl");
         $this->renderComponent($fileManager);
-
-        $this->assertInstanceOf("Nette\Templating\FileTemplate", $fileManager->template);
-        $this->assertEquals("default.latte", basename($fileManager->template->getFile()));
     }
 
     /**
-     * Test render body.latte
+     * Test render css.latte
      *
      * @return void
      */
-    public function testRenderBody()
+    public function testRenderCss()
     {
         $control = new Ixtrum\FileManager($this->context, array("uploadroot" => $this->uploadRoot));
         $this->presenter->addComponent($control, "testControl");
         $this->presenter->run(new Nette\Application\Request("Homepage", "GET", array()));
 
         $fileManager = $this->presenter->getComponent("testControl");
-        $this->renderComponent($fileManager, "body");
+        $this->renderComponent($fileManager, "css");
 
         $this->assertInstanceOf("Nette\Templating\FileTemplate", $fileManager->template);
-        $this->assertEquals("body.latte", basename($fileManager->template->getFile()));
+        $this->assertEquals("css.latte", basename($fileManager->template->getFile()));
     }
 
     /**
-     * Test render head.latte
+     * Test render content.latte
      *
      * @return void
      */
-    public function testRenderHead()
+    public function testRenderContent()
     {
         $control = new Ixtrum\FileManager($this->context, array("uploadroot" => $this->uploadRoot));
         $this->presenter->addComponent($control, "testControl");
         $this->presenter->run(new Nette\Application\Request("Homepage", "GET", array()));
 
         $fileManager = $this->presenter->getComponent("testControl");
-        $this->renderComponent($fileManager, "head");
+        $this->renderComponent($fileManager, "content");
 
         $this->assertInstanceOf("Nette\Templating\FileTemplate", $fileManager->template);
-        $this->assertEquals("head.latte", basename($fileManager->template->getFile()));
+        $this->assertEquals("content.latte", basename($fileManager->template->getFile()));
+    }
+
+    /**
+     * Test render toolbar.latte
+     *
+     * @return void
+     */
+    public function testRenderToolbar()
+    {
+        $control = new Ixtrum\FileManager($this->context, array("uploadroot" => $this->uploadRoot));
+        $this->presenter->addComponent($control, "testControl");
+        $this->presenter->run(new Nette\Application\Request("Homepage", "GET", array()));
+
+        $fileManager = $this->presenter->getComponent("testControl");
+        $this->renderComponent($fileManager, "toolbar");
+
+        $this->assertInstanceOf("Nette\Templating\FileTemplate", $fileManager->template);
+        $this->assertEquals("toolbar.latte", basename($fileManager->template->getFile()));
+    }
+
+    /**
+     * Test render addressbar.latte
+     *
+     * @return void
+     */
+    public function testRenderAddressbar()
+    {
+        $control = new Ixtrum\FileManager($this->context, array("uploadroot" => $this->uploadRoot));
+        $this->presenter->addComponent($control, "testControl");
+        $this->presenter->run(new Nette\Application\Request("Homepage", "GET", array()));
+
+        $fileManager = $this->presenter->getComponent("testControl");
+        $this->renderComponent($fileManager, "addressbar");
+
+        $this->assertInstanceOf("Nette\Templating\FileTemplate", $fileManager->template);
+        $this->assertEquals("addressbar.latte", basename($fileManager->template->getFile()));
+    }
+
+    /**
+     * Test render infobar.latte
+     *
+     * @return void
+     */
+    public function testRenderInfobar()
+    {
+        $control = new Ixtrum\FileManager($this->context, array("uploadroot" => $this->uploadRoot));
+        $this->presenter->addComponent($control, "testControl");
+        $this->presenter->run(new Nette\Application\Request("Homepage", "GET", array()));
+
+        $fileManager = $this->presenter->getComponent("testControl");
+        $this->renderComponent($fileManager, "infobar");
+
+        $this->assertInstanceOf("Nette\Templating\FileTemplate", $fileManager->template);
+        $this->assertEquals("infobar.latte", basename($fileManager->template->getFile()));
+    }
+
+    /**
+     * Test render messages.latte
+     *
+     * @return void
+     */
+    public function testRenderMessages()
+    {
+        $control = new Ixtrum\FileManager($this->context, array("uploadroot" => $this->uploadRoot));
+        $this->presenter->addComponent($control, "testControl");
+        $this->presenter->run(new Nette\Application\Request("Homepage", "GET", array()));
+
+        $fileManager = $this->presenter->getComponent("testControl");
+        $this->renderComponent($fileManager, "messages");
+
+        $this->assertInstanceOf("Nette\Templating\FileTemplate", $fileManager->template);
+        $this->assertEquals("messages.latte", basename($fileManager->template->getFile()));
+    }
+
+    /**
+     * Test render scripts.latte
+     *
+     * @return void
+     */
+    public function testRenderScripts()
+    {
+        $control = new Ixtrum\FileManager($this->context, array("uploadroot" => $this->uploadRoot));
+        $this->presenter->addComponent($control, "testControl");
+        $this->presenter->run(new Nette\Application\Request("Homepage", "GET", array()));
+
+        $fileManager = $this->presenter->getComponent("testControl");
+        $this->renderComponent($fileManager, "scripts");
+
+        $this->assertInstanceOf("Nette\Templating\FileTemplate", $fileManager->template);
+        $this->assertEquals("scripts.latte", basename($fileManager->template->getFile()));
     }
 
     /**
