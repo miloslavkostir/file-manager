@@ -13,7 +13,7 @@
             data-filename="{$item['filename']}">
                     {if $item['create_thumb'] <> 1}
                             {if $item['type'] == 'file'}
-                                <img src="{$basePath . $thumb_dir . $item['icon']}"
+                                <img src="{$basePath}/{$thumbDir}/{$item['icon']}"
                                      data-filename="{$item['filename']}"
                                      data-actualdir="{$actualdir}"
                                      class="fm-draggable fm-thumb" />
@@ -26,7 +26,7 @@
                                 <a n:href="openDir!, $targetpath"
                                    class="fm-ajax-dbl fm-thumb"
                                    title="{_'Open folder'}">
-                                    <img src="{$basePath . $thumb_dir . $item['icon']}"
+                                    <img src="{$basePath}/{$thumbDir}/{$item['icon']}"
                                          data-filename="{$item['filename']}"
                                          data-targetdir="{$targetpath}"
                                          data-move-url="{link move!}"
