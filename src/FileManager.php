@@ -240,6 +240,7 @@ class FileManager extends \Nette\Application\UI\Control
     public function renderToolbar()
     {
         $this->template->setFile(__DIR__ . "/templates/toolbar.latte");
+        $this->template->setTranslator($this->system->translator);
         $this->template->toolbarPlugins = array();
         foreach ($this->system->parameters["plugins"] as $plugin) {
 
