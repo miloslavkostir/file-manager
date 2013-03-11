@@ -1,0 +1,84 @@
+.fm-adressbar {
+    background-color: #6891E7;
+    background-image: linear-gradient(to bottom, #4495E7 0px, #0053A6 100%);
+    background-image: -moz-linear-gradient(to bottom, #4495E7 0px, #0053A6 100%);
+    background-image: -webkit-linear-gradient(top,#4495E7 0,#0053A6 100%);
+    filter: progid:DXImageTransform.Microsoft.Gradient(GradientType=0,StartColorStr=#ff4495e7,EndColorStr=#ff0053a6);
+    box-shadow: 0 1px 0 rgba(255, 255, 255, 0.35) inset;
+    -webkit-box-shadow: inset 0 1px 0 rgba(256, 256, 256, .35);
+    color: #FFFFFF;
+    text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.5);
+    border-color: #0053A6 #0053A6 #000000;
+    border: 1px solid #5FB0D9;
+}
+.fm-adressbar .fm-location { width: 75%; float: left; margin-left: 5px; margin-top: 7px; margin-bottom: 7px; position: relative; }
+.fm-adressbar .fm-location form { width: 100%; margin: 0; padding: 0; }
+.fm-adressbar .fm-location input {
+    padding-left: 25px;
+    width: 100%;
+    background-color: #F5F5F5;
+    border: 1px solid #5FB0D9;
+}
+.fm-adressbar .fm-location input.active {
+    background-image: url('../img/icons/folder.png');
+    background-color: #FFFFFF;
+    background-position: 6px 50%;
+    background-repeat: no-repeat;
+}
+.fm-adressbar .fm-navigation {
+    position: absolute;
+    border-top: 1px solid #5FB0D9;
+    border-bottom: 1px solid #5FB0D9;
+    border-left: 1px solid #5FB0D9;
+    border-radius: 4px 0 0 4px;
+    height: 26px;
+    line-height: 26px;
+    background-color: #F5F5F5;
+}
+.fm-adressbar .fm-navigation .fm-navigation-root {
+    display: block;
+    margin-left: 4px;
+    height: 26px;
+    width: 20px;
+    float: left;
+    background: url('../img/icons/folder.png') no-repeat 50% 50% transparent;
+}
+.fm-adressbar .fm-navigation a span {
+    height: 26px;
+    float: left;
+    background: url('../img/icons/next.png') no-repeat right;
+    padding: 0 17px 0 5px;
+}
+.fm-adressbar .fm-navigation a span:hover {
+    color: #FFFFFF;
+    background-color: #096BD2;
+    border-color: #002D59 #002D59 #000000;
+    box-shadow: 0 1px 0 rgba(255, 255, 255, 0.35) inset, 0 1px 3px rgba(0, 0, 0, 0.5);
+}
+.fm-adressbar .fm-refresh {
+    width: 26px;
+    height: 26px;
+    float: left;
+    background-color: #F5F5F5;
+    border: 1px solid #5FB0D9;
+    border-radius: 0 4px 4px 0;
+    cursor: pointer;
+    margin-top: 7px;
+    margin-bottom: 7px;
+    position: relative;
+}
+.fm-adressbar .fm-refresh .fm-refresh-icon {
+    background: url('../img/icons/refresh.png') no-repeat 50% 50% transparent;
+    margin: 5px 0 0 5px;
+    width: 15px;
+    height: 15px;
+    border: none;
+}
+.fm-adressbar .fm-filter { float: left; margin-top: 7px; margin-bottom: 7px; position: relative; }
+.fm-adressbar .fm-filter input {
+    height: 24px;
+    border: 1px solid #5FB0D9;
+    background: #FFFFFF url('../img/icons/search.png') no-repeat right;
+    padding-left: 5px;
+    padding-right: 25px;
+}

@@ -1,0 +1,19 @@
+<div class="file-manager">
+    <div class="fm-body">
+        <div n:snippet="treeview" class="fm-treeview">
+            {control control-Treeview}
+        </div>
+        <div class="fm-content">
+            <div n:snippet="plugin">
+                {ifset $plugin}
+                    {control plugin-$plugin}
+                {/ifset}
+            </div>
+            <div n:snippet="content">
+                {ifset $newFolder}{control control-NewFolder}{/ifset}
+                {ifset $rename}{control control-Rename}{/ifset}
+                {control control-Content}
+            </div>
+        </div>
+    </div>
+</div>

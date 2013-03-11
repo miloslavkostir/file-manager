@@ -139,18 +139,46 @@ class FileManager extends \Nette\Application\UI\Control
     }
 
     /**
-     * Should be called only in renderBody() & render()
+     * Render all
      */
-    private function sharedRender()
+    public function render()
     {
-        $this->template->setTranslator($this->system->translator);
-        $this->template->resDir = $this->system->parameters["resDir"];
+        $this->renderCss();
+        $this->renderAddressbar();
+        $this->renderToolbar();
+        $this->renderMessages();
+        $this->renderContent();
+        $this->renderInfobar();
+        $this->renderScripts();
+    }
 
-        // Get clipboard
-        $clipboard = $this->system->session->get("clipboard");
-        if ($clipboard) {
-            $this->template->clipboard = $clipboard;
-        }
+    /**
+     * Render addressbar
+     */
+    public function renderAddressbar()
+    {
+        $this->template->setFile(__DIR__ . "/templates/addressbar.latte");
+        $this->template->setTranslator($this->system->translator);
+        $this->template->render();
+    }
+
+    /**
+     * Render content
+     */
+    public function renderContent()
+    {
+        $this->template->setFile(__DIR__ . "/templates/content.latte");
+        $this->template->setTranslator($this->system->translator);
+        $this->template->render();
+    }
+
+    /**
+     * Render css
+     */
+    public function renderCss()
+    {
+        $this->template->setFile(__DIR__ . "/templates/css.latte");
+        $this->template->resDir = $this->system->parameters["resDir"];
 
         // Get theme
         $theme = $this->system->session->get("theme");
@@ -159,63 +187,66 @@ class FileManager extends \Nette\Application\UI\Control
         } else {
             $this->template->theme = "default";
         }
+        $this->template->render();
+    }
+
+    /**
+     * Render infobar
+     */
+    public function renderInfobar()
+    {
+        $this->template->setFile(__DIR__ . "/templates/infobar.latte");
+        $this->template->setTranslator($this->system->translator);
 
         // Get plugins
-        $this->template->toolbarPlugins = array();
         $this->template->fileInfoPlugins = array();
-
         foreach ($this->system->parameters["plugins"] as $plugin) {
 
-            if (in_array("toolbar", $plugin["integration"])) {
-                $this->template->toolbarPlugins[] = $plugin;
-            }
             if (in_array("fileinfo", $plugin["integration"])) {
                 $this->template->fileInfoPlugins[] = $plugin;
             }
         }
+        $this->template->render();
+    }
+
+    /**
+     * Render messages
+     */
+    public function renderMessages()
+    {
+        $this->template->setFile(__DIR__ . "/templates/messages.latte");
+        $this->template->setTranslator($this->system->translator);
 
         // Sort flash messages; 1=error, 2=warning, 3=info
         usort($this->template->flashes, function($flash, $nextFlash) {
                     return ($flash->type === "error") ? -1 : 1;
                 });
-
         $this->template->render();
     }
 
     /**
-     * Render default template
+     * Render scripts
      */
-    public function render()
+    public function renderScripts()
     {
-        $this->template->setFile(__DIR__ . "/default.latte");
-        $this->sharedRender();
-    }
-
-    /**
-     * Render body template
-     */
-    public function renderBody()
-    {
-        $this->template->setFile(__DIR__ . "/body.latte");
-        $this->sharedRender();
-    }
-
-    /**
-     * Render head template
-     */
-    public function renderHead()
-    {
-        $this->template->setFile(__DIR__ . "/head.latte");
+        $this->template->setFile(__DIR__ . "/templates/scripts.latte");
         $this->template->resDir = $this->system->parameters["resDir"];
+        $this->template->render();
+    }
 
-        // Get theme
-        $theme = $this->system->session->get("theme");
-        if ($theme) {
-            $this->template->theme = $theme;
-        } else {
-            $this->template->theme = "default";
+    /**
+     * Render toolbar
+     */
+    public function renderToolbar()
+    {
+        $this->template->setFile(__DIR__ . "/templates/toolbar.latte");
+        $this->template->toolbarPlugins = array();
+        foreach ($this->system->parameters["plugins"] as $plugin) {
+
+            if (in_array("toolbar", $plugin["integration"])) {
+                $this->template->toolbarPlugins[] = $plugin;
+            }
         }
-
         $this->template->render();
     }
 

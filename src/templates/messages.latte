@@ -1,0 +1,18 @@
+<div class="file-manager">
+    <div n:snippet="message" class="fm-alert-message">
+        <div n:if="$flashes" n:class="$flashes[0]->type, fm-alert">
+            <span class="fm-close fm-right" title="{_'Close'}">&times;</span>
+            {if count($flashes) > 1}
+                <strong>{_'Messages'} - {count($flashes)}</strong>
+                <a class="fm-show-messages">{_'View all'}</a>
+                <div n:foreach="$flashes as $flash" class="fm-alert-message-text fm-hide">
+                    <i class="fm-icon fm-icon-{$flash->type}"></i>
+                    {$flash->message}
+                </div>
+            {else}
+                <i class="fm-icon fm-icon-{$flashes[0]->type}"></i>
+                {$flashes[0]->message}
+            {/if}
+        </div>
+    </div>
+</div>

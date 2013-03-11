@@ -223,21 +223,25 @@ $(function() {
     });
 
     // Disable file manager and show ajax loader
-    $.animateProgress = function(selector, e) {
-        var fm = $(selector);
-        $('<div class="fm-inactive"></div>').css({
-            top: fm.position().top,
-            left: fm.position().left,
-            width: fm.outerWidth(),
-            height: fm.outerHeight()
-        }).ajaxStop(function() {
-            $(this).remove();
-        }).appendTo(fm);
+    $.animateProgress = function(selector, event) {
+
+        // Show inactive div over every part
+        $(selector).each(function() {
+            var inactive$ = $('<div class="fm-inactive"></div>');
+            inactive$.css({
+                top: $(this).position().top,
+                left: $(this).position().left,
+                width: $(this).outerWidth(),
+                height: $(this).outerHeight()
+            }).ajaxStop(function() {
+                inactive$.remove();
+            }).appendTo($(this));
+        });
 
         $('<div class="fm-ajax-loader"></div>').css({
             position: "absolute",
-            left: e.pageX + 20,
-            top: e.pageY + 40
+            left: event.pageX + 20,
+            top: event.pageY + 40
         }).ajaxStop(function() {
             $(this).remove();
         }).appendTo("body");
