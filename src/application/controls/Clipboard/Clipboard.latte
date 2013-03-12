@@ -1,6 +1,7 @@
+{if $clipboard}
 <li>
     <a href="#" title="{_'Show items in clipboard'}" id="show-clipboard" class="fm-toolbar-item">
-        <span>{_'Clipboard'} ({? echo count($clipboard); })</span>
+        <span>{_'Clipboard'} ({count($clipboard)})</span>
     </a>
     <div class="fm-clipboard">
         <div class="fm-clipboard-container">
@@ -47,3 +48,4 @@
         <span>{_'Paste'}</span>
     </a>
 </li>
+{/if}
