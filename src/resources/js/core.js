@@ -136,12 +136,10 @@ $(function() {
 
 
     /* Treeview */
-    $(".file-manager").on("hover", ".fm-treeview", function(event) {
-        if (event.type === 'mouseenter') {
-            $(".file-manager .hitarea").stop(true, true)
-            $(".file-manager .hitarea").show("fade");
-        } else
-            $(".file-manager .hitarea").hide("fade", 700);
+    $(".file-manager .fm-treeview").mouseenter(function() {
+        $(this).find(".hitarea").stop(true, true).show("fade");
+    }).mouseleave(function() {
+        $(".file-manager .hitarea").hide("fade", 700);
     });
 
 
