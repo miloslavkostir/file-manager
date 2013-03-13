@@ -74,7 +74,7 @@
     height: 15px;
     border: none;
 }
-.fm-adressbar .fm-filter { float: left; margin-top: 7px; margin-bottom: 7px; position: relative; }
+.fm-adressbar .fm-filter { float: left; margin-top: 7px; margin-left: 5px; margin-bottom: 7px; position: relative; }
 .fm-adressbar .fm-filter input {
     height: 24px;
     border: 1px solid #5FB0D9;
