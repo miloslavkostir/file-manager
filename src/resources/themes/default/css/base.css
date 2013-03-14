@@ -1,15 +1,14 @@
 .file-manager {
     width: 100%;
-    font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
     font-size: 14px;
     min-width: 450px;
-    z-index: 0;
+}
+.file-manager * {
+    font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+    margin: 0;
+    padding: 0;
 }
 .file-manager a { text-decoration: none; color: black; }
-.file-manager form {
-    padding: 0;
-    margin: 0;
-}
 .file-manager h2 { font-size: 20px; font-weight: normal; }
 .file-manager h3 { font-size: 15px; font-weight: normal; height: 25px; line-height: 25px; margin: 5px 0 10px; padding: 0 7px; }
 .file-manager input[type='text'] {
