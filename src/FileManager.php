@@ -217,10 +217,15 @@ class FileManager extends \Nette\Application\UI\Control
         $this->template->setFile(__DIR__ . "/templates/messages.latte");
         $this->template->setTranslator($this->system->translator);
 
-        // Sort flash messages; 1=error, 2=warning, 3=info
-        usort($this->template->flashes, function($flash, $nextFlash) {
-                    return ($flash->type === "error") ? -1 : 1;
+        // Sort messages according to priorities - 1. error, 2. warning, 3. info
+        usort($this->template->flashes, function($next, $current) {
+
+                    if ($current->type === "warning" && $next->type === "info"
+                            || $current->type === "error" && $next->type !== "error") {
+                        return +1;
+                    }
                 });
+
         $this->template->render();
     }
 
