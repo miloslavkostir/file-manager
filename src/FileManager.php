@@ -10,7 +10,7 @@ class FileManager extends \Nette\Application\UI\Control
 {
 
     const NAME = "iXtrum File Manager";
-    const VERSION = "dev-master";
+    const VERSION = "1.0-beta3";
 
     /** @var \Ixtrum\FileManager\Application\Loader */
     protected $system;
