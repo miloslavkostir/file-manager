@@ -46,11 +46,15 @@ $(function() {
         }});
 
         items.push({ {_'Download'} : function(menuItem, menuObject, event) {
-                $.nette.ajax({
-                    type: "post",
-                    url: {link download!},
-                    data: { files: selected }
-                });
+            // Create temporary form and submit
+            $(menuItem).append($("<form/>", {
+                method: "POST",
+                action: {link download!}
+            })).children("form").append($("<input/>", {
+                type: "hidden",
+                name: "files[]",
+                value: selected[0]
+            })).submit();
         }});
 
         items.push({ {_'Rename'} : function(menuItem, menuObject, event) {
