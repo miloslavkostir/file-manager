@@ -298,9 +298,7 @@ class FileSystem
      *
      * @param string $path Path to file/folder
      *
-     * @return integer
-     *
-     * @throws \Exception
+     * @return string
      */
     public function getSize($path)
     {
@@ -315,28 +313,7 @@ class FileSystem
         } else {
 
             $fileSize = new FileSystem\FileSize($path);
-
-            $size = $fileSize->sizeCurl();
-            if ($size)
-                return $size;
-
-            $size = $fileSize->sizeNativeSeek();
-            if ($size)
-                return $size;
-
-            $size = $fileSize->sizeCom();
-            if ($size)
-                return $size;
-
-            $size = $fileSize->sizeExec();
-            if ($size)
-                return $size;
-
-            $size = $fileSize->sizeNativeRead();
-            if ($size)
-                return $size;
-
-            throw new \Exception("File size error at file '$path'");
+            return $fileSize->getSize();
         }
     }
 

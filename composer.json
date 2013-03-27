@@ -11,6 +11,9 @@
         "homepage": "https://github.com/bauer01"
     }
     ],
+    "require": {
+        "ext-bcmath": "*"
+    },
     "require-dev": {
         "nette/nette": "2.0.*",
         "phpunit/phpunit": "3.7.*"
