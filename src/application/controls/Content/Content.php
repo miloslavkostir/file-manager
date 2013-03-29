@@ -94,13 +94,18 @@ class Content extends \Ixtrum\FileManager\Application\Controls
         if (count($this->selectedFiles) === 1) {
 
             $file = $this->selectedFiles[0];
-            if ($this->isPathValid($this->getActualDir(), $file)) {
+            if (!$this->isPathValid($this->getActualDir(), $file)) {
 
-                $path = $this->getAbsolutePath($this->getActualDir()) . DIRECTORY_SEPARATOR . $file;
-                $this->presenter->sendResponse(new FileResponse($path, $file, null));
-            } else {
                 $this->parent->parent->flashMessage($this->system->translator->translate("File %s not found!", $file), "warning");
+                return;
             }
+            $path = $this->getAbsolutePath($this->getActualDir()) . DIRECTORY_SEPARATOR . $file;
+            if (is_dir($path)) {
+
+                $this->parent->parent->flashMessage($this->system->translator->translate("You can download only files, not folders!"), "warning");
+                return;
+            }
+            $this->presenter->sendResponse(new FileResponse($path, $file, null));
         }
     }
 
