@@ -1,9 +1,23 @@
 <?php
 
+/**
+ * This file is part of the Ixtrum File Manager package (http://ixtrum.com/file-manager)
+ *
+ * (c) Bronislav Sedlák <sedlak@ixtrum.com>)
+ *
+ * For the full copyright and license information, please view
+ * the file LICENSE that was distributed with this source code.
+ */
+
+/**
+ * Main test case.
+ *
+ * @author Bronislav Sedlák <sedlak@ixtrum.com>
+ */
 class TestCase extends PHPUnit_Framework_TestCase
 {
 
-    /**  @var Nette\DI\Container */
+    /**  @var \Nette\DI\Container */
     public $context;
 
     /** @var string */
@@ -113,6 +127,9 @@ class TestCase extends PHPUnit_Framework_TestCase
         return true;
     }
 
+    /**
+     * Set up test
+     */
     public function setUp()
     {
         if (is_dir($this->uploadRoot)) {
@@ -120,7 +137,10 @@ class TestCase extends PHPUnit_Framework_TestCase
         }
         $this->mkdir($this->uploadRoot);
     }
-    
+
+    /**
+     * Tear down test
+     */
     public function tearDown()
     {
         $this->rmdir($this->uploadRoot);

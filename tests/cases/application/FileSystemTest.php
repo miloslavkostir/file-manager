@@ -1,17 +1,37 @@
 <?php
 
+/**
+ * This file is part of the Ixtrum File Manager package (http://ixtrum.com/file-manager)
+ *
+ * (c) Bronislav Sedlák <sedlak@ixtrum.com>)
+ *
+ * For the full copyright and license information, please view
+ * the file LICENSE that was distributed with this source code.
+ */
+
+/**
+ * Test FileSystem
+ *
+ * @author Bronislav Sedlák <sedlak@ixtrum.com>
+ */
 class FileSystemTest extends TestCase
 {
 
     /** @var Ixtrum\FileManager\Application\FileSystem */
     private $library;
 
+    /**
+     * Set up test
+     */
     public function setUp()
     {
         parent::setUp();
         $this->library = new Ixtrum\FileManager\Application\FileSystem;
     }
 
+    /**
+     * Test copy
+     */
     public function testCopy()
     {
         // Create test file
@@ -37,6 +57,9 @@ class FileSystemTest extends TestCase
         $this->assertFileEquals($dirPath . DIRECTORY_SEPARATOR . "1_test" . DIRECTORY_SEPARATOR . "test_file", $this->uploadRoot . DIRECTORY_SEPARATOR . "1_test" . DIRECTORY_SEPARATOR . "test_file");
     }
 
+    /**
+     * Test getUniquePath
+     */
     public function testGetUniquePath()
     {
         // Path exist
@@ -49,6 +72,9 @@ class FileSystemTest extends TestCase
         $this->assertEquals($path, $this->library->getUniquePath($path));
     }
 
+    /**
+     * Test isSubFolder
+     */
     public function testIsSubFolder()
     {
         $parent = $this->uploadRoot . DIRECTORY_SEPARATOR . "parent";
@@ -61,6 +87,9 @@ class FileSystemTest extends TestCase
         $this->assertFalse($this->library->isSubFolder($child, $parent));
     }
 
+    /**
+     * Test getRootName
+     */
     public function testGetRootName()
     {
         $this->assertEquals("/", Ixtrum\FileManager\Application\FileSystem::getRootName());

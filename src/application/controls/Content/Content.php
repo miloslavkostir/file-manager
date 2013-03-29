@@ -1,19 +1,39 @@
 <?php
 
+/**
+ * This file is part of the Ixtrum File Manager package (http://ixtrum.com/file-manager)
+ *
+ * (c) Bronislav Sedlák <sedlak@ixtrum.com>)
+ *
+ * For the full copyright and license information, please view
+ * the file LICENSE that was distributed with this source code.
+ */
+
 namespace Ixtrum\FileManager\Application\Controls;
 
 use Nette\Application\Responses\FileResponse,
     Ixtrum\FileManager\Application\FileSystem\Finder,
     Ixtrum\FileManager\Application\FileSystem;
 
+/**
+ * Content control.
+ *
+ * @author Bronislav Sedlák <sedlak@ixtrum.com>
+ */
 class Content extends \Ixtrum\FileManager\Application\Controls
 {
 
+    /**
+     * Show file/dir details
+     */
     public function handleInfo()
     {
         $this->parent->parent->template->fileinfo = $this->getActualDir();
     }
 
+    /**
+     * Copy file/dir
+     */
     public function handleCopy()
     {
         foreach ($this->selectedFiles as $file) {
@@ -28,6 +48,9 @@ class Content extends \Ixtrum\FileManager\Application\Controls
         }
     }
 
+    /**
+     * Cut file/dir
+     */
     public function handleCut()
     {
         foreach ($this->selectedFiles as $file) {
@@ -42,6 +65,11 @@ class Content extends \Ixtrum\FileManager\Application\Controls
         }
     }
 
+    /**
+     * Delete file/dir
+     *
+     * @return void
+     */
     public function handleDelete()
     {
         if ($this->system->parameters["readonly"]) {
@@ -76,6 +104,11 @@ class Content extends \Ixtrum\FileManager\Application\Controls
         }
     }
 
+    /**
+     * Order files by
+     *
+     * @param string $key Order key
+     */
     public function handleOrderBy($key)
     {
         $this->system->session->set("order", $key);
@@ -84,11 +117,21 @@ class Content extends \Ixtrum\FileManager\Application\Controls
         }
     }
 
+    /**
+     * Run plugin
+     *
+     * @param string $name Plugin name
+     */
     public function handleRunPlugin($name)
     {
         $this->parent->parent->handleRunPlugin($name);
     }
 
+    /**
+     * Download file
+     *
+     * @return void
+     */
     public function handleDownload()
     {
         if (count($this->selectedFiles) === 1) {
@@ -109,6 +152,9 @@ class Content extends \Ixtrum\FileManager\Application\Controls
         }
     }
 
+    /**
+     * Go to parent dir from actual path
+     */
     public function handleGoToParent()
     {
         $parent = dirname($this->getActualDir());
@@ -120,6 +166,14 @@ class Content extends \Ixtrum\FileManager\Application\Controls
         $this->setActualDir($parentDir);
     }
 
+    /**
+     * Move file/dir
+     *
+     * @param string $targetDir Target dir
+     * @param string $filename  File name
+     *
+     * @return void
+     */
     public function handleMove($targetDir = null, $filename = null)
     {
         // if sended by AJAX
@@ -144,16 +198,30 @@ class Content extends \Ixtrum\FileManager\Application\Controls
         }
     }
 
+    /**
+     * Go to to dir
+     *
+     * @param string $dir Dir
+     */
     public function handleOpenDir($dir)
     {
         $this->setActualDir($dir);
     }
 
+    /**
+     * Show thumb image
+     *
+     * @param string $dir      Dir
+     * @param string $fileName File name
+     */
     public function handleShowThumb($dir, $fileName)
     {
         $this->system->thumbs->getThumbFile($this->getAbsolutePath($dir) . "/$fileName")->send();
     }
 
+    /**
+     * Render control
+     */
     public function render()
     {
         $this->template->setFile(__DIR__ . "/$this->view.latte");
@@ -181,16 +249,16 @@ class Content extends \Ixtrum\FileManager\Application\Controls
     }
 
     /**
-     * Load directory content
+     * Get directory content
      *
-     * @todo Nette Finder does not support mask for folders
-     *
-     * @param string $dir
-     * @param string $mask
-     * @param string $view
-     * @param string $order
+     * @param string $dir   Dir
+     * @param string $mask  Mask
+     * @param string $view  View
+     * @param string $order Order
      *
      * @return array
+     *
+     * @todo Finder does not support mask for folders
      */
     private function getDirectoryContent($dir, $mask, $view, $order)
     {
@@ -231,6 +299,7 @@ class Content extends \Ixtrum\FileManager\Application\Controls
                     $dir_array[$name]["create_thumb"] = false;
                 }
             } else {
+
                 $dir_array[$name]["type"] = "folder";
                 $dir_array[$name]["icon"] = "folder.png";
                 $dir_array[$name]["create_thumb"] = false;
@@ -243,10 +312,10 @@ class Content extends \Ixtrum\FileManager\Application\Controls
     /**
      * Load data from actual directory
      *
-     * @param string $dir
-     * @param string $mask
-     * @param string $view
-     * @param string $order
+     * @param string $dir   Dir
+     * @param string $mask  Mask
+     * @param string $view  View
+     * @param string $order Order
      *
      * @return array
      */
@@ -276,10 +345,12 @@ class Content extends \Ixtrum\FileManager\Application\Controls
     }
 
     /**
-     * Move file/folder
+     * Move file/dir
      *
      * @param string $source Source path
-     * @param string $target Target folder
+     * @param string $target Target dir
+     *
+     * @return void
      *
      * @todo it can be in file manager class, accessible fot other controls
      */

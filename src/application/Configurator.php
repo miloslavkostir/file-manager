@@ -1,11 +1,27 @@
 <?php
 
+/**
+ * This file is part of the Ixtrum File Manager package (http://ixtrum.com/file-manager)
+ *
+ * (c) Bronislav Sedlák <sedlak@ixtrum.com>)
+ *
+ * For the full copyright and license information, please view
+ * the file LICENSE that was distributed with this source code.
+ */
+
 namespace Ixtrum\FileManager\Application;
 
-use Nette\Utils\Json,
+use Nette\DirectoryNotFoundException,
+    Nette\InvalidArgumentException,
+    Nette\Utils\Json,
     Ixtrum\FileManager\Application\FileSystem\Finder,
     Ixtrum\FileManager;
 
+/**
+ * Configurator.
+ *
+ * @author Bronislav Sedlák <sedlak@ixtrum.com>
+ */
 class Configurator
 {
 
@@ -20,38 +36,38 @@ class Configurator
     public function checkRequirements(array $config)
     {
         if (!isset($config["uploadroot"]) || empty($config["uploadroot"])) {
-            throw new \Nette\InvalidArgumentException("Parameter 'uploadroot' not defined!");
+            throw new InvalidArgumentException("Parameter 'uploadroot' not defined!");
         }
 
         if (!is_dir($config["uploadroot"])) {
-            throw new \Nette\DirectoryNotFoundException("Upload root '" . $config["uploadroot"] . "' doesn't exist!");
+            throw new DirectoryNotFoundException("Upload root '" . $config["uploadroot"] . "' doesn't exist!");
         }
 
         if (!is_dir($config["tempDir"])) {
-            throw new \Nette\DirectoryNotFoundException("Temp dir '" . $config["tempDir"] . "' doesn't exist!");
+            throw new DirectoryNotFoundException("Temp dir '" . $config["tempDir"] . "' doesn't exist!");
         }
 
         if (!is_dir($config["wwwDir"])) {
-            throw new \Nette\DirectoryNotFoundException("WWW dir '" . $config["wwwDir"] . "' doesn't exist!");
+            throw new DirectoryNotFoundException("WWW dir '" . $config["wwwDir"] . "' doesn't exist!");
         }
 
         if (!is_dir($config["pluginDir"])) {
-            throw new \Nette\DirectoryNotFoundException("Plugin dir '" . $config["pluginDir"] . "' doesn't exist!");
+            throw new DirectoryNotFoundException("Plugin dir '" . $config["pluginDir"] . "' doesn't exist!");
         }
 
         if (!is_dir($config["langDir"])) {
-            throw new \Nette\DirectoryNotFoundException("Language dir '" . $config["langDir"] . "' doesn't exist!");
+            throw new DirectoryNotFoundException("Language dir '" . $config["langDir"] . "' doesn't exist!");
         }
 
         if ($config["quota"] && (int) $config["quotaLimit"] === 0) {
-            throw new \Nette\InvalidArgumentException("Quota limit must defined if quota enabled, but '" . $config["quotaLimit"] . "' given!");
+            throw new InvalidArgumentException("Quota limit must defined if quota enabled, but '" . $config["quotaLimit"] . "' given!");
         }
     }
 
     /**
      * Create application configuration
      *
-     * @param array  $config  User configuration
+     * @param array $config User configuration
      *
      * @return array Configuration
      */

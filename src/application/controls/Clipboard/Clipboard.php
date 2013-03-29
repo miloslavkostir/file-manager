@@ -1,17 +1,39 @@
 <?php
 
+/**
+ * This file is part of the Ixtrum File Manager package (http://ixtrum.com/file-manager)
+ *
+ * (c) Bronislav Sedlák <sedlak@ixtrum.com>)
+ *
+ * For the full copyright and license information, please view
+ * the file LICENSE that was distributed with this source code.
+ */
+
 namespace Ixtrum\FileManager\Application\Controls;
 
 use Ixtrum\FileManager\Application\FileSystem;
 
+/**
+ * Clipboard control.
+ *
+ * @author Bronislav Sedlák <sedlak@ixtrum.com>
+ */
 class Clipboard extends \Ixtrum\FileManager\Application\Controls
 {
 
+    /**
+     * Clear clipboard
+     */
     public function handleClearClipboard()
     {
         $this->system->session->clear("clipboard");
     }
 
+    /**
+     * Paste items from clipboard to actual dir
+     *
+     * @return void
+     */
     public function handlePasteFromClipboard()
     {
         $actualDir = $this->getActualDir();
@@ -44,11 +66,20 @@ class Clipboard extends \Ixtrum\FileManager\Application\Controls
         $this->system->session->clear("clipboard");
     }
 
+    /**
+     * Remove item from clipboard
+     *
+     * @param string $dir      Dir path
+     * @param string $filename File name
+     */
     public function handleRemoveFromClipboard($dir, $filename)
     {
         $this->system->session->remove("clipboard", $dir . $filename);
     }
 
+    /**
+     * Render control
+     */
     public function render()
     {
         $this->template->setFile(__DIR__ . "/Clipboard.latte");
@@ -59,10 +90,10 @@ class Clipboard extends \Ixtrum\FileManager\Application\Controls
     }
 
     /**
-     * Move file/folder
+     * Move file/dir
      *
      * @param string $source Source path
-     * @param string $target Target folder
+     * @param string $target Target dir
      *
      * @todo it can be in file manager class, accessible fot other controls
      */
@@ -107,10 +138,12 @@ class Clipboard extends \Ixtrum\FileManager\Application\Controls
     }
 
     /**
-     * Copy file/folder
+     * Copy file/dir
      *
-     * @param string $source Source file/folder
-     * @param string $target Target folder
+     * @param string $source Source file/dir
+     * @param string $target Target dir
+     *
+     * @return void
      *
      * @todo it can be in file manager class, accessible fot other controls
      */

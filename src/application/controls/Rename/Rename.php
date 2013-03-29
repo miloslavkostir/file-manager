@@ -1,12 +1,29 @@
 <?php
 
+/**
+ * This file is part of the Ixtrum File Manager package (http://ixtrum.com/file-manager)
+ *
+ * (c) Bronislav Sedlák <sedlak@ixtrum.com>)
+ *
+ * For the full copyright and license information, please view
+ * the file LICENSE that was distributed with this source code.
+ */
+
 namespace Ixtrum\FileManager\Application\Controls;
 
 use Nette\Application\UI\Form;
 
+/**
+ * New folder control.
+ *
+ * @author Bronislav Sedlák <sedlak@ixtrum.com>
+ */
 class Rename extends \Ixtrum\FileManager\Application\Controls
 {
 
+    /**
+     * Render control
+     */
     public function render()
     {
         $this->template->setFile(__DIR__ . "/Rename.latte");
@@ -41,7 +58,7 @@ class Rename extends \Ixtrum\FileManager\Application\Controls
     /**
      * RenameForm success event
      *
-     * @param \Nette\Application\UI\Form $form RenameForm
+     * @param \Nette\Application\UI\Form $form Form instance
      *
      * @return void
      */

@@ -1,9 +1,20 @@
 <?php
 
+/**
+ * This file is part of the Ixtrum File Manager package (http://ixtrum.com/file-manager)
+ *
+ * (c) Bronislav Sedlák <sedlak@ixtrum.com>)
+ *
+ * For the full copyright and license information, please view
+ * the file LICENSE that was distributed with this source code.
+ */
+
 namespace Ixtrum\FileManager\Application\FileSystem;
 
 /**
- * Add sorting to Nette\Utils\Finder
+ * Extension of Nette\Utils\Finder
+ *
+ * @author Bronislav Sedlák <sedlak@ixtrum.com>
  */
 class Finder extends \Nette\Utils\Finder
 {
@@ -14,7 +25,7 @@ class Finder extends \Nette\Utils\Finder
     /**
      * Sets the order comparison function
      *
-     * @param callback $order
+     * @param callback $order Order callback
      *
      * @return \Ixtrum\FileManager\Application\FileSystem
      */
@@ -24,6 +35,13 @@ class Finder extends \Nette\Utils\Finder
         return $this;
     }
 
+    /**
+     * Order by
+     *
+     * @param string $key Key
+     *
+     * @return \Ixtrum\FileManager\Application\FileSystem\Finder
+     */
     public function orderBy($key)
     {
         switch ($key) {
@@ -61,7 +79,7 @@ class Finder extends \Nette\Utils\Finder
     /**
      * Get iterator
      *
-     * @return \Iterator
+     * @return \ArrayIterator
      */
     public function getIterator()
     {

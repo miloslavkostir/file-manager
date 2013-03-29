@@ -1,9 +1,24 @@
 <?php
 
+/**
+ * This file is part of the Ixtrum File Manager package (http://ixtrum.com/file-manager)
+ *
+ * (c) Bronislav Sedlák <sedlak@ixtrum.com>)
+ *
+ * For the full copyright and license information, please view
+ * the file LICENSE that was distributed with this source code.
+ */
+
 namespace Ixtrum\FileManager\Application\Controls;
 
-use Ixtrum\FileManager\Application\FileSystem\Finder;
+use Ixtrum\FileManager\Application\FileSystem\Finder,
+    Nette\Application\UI\Form;
 
+/**
+ * Themes control.
+ *
+ * @author Bronislav Sedlák <sedlak@ixtrum.com>
+ */
 class Themes extends \Ixtrum\FileManager\Application\Controls
 {
 
@@ -31,7 +46,7 @@ class Themes extends \Ixtrum\FileManager\Application\Controls
         }
 
         $themeDir = $this->system->parameters["wwwDir"] . "/" . $this->system->parameters["resDir"] . "/themes";
-        $form = new \Nette\Application\UI\Form;
+        $form = new Form;
         $form->addSelect("theme", null, $this->loadThemes($themeDir))
                 ->setAttribute("onchange", "submit()")
                 ->setDefaultValue($default);
@@ -42,9 +57,9 @@ class Themes extends \Ixtrum\FileManager\Application\Controls
     /**
      * ThemeForm on success event
      *
-     * @param \Nette\Application\UI\Form $form Form
+     * @param \Nette\Application\UI\Form $form Form instance
      */
-    public function themeFormSuccess(\Nette\Application\UI\Form $form)
+    public function themeFormSuccess(Form $form)
     {
         $this->system->session->set("theme", $form->values->theme);
         $this->redirect("this");

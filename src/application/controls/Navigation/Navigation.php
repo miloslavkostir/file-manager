@@ -1,18 +1,40 @@
 <?php
 
+/**
+ * This file is part of the Ixtrum File Manager package (http://ixtrum.com/file-manager)
+ *
+ * (c) Bronislav Sedlák <sedlak@ixtrum.com>)
+ *
+ * For the full copyright and license information, please view
+ * the file LICENSE that was distributed with this source code.
+ */
+
 namespace Ixtrum\FileManager\Application\Controls;
 
 use Nette\Application\UI\Form,
     Ixtrum\FileManager\Application\FileSystem;
 
+/**
+ * Navigatior control.
+ *
+ * @author Bronislav Sedlák <sedlak@ixtrum.com>
+ */
 class Navigation extends \Ixtrum\FileManager\Application\Controls
 {
 
+    /**
+     * Go to dir
+     *
+     * @param string $dir Dir name
+     */
     public function handleOpenDir($dir)
     {
         $this->setActualDir($dir);
     }
 
+    /**
+     * Refresh content
+     */
     public function handleRefreshContent()
     {
         if ($this->system->parameters["cache"]) {
@@ -25,6 +47,9 @@ class Navigation extends \Ixtrum\FileManager\Application\Controls
         }
     }
 
+    /**
+     * Render control
+     */
     public function render()
     {
         $this->template->setFile(__DIR__ . "/Navigation.latte");
@@ -33,6 +58,11 @@ class Navigation extends \Ixtrum\FileManager\Application\Controls
         $this->template->render();
     }
 
+    /**
+     * LocationForm component factory
+     *
+     * @return \Nette\Application\UI\Form
+     */
     protected function createComponentLocationForm()
     {
         $form = new Form;
@@ -43,7 +73,12 @@ class Navigation extends \Ixtrum\FileManager\Application\Controls
         return $form;
     }
 
-    public function locationFormSuccess($form)
+    /**
+     * LocationForm success event
+     *
+     * @param \Nette\Application\UI\Form $form Form instance
+     */
+    public function locationFormSuccess(Form $form)
     {
         $this->setActualDir($form->values->location);
     }

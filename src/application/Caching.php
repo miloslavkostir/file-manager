@@ -1,5 +1,14 @@
 <?php
 
+/**
+ * This file is part of the Ixtrum File Manager package (http://ixtrum.com/file-manager)
+ *
+ * (c) Bronislav Sedlák <sedlak@ixtrum.com>)
+ *
+ * For the full copyright and license information, please view
+ * the file LICENSE that was distributed with this source code.
+ */
+
 namespace Ixtrum\FileManager\Application;
 
 use Nette\Caching\Cache,
@@ -8,10 +17,15 @@ use Nette\Caching\Cache,
     Nette\Caching\Storages\MemcachedStorage,
     Ixtrum\FileManager\Application\FileSystem\Finder;
 
+/**
+ * Cache wrapper.
+ *
+ * @author Bronislav Sedlák <sedlak@ixtrum.com>
+ */
 class Caching
 {
 
-    /** @var Cache */
+    /** @var \Nette\Caching\Cache */
     private $cache;
 
     /** @var array */
@@ -19,8 +33,8 @@ class Caching
 
     /**
      * Constructor
-     * 
-     * @param array $config application configuration
+     *
+     * @param array $config Configuration
      */
     public function __construct($config)
     {
@@ -47,10 +61,10 @@ class Caching
     /**
      * Delete single item from cache
      *
-     * @param mixed $key
-     * @param array $conds (optional)
+     * @param mixed $key   key
+     * @param array $conds Conditions (optional)
      */
-    public function deleteItem($key, $conds = NULL)
+    public function deleteItem($key, $conds = null)
     {
         if ($conds) {
             $this->cache->clean($conds);
@@ -62,7 +76,7 @@ class Caching
     /**
      * Delete items from cache with recursion
      *
-     * @param string $absDir
+     * @param string $absDir Absolute dir path
      */
     public function deleteItemsRecursive($absDir)
     {
@@ -78,27 +92,26 @@ class Caching
     /**
      * Get data from cache storage
      *
-     * @param mixed $key
-     * @return cache data | NULL
+     * @param mixed $key Key
+     *
+     * @return mixed | null Cache data
      */
     public function getItem($key)
     {
-        $cache = $this->cache;
-        if (isset($cache[$key])) {
-            return $cache[$key];
-        } else {
-            return NULL;
+        if (isset($this->cache[$key])) {
+            return $this->cache[$key];
         }
+        return null;
     }
 
     /**
      * Save data to cache storage
      *
-     * @param mixed $key
-     * @param mixed $value
-     * @param array $options
+     * @param mixed $key     Key
+     * @param mixed $value   Value
+     * @param array $options Options (optional)
      */
-    public function saveItem($key, $value, $options = NULL)
+    public function saveItem($key, $value, $options = null)
     {
         $this->cache->save($key, $value, $options);
     }

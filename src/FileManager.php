@@ -1,12 +1,29 @@
 <?php
 
+/**
+ * This file is part of the Ixtrum File Manager package (http://ixtrum.com/file-manager)
+ *
+ * (c) Bronislav Sedlák <sedlak@ixtrum.com>)
+ *
+ * For the full copyright and license information, please view
+ * the file LICENSE that was distributed with this source code.
+ */
+
 namespace Ixtrum;
 
 use Ixtrum\FileManager\Application\FileSystem,
     Ixtrum\FileManager\Application\FileSystem\Finder,
+    Nette\DI\Container,
+    Nette\Application\UI\Form,
+    Nette\Application\UI\Control,
     Nette\Application\UI\Multiplier;
 
-class FileManager extends \Nette\Application\UI\Control
+/**
+ * File Manager base class.
+ *
+ * @author Bronislav Sedlák <sedlak@ixtrum.com>
+ */
+class FileManager extends Control
 {
 
     const NAME = "iXtrum File Manager";
@@ -24,7 +41,7 @@ class FileManager extends \Nette\Application\UI\Control
      * @param \Nette\DI\Container $container System container
      * @param array               $config    User configuration
      */
-    public function __construct(\Nette\DI\Container $container, $config = array())
+    public function __construct(Container $container, $config = array())
     {
         parent::__construct();
 
@@ -55,7 +72,7 @@ class FileManager extends \Nette\Application\UI\Control
     }
 
     /**
-     * New folder signal
+     * Show new folder control
      */
     public function handleNewFolder()
     {
@@ -63,13 +80,16 @@ class FileManager extends \Nette\Application\UI\Control
     }
 
     /**
-     * Rename signal
+     * Show rename control
      */
     public function handleRename()
     {
         $this->template->rename = true;
     }
 
+    /**
+     * Refresh content - clear cache
+     */
     public function handleRefreshContent()
     {
         if ($this->system->parameters["cache"]) {
@@ -82,6 +102,11 @@ class FileManager extends \Nette\Application\UI\Control
         }
     }
 
+    /**
+     * Run plugin
+     *
+     * @param string $name Plugin name
+     */
     public function handleRunPlugin($name)
     {
         // Find valid plugin
@@ -220,8 +245,7 @@ class FileManager extends \Nette\Application\UI\Control
         // Sort messages according to priorities - 1. error, 2. warning, 3. info
         usort($this->template->flashes, function($next, $current) {
 
-                    if ($current->type === "warning" && $next->type === "info"
-                            || $current->type === "error" && $next->type !== "error") {
+                    if ($current->type === "warning" && $next->type === "info" || $current->type === "error" && $next->type !== "error") {
                         return +1;
                     }
                 });
@@ -259,11 +283,11 @@ class FileManager extends \Nette\Application\UI\Control
     /**
      * Callback for error event in form
      *
-     * @param \Nette\Application\UI\Form $form
+     * @param \Nette\Application\UI\Form $form Form instance
      *
      * @return void
      */
-    public function onFormError(\Nette\Application\UI\Form $form)
+    public function onFormError(Form $form)
     {
         foreach ($form->errors as $error) {
             $this->flashMessage($error, "warning");

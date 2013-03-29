@@ -1,5 +1,19 @@
 <?php
 
+/**
+ * This file is part of the Ixtrum File Manager package (http://ixtrum.com/file-manager)
+ *
+ * (c) Bronislav Sedlák <sedlak@ixtrum.com>)
+ *
+ * For the full copyright and license information, please view
+ * the file LICENSE that was distributed with this source code.
+ */
+
+/**
+ * Test FileManager class
+ *
+ * @author Bronislav Sedlák <sedlak@ixtrum.com>
+ */
 class FileManagerTest extends TestCase
 {
 
@@ -8,8 +22,6 @@ class FileManagerTest extends TestCase
 
     /**
      * Set up test
-     *
-     * @return void
      */
     public function setUp()
     {
@@ -19,6 +31,9 @@ class FileManagerTest extends TestCase
         $this->presenter = $presenter;
     }
 
+    /**
+     * Test isPathValid method
+     */
     public function testIsPathValid()
     {
         $control = new Ixtrum\FileManager($this->context, array("uploadroot" => $this->uploadRoot));
@@ -64,8 +79,6 @@ class FileManagerTest extends TestCase
 
     /**
      * Test render
-     *
-     * @return void
      */
     public function testRender()
     {
@@ -79,8 +92,6 @@ class FileManagerTest extends TestCase
 
     /**
      * Test render css.latte
-     *
-     * @return void
      */
     public function testRenderCss()
     {
@@ -97,8 +108,6 @@ class FileManagerTest extends TestCase
 
     /**
      * Test render content.latte
-     *
-     * @return void
      */
     public function testRenderContent()
     {
@@ -115,8 +124,6 @@ class FileManagerTest extends TestCase
 
     /**
      * Test render toolbar.latte
-     *
-     * @return void
      */
     public function testRenderToolbar()
     {
@@ -133,8 +140,6 @@ class FileManagerTest extends TestCase
 
     /**
      * Test render addressbar.latte
-     *
-     * @return void
      */
     public function testRenderAddressbar()
     {
@@ -151,8 +156,6 @@ class FileManagerTest extends TestCase
 
     /**
      * Test render infobar.latte
-     *
-     * @return void
      */
     public function testRenderInfobar()
     {
@@ -169,8 +172,6 @@ class FileManagerTest extends TestCase
 
     /**
      * Test render messages.latte
-     *
-     * @return void
      */
     public function testRenderMessages()
     {
@@ -187,8 +188,6 @@ class FileManagerTest extends TestCase
 
     /**
      * Test render scripts.latte
-     *
-     * @return void
      */
     public function testRenderScripts()
     {
@@ -205,8 +204,6 @@ class FileManagerTest extends TestCase
 
     /**
      * Test method setActualDir
-     *
-     * @return void
      */
     public function testSetActualDir()
     {
@@ -223,8 +220,6 @@ class FileManagerTest extends TestCase
 
     /**
      * Test method getLanguages
-     *
-     * @return void
      */
     public function testGetLanguages()
     {

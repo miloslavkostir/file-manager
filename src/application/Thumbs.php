@@ -1,10 +1,26 @@
 <?php
 
+/**
+ * This file is part of the Ixtrum File Manager package (http://ixtrum.com/file-manager)
+ *
+ * (c) Bronislav Sedlák <sedlak@ixtrum.com>)
+ *
+ * For the full copyright and license information, please view
+ * the file LICENSE that was distributed with this source code.
+ */
+
 namespace Ixtrum\FileManager\Application;
 
-use Nette\Image,
+use Nette\Application\ApplicationException,
+    Nette\DirectoryNotFoundException,
+    Nette\Image,
     Ixtrum\FileManager\Application\FileSystem\Finder;
 
+/**
+ * Image thumbnails.
+ *
+ * @author Bronislav Sedlák <sedlak@ixtrum.com>
+ */
 class Thumbs
 {
 
@@ -33,7 +49,7 @@ class Thumbs
         }
 
         if (!is_writable($thumbDir)) {
-            throw new \Nette\Application\ApplicationException("Thumb dir '$thumbDir' is not writeable!");
+            throw new ApplicationException("Thumb dir '$thumbDir' is not writeable!");
         }
 
         $this->thumbDir = $thumbDir;
@@ -43,7 +59,8 @@ class Thumbs
     /**
      * Get thumb path
      *
-     * @param string $path
+     * @param string $path File path
+     *
      * @return string
      */
     public function getThumbPath($path)
@@ -54,7 +71,8 @@ class Thumbs
     /**
      * Get thumb file
      *
-     * @param string $path
+     * @param string $path File path
+     *
      * @return Nette\Image
      */
     public function getThumbFile($path)
@@ -83,7 +101,7 @@ class Thumbs
                 $image = Image::fromFile($path);
             }
 
-            $image->resize(96, NULL);
+            $image->resize(96, null);
             $image->save($thumbPath, 80);
 
             return $image;
@@ -93,7 +111,8 @@ class Thumbs
     /**
      * Encode thumb name
      *
-     * @param string $path
+     * @param string $path File path
+     *
      * @return string
      */
     private function getName($path)
@@ -105,7 +124,7 @@ class Thumbs
     /**
      * Delete all thumbs in folder recursively
      *
-     * @param string $dirPath
+     * @param string $dirPath Dir path
      */
     public function deleteDirThumbs($dirPath)
     {
@@ -125,14 +144,14 @@ class Thumbs
                 }
             }
         } else {
-            throw new \Nette\DirectoryNotFoundException("Given path $dirPath does not exist.");
+            throw new DirectoryNotFoundException("Given path $dirPath does not exist.");
         }
     }
 
     /**
      * Delete thumb
      *
-     * @param string $path
+     * @param string $path Thumb path
      */
     public function deleteThumb($path)
     {

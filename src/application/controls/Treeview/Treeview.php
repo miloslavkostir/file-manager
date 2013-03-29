@@ -1,18 +1,40 @@
 <?php
 
+/**
+ * This file is part of the Ixtrum File Manager package (http://ixtrum.com/file-manager)
+ *
+ * (c) Bronislav Sedlák <sedlak@ixtrum.com>)
+ *
+ * For the full copyright and license information, please view
+ * the file LICENSE that was distributed with this source code.
+ */
+
 namespace Ixtrum\FileManager\Application\Controls;
 
 use Ixtrum\FileManager\Application\FileSystem,
     Ixtrum\FileManager\Application\FileSystem\Finder;
 
+/**
+ * Treeview control.
+ *
+ * @author Bronislav Sedlák <sedlak@ixtrum.com>
+ */
 class Treeview extends \Ixtrum\FileManager\Application\Controls
 {
 
+    /**
+     * Go to dir
+     *
+     * @param string $dir Dir name
+     */
     public function handleOpenDir($dir)
     {
         $this->setActualDir($dir);
     }
 
+    /**
+     * Default render method
+     */
     public function render()
     {
         $this->template->setFile(__DIR__ . "/Treeview.latte");
@@ -21,6 +43,14 @@ class Treeview extends \Ixtrum\FileManager\Application\Controls
         $this->template->render();
     }
 
+    /**
+     * Generate tree html structure
+     *
+     * @param array  $dirs     Directory structure
+     * @param string $superior Superior dir
+     *
+     * @return string
+     */
     private function generateTree($dirs, $superior)
     {
         $html = "<ul>";
@@ -45,6 +75,13 @@ class Treeview extends \Ixtrum\FileManager\Application\Controls
         return $html;
     }
 
+    /**
+     * Get dir structure
+     *
+     * @param string $dir Dir path
+     *
+     * @return array
+     */
     private function getDirTree($dir)
     {
         $x = array();
@@ -57,6 +94,11 @@ class Treeview extends \Ixtrum\FileManager\Application\Controls
         return $x;
     }
 
+    /**
+     * Generate treeview html
+     *
+     * @return string
+     */
     private function generateTreeview()
     {
         $dirs = $this->getDirTree($this->system->parameters["uploadroot"]);

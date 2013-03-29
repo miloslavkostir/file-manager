@@ -1,9 +1,24 @@
 <?php
 
+/**
+ * This file is part of the Ixtrum File Manager package (http://ixtrum.com/file-manager)
+ *
+ * (c) Bronislav Sedlák <sedlak@ixtrum.com>)
+ *
+ * For the full copyright and license information, please view
+ * the file LICENSE that was distributed with this source code.
+ */
+
 namespace Ixtrum\FileManager\Application;
 
-use Ixtrum\FileManager\Application\FileSystem\Finder;
+use Nette\Utils\Strings,
+    Ixtrum\FileManager\Application\FileSystem\Finder;
 
+/**
+ * Collection of file system functions.
+ *
+ * @author Bronislav Sedlák <sedlak@ixtrum.com>
+ */
 class FileSystem
 {
 
@@ -216,7 +231,7 @@ class FileSystem
             $name = "";
         }
 
-        return \Nette\Utils\Strings::toAscii($name);
+        return Strings::toAscii($name);
     }
 
     /**
@@ -231,7 +246,7 @@ class FileSystem
         $except = array("\\", "/", ":", "*", "?", '"', "<", ">", "|");
         $name = str_replace($except, "", $name);
 
-        return \Nette\Utils\Strings::toAscii($name);
+        return Strings::toAscii($name);
     }
 
     /**
@@ -296,7 +311,7 @@ class FileSystem
     /**
      * Get file/folder size
      *
-     * @param string $path Path to file/folder
+     * @param string $path Path to file/dir
      *
      * @return string
      */
@@ -310,11 +325,10 @@ class FileSystem
                 $size += $this->getSize($file->getPathName());
             }
             return $size;
-        } else {
-
-            $fileSize = new FileSystem\FileSize($path);
-            return $fileSize->getSize();
         }
+
+        $fileSize = new FileSystem\FileSize($path);
+        return $fileSize->getSize();
     }
 
 }

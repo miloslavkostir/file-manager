@@ -1,12 +1,29 @@
 <?php
 
+/**
+ * This file is part of the Ixtrum File Manager package (http://ixtrum.com/file-manager)
+ *
+ * (c) Bronislav Sedlák <sedlak@ixtrum.com>)
+ *
+ * For the full copyright and license information, please view
+ * the file LICENSE that was distributed with this source code.
+ */
+
 namespace Ixtrum\FileManager\Application\Controls;
 
 use Ixtrum\FileManager\Application\FileSystem\Finder;
 
+/**
+ * File info control.
+ *
+ * @author Bronislav Sedlák <sedlak@ixtrum.com>
+ */
 class FileInfo extends \Ixtrum\FileManager\Application\Controls
 {
 
+    /**
+     * Render control
+     */
     public function render()
     {
         $this->template->setFile(__DIR__ . "/FileInfo.latte");
@@ -36,8 +53,8 @@ class FileInfo extends \Ixtrum\FileManager\Application\Controls
     /**
      * Get file details
      *
-     * @param string $dir
-     * @param string $filename
+     * @param string $dir      Dir
+     * @param string $filename File name
      *
      * @return array
      */
@@ -101,9 +118,9 @@ class FileInfo extends \Ixtrum\FileManager\Application\Controls
     /**
      * Get info about files
      *
-     * @param string  $dir
-     * @param array   $files
-     * @param boolean $iterate
+     * @param string  $dir     Dir
+     * @param array   $files   Files
+     * @param boolean $iterate Iterate? (optional)
      *
      * @return array
      */
