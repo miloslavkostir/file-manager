@@ -29,7 +29,7 @@ class Thumbs
     private $thumbsDir;
 
     /** @var array */
-    public $supported = array("jpg", "jpeg", "png", "gif", "bmp");
+    public $supported = array("jpg", "jpeg", "png", "gif");
 
     /**
      * Constructor
