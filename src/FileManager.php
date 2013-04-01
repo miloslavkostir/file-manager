@@ -13,7 +13,8 @@ namespace Ixtrum;
 
 use Ixtrum\FileManager\Application\FileSystem,
     Ixtrum\FileManager\Application\FileSystem\Finder,
-    Nette\DI\Container,
+    Nette\Http\Session,
+    Nette\Http\Request,
     Nette\Application\UI\Form,
     Nette\Application\UI\Control,
     Nette\Application\UI\Multiplier;
@@ -38,19 +39,16 @@ class FileManager extends Control
     /**
      * Constructor
      *
-     * @param \Nette\DI\Container $container System container
-     * @param array               $config    User configuration
+     * @param \Nette\Http\Request $request HTTP request
+     * @param \Nette\Http\Session $session Session
+     * @param array               $config  Custom configuration
      */
-    public function __construct(Container $container, $config = array())
+    public function __construct(Request $request, Session $session, $config = array())
     {
         parent::__construct();
 
-        // Add important base parameters to config
-        $config["wwwDir"] = $container->parameters["wwwDir"];
-        $config["tempDir"] = $container->parameters["tempDir"];
-
-        // Load system container with services and configuration
-        $this->system = new FileManager\Application\Loader($container->session, $config);
+        // Create system container with services and configuration
+        $this->system = new FileManager\Application\Loader($session, $config);
         $this->system->freeze();
 
         // Get & validate actual dir
@@ -63,7 +61,7 @@ class FileManager extends Control
         $this->setActualDir($actualDir);
 
         // Get selected files via POST
-        $selectedFiles = $container->httpRequest->getPost("files");
+        $selectedFiles = $request->getPost("files");
         if (is_array($selectedFiles)) {
             $this->selectedFiles = $selectedFiles;
         }
@@ -203,7 +201,7 @@ class FileManager extends Control
     public function renderCss()
     {
         $this->template->setFile(__DIR__ . "/templates/css.latte");
-        $this->template->resDir = $this->system->parameters["resDir"];
+        $this->template->resUrl = $this->system->parameters["resUrl"];
 
         // Get theme
         $theme = $this->system->session->get("theme");
@@ -245,7 +243,8 @@ class FileManager extends Control
         // Sort messages according to priorities - 1. error, 2. warning, 3. info
         usort($this->template->flashes, function($next, $current) {
 
-                    if ($current->type === "warning" && $next->type === "info" || $current->type === "error" && $next->type !== "error") {
+                    if ($current->type === "warning" && $next->type === "info" || $current->type === "error" && $next->type !== "error"
+                    ) {
                         return +1;
                     }
                 });
@@ -259,7 +258,7 @@ class FileManager extends Control
     public function renderScripts()
     {
         $this->template->setFile(__DIR__ . "/templates/scripts.latte");
-        $this->template->resDir = $this->system->parameters["resDir"];
+        $this->template->resUrl = $this->system->parameters["resUrl"];
         $this->template->render();
     }
 
@@ -351,14 +350,15 @@ class FileManager extends Control
         return array(
             "uploadroot" => null,
             "cache" => true,
+            "cacheDir" => null,
             "cacheStorage" => "FileStorage",
+            "thumbs" => true,
+            "thumbsDir" => null,
+            "resUrl" => "ixtrum-res",
             "readonly" => false,
             "quota" => false,
             "quotaLimit" => 20, // megabytes
             "lang" => "en",
-            "tempDir" => null,
-            "wwwDir" => null,
-            "resDir" => "ixtrum-res",
             "pluginDir" => __DIR__ . "/plugins",
             "langDir" => __DIR__ . "/lang"
         );

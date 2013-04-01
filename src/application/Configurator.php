@@ -35,20 +35,8 @@ class Configurator
      */
     public function checkRequirements(array $config)
     {
-        if (!isset($config["uploadroot"]) || empty($config["uploadroot"])) {
+        if (!isset($config["uploadroot"]) || !is_dir($config["uploadroot"])) {
             throw new InvalidArgumentException("Parameter 'uploadroot' not defined!");
-        }
-
-        if (!is_dir($config["uploadroot"])) {
-            throw new DirectoryNotFoundException("Upload root '" . $config["uploadroot"] . "' doesn't exist!");
-        }
-
-        if (!is_dir($config["tempDir"])) {
-            throw new DirectoryNotFoundException("Temp dir '" . $config["tempDir"] . "' doesn't exist!");
-        }
-
-        if (!is_dir($config["wwwDir"])) {
-            throw new DirectoryNotFoundException("WWW dir '" . $config["wwwDir"] . "' doesn't exist!");
         }
 
         if (!is_dir($config["pluginDir"])) {
@@ -67,13 +55,13 @@ class Configurator
     /**
      * Create application configuration
      *
-     * @param array $config User configuration
+     * @param array $config Custom configuration
      *
      * @return array Configuration
      */
     public function createConfiguration($config)
     {
-        // Merge user config with default config
+        // Merge custom config with default config
         $config = array_merge(FileManager::getDefaults(), $config);
 
         // Check requirements
@@ -81,6 +69,9 @@ class Configurator
 
         // Canonicalize uploadroot
         $config["uploadroot"] = realpath($config["uploadroot"]);
+
+        // Define absolute path to resources
+        $config["resDir"] = dirname($_SERVER["SCRIPT_FILENAME"]) . "/" . $config["resUrl"];
 
         // Get plugins
         $config["plugins"] = $this->getPlugins($config["pluginDir"]);

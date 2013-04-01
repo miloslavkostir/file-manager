@@ -117,10 +117,13 @@ class Clipboard extends \Ixtrum\FileManager\Application\Controls
         }
 
         // Remove thumbs
-        if (is_dir($source)) {
-            $this->system->thumbs->deleteDirThumbs($source);
-        } else {
-            $this->system->thumbs->deleteThumb($source);
+        if ($this->system->parameters["thumbs"]) {
+
+            if (is_dir($source)) {
+                $this->system->thumbs->deleteDirThumbs($source);
+            } else {
+                $this->system->thumbs->deleteThumb($source);
+            }
         }
 
         // Clear cache if needed

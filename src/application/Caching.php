@@ -29,33 +29,47 @@ class Caching
     private $cache;
 
     /** @var array */
-    private $config;
+    private $supported = array("filestorage", "memcachedstorage");
 
     /**
      * Constructor
      *
-     * @param array $config Configuration
+     * @param string $cacheDir Cache dir
+     * @param string $storage  Cache storage
+     *
+     * @throws \Exception
      */
-    public function __construct($config)
+    public function __construct($storage, $cacheDir)
     {
-        $storageCfg = strtolower($config["cacheStorage"]);
-        if ($storageCfg === "filestorage") {
+        $storage = strtolower($storage);
+        if (!in_array($storage, $this->supported)) {
+            throw new \Exception("Unsupported storage '$storage'! Supported are only " . implode(",", $this->supported));
+        }
 
-            $cacheDir = $config["tempDir"] . "/cache/_Ixtrum.FileManager";
+        // File storage
+        if ($storage === "filestorage") {
+
+            if (!$cacheDir) {
+                throw new \Exception("You must define cache dir!");
+            }
             if (!is_dir($cacheDir)) {
 
                 $oldumask = umask(0);
-                mkdir($cacheDir, 0777);
+                mkdir($cacheDir, 0777, true);
                 umask($oldumask);
             }
-
+            if (!is_writable($cacheDir)) {
+                throw new \Exception("Cache dir '$cacheDir' is not writable!");
+            }
             $storage = new FileStorage($cacheDir, new FileJournal($cacheDir));
-        } elseif ($storageCfg === "memcachedstorage") {
+        }
+
+        // Memcached storage
+        if ($storage === "memcachedstorage") {
             $storage = new MemcachedStorage();
         }
 
         $this->cache = new Cache($storage);
-        $this->config = $config;
     }
 
     /**

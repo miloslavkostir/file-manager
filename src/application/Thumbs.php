@@ -11,9 +11,10 @@
 
 namespace Ixtrum\FileManager\Application;
 
-use Nette\Application\ApplicationException,
-    Nette\DirectoryNotFoundException,
+use Nette\DirectoryNotFoundException,
+    Nette\ImageMagick,
     Nette\Image,
+    Imagick,
     Ixtrum\FileManager\Application\FileSystem\Finder;
 
 /**
@@ -25,10 +26,7 @@ class Thumbs
 {
 
     /** @var string */
-    private $thumbDir;
-
-    /** @var array */
-    private $config;
+    private $thumbsDir;
 
     /** @var array */
     public $supported = array("jpg", "jpeg", "png", "gif", "bmp");
@@ -36,24 +34,25 @@ class Thumbs
     /**
      * Constructor
      *
-     * @param array $config application configuration
+     * @param string $thumbsDir Thumbnails dir
+     *
+     * @throws \Exception
      */
-    public function __construct($config)
+    public function __construct($thumbsDir)
     {
-        $thumbDir = $config["tempDir"] . "/cache/_Ixtrum.FileManager/thumbs";
-        if (!is_dir($thumbDir)) {
+        if (!$thumbsDir) {
+            throw new \Exception("You must define thumbs dir!");
+        }
+        if (!is_dir($thumbsDir)) {
 
             $oldumask = umask(0);
-            mkdir($thumbDir, 0777);
+            mkdir($thumbsDir, 0777, true);
             umask($oldumask);
         }
-
-        if (!is_writable($thumbDir)) {
-            throw new ApplicationException("Thumb dir '$thumbDir' is not writeable!");
+        if (!is_writable($thumbsDir)) {
+            throw new \Exception("Thumbs dir '$thumbsDir' is not writable!");
         }
-
-        $this->thumbDir = $thumbDir;
-        $this->config = $config;
+        $this->thumbsDir = $thumbsDir;
     }
 
     /**
@@ -65,7 +64,7 @@ class Thumbs
      */
     public function getThumbPath($path)
     {
-        return "$this->thumbDir/" . $this->getName($path);
+        return "$this->thumbsDir/" . $this->getName($path);
     }
 
     /**
@@ -89,10 +88,10 @@ class Thumbs
             }
 
             if (class_exists("\Nette\ImageMagick") && !$status) {
-                $image = new \Nette\ImageMagick($path);
+                $image = new ImageMagick($path);
             } elseif (class_exists("\Imagick")) {
-                $thumb = new \Imagick($path);
-                $thumb->resizeImage(96, null, \Imagick::FILTER_LANCZOS, 1);
+                $thumb = new Imagick($path);
+                $thumb->resizeImage(96, null, Imagick::FILTER_LANCZOS, 1);
                 $thumb->writeImage($thumbPath);
                 $thumb->destroy();
 

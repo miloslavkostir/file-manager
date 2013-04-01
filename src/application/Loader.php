@@ -40,11 +40,14 @@ final class Loader extends Container
     /**
      * Create service caching
      *
-     * @return \Ixtrum\FileManager\Application\Caching
+     * @return \Ixtrum\FileManager\Application\Caching | \stdClass
      */
     protected function createServiceCaching()
     {
-        return new Caching($this->parameters);
+        if (!$this->parameters["cache"]) {
+            return new \stdClass;
+        }
+        return new Caching($this->parameters["cacheStorage"], $this->parameters["cacheDir"]);
     }
 
     /**
@@ -80,11 +83,14 @@ final class Loader extends Container
     /**
      * Create service thumbs
      *
-     * @return \Ixtrum\FileManager\Application\Thumbs
+     * @return \Ixtrum\FileManager\Application\Thumbs | \stdClass
      */
     protected function createServiceThumbs()
     {
-        return new Thumbs($this->parameters);
+        if (!$this->parameters["thumbs"]) {
+            return new \stdClass;
+        }
+        return new Thumbs($this->parameters["thumbsDir"]);
     }
 
 }

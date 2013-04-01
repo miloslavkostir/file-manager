@@ -60,6 +60,24 @@ class TestCase extends PHPUnit_Framework_TestCase
     }
 
     /**
+     * Create test control
+     *
+     * @param array $config Custom configuration
+     *
+     * @return \Ixtrum\FileManager
+     */
+    protected function createControl($config = array())
+    {
+        $default = array(
+            "uploadroot" => $this->uploadRoot,
+            "cacheDir" => $this->context->parameters["tempDir"] . "/cache/_Ixtrum.FileManager"
+        );
+        return new Ixtrum\FileManager(
+                $this->context->httpRequest, $this->context->session, array_merge($default, $config)
+        );
+    }
+
+    /**
      * Render method helper for testing components and controls
      *
      * @param Nette\Application\UI\Control $control Component
@@ -145,4 +163,5 @@ class TestCase extends PHPUnit_Framework_TestCase
     {
         $this->rmdir($this->uploadRoot);
     }
+
 }

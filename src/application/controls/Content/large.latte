@@ -8,38 +8,42 @@
 <div class="fm-delimiter"></div>
 <div class="fm-content-files fm-files-large">
     <ul>
-        <li n:foreach="$files as $item"
+        <li n:foreach="$files as $filename => $file"
             class="fm-content-file"
-            data-filename="{$item['filename']}">
-                    {if $item['create_thumb'] <> 1}
-                            {if $item['type'] == 'file'}
-                                <img src="{$basePath}/{$thumbDir}/{$item['icon']}"
-                                     data-filename="{$item['filename']}"
-                                     data-actualdir="{$actualdir}"
-                                     class="fm-draggable fm-thumb" />
-                            {else}
-                                {if $actualdir === $rootname}
-                                    {var $targetpath = '/' . $item['filename'] . '/'}
-                                {else}
-                                    {var $targetpath = $actualdir . $item['filename'] . '/'}
-                                {/if}
-                                <a n:href="openDir!, $targetpath"
-                                   class="fm-ajax-dbl fm-thumb"
-                                   title="{_'Open folder'}">
-                                    <img src="{$basePath}/{$thumbDir}/{$item['icon']}"
-                                         data-filename="{$item['filename']}"
-                                         data-targetdir="{$targetpath}"
-                                         data-move-url="{link move!}"
-                                         class="fm-droppable fm-draggable fm-thumb" />
-                                </a>
-                            {/if}
-                    {else}
-                            <img src="{link showThumb!, $actualdir, $item['filename']}"
-                                 data-filename="{$item['filename']}"
-                                 data-actualdir="{$actualdir}"
-                                 class="fm-thumb fm-photo fm-draggable" />
+            data-filename="{$filename}">
+            {if !$file['dir']}
+                {if $file['thumb']}
+            <img src="{link showThumb! $actualdir, $filename}"
+                 data-filename="{$filename}"
+                 data-actualdir="{$actualdir}"
+                 class="fm-thumb fm-photo fm-draggable" />
+                {else}
+                    {var $icon = "icon"}
+                    {if is_file($resDir . "/img/icons/" . $view . "/" . $file['extension'] . ".png")}
+                        {var $icon = $file['extension']}
                     {/if}
-                    <div class="fm-file-name">{$item['filename']|truncate:20}</div>
+            <img src="{$basePath}/{$resUrl}/img/icons/{$view}/{$icon}.png"
+                 data-filename="{$filename}"
+                 data-actualdir="{$actualdir}"
+                 class="fm-draggable fm-thumb" />
+                {/if}
+            {else}
+                {if $actualdir === $rootname}
+                    {var $targetPath = '/' . $filename . '/'}
+                {else}
+                    {var $targetPath = $actualdir . $filename . '/'}
+                {/if}
+            <a n:href="openDir!, $targetPath"
+               class="fm-ajax-dbl fm-thumb"
+               title="{_'Open folder'}">
+                <img src="{$basePath}/{$resUrl}/img/icons/{$view}/folder.png"
+                     data-filename="{$filename}"
+                     data-targetdir="{$targetPath}"
+                     data-move-url="{link move!}"
+                     class="fm-droppable fm-draggable fm-thumb" />
+            </a>
+            {/if}
+            <div class="fm-file-name">{$filename|truncate:20}</div>
         </li>
     </ul>
 </div>

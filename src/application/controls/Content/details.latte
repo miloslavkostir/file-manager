@@ -17,36 +17,40 @@
             </tr>
         </thead>
         <tbody>
-            <tr n:foreach="$files as $item"
+            <tr n:foreach="$files as $filename => $file"
                 class="fm-content-file"
-                data-filename="{$item['filename']}">
+                data-filename="{$filename}">
                 <td>
-                    {if $item['type'] == 'file'}
-                        <img src="{$basePath}/{$thumbDir}/{$item['icon']}"
-                             data-filename="{$item['filename']}"
-                             data-actualdir="{$actualdir}"
-                             class="fm-draggable fm-thumb" />
+                    {if !$file['dir']}
+                        {var $icon = "icon"}
+                        {if is_file($resDir . "/img/icons/" . $view . "/" . $file['extension'] . ".png")}
+                            {var $icon = $file['extension']}
+                        {/if}
+                    <img src="{$basePath}/{$resUrl}/img/icons/{$view}/{$icon}.png"
+                         data-filename="{$filename}"
+                         data-actualdir="{$actualdir}"
+                         class="fm-draggable fm-thumb" />
                     {else}
                         {if $actualdir === $rootname}
-                            {var $targetpath = '/' . $item['filename'] . '/'}
+                            {var $targetPath = '/' . $filename . '/'}
                         {else}
-                            {var $targetpath = $actualdir . $item['filename'] . '/'}
+                            {var $targetPath = $actualdir . $filename . '/'}
                         {/if}
-                        <a n:href="openDir!, $targetpath"
-                        class="fm-ajax-dbl fm-thumb"
-                        title="{_'Open folder'}">
-                            <img src="{$basePath}/{$thumbDir}/{$item['icon']}"
-                                 data-filename="{$item['filename']}"
-                                 data-targetdir="{$targetpath}"
-                                 data-move-url="{link move!}"
-                                 class="fm-droppable fm-draggable fm-thumb" />
-                        </a>
+                    <a n:href="openDir!, $targetPath"
+                       class="fm-ajax-dbl fm-thumb"
+                       title="{_'Open folder'}">
+                        <img src="{$basePath}/{$resUrl}/img/icons/{$view}/folder.png"
+                             data-filename="{$filename}"
+                             data-targetdir="{$targetPath}"
+                             data-move-url="{link move!}"
+                             class="fm-droppable fm-draggable fm-thumb" />
+                    </a>
                     {/if}
-                    {$item['filename']|truncate:100}
+                    {$filename|truncate:100}
                 </td>
-                <td>{$item['modified']|date:'%d.%m.%Y %H:%M'}</td>
-                <td>{ifset $item['filetype']}{$item['filetype']|upper}{/ifset}</td>
-                <td>{ifset $item['size']}{$item['size']|bytes}{/ifset}</td>
+                <td>{$file['modified']|date:'%d.%m.%Y %H:%M'}</td>
+                <td>{ifset $file['extension']}{$file['extension']|upper}{/ifset}</td>
+                <td>{ifset $file['size']}{$file['size']|bytes}{/ifset}</td>
             </tr>
         </tbody>
     </table>

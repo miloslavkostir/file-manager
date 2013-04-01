@@ -216,7 +216,9 @@ class Content extends \Ixtrum\FileManager\Application\Controls
      */
     public function handleShowThumb($dir, $fileName)
     {
-        $this->system->thumbs->getThumbFile($this->getAbsolutePath($dir) . "/$fileName")->send();
+        if ($this->system->parameters["thumbs"]) {
+            $this->system->thumbs->getThumbFile($this->getAbsolutePath($dir) . "/$fileName")->send();
+        }
     }
 
     /**
@@ -231,7 +233,9 @@ class Content extends \Ixtrum\FileManager\Application\Controls
         );
         $this->template->actualdir = $this->getActualDir();
         $this->template->rootname = FileSystem::getRootName();
-        $this->template->thumbDir = $this->system->parameters["resDir"] . "/img/icons/$this->view";
+        $this->template->view = $this->view;
+        $this->template->resUrl = $this->system->parameters["resUrl"];
+        $this->template->resDir = $this->system->parameters["resDir"];
 
         // Load plugins
         if ($this->system->parameters["plugins"]) {
@@ -266,47 +270,27 @@ class Content extends \Ixtrum\FileManager\Application\Controls
                 ->in($this->getAbsolutePath($dir))
                 ->orderBy($order);
 
-        $dir_array = array();
+        $content = array();
         foreach ($files as $file) {
 
             $name = $file->getFilename();
-            $dir_array[$name]["filename"] = $name;
-            $dir_array[$name]["modified"] = $file->getMTime();
+            $content[$name]["modified"] = $file->getMTime();
+            $content[$name]["dir"] = false;
 
-            if (!is_dir($file->getPath() . "/$name")) {
+            if ($file->isFile()) {
 
-                $dir_array[$name]["type"] = "file";
-                $dir_array[$name]["size"] = $this->system->filesystem->getSize($file->getPathName());
-                $filetype = strtolower(pathinfo($name, PATHINFO_EXTENSION));
-                $dir_array[$name]["filetype"] = $filetype;
+                $content[$name]["size"] = $this->system->filesystem->getSize($file->getPathName());
+                $content[$name]["extension"] = strtolower($file->getExtension());
 
-                if (file_exists($this->system->parameters["wwwDir"] . "/" . $this->system->parameters["resDir"] . "/img/icons/$view/$filetype.png")) {
-
-                    if ($filetype === "folder") {
-                        $dir_array[$name]["icon"] = "icon.png";
-                    } else {
-                        $dir_array[$name]["icon"] = "$filetype.png";
-                    }
-
-                    if (in_array($filetype, $this->system->thumbs->supported)) {
-                        $dir_array[$name]["create_thumb"] = true;
-                    } else {
-                        $dir_array[$name]["create_thumb"] = false;
-                    }
-                } else {
-
-                    $dir_array[$name]["icon"] = "icon.png";
-                    $dir_array[$name]["create_thumb"] = false;
+                $content[$name]["thumb"] = false;
+                if ($this->system->parameters["thumbs"]) {
+                    $content[$name]["thumb"] = in_array($content[$name]["extension"], $this->system->thumbs->supported);
                 }
             } else {
-
-                $dir_array[$name]["type"] = "folder";
-                $dir_array[$name]["icon"] = "folder.png";
-                $dir_array[$name]["create_thumb"] = false;
+                $content[$name]["dir"] = true;
             }
         }
-
-        return $dir_array;
+        return $content;
     }
 
     /**
@@ -374,10 +358,13 @@ class Content extends \Ixtrum\FileManager\Application\Controls
         }
 
         // Remove thumbs
-        if (is_dir($source)) {
-            $this->system->thumbs->deleteDirThumbs($source);
-        } else {
-            $this->system->thumbs->deleteThumb($source);
+        if ($this->system->parameters["thumbs"]) {
+
+            if (is_dir($source)) {
+                $this->system->thumbs->deleteDirThumbs($source);
+            } else {
+                $this->system->thumbs->deleteThumb($source);
+            }
         }
 
         // Clear cache if needed

@@ -36,8 +36,7 @@ class FileManagerTest extends TestCase
      */
     public function testIsPathValid()
     {
-        $control = new Ixtrum\FileManager($this->context, array("uploadroot" => $this->uploadRoot));
-        $this->presenter->addComponent($control, "testControl");
+        $this->presenter->addComponent($this->createControl(), "testControl");
         $this->presenter->run(new Nette\Application\Request("Homepage", "GET", array()));
         $fileManager = $this->presenter->getComponent("testControl");
 
@@ -82,8 +81,7 @@ class FileManagerTest extends TestCase
      */
     public function testRender()
     {
-        $control = new Ixtrum\FileManager($this->context, array("uploadroot" => $this->uploadRoot));
-        $this->presenter->addComponent($control, "testControl");
+        $this->presenter->addComponent($this->createControl(), "testControl");
         $this->presenter->run(new Nette\Application\Request("Homepage", "GET", array()));
 
         $fileManager = $this->presenter->getComponent("testControl");
@@ -95,8 +93,7 @@ class FileManagerTest extends TestCase
      */
     public function testRenderCss()
     {
-        $control = new Ixtrum\FileManager($this->context, array("uploadroot" => $this->uploadRoot));
-        $this->presenter->addComponent($control, "testControl");
+        $this->presenter->addComponent($this->createControl(), "testControl");
         $this->presenter->run(new Nette\Application\Request("Homepage", "GET", array()));
 
         $fileManager = $this->presenter->getComponent("testControl");
@@ -111,8 +108,7 @@ class FileManagerTest extends TestCase
      */
     public function testRenderContent()
     {
-        $control = new Ixtrum\FileManager($this->context, array("uploadroot" => $this->uploadRoot));
-        $this->presenter->addComponent($control, "testControl");
+        $this->presenter->addComponent($this->createControl(), "testControl");
         $this->presenter->run(new Nette\Application\Request("Homepage", "GET", array()));
 
         $fileManager = $this->presenter->getComponent("testControl");
@@ -127,8 +123,7 @@ class FileManagerTest extends TestCase
      */
     public function testRenderToolbar()
     {
-        $control = new Ixtrum\FileManager($this->context, array("uploadroot" => $this->uploadRoot));
-        $this->presenter->addComponent($control, "testControl");
+        $this->presenter->addComponent($this->createControl(), "testControl");
         $this->presenter->run(new Nette\Application\Request("Homepage", "GET", array()));
 
         $fileManager = $this->presenter->getComponent("testControl");
@@ -143,8 +138,7 @@ class FileManagerTest extends TestCase
      */
     public function testRenderAddressbar()
     {
-        $control = new Ixtrum\FileManager($this->context, array("uploadroot" => $this->uploadRoot));
-        $this->presenter->addComponent($control, "testControl");
+        $this->presenter->addComponent($this->createControl(), "testControl");
         $this->presenter->run(new Nette\Application\Request("Homepage", "GET", array()));
 
         $fileManager = $this->presenter->getComponent("testControl");
@@ -159,8 +153,7 @@ class FileManagerTest extends TestCase
      */
     public function testRenderInfobar()
     {
-        $control = new Ixtrum\FileManager($this->context, array("uploadroot" => $this->uploadRoot));
-        $this->presenter->addComponent($control, "testControl");
+        $this->presenter->addComponent($this->createControl(), "testControl");
         $this->presenter->run(new Nette\Application\Request("Homepage", "GET", array()));
 
         $fileManager = $this->presenter->getComponent("testControl");
@@ -175,8 +168,7 @@ class FileManagerTest extends TestCase
      */
     public function testRenderMessages()
     {
-        $control = new Ixtrum\FileManager($this->context, array("uploadroot" => $this->uploadRoot));
-        $this->presenter->addComponent($control, "testControl");
+        $this->presenter->addComponent($this->createControl(), "testControl");
         $this->presenter->run(new Nette\Application\Request("Homepage", "GET", array()));
 
         $fileManager = $this->presenter->getComponent("testControl");
@@ -191,8 +183,7 @@ class FileManagerTest extends TestCase
      */
     public function testRenderScripts()
     {
-        $control = new Ixtrum\FileManager($this->context, array("uploadroot" => $this->uploadRoot));
-        $this->presenter->addComponent($control, "testControl");
+        $this->presenter->addComponent($this->createControl(), "testControl");
         $this->presenter->run(new Nette\Application\Request("Homepage", "GET", array()));
 
         $fileManager = $this->presenter->getComponent("testControl");
@@ -208,8 +199,7 @@ class FileManagerTest extends TestCase
     public function testSetActualDir()
     {
         $this->mkdir($this->uploadRoot . "/testing");
-        $control = new Ixtrum\FileManager($this->context, array("uploadroot" => $this->uploadRoot));
-        $this->presenter->addComponent($control, "testControl");
+        $this->presenter->addComponent($this->createControl(), "testControl");
         $this->presenter->run(new Nette\Application\Request("Homepage", "GET", array()));
 
         $fileManager = $this->presenter->getComponent("testControl");
