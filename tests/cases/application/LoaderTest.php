@@ -27,7 +27,7 @@ class LoaderTest extends TestCase
         $config = array(
             "appDir" => __DIR__,
             "pluginDir" => __DIR__,
-            "uploadroot" => __DIR__,
+            "dataDir" => __DIR__,
             "langDir" => __DIR__,
             "tempDir" => __DIR__,
             "wwwDir" => __DIR__
@@ -36,16 +36,15 @@ class LoaderTest extends TestCase
     }
 
     /**
-     * Test empty uploadroot
+     * Test empty dataDir
      *
      * @expectedException \Nette\InvalidArgumentException
      */
-    public function testEmptyUploadroot()
+    public function testEmptyDataDir()
     {
         $config = array(
-            "appDir" => __DIR__,
             "pluginDir" => __DIR__,
-            "uploadroot" => null,
+            "dataDir" => null,
             "tempDir" => __DIR__,
             "wwwDir" => __DIR__
         );

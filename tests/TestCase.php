@@ -21,7 +21,7 @@ class TestCase extends PHPUnit_Framework_TestCase
     public $context;
 
     /** @var string */
-    public $uploadRoot;
+    public $dataDir;
 
     /**
      * Constructor
@@ -56,7 +56,25 @@ class TestCase extends PHPUnit_Framework_TestCase
         $this->context = $container;
 
         // Set up upload root dirs
-        $this->uploadRoot = $container->parameters["tempDir"] . "/uploadroot";
+        $this->dataDir = $container->parameters["tempDir"] . "/dataDir";
+    }
+
+    /**
+     * Create test control
+     *
+     * @param array $config Custom configuration
+     *
+     * @return \Ixtrum\FileManager
+     */
+    protected function createControl($config = array())
+    {
+        $default = array(
+            "dataDir" => $this->dataDir,
+            "cacheDir" => $this->context->parameters["tempDir"] . "/cache/_Ixtrum.FileManager"
+        );
+        return new Ixtrum\FileManager(
+                $this->context->httpRequest, $this->context->session, array_merge($default, $config)
+        );
     }
 
     /**
@@ -132,10 +150,10 @@ class TestCase extends PHPUnit_Framework_TestCase
      */
     public function setUp()
     {
-        if (is_dir($this->uploadRoot)) {
-            $this->rmdir($this->uploadRoot);
+        if (is_dir($this->dataDir)) {
+            $this->rmdir($this->dataDir);
         }
-        $this->mkdir($this->uploadRoot);
+        $this->mkdir($this->dataDir);
     }
 
     /**
@@ -143,6 +161,7 @@ class TestCase extends PHPUnit_Framework_TestCase
      */
     public function tearDown()
     {
-        $this->rmdir($this->uploadRoot);
+        $this->rmdir($this->dataDir);
     }
+
 }

@@ -91,8 +91,9 @@ class Rename extends \Ixtrum\FileManager\Application\Controls
         if (is_dir($origPath)) {
 
             $newFilename = $this->system->filesystem->safeFoldername($form->values->newFilename);
-            $this->system->thumbs->deleteDirThumbs($origPath);
-
+            if ($this->system->parameters["thumbs"]) {
+                $this->system->thumbs->deleteDirThumbs($origPath);
+            }
             if ($this->system->parameters["cache"]) {
 
                 $this->system->caching->deleteItem(array("content", $path));
@@ -101,8 +102,9 @@ class Rename extends \Ixtrum\FileManager\Application\Controls
         } else {
 
             $newFilename = $this->system->filesystem->safeFilename($form->values->newFilename);
-            $this->system->thumbs->deleteThumb($origPath);
-
+            if ($this->system->parameters["thumbs"]) {
+                $this->system->thumbs->deleteThumb($origPath);
+            }
             if ($this->system->parameters["cache"]) {
                 $this->system->caching->deleteItem(array("content", $path));
             }

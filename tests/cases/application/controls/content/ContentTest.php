@@ -40,8 +40,7 @@ class ContentTest extends TestCase
      */
     public function testRender()
     {
-        $control = new Ixtrum\FileManager($this->context, array("uploadroot" => $this->uploadRoot));
-        $this->presenter->addComponent($control, "testControl");
+        $this->presenter->addComponent($this->createControl(), "testControl");
         $this->presenter->run(new Nette\Application\Request("Homepage", "GET", array()));
 
         $fileManager = $this->presenter->getComponent("testControl");

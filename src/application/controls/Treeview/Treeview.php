@@ -101,7 +101,7 @@ class Treeview extends \Ixtrum\FileManager\Application\Controls
      */
     private function generateTreeview()
     {
-        $dirs = $this->getDirTree($this->system->parameters["uploadroot"]);
+        $dirs = $this->getDirTree($this->system->parameters["dataDir"]);
         $rootname = FileSystem::getRootName();
 
         $output = '<ul class="filetree">';
@@ -124,7 +124,7 @@ class Treeview extends \Ixtrum\FileManager\Application\Controls
     {
         if ($this->system->parameters["cache"]) {
 
-            $path = $this->system->parameters["uploadroot"];
+            $path = $this->system->parameters["dataDir"];
             $cacheData = $this->system->caching->getItem($path);
             if (!$cacheData) {
 

@@ -28,7 +28,7 @@ class FileInfo extends \Ixtrum\FileManager\Application\Controls
     {
         $this->template->setFile(__DIR__ . "/FileInfo.latte");
         $this->template->setTranslator($this->system->translator);
-        $this->template->thumbDir = $this->system->parameters["resDir"] . "/img/icons/large";
+        $this->template->resUrl = $this->system->parameters["resUrl"];
 
         if (count($this->selectedFiles) > 1) {
 
@@ -60,45 +60,31 @@ class FileInfo extends \Ixtrum\FileManager\Application\Controls
      */
     private function getFileInfo($dir, $filename)
     {
-        $thumbDir = $this->system->parameters["resDir"] . "/img/icons/large";
         $path = $this->getAbsolutePath($dir) . DIRECTORY_SEPARATOR . $filename;
 
         $info = array();
-        if (!is_dir($path)) {
+        $info["name"] = $filename;
+        $info["modificated"] = date("F d Y H:i:s", filemtime($path));
+        $info["permissions"] = $this->system->filesystem->getFileMod($path);
+        $info["dir"] = false;
 
-            $info["path"] = $path;
-            $info["actualdir"] = $dir;
-            $info["filename"] = $filename;
-            $info["type"] = pathinfo($path, PATHINFO_EXTENSION);
+        if (is_file($path)) {
+
+            $info["extension"] = pathinfo($path, PATHINFO_EXTENSION);
             $info["size"] = $this->system->filesystem->getSize($path);
-            $info["modificated"] = date("F d Y H:i:s", filemtime($path));
-            $info["permissions"] = $this->system->filesystem->getFileMod($path);
-
-            if (file_exists($this->system->parameters["wwwDir"] . "/$thumbDir/" . strtolower($info["type"]) . ".png" && strtolower($info["type"]) <> "folder")) {
-                $info["icon"] = "/$thumbDir/" . $info["type"] . ".png";
-            } else {
-                $info["icon"] = "/$thumbDir/" . "icon.png";
-            }
         } else {
 
-            $info["path"] = $path;
-            $info["actualdir"] = $dir;
-            $info["filename"] = $filename;
-            $info["type"] = "folder";
+            $info["dir"] = true;
             $info["size"] = $this->system->filesystem->getSize($path);
-            $info["files_count"] = $this->getDirFilesCount($path);
-            $info["modificated"] = date("F d Y H:i:s", filemtime($path));
-            $info["permissions"] = $this->system->filesystem->getFileMod($path);
-            $info["icon"] = "/$thumbDir/folder.png";
+            $info["filesCount"] = $this->getDirFilesCount($path);
         }
-
         return $info;
     }
 
     /**
      * Get files count in directory
      *
-     * @param string $path Path to folder
+     * @param string $path Dir path
      *
      * @return integer
      */
@@ -130,7 +116,7 @@ class FileInfo extends \Ixtrum\FileManager\Application\Controls
         $info = array(
             "size" => 0,
             "dirCount" => 0,
-            "fileCount" => 0
+            "filesCount" => 0
         );
 
         foreach ($files as $file) {
@@ -139,7 +125,7 @@ class FileInfo extends \Ixtrum\FileManager\Application\Controls
             if (!is_dir($filePath)) {
 
                 $info['size'] += $this->system->filesystem->getSize($filePath);
-                $info['fileCount']++;
+                $info['filesCount']++;
             } elseif ($iterate) {
 
                 $info['dirCount']++;
@@ -151,12 +137,11 @@ class FileInfo extends \Ixtrum\FileManager\Application\Controls
                         $info['dirCount']++;
                     } else {
                         $info['size'] += $this->system->filesystem->getSize($item->getPathName());
-                        $info['fileCount']++;
+                        $info['filesCount']++;
                     }
                 }
             }
         }
-
         return $info;
     }
 
