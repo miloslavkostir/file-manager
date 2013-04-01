@@ -35,8 +35,8 @@ class Configurator
      */
     public function checkRequirements(array $config)
     {
-        if (!isset($config["uploadroot"]) || !is_dir($config["uploadroot"])) {
-            throw new InvalidArgumentException("Parameter 'uploadroot' not defined!");
+        if (!isset($config["dataDir"]) || !is_dir($config["dataDir"])) {
+            throw new InvalidArgumentException("Data dir not defined!");
         }
 
         if (!is_dir($config["pluginDir"])) {
@@ -67,8 +67,8 @@ class Configurator
         // Check requirements
         $this->checkRequirements($config);
 
-        // Canonicalize uploadroot
-        $config["uploadroot"] = realpath($config["uploadroot"]);
+        // Canonicalize dataDir
+        $config["dataDir"] = realpath($config["dataDir"]);
 
         // Define absolute path to resources
         $config["resDir"] = dirname($_SERVER["SCRIPT_FILENAME"]) . "/" . $config["resUrl"];

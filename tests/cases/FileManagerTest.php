@@ -41,39 +41,39 @@ class FileManagerTest extends TestCase
         $fileManager = $this->presenter->getComponent("testControl");
 
         $dir = "/test/";
-        $this->mkdir($this->uploadRoot . $dir);
+        $this->mkdir($this->dataDir . $dir);
         $this->assertTrue($fileManager->isPathValid($dir));
 
         // Non-existing files are not valid
         $this->assertFalse($fileManager->isPathValid("/test/", "non-existing-file"));
 
-        // Folders in uploadroot superior are not valid
+        // Folders in dataDir superior are not valid
         $this->assertFalse($fileManager->isPathValid("/../"));
 
-        // Uploadroot is valid
+        // dataDir is valid
         $this->assertTrue($fileManager->isPathValid("/"));
 
         // Non-existing folders are not valid
         $this->assertFalse($fileManager->isPathValid("/missing/"));
 
-        // Files in uploadroot subfolder are valid
+        // Files in dataDir subfolder are valid
         $dir = "/test/";
         $file = "test.txt";
-        file_put_contents($this->uploadRoot . $dir . $file, "data");
+        file_put_contents($this->dataDir . $dir . $file, "data");
         $this->assertTrue($fileManager->isPathValid($dir, $file));
 
-        // Files in uploadroot are valid
+        // Files in dataDir are valid
         $dir = "/";
         $file = "test.txt";
-        file_put_contents($this->uploadRoot . $dir . $file, "data");
+        file_put_contents($this->dataDir . $dir . $file, "data");
         $this->assertTrue($fileManager->isPathValid($dir, $file));
 
-        // Files in uploadroot superior are not valid
+        // Files in dataDir superior are not valid
         $dir = "/../";
         $file = "test.txt";
-        file_put_contents($this->uploadRoot . $dir . $file, "data");
+        file_put_contents($this->dataDir . $dir . $file, "data");
         $this->assertFalse($fileManager->isPathValid($dir, $file));
-        unlink($this->uploadRoot . $dir . $file);
+        unlink($this->dataDir . $dir . $file);
     }
 
     /**
@@ -198,7 +198,7 @@ class FileManagerTest extends TestCase
      */
     public function testSetActualDir()
     {
-        $this->mkdir($this->uploadRoot . "/testing");
+        $this->mkdir($this->dataDir . "/testing");
         $this->presenter->addComponent($this->createControl(), "testControl");
         $this->presenter->run(new Nette\Application\Request("Homepage", "GET", array()));
 

@@ -334,9 +334,9 @@ class FileManager extends Control
     public function getFreeSpace()
     {
         if ($this->system->parameters["quota"]) {
-            return $this->system->parameters["quotaLimit"] * 1048576 - $this->system->filesystem->getSize($this->system->parameters["uploadroot"]);
+            return $this->system->parameters["quotaLimit"] * 1048576 - $this->system->filesystem->getSize($this->system->parameters["dataDir"]);
         } else {
-            return disk_free_space($this->system->parameters["uploadroot"]);
+            return disk_free_space($this->system->parameters["dataDir"]);
         }
     }
 
@@ -348,7 +348,7 @@ class FileManager extends Control
     public static function getDefaults()
     {
         return array(
-            "uploadroot" => null,
+            "dataDir" => null,
             "cache" => true,
             "cacheDir" => null,
             "cacheStorage" => "FileStorage",
@@ -383,11 +383,11 @@ class FileManager extends Control
             return false;
         }
 
-        if ($this->system->parameters["uploadroot"] === $path) {
+        if ($this->system->parameters["dataDir"] === $path) {
             return true;
         }
 
-        return $this->system->filesystem->isSubFolder($this->system->parameters["uploadroot"], $path);
+        return $this->system->filesystem->isSubFolder($this->system->parameters["dataDir"], $path);
     }
 
     /**
@@ -399,7 +399,7 @@ class FileManager extends Control
      */
     public function getAbsolutePath($actualdir)
     {
-        return realpath($this->system->parameters["uploadroot"] . $actualdir);
+        return realpath($this->system->parameters["dataDir"] . $actualdir);
     }
 
 }
