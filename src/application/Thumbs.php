@@ -90,6 +90,7 @@ class Thumbs
             if (class_exists("\Nette\ImageMagick") && !$status) {
                 $image = new ImageMagick($path);
             } elseif (class_exists("\Imagick")) {
+
                 $thumb = new Imagick($path);
                 $thumb->resizeImage(96, null, Imagick::FILTER_LANCZOS, 1);
                 $thumb->writeImage($thumbPath);
@@ -100,7 +101,7 @@ class Thumbs
                 $image = Image::fromFile($path);
             }
 
-            $image->resize(96, null);
+            $image->resize(96, null, Image::SHRINK_ONLY);
             $image->save($thumbPath, 80);
 
             return $image;
