@@ -18,6 +18,9 @@
         "nette/nette": "2.0.*",
         "phpunit/phpunit": "3.7.*"
     },
+    "suggest": {
+        "ext-imagick": "*"
+    },
     "autoload": {
         "classmap": ["src/"]
     }
