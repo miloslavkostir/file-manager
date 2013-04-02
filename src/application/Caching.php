@@ -29,7 +29,7 @@ class Caching
     private $cache;
 
     /** @var array */
-    private $supported = array("filestorage", "memcachedstorage");
+    public static $supported = array("filestorage", "memcachedstorage");
 
     /**
      * Constructor
@@ -42,8 +42,8 @@ class Caching
     public function __construct($storage, $cacheDir)
     {
         $storage = strtolower($storage);
-        if (!in_array($storage, $this->supported)) {
-            throw new \Exception("Unsupported storage '$storage'! Supported are only " . implode(",", $this->supported));
+        if (!in_array($storage, self::$supported)) {
+            throw new \Exception("Unsupported storage '$storage'! Supported are only " . implode(",", self::$supported));
         }
 
         // File storage
