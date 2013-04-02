@@ -26,11 +26,9 @@ class LoaderTest extends TestCase
     {
         $config = array(
             "appDir" => __DIR__,
-            "pluginDir" => __DIR__,
+            "pluginsDir" => __DIR__,
             "dataDir" => __DIR__,
-            "langDir" => __DIR__,
-            "tempDir" => __DIR__,
-            "wwwDir" => __DIR__
+            "langDir" => __DIR__
         );
         $this->createLoader($config);
     }
@@ -43,10 +41,8 @@ class LoaderTest extends TestCase
     public function testEmptyDataDir()
     {
         $config = array(
-            "pluginDir" => __DIR__,
-            "dataDir" => null,
-            "tempDir" => __DIR__,
-            "wwwDir" => __DIR__
+            "pluginsDir" => __DIR__,
+            "dataDir" => null
         );
         $this->createLoader($config);
     }

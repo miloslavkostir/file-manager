@@ -34,7 +34,7 @@ final class Loader extends Container
     {
         $this->session = $session;
         $configurator = new Configurator;
-        $this->parameters = $configurator->createConfiguration($config);
+        $this->parameters = $configurator->createConfig($config);
     }
 
     /**

@@ -12,7 +12,6 @@
 namespace Ixtrum;
 
 use Ixtrum\FileManager\Application\FileSystem,
-    Ixtrum\FileManager\Application\FileSystem\Finder,
     Nette\Http\Session,
     Nette\Http\Request,
     Nette\Application\UI\Form,
@@ -129,24 +128,6 @@ class FileManager extends Control
     public function getActualDir()
     {
         return $this->system->session->get("actualdir");
-    }
-
-    /**
-     * Get available languages
-     *
-     * @return array
-     */
-    public static function getLanguages()
-    {
-        $config = self::getDefaults();
-        $languages = array($config["lang"] => $config["lang"]);
-        $files = Finder::findFiles("*.json")->in($config["langDir"]);
-        foreach ($files as $file) {
-
-            $baseName = $file->getBasename(".json");
-            $languages[$baseName] = $baseName;
-        }
-        return $languages;
     }
 
     /**
@@ -338,30 +319,6 @@ class FileManager extends Control
         } else {
             return disk_free_space($this->system->parameters["dataDir"]);
         }
-    }
-
-    /**
-     * Get default parameters
-     *
-     * @return array
-     */
-    public static function getDefaults()
-    {
-        return array(
-            "dataDir" => null,
-            "cache" => true,
-            "cacheDir" => null,
-            "cacheStorage" => "FileStorage",
-            "thumbs" => true,
-            "thumbsDir" => null,
-            "resUrl" => "ixtrum-res",
-            "readonly" => false,
-            "quota" => false,
-            "quotaLimit" => 20, // megabytes
-            "lang" => "en",
-            "pluginDir" => __DIR__ . "/plugins",
-            "langDir" => __DIR__ . "/lang"
-        );
     }
 
     /**

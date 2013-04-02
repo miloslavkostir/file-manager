@@ -14,8 +14,7 @@ namespace Ixtrum\FileManager\Application;
 use Nette\DirectoryNotFoundException,
     Nette\InvalidArgumentException,
     Nette\Utils\Json,
-    Ixtrum\FileManager\Application\FileSystem\Finder,
-    Ixtrum\FileManager;
+    Ixtrum\FileManager\Application\FileSystem\Finder;
 
 /**
  * Configurator.
@@ -25,26 +24,46 @@ use Nette\DirectoryNotFoundException,
 class Configurator
 {
 
+    /** @var array */
+    private $defaults = array(
+        "appDir" => null,
+        "dataDir" => null,
+        "cache" => true,
+        "cacheDir" => null,
+        "cacheStorage" => "FileStorage",
+        "thumbs" => true,
+        "thumbsDir" => null,
+        "resUrl" => "ixtrum-res",
+        "readonly" => false,
+        "quota" => false,
+        "quotaLimit" => 20, // megabytes
+        "lang" => "en",
+        "langs" => array(),
+        "langDir" => null,
+        "plugins" => array(),
+        "pluginsDir" => null
+    );
+
     /**
-     * Check application requirements with given config
+     * Validate configuration
      *
      * @param array $config Configuration
      *
      * @throws \Nette\DirectoryNotFoundException
      * @throws \Nette\InvalidArgumentException
      */
-    public function checkRequirements(array $config)
+    private function validateConfig(array $config)
     {
         if (!isset($config["dataDir"]) || !is_dir($config["dataDir"])) {
             throw new InvalidArgumentException("Data dir not defined!");
         }
 
-        if (!is_dir($config["pluginDir"])) {
-            throw new DirectoryNotFoundException("Plugin dir '" . $config["pluginDir"] . "' doesn't exist!");
+        if (!is_dir($config["pluginsDir"])) {
+            throw new DirectoryNotFoundException("Plugins dir '" . $config["pluginsDir"] . "' doesn't exist!");
         }
 
         if (!is_dir($config["langDir"])) {
-            throw new DirectoryNotFoundException("Language dir '" . $config["langDir"] . "' doesn't exist!");
+            throw new DirectoryNotFoundException("Languages dir '" . $config["langDir"] . "' doesn't exist!");
         }
 
         if ($config["quota"] && (int) $config["quotaLimit"] === 0) {
@@ -55,17 +74,17 @@ class Configurator
     /**
      * Create application configuration
      *
-     * @param array $config Custom configuration
+     * @param array $custom Custom configuration
      *
      * @return array Configuration
      */
-    public function createConfiguration($config)
+    public function createConfig(array $custom)
     {
         // Merge custom config with default config
-        $config = array_merge(FileManager::getDefaults(), $config);
+        $config = array_merge($this->createDefaults(), $custom);
 
-        // Check requirements
-        $this->checkRequirements($config);
+        // Validate configuration
+        $this->validateConfig($config);
 
         // Canonicalize dataDir
         $config["dataDir"] = realpath($config["dataDir"]);
@@ -73,8 +92,11 @@ class Configurator
         // Define absolute path to resources
         $config["resDir"] = dirname($_SERVER["SCRIPT_FILENAME"]) . "/" . $config["resUrl"];
 
-        // Get plugins
-        $config["plugins"] = $this->getPlugins($config["pluginDir"]);
+        // Get available plugins
+        $config["plugins"] = $this->getPlugins($config["pluginsDir"]);
+
+        // Get available languages
+        $config["langs"] = $this->getLanguages($config["langDir"]);
 
         return $config;
     }
@@ -82,14 +104,14 @@ class Configurator
     /**
      * Get plugins
      *
-     * @param string $pluginDir Plugins directory
+     * @param string $pluginsDir Plugins directory
      *
      * @return array
      */
-    public function getPlugins($pluginDir)
+    private function getPlugins($pluginsDir)
     {
         $plugins = array();
-        foreach (Finder::findFiles("plugin.json")->from($pluginDir) as $plugin) {
+        foreach (Finder::findFiles("plugin.json")->from($pluginsDir) as $plugin) {
 
             $config = Json::decode(file_get_contents($plugin->getRealPath()), 1);
             $config["path"] = dirname($plugin->getRealPath());
@@ -97,6 +119,38 @@ class Configurator
         }
 
         return $plugins;
+    }
+
+    /**
+     * Create default configuration
+     *
+     * @return array
+     */
+    private function createDefaults()
+    {
+        $reflection = new \ReflectionClass("\Ixtrum\FileManager");
+        $appDir = dirname($reflection->getFileName());
+
+        // Get and complete default system parameters
+        $defaults = $this->defaults;
+        $defaults["pluginsDir"] = "$appDir/plugins";
+        $defaults["langDir"] = "$appDir/lang";
+
+        return $defaults;
+    }
+
+    /**
+     * Get available languages
+     *
+     * @return array
+     */
+    private function getLanguages($langDir)
+    {
+        $langs = array($this->defaults["lang"] => $this->defaults["lang"]);
+        foreach (Finder::findFiles("*.json")->in($langDir) as $file) {
+            $langs[$file->getBasename(".json")] = $file->getBasename(".json");
+        }
+        return $langs;
     }
 
 }

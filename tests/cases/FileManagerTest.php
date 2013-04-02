@@ -208,14 +208,4 @@ class FileManagerTest extends TestCase
         $this->assertEquals("/testing/", $fileManager->getActualDir());
     }
 
-    /**
-     * Test method getLanguages
-     */
-    public function testGetLanguages()
-    {
-        $this->assertEquals(
-                array("en" => "en", "cs" => "cs"), Ixtrum\FileManager::getLanguages(__DIR__ . "/../../src/lang")
-        );
-    }
-
 }
