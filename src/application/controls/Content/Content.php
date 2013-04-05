@@ -280,7 +280,7 @@ class Content extends \Ixtrum\FileManager\Application\Controls
             if ($file->isFile()) {
 
                 $content[$name]["size"] = $this->system->filesystem->getSize($file->getPathName());
-                $content[$name]["extension"] = strtolower($file->getExtension());
+                $content[$name]["extension"] = strtolower(pathinfo($file->getFilename(), PATHINFO_EXTENSION));
 
                 $content[$name]["thumb"] = false;
                 if ($this->system->parameters["thumbs"]) {
