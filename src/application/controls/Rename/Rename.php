@@ -41,7 +41,7 @@ class Rename extends \Ixtrum\FileManager\Application\Controls
         $form = new Form;
         $form->setTranslator($this->system->translator);
         $form->addText("newFilename", "New name")
-                ->setRequired("New name required.");
+                ->setRequired("New name is required.");
         $form->addHidden("originalFilename");
         $form->addSubmit("send", "OK");
 

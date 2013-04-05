@@ -28,7 +28,7 @@
         "Available":"Dostupn\u00e9",
         "Add new folder":"P\u0159idat novou slo\u017eku",
         "Name:":"N\u00e1zev:",
-        "Folder name required.":"N\u00e1zev slo\u017eky je povinn\u00fd.",
+        "Directory name is required.":"N\u00e1zev slo\u017eky je povinn\u00fd.",
         "Create":"Vytvo\u0159it",
         "Folder %s successfully created":"Slo\u017eka %s \u00fasp\u011b\u0161n\u011b vytvo\u0159ena",
         "Close":"Zav\u0159\u00edt",
@@ -38,7 +38,7 @@
         "Size":"Velikost",
         "Rename":"P\u0159ejmenovat",
         "New name":"Nov\u00fd n\u00e1zev",
-        "New name required.":"Nov\u00fd n\u00e1zev je povinn\u00fd.",
+        "New name is required.":"Nov\u00fd n\u00e1zev je povinn\u00fd.",
         "OK":"OK",
         "Show items in clipboard":"Zobrazit polo\u017eky ve schr\u00e1nce",
         "Clipboard":"Schr\u00e1nka",
@@ -75,6 +75,13 @@
         "Folder":"Slo\u017eka",
         "Files":"Soubory",
         "New folder":"Nov\u00e1 slo\u017eka",
-        "You can download only files, not folders!":"Lze stahovat pouze soubory, ne slo\u017eky!"
+        "You can download only files, not folders!":"Lze stahovat pouze soubory, ne slo\u017eky!",
+        "Selected items":"Vybran\u00e9 polo\u017eky",
+        "Succesfully copied.":"\u00dasp\u011b\u0161n\u011b zkop\u00edrov\u00e1no.",
+        "Folder '%s' successfully created.":"Slo\u017eka '%s' byla \u00fasp\u011b\u0161n\u011b vytvo\u0159ena.",
+        "Successfully renamed to '%s'.":"\u00dasp\u011b\u0161n\u011b p\u0159ejmenov\u00e1no na '%s'.",
+        "'%s' successfuly deleted.":"'%s' \u00fasp\u011b\u0161n\u011b smaz\u00e1no.",
+        "Succesfully moved.":"\u00dasp\u011b\u0161n\u011b p\u0159esunuto.",
+        "Item %newFilename required.":"Item %newFilename required.",
     }
 }
