@@ -1,7 +1,11 @@
 <ul n:ifset="$file">
     <li>
-        {var $icon = "folder"}
-        {if !$file['dir']}{var $icon = $file['extension']}{/if}
+        {var $icon = "icon"}
+        {if $file['dir']}
+            {var $icon = "folder"}
+        {elseif is_file($resDir . "/img/icons/large/" . $file['extension'] . ".png")}
+            {var $icon = $file['extension']}
+        {/if}
         <img src="{$basePath}/{$resUrl}/img/icons/large/{$icon}.png" alt="" class="fm-thumb" />
     </li>
     <li>
