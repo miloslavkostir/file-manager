@@ -26,8 +26,8 @@
     <li>
         <ul class="fm-file-info-details">
             <li><h2>{_"Selected items"}</h2></li>
-            <li>{_"Files"}: <strong>{$files["filesCount"]}</strong></li>
-            <li>{_"Folders"}: <strong>{$files["dirCount"]}</strong></li>
+            <li n:if="$files['filesCount'] > 0">{_"Files"}: <strong>{$files["filesCount"]}</strong></li>
+            <li n:if="$files['dirCount'] > 0">{_"Folders"}: <strong>{$files["dirCount"]}</strong></li>
             <li>{_'Size'}: <strong>{$files["size"]|bytes}</strong></li>
         </ul>
     </li>
