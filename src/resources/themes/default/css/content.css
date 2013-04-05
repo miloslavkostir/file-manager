@@ -52,7 +52,7 @@
 .fm-body .fm-files-small .fm-content-file { width: 80px; height: 121px; float: left; margin: 5px; padding: 5px; text-align: center; }
 .fm-body .fm-files-small .fm-content-file .fm-thumb { border-style: none; max-height: 48px; }
 .fm-body .fm-files-small .fm-content-file .fm-thumb.fm-photo { border: 1px solid #CCCCCC; max-height: 48px; }
-.fm-body .fm-files-large .fm-content-file .fm-file-name { word-wrap: break-word; }
+.fm-body .fm-files-small .fm-content-file .fm-file-name { word-wrap: break-word; }
 .fm-body .fm-files-small ul { list-style: none outside none; margin: 5px; padding: 10px; }
 .fm-body .fm-files-small li { border: 1px solid #F5F5F5; border-radius: 4px; }
 .fm-body .fm-files-small li:hover { background-color: #EBEBEB; border-color: #D4D4D4; }
