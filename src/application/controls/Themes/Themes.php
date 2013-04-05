@@ -48,7 +48,6 @@ class Themes extends \Ixtrum\FileManager\Application\Controls
         $themeDir = $this->system->parameters["resDir"] . "/themes";
         $form = new Form;
         $form->addSelect("theme", null, $this->loadThemes($themeDir))
-                ->setAttribute("onchange", "submit()")
                 ->setDefaultValue($default);
         $form->onSuccess[] = $this->themeFormSuccess;
         return $form;

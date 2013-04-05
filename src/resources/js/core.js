@@ -1,14 +1,5 @@
 $(function() {
 
-    $.nette.ext("fm-select-onchange", {
-        load: function() {
-            $(".file-manager").on("change", ".ajax-select", function(event) {
-                event.preventDefault();
-                $(this).closest("form").submit();
-            });
-        }
-    });
-
     $.nette.ext("fm-inactive", {
         start: function() {
             $(".file-manager").each(function() {
@@ -152,6 +143,11 @@ $(function() {
     $(document).on("click", "#show-clipboard", function(event) {
         event.preventDefault();
         $(".fm-clipboard").slideToggle("slow");
+    });
+
+    /** Toolbar */
+    $(".file-manager").on("change", ".ajax-select", function() {
+        $(this).closest("form").submit();
     });
 });
 
