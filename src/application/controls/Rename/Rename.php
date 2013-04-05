@@ -72,16 +72,6 @@ class Rename extends \Ixtrum\FileManager\Application\Controls
             return;
         }
 
-        if ($form->values->newFilename === $form->values->originalFilename) {
-            $this->parent->parent->flashMessage($this->system->translator->translate("Names are the same!"), "warning");
-            return;
-        }
-
-        if (file_exists($path . DIRECTORY_SEPARATOR . $form->values->newFilename)) {
-            $this->parent->parent->flashMessage($this->system->translator->translate("'%s' already exist!", $form->values->newFilename), "warning");
-            return;
-        }
-
         if (!$this->isPathValid($actualDir, $form->values->originalFilename)) {
             $this->parent->parent->flashMessage($this->system->translator->translate("'%s' does not already exists!", $form->values->originalFilename), "error");
             return;
