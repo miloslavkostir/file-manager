@@ -142,6 +142,8 @@ class Configurator
     /**
      * Get available languages
      *
+     * @todo Get lanugage title too
+     *
      * @return array
      */
     private function getLanguages($langDir)

@@ -22,13 +22,19 @@ class Translator implements ITranslator
 {
 
     /** @var array */
-    private $dictionary;
+    private $dictionary = array();
 
     /** @var boolean */
     private $extract = false;
 
     /** @var string */
     private $langFile;
+
+    /** @var string */
+    private $title = "english";
+
+    /** @var string */
+    private $timeFormat = "Y-m-d H:i:s";
 
     /**
      * Constructor
@@ -38,51 +44,78 @@ class Translator implements ITranslator
     public function __construct($langFile)
     {
         $this->langFile = $langFile;
-        $this->dictionary = $this->loadDictionary();
+        $this->loadLanguage();
+    }
+
+    /**
+     * Get language time format
+     *
+     * @return string
+     */
+    public function getTimeFormat()
+    {
+        return $this->timeFormat;
+    }
+
+    /**
+     * Get language title
+     *
+     * @return string
+     */
+    public function getTitle()
+    {
+        return $this->title;
     }
 
     /**
      * Translates the given string.
      *
-     * @param string  Message
+     * @param string  Word
      * @param integer Plural count - @todo
      *
      * @return string
      */
-    public function translate($message, $count = null)
+    public function translate($word, $count = null)
     {
-        $message = (string) $message;
-        if (!empty($message) && isset($this->dictionary[$message])) {
+        $word = (string) $word;
+        if (!empty($word) && isset($this->dictionary[$word])) {
 
-            $translation = $this->dictionary[$message];
+            $translation = $this->dictionary[$word];
             if (!empty($translation)) {
-                $message = $translation;
+                $word = $translation;
             }
         } elseif ($this->extract) {
-            $this->dictionary[$message] = $message;
+            $this->dictionary[$word] = $word;
         }
 
         $args = func_get_args();
         if (count($args) > 1) {
             array_shift($args);
-            $message = vsprintf($message, $args);
+            $word = vsprintf($word, $args);
         }
-
-
-        return $message;
+        return $word;
     }
 
     /**
-     * Load dictionary
+     * Load language
      *
-     * @return array
+     * @return void
      */
-    public function loadDictionary()
+    private function loadLanguage()
     {
-        if (file_exists($this->langFile)) {
-            return json_decode(file_get_contents($this->langFile), true);
+        if (is_file($this->langFile)) {
+
+            $language = json_decode(file_get_contents($this->langFile), true);
+            if (isset($language["dictionary"])) {
+                $this->dictionary = $language["dictionary"];
+            }
+            if (isset($language["timeFormat"])) {
+                $this->timeFormat = $language["timeFormat"];
+            }
+            if (isset($language["title"])) {
+                $this->title = $language["title"];
+            }
         }
-        return array();
     }
 
     /**
@@ -90,8 +123,14 @@ class Translator implements ITranslator
      */
     public function __destruct()
     {
+        // If extraction enabled, export language
         if ($this->extract) {
-            file_put_contents($this->langFile, self::indent(json_encode($this->dictionary)));
+
+            $language = array();
+            $language["timeFormat"] = $this->timeFormat;
+            $language["title"] = $this->title;
+            $language["dictionary"] = $this->dictionary;
+            file_put_contents($this->langFile, self::indent(json_encode($language)));
         }
     }
 

@@ -14,7 +14,7 @@
             <li><span>{$file['name']}</span></li>
             <li n:ifset="$file['filesCount']">{_'Files'}: <strong>{$file['filesCount']}</strong></li>
             <li>{_'Size'}: <strong>{$file['size']|bytes}</strong></li>
-            <li>{_'Modificated'}: <strong>{$file['modificated']}</strong></li>
+            <li>{_'Modificated'}: <strong>{$file['modificated']|date:$timeFormat}</strong></li>
             <li>{_'Permissions'}: <strong>{$file['permissions']}</strong></li>
         </ul>
     </li>

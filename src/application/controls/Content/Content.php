@@ -236,6 +236,7 @@ class Content extends \Ixtrum\FileManager\Application\Controls
         $this->template->view = $this->view;
         $this->template->resUrl = $this->system->parameters["resUrl"];
         $this->template->resDir = $this->system->parameters["resDir"];
+        $this->template->timeFormat = $this->system->translator->getTimeFormat();
 
         // Load plugins
         if ($this->system->parameters["plugins"]) {

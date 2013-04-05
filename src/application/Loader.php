@@ -53,7 +53,7 @@ final class Loader extends Container
     /**
      * Create service translator
      *
-     * @return \Ixtrum\FileManager\Application\Translator\GettextTranslator
+     * @return \Ixtrum\FileManager\Application\Translator
      */
     protected function createServiceTranslator()
     {

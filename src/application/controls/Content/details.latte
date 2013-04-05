@@ -48,7 +48,7 @@
                     {/if}
                     {$filename|truncate:100}
                 </td>
-                <td>{$file['modified']|date:'%d.%m.%Y %H:%M'}</td>
+                <td>{$file['modified']|date:$timeFormat}</td>
                 <td>{ifset $file['extension']}{$file['extension']|upper}{/ifset}</td>
                 <td>{ifset $file['size']}{$file['size']|bytes}{/ifset}</td>
             </tr>

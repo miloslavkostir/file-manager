@@ -69,7 +69,7 @@ class FileManager extends Control
     }
 
     /**
-     * Show new folder control
+     * Show new dir control
      */
     public function handleNewFolder()
     {
