@@ -26,18 +26,18 @@ abstract class Controls extends \Ixtrum\FileManager
     protected $view;
 
     /** @var array */
-    protected $selectedFiles;
+    protected $selected;
 
     /**
      * Constructor
      *
-     * @param \Ixtrum\FileManager\Application\Loader $system        Application container
-     * @param array                                  $selectedFiles Selected files from POST request
+     * @param \Ixtrum\FileManager\Application\Loader $system   Application container
+     * @param array                                  $selected Selected files/dirs
      */
-    public function __construct(Loader $system, array $selectedFiles = array())
+    public function __construct(Loader $system, array $selected)
     {
         $this->system = $system;
-        $this->selectedFiles = $selectedFiles;
+        $this->selected = $selected;
 
         // Get & validate selected view
         $view = $system->session->get("view");
