@@ -11,7 +11,9 @@
 
 namespace Ixtrum\FileManager\Application;
 
-use Nette\Localization\ITranslator;
+use Nette\Localization\ITranslator,
+    Nette\Utils\Json,
+    Nette\Utils\JsonException;
 
 /**
  * Language translator.
@@ -100,12 +102,19 @@ class Translator implements ITranslator
      * Load language
      *
      * @return void
+     *
+     * @throws \Exception
      */
     private function loadLanguage()
     {
         if (is_file($this->langFile)) {
 
-            $language = json_decode(file_get_contents($this->langFile), true);
+            try {
+                $language = Json::decode(file_get_contents($this->langFile), true);
+            } catch (JsonException $exception) {
+                throw new \Exception("Problem with language file '$this->langFile'. " . $exception->getMessage());
+            }
+
             if (isset($language["dictionary"])) {
                 $this->dictionary = $language["dictionary"];
             }
@@ -130,7 +139,7 @@ class Translator implements ITranslator
             $language["timeFormat"] = $this->timeFormat;
             $language["title"] = $this->title;
             $language["dictionary"] = $this->dictionary;
-            file_put_contents($this->langFile, self::indent(json_encode($language)));
+            file_put_contents($this->langFile, self::indent(Json::encode($language)));
         }
     }
 
