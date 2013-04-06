@@ -45,9 +45,9 @@ class Rename extends \Ixtrum\FileManager\Application\Controls
         $form->addHidden("originalFilename");
         $form->addSubmit("send", "OK");
 
-        if (isset($this->selected[0])) {
-            $form["newFilename"]->setDefaultValue($this->selected[0]);
-            $form["originalFilename"]->setDefaultValue($this->selected[0]);
+        if (isset($this->selectedFiles[0])) {
+            $form["newFilename"]->setDefaultValue($this->selectedFiles[0]);
+            $form["originalFilename"]->setDefaultValue($this->selectedFiles[0]);
         }
 
         $form->onSuccess[] = $this->renameFormSuccess;

@@ -32,8 +32,8 @@ class FileManager extends Control
     /** @var \Ixtrum\FileManager\Application\Loader */
     protected $system;
 
-    /** @var \Nette\Http\Request */
-    protected $request;
+    /** @var array */
+    protected $selectedFiles = array();
 
     /**
      * Constructor
@@ -45,7 +45,6 @@ class FileManager extends Control
     public function __construct(Request $request, Session $session, $config = array())
     {
         parent::__construct();
-        $this->request = $request;
 
         // Create system container with services and configuration
         $this->system = new FileManager\Application\Loader($session, $config);
@@ -59,6 +58,12 @@ class FileManager extends Control
             $actualDir = FileSystem::getRootname();
         }
         $this->setActualDir($actualDir);
+
+        // Get selected files via POST
+        $selectedFiles = $request->getPost("files");
+        if (is_array($selectedFiles)) {
+            $this->selectedFiles = $selectedFiles;
+        }
 
         $this->invalidateControl();
     }
@@ -277,12 +282,12 @@ class FileManager extends Control
     protected function createComponentControl()
     {
         $system = $this->system;
-        $selected = $this->getSelected();
-        return new Multiplier(function ($name) use ($system, $selected) {
+        $selectedFiles = $this->selectedFiles;
+        return new Multiplier(function ($name) use ($system, $selectedFiles) {
                     $namespace = __NAMESPACE__;
                     $namespace .= "\\FileManager\Application\Controls";
                     $class = "$namespace\\$name";
-                    return new $class($system, $selected);
+                    return new $class($system, $selectedFiles);
                 });
     }
 
@@ -294,11 +299,11 @@ class FileManager extends Control
     protected function createComponentPlugin()
     {
         $system = $this->system;
-        $selected = $this->getSelected();
-        return new Multiplier(function ($name) use ($system, $selected) {
+        $selectedFiles = $this->selectedFiles;
+        return new Multiplier(function ($name) use ($system, $selectedFiles) {
 
                     $class = $system->parameters["plugins"][$name]["class"];
-                    return new $class($name, $system, $selected);
+                    return new $class($name, $system, $selectedFiles);
                 });
     }
 
@@ -314,17 +319,6 @@ class FileManager extends Control
         } else {
             return disk_free_space($this->system->parameters["dataDir"]);
         }
-    }
-
-    /**
-     * Get selected files/dirs list
-     *
-     * @return array
-     */
-    private function getSelected()
-    {
-        $selection = $this->request->getPost("selected");
-        return is_array($selection) ? $selection : array();
     }
 
     /**

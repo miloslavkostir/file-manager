@@ -36,7 +36,7 @@ class Content extends \Ixtrum\FileManager\Application\Controls
      */
     public function handleCopy()
     {
-        foreach ($this->selected as $file) {
+        foreach ($this->selectedFiles as $file) {
 
             $this->system->session->add(
                     "clipboard", $this->getActualDir() . $file, array(
@@ -53,7 +53,7 @@ class Content extends \Ixtrum\FileManager\Application\Controls
      */
     public function handleCut()
     {
-        foreach ($this->selected as $file) {
+        foreach ($this->selectedFiles as $file) {
 
             $this->system->session->add(
                     "clipboard", $this->getActualDir() . $file, array(
@@ -77,7 +77,7 @@ class Content extends \Ixtrum\FileManager\Application\Controls
             return;
         }
 
-        foreach ($this->selected as $file) {
+        foreach ($this->selectedFiles as $file) {
 
             $path = $this->getAbsolutePath($this->getActualDir()) . DIRECTORY_SEPARATOR . $file;
             if (!file_exists($path)) {
@@ -134,9 +134,9 @@ class Content extends \Ixtrum\FileManager\Application\Controls
      */
     public function handleDownload()
     {
-        if (count($this->selected) === 1) {
+        if (count($this->selectedFiles) === 1) {
 
-            $file = $this->selected[0];
+            $file = $this->selectedFiles[0];
             if (!$this->isPathValid($this->getActualDir(), $file)) {
 
                 $this->parent->parent->flashMessage($this->system->translator->translate("File %s not found!", $file), "warning");

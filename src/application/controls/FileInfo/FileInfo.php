@@ -32,15 +32,15 @@ class FileInfo extends \Ixtrum\FileManager\Application\Controls
         $this->template->resDir = $this->system->parameters["resDir"];
         $this->template->timeFormat = $this->system->translator->getTimeFormat();
 
-        if (count($this->selected) > 1) {
+        if (count($this->selectedFiles) > 1) {
 
             $this->template->files = $this->getFilesInfo(
-                    $this->getActualDir(), $this->selected
+                    $this->getActualDir(), $this->selectedFiles
             );
-        } elseif (isset($this->selected[0])) {
+        } elseif (isset($this->selectedFiles[0])) {
 
             $actualDir = $this->getActualDir();
-            $filename = $this->selected[0];
+            $filename = $this->selectedFiles[0];
             if ($this->isPathValid($actualDir, $filename)) {
                 $this->template->file = $this->getFileInfo($actualDir, $filename);
             } else {
