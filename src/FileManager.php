@@ -323,7 +323,7 @@ class FileManager extends Control
      */
     private function getSelected()
     {
-        $selection = $this->request->getPost("files");
+        $selection = $this->request->getPost("selected");
         return is_array($selection) ? $selection : array();
     }
 
