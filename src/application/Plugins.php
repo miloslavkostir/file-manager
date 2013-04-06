@@ -33,10 +33,13 @@ abstract class Plugins extends \Ixtrum\FileManager
     /** @var array */
     protected $config;
 
+    /** @var string */
+    protected $resUrl;
+
     /**
      * Constructor
      *
-     * @param string $name Plugin name
+     * @param string                                 $name          Plugin name
      * @param \Ixtrum\FileManager\Application\Loader $system        Application container
      * @param array                                  $selectedFiles Selected files from POST request
      */
@@ -45,6 +48,7 @@ abstract class Plugins extends \Ixtrum\FileManager
         $this->system = $system;
         $this->selectedFiles = $selectedFiles;
         $this->config = $this->system->parameters["plugins"][$name];
+        $this->resUrl = $this->system->parameters["resUrl"] . "/plugins/$name";
 
         // Get & validate selected view
         $view = $system->session->get("view");
