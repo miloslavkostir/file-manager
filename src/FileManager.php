@@ -71,17 +71,17 @@ class FileManager extends Control
     /**
      * Show new dir control
      */
-    public function handleNewFolder()
+    public function handleRunNewFolder()
     {
-        $this->template->newFolder = true;
+        $this->template->run = "newfolder";
     }
 
     /**
      * Show rename control
      */
-    public function handleRename()
+    public function handleRunRename()
     {
-        $this->template->rename = true;
+        $this->template->run = "rename";
     }
 
     /**
@@ -108,14 +108,13 @@ class FileManager extends Control
     {
         // Find valid plugin
         foreach ($this->system->parameters["plugins"] as $plugin) {
+
             if ($name === $plugin["name"]) {
-                $validPlugin = true;
+                $this->template->plugin = $name;
             }
         }
 
-        if (isset($validPlugin)) {
-            $this->template->plugin = $name;
-        } else {
+        if (!isset($this->template->plugin)) {
             $this->flashMessage($this->system->translator->translate("Plugin '%s' not found!", $name), "warning");
         }
     }

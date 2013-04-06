@@ -3,17 +3,20 @@
         <div n:snippet="treeview" class="fm-treeview">
             {control control-Treeview}
         </div>
-        <div class="fm-content">
-            <div n:snippet="plugin">
+        <div n:snippet="content" class="fm-content">
+            {ifset $run}
+                {if $run === "newfolder"}
+                    {control control-NewFolder}
+                {elseif $run === "rename"}
+                    {control control-Rename}
+                {/if}
+            {else}
                 {ifset $plugin}
                     {control plugin-$plugin}
+                {else}
+                    {control control-Content}
                 {/ifset}
-            </div>
-            <div n:snippet="content">
-                {ifset $newFolder}{control control-NewFolder}{/ifset}
-                {ifset $rename}{control control-Rename}{/ifset}
-                {control control-Content}
-            </div>
+            {/ifset}
         </div>
     </div>
 </div>

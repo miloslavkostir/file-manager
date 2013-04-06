@@ -60,7 +60,7 @@ $(function() {
         items.push({ {_'Rename'} : function(menuItem, menuObject, event) {
                 $.nette.ajax({
                     type: "post",
-                    url: {$control->parent->parent->link('rename')},
+                    url: {$control->parent->parent->link('runRename')},
                     data: { files: selected }
                 });
         }});
