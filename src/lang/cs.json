@@ -81,7 +81,6 @@
         "Folder '%s' successfully created.":"Slo\u017eka '%s' byla \u00fasp\u011b\u0161n\u011b vytvo\u0159ena.",
         "Successfully renamed to '%s'.":"\u00dasp\u011b\u0161n\u011b p\u0159ejmenov\u00e1no na '%s'.",
         "'%s' successfuly deleted.":"'%s' \u00fasp\u011b\u0161n\u011b smaz\u00e1no.",
-        "Succesfully moved.":"\u00dasp\u011b\u0161n\u011b p\u0159esunuto.",
-        "Item %newFilename required.":"Item %newFilename required.",
+        "Succesfully moved.":"\u00dasp\u011b\u0161n\u011b p\u0159esunuto."
     }
 }
