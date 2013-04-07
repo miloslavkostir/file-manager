@@ -36,6 +36,9 @@ abstract class Plugins extends \Ixtrum\FileManager
     /** @var string */
     protected $resUrl;
 
+    /** @var \Ixtrum\FileManager\Application\Translator */
+    protected $translator;
+
     /**
      * Constructor
      *
@@ -49,6 +52,7 @@ abstract class Plugins extends \Ixtrum\FileManager
         $this->selectedFiles = $selectedFiles;
         $this->config = $this->system->parameters["plugins"][$name];
         $this->resUrl = $this->system->parameters["resUrl"] . "/plugins/$name";
+        $this->translator = new Translator;
 
         // Get & validate selected view
         $view = $system->session->get("view");

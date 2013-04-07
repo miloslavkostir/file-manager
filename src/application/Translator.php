@@ -42,11 +42,27 @@ class Translator implements ITranslator
      * Constructor
      *
      * @param string $langFile Language file
+     *
+     * @return $this
      */
-    public function __construct($langFile)
+    public function init($langFile)
     {
         $this->langFile = $langFile;
         $this->loadLanguage();
+        return $this;
+    }
+
+    /**
+     * Enable or disable strings extraction
+     *
+     * @param boolean $status Extraction status
+     *
+     * @return $this
+     */
+    public function setExtract($status)
+    {
+        $this->extract = (bool) $status;
+        return $this;
     }
 
     /**
