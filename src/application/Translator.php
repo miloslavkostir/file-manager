@@ -151,10 +151,7 @@ class Translator implements ITranslator
         // If extraction enabled, export language
         if ($this->extract) {
 
-            $language = array();
-            $language["timeFormat"] = $this->timeFormat;
-            $language["title"] = $this->title;
-            $language["dictionary"] = $this->dictionary;
+            $language = array("dictionary" => $this->dictionary);
             file_put_contents($this->langFile, self::indent(Json::encode($language)));
         }
     }
