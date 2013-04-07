@@ -134,22 +134,21 @@ class Content extends \Ixtrum\FileManager\Application\Controls
      */
     public function handleDownload()
     {
-        if (count($this->selectedFiles) === 1) {
+        $actualDir = $this->presenter->getParameter("actualDir");
+        $filename = $this->presenter->getParameter("filename");
 
-            $file = $this->selectedFiles[0];
-            if (!$this->isPathValid($this->getActualDir(), $file)) {
+        if (!$this->isPathValid($actualDir, $filename)) {
 
-                $this->parent->parent->flashMessage($this->system->translator->translate("File %s not found!", $file), "warning");
-                return;
-            }
-            $path = $this->getAbsolutePath($this->getActualDir()) . DIRECTORY_SEPARATOR . $file;
-            if (is_dir($path)) {
-
-                $this->parent->parent->flashMessage($this->system->translator->translate("You can download only files, not folders!"), "warning");
-                return;
-            }
-            $this->presenter->sendResponse(new FileResponse($path, $file, null));
+            $this->parent->parent->flashMessage($this->system->translator->translate("File %s not found!", $filename), "warning");
+            return;
         }
+        $path = $this->getAbsolutePath($actualDir) . DIRECTORY_SEPARATOR . $filename;
+        if (is_dir($path)) {
+
+            $this->parent->parent->flashMessage($this->system->translator->translate("You can download only files, not folders!"), "warning");
+            return;
+        }
+        $this->presenter->sendResponse(new FileResponse($path, $filename, null));
     }
 
     /**
