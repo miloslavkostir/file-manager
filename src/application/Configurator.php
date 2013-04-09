@@ -62,10 +62,6 @@ class Configurator
             throw new DirectoryNotFoundException("Plugins dir '" . $config["pluginsDir"] . "' doesn't exist!");
         }
 
-        if (!is_dir($config["langDir"])) {
-            throw new DirectoryNotFoundException("Languages dir '" . $config["langDir"] . "' doesn't exist!");
-        }
-
         if ($config["quota"] && (int) $config["quotaLimit"] === 0) {
             throw new InvalidArgumentException("Quota limit must defined if quota enabled, but '" . $config["quotaLimit"] . "' given!");
         }

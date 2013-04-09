@@ -58,7 +58,7 @@ final class Loader extends Container
     protected function createServiceTranslator()
     {
         $translator = new Translator;
-        return $translator->init($this->parameters["langDir"] . DIRECTORY_SEPARATOR . $this->parameters["lang"] . ".json");
+        return $translator->init($this->parameters["langDir"], $this->parameters["lang"]);
     }
 
     /**
