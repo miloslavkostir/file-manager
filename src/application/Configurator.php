@@ -11,9 +11,7 @@
 
 namespace Ixtrum\FileManager\Application;
 
-use Nette\DirectoryNotFoundException,
-    Nette\InvalidArgumentException,
-    Nette\Utils\Json,
+use Nette\Utils\Json,
     Ixtrum\FileManager\Application\FileSystem\Finder;
 
 /**
@@ -45,42 +43,30 @@ class Configurator
     );
 
     /**
-     * Validate configuration
-     *
-     * @param array $config Configuration
-     *
-     * @throws \Nette\DirectoryNotFoundException
-     * @throws \Nette\InvalidArgumentException
-     */
-    private function validateConfig(array $config)
-    {
-        if (!isset($config["dataDir"]) || !is_dir($config["dataDir"])) {
-            throw new InvalidArgumentException("Data dir not defined!");
-        }
-
-        if (!is_dir($config["pluginsDir"])) {
-            throw new DirectoryNotFoundException("Plugins dir '" . $config["pluginsDir"] . "' doesn't exist!");
-        }
-
-        if ($config["quota"] && (int) $config["quotaLimit"] === 0) {
-            throw new InvalidArgumentException("Quota limit must defined if quota enabled, but '" . $config["quotaLimit"] . "' given!");
-        }
-    }
-
-    /**
      * Create application configuration
      *
      * @param array $custom Custom configuration
      *
      * @return array Configuration
+     *
+     * @throws \Exception
      */
     public function createConfig(array $custom)
     {
+        if (!isset($custom["dataDir"])) {
+            throw new \Exception("Parameter 'dataDir' not defined!");
+        }
+
         // Merge custom config with default config
         $config = array_merge($this->createDefaults(), $custom);
 
-        // Validate configuration
-        $this->validateConfig($config);
+        // Check required parameters
+        if ($config["quota"] && (int) $config["quotaLimit"] <= 0) {
+            throw new \Exception("Quota limit must defined if quota enabled, but '" . $config["quotaLimit"] . "' given!");
+        }
+        if (!is_dir($config["dataDir"])) {
+            throw new \Exception("Data dir '" . $config["dataDir"] . "' not found!");
+        }
 
         // Canonicalize dataDir
         $config["dataDir"] = realpath($config["dataDir"]);
@@ -103,9 +89,15 @@ class Configurator
      * @param string $pluginsDir Plugins directory
      *
      * @return array
+     *
+     * @throws \Exception
      */
     private function getPlugins($pluginsDir)
     {
+        if (!is_dir($pluginsDir)) {
+            throw new \Exception("Plugins dir '$pluginsDir' not found!");
+        }
+
         $plugins = array();
         foreach (Finder::findFiles("plugin.json")->from($pluginsDir) as $plugin) {
 
