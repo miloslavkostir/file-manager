@@ -18,27 +18,54 @@ class LoaderTest extends TestCase
 {
 
     /**
-     * Test base configuration
-     *
-     * @return void
+     * Test caching service
      */
-    public function testConfiguration()
+    public function testCreateServiceCaching()
     {
-        $this->createLoader(array("dataDir" => __DIR__));
+        $loader = $this->createLoader(array("dataDir" => $this->dataDir, "cache" => false));
+        $this->assertInstanceOf("stdClass", $loader->caching);
+
+        $loader = $this->createLoader(array("dataDir" => $this->dataDir, "cacheDir" => $this->cacheDir));
+        $this->assertInstanceOf("Ixtrum\FileManager\Application\Caching", $loader->caching);
     }
 
     /**
-     * Test empty dataDir
-     *
-     * @expectedException \Nette\InvalidArgumentException
+     * Test translator service
      */
-    public function testEmptyDataDir()
+    protected function testCreateServiceTranslator()
     {
-        $config = array(
-            "pluginsDir" => __DIR__,
-            "dataDir" => null
-        );
-        $this->createLoader($config);
+        $loader = $this->createLoader(array("dataDir" => $this->dataDir));
+        $this->assertInstanceOf("Ixtrum\FileManager\Application\Translator", $loader->translator);
+    }
+
+    /**
+     * Test session service
+     */
+    protected function testCreateServiceSession()
+    {
+        $loader = $this->createLoader(array("dataDir" => $this->dataDir));
+        $this->assertInstanceOf("Ixtrum\FileManager\Application\Session", $loader->session);
+    }
+
+    /**
+     * Test filesystem service
+     */
+    protected function testCreateServiceFilesystem()
+    {
+        $loader = $this->createLoader(array("dataDir" => $this->dataDir));
+        $this->assertInstanceOf("Ixtrum\FileManager\Application\FileSystem", $loader->filesystem);
+    }
+
+    /**
+     * Test thumbs service
+     */
+    public function testCreateServiceThumbs()
+    {
+        $loader = $this->createLoader(array("dataDir" => $this->dataDir, "thumbs" => false));
+        $this->assertInstanceOf("stdClass", $loader->thumbs);
+
+        $loader = $this->createLoader(array("dataDir" => $this->dataDir, "thumbsDir" => $this->cacheDir . "/thumbs"));
+        $this->assertInstanceOf("Ixtrum\FileManager\Application\Thumbs", $loader->thumbs);
     }
 
     /**

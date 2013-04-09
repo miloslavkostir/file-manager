@@ -55,8 +55,11 @@ class TestCase extends PHPUnit_Framework_TestCase
 
         $this->context = $container;
 
-        // Set up upload root dirs
+        // Set up dataDir
         $this->dataDir = $container->parameters["tempDir"] . "/dataDir";
+
+        // Set up dataDir
+        $this->cacheDir = $container->parameters["tempDir"] . "/cache";
     }
 
     /**
@@ -70,7 +73,7 @@ class TestCase extends PHPUnit_Framework_TestCase
     {
         $default = array(
             "dataDir" => $this->dataDir,
-            "cacheDir" => $this->context->parameters["tempDir"] . "/cache/_Ixtrum.FileManager"
+            "cacheDir" => $this->cacheDir
         );
         return new Ixtrum\FileManager(
                 $this->context->httpRequest, $this->context->session, array_merge($default, $config)
