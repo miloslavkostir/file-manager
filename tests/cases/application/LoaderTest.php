@@ -32,7 +32,7 @@ class LoaderTest extends TestCase
     /**
      * Test translator service
      */
-    protected function testCreateServiceTranslator()
+    public function testCreateServiceTranslator()
     {
         $loader = $this->createLoader(array("dataDir" => $this->dataDir));
         $this->assertInstanceOf("Ixtrum\FileManager\Application\Translator", $loader->translator);
@@ -41,7 +41,7 @@ class LoaderTest extends TestCase
     /**
      * Test session service
      */
-    protected function testCreateServiceSession()
+    public function testCreateServiceSession()
     {
         $loader = $this->createLoader(array("dataDir" => $this->dataDir));
         $this->assertInstanceOf("Ixtrum\FileManager\Application\Session", $loader->session);
@@ -50,7 +50,7 @@ class LoaderTest extends TestCase
     /**
      * Test filesystem service
      */
-    protected function testCreateServiceFilesystem()
+    public function testCreateServiceFilesystem()
     {
         $loader = $this->createLoader(array("dataDir" => $this->dataDir));
         $this->assertInstanceOf("Ixtrum\FileManager\Application\FileSystem", $loader->filesystem);
