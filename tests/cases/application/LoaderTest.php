@@ -77,7 +77,7 @@ class LoaderTest extends TestCase
      */
     private function createLoader(array $config)
     {
-        return new Ixtrum\FileManager\Application\Loader(new MockSession(), $config);
+        return new Ixtrum\FileManager\Application\Loader(new MockSession, $config);
     }
 
 }

@@ -68,7 +68,7 @@ final class Loader extends Container
      */
     protected function createServiceSession()
     {
-        return new Session($this->session->getSection("file-manager"));
+        return new Session($this->session);
     }
 
     /**
