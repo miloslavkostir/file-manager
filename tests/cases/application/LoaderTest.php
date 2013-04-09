@@ -24,13 +24,7 @@ class LoaderTest extends TestCase
      */
     public function testConfiguration()
     {
-        $config = array(
-            "appDir" => __DIR__,
-            "pluginsDir" => __DIR__,
-            "dataDir" => __DIR__,
-            "langDir" => __DIR__
-        );
-        $this->createLoader($config);
+        $this->createLoader(array("dataDir" => __DIR__));
     }
 
     /**
