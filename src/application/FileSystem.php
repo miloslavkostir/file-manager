@@ -23,9 +23,9 @@ class FileSystem
 {
 
     /**
-     * Get unique file/folder path
+     * Get unique file/directory path
      *
-     * @param string $path Path to file/folder
+     * @param string $path Path to file/dir
      *
      * @return string
      */
@@ -44,21 +44,21 @@ class FileSystem
     }
 
     /**
-     * Copy file/folder to destination folder
+     * Copy file/directory to destination directory
      *
-     * @param string  $source      Source file/folder path
-     * @param string  $destination Destination folder path
-     * @param boolean $overwrite   Overwrite file/folder if exist
+     * @param string  $source      Source file/directory path
+     * @param string  $destination Destination directory path
+     * @param boolean $overwrite   Overwrite file/directory if exist
      *
      * @throws \Exception
      */
     public function copy($source, $destination, $overwrite = false)
     {
         if (!is_dir($destination)) {
-            throw new \Exception("Destination must be existing folder, but '$destination' given!");
+            throw new \Exception("Destination must be existing directory, but '$destination' given!");
         }
 
-        // Get destination file/folder path
+        // Get destination file/directory path
         $fileName = basename($source);
         if ($overwrite) {
             $destination .= DIRECTORY_SEPARATOR . $fileName;
@@ -76,18 +76,18 @@ class FileSystem
     /**
      * Copy directory
      *
-     * @param string $source      Source folder
-     * @param string $destination Destination folder
+     * @param string $source      Source directory
+     * @param string $destination Destination directory
      *
      * @throws \Exception
      */
     public function copyDir($source, $destination)
     {
         if (!is_dir($source)) {
-            throw new \Exception("Source must be existing folder, but '$source' given!");
+            throw new \Exception("Source must be existing directory, but '$source' given!");
         }
 
-        // Create destination folder if not exists
+        // Create destination directory if not exists
         if (!is_dir($destination)) {
             $this->mkdir($destination);
         }
@@ -131,14 +131,14 @@ class FileSystem
     }
 
     /**
-     * Check if destination folder is located in it's sub-folder
+     * Check if destination directory is located in it's sub-directory
      *
-     * @param string $root Original folder path
-     * @param string $dir  Tested folder path
+     * @param string $root Original directory path
+     * @param string $dir  Tested directory path
      *
      * @return boolean
      */
-    public function isSubFolder($root, $dir)
+    public function isSubDir($root, $dir)
     {
         if (!is_dir($root)) {
             throw new \Exception("'$root' is not directory!");
@@ -214,13 +214,13 @@ class FileSystem
     }
 
     /**
-     * Get safe folder name
+     * Get safe directory name
      *
-     * @param string $name Folder name
+     * @param string $name Directory name
      *
      * @return string
      */
-    public function safeFoldername($name)
+    public function safeDirname($name)
     {
         $except = array('\\', '/', ':', '*', '?', '"', '<', '>', '|');
         $name = str_replace($except, '', $name);
@@ -250,9 +250,9 @@ class FileSystem
     }
 
     /**
-     * Delete file or folder
+     * Delete file/directory
      *
-     * @param string $path Path to file/folder
+     * @param string $path Path to file/directory
      *
      * @return boolean
      */
@@ -280,10 +280,10 @@ class FileSystem
     }
 
     /**
-     * Create folder
+     * Create directory
      *
-     * @param string  $path Path to folder
-     * @param integer $mask Folder mask
+     * @param string  $path Path to directory
+     * @param integer $mask Directory mask
      *
      * @return boolean
      */
@@ -299,7 +299,7 @@ class FileSystem
     }
 
     /**
-     * Get root folder name
+     * Get root directory name
      *
      * @return string
      */
@@ -309,7 +309,7 @@ class FileSystem
     }
 
     /**
-     * Get file/folder size
+     * Get file/directory size
      *
      * @param string $path Path to file/dir
      *

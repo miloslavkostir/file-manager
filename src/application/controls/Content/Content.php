@@ -24,7 +24,7 @@ class Content extends \Ixtrum\FileManager\Application\Controls
 {
 
     /**
-     * Show file/dir details
+     * Show file/directory details
      */
     public function handleInfo()
     {
@@ -145,14 +145,14 @@ class Content extends \Ixtrum\FileManager\Application\Controls
         $path = $this->getAbsolutePath($actualDir) . DIRECTORY_SEPARATOR . $filename;
         if (is_dir($path)) {
 
-            $this->parent->parent->flashMessage($this->system->translator->translate("You can download only files, not folders!"), "warning");
+            $this->parent->parent->flashMessage($this->system->translator->translate("You can download only files, not directories!"), "warning");
             return;
         }
         $this->presenter->sendResponse(new FileResponse($path, $filename, null));
     }
 
     /**
-     * Go to parent dir from actual path
+     * Go to parent directory from actual path
      */
     public function handleGoToParent()
     {
@@ -200,7 +200,7 @@ class Content extends \Ixtrum\FileManager\Application\Controls
     /**
      * Go to to dir
      *
-     * @param string $dir Dir
+     * @param string $dir Directory
      */
     public function handleOpenDir($dir)
     {
@@ -210,7 +210,7 @@ class Content extends \Ixtrum\FileManager\Application\Controls
     /**
      * Show thumb image
      *
-     * @param string $dir      Dir
+     * @param string $dir      Directory
      * @param string $fileName File name
      */
     public function handleShowThumb($dir, $fileName)
@@ -255,14 +255,14 @@ class Content extends \Ixtrum\FileManager\Application\Controls
     /**
      * Get directory content
      *
-     * @param string $dir   Dir
+     * @param string $dir   Directory
      * @param string $mask  Mask
      * @param string $view  View
      * @param string $order Order
      *
      * @return array
      *
-     * @todo Finder does not support mask for folders
+     * @todo Finder does not support mask for directories
      */
     private function getDirectoryContent($dir, $mask, $view, $order)
     {
@@ -296,7 +296,7 @@ class Content extends \Ixtrum\FileManager\Application\Controls
     /**
      * Load data from actual directory
      *
-     * @param string $dir   Dir
+     * @param string $dir   Directory
      * @param string $mask  Mask
      * @param string $view  View
      * @param string $order Order
@@ -346,9 +346,9 @@ class Content extends \Ixtrum\FileManager\Application\Controls
             return;
         }
 
-        // Target folder can not be it's subfolder
-        if (is_dir($source) && $this->system->filesystem->isSubFolder($source, $target)) {
-            $this->flashMessage($this->system->translator->translate("Target folder is it's subfolder, can not continue!", "warning"));
+        // Target directory can not be it's sub-directory
+        if (is_dir($source) && $this->system->filesystem->isSubDir($source, $target)) {
+            $this->flashMessage($this->system->translator->translate("Target directory is it's sub-directory, can not continue!", "warning"));
             return;
         }
 

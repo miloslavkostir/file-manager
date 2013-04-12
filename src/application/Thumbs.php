@@ -46,7 +46,7 @@ class Thumbs
             umask($oldumask);
         }
         if (!is_writable($thumbsDir)) {
-            throw new \Exception("Thumbs dir '$thumbsDir' is not writable!");
+            throw new \Exception("Thumbs directory '$thumbsDir' is not writable!");
         }
         $this->thumbsDir = $thumbsDir;
     }
@@ -118,9 +118,9 @@ class Thumbs
     }
 
     /**
-     * Delete all thumbs in folder recursively
+     * Delete all thumbs from directory recursively
      *
-     * @param string $dir Dir path
+     * @param string $dir Directory path
      *
      * @throws \Exception
      */

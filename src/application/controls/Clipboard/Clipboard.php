@@ -38,7 +38,7 @@ class Clipboard extends \Ixtrum\FileManager\Application\Controls
     {
         $actualDir = $this->getActualDir();
         if (!$this->isPathValid($actualDir)) {
-            $this->parent->parent->flashMessage($this->system->translator->translate("Target folder '%s' is not valid!", $actualDir), "warning");
+            $this->parent->parent->flashMessage($this->system->translator->translate("Target directory '%s' is not valid!", $actualDir), "warning");
             return;
         }
 
@@ -69,7 +69,7 @@ class Clipboard extends \Ixtrum\FileManager\Application\Controls
     /**
      * Remove item from clipboard
      *
-     * @param string $dir      Dir path
+     * @param string $dir      Directory path
      * @param string $filename File name
      */
     public function handleRemoveFromClipboard($dir, $filename)
@@ -105,9 +105,9 @@ class Clipboard extends \Ixtrum\FileManager\Application\Controls
             return;
         }
 
-        // Target folder can not be it's subfolder
-        if (is_dir($source) && $this->system->filesystem->isSubFolder($source, $target)) {
-            $this->flashMessage($this->system->translator->translate("Target folder is it's subfolder, can not continue!", "warning"));
+        // Target directory can not be it's sub-directory
+        if (is_dir($source) && $this->system->filesystem->isSubDir($source, $target)) {
+            $this->flashMessage($this->system->translator->translate("Target directory is it's sub-directory, can not continue!", "warning"));
             return;
         }
 
@@ -158,9 +158,9 @@ class Clipboard extends \Ixtrum\FileManager\Application\Controls
             return;
         }
 
-        // Targer folder can not be subfolder of source folder
-        if (is_dir($source) && $this->system->filesystem->isSubFolder($source, $target)) {
-            $this->parent->parent->flashMessage($this->system->translator->translate("Target folder is it's subfolder, can not continue!", "warning"));
+        // Targer directory can not be sub-directory of source directory
+        if (is_dir($source) && $this->system->filesystem->isSubDir($source, $target)) {
+            $this->parent->parent->flashMessage($this->system->translator->translate("Target directory is it's sub-directory, can not continue!", "warning"));
             return;
         }
 

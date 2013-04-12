@@ -14,10 +14,10 @@
 .fm-body .fm-treeview .treeview .hitarea { background: url('../img/icons/collapse.png') 0 0 no-repeat; height: 16px; width: 16px; margin-left: -15px; margin-top: 2px; float: left; }
 .fm-body .fm-treeview .treeview li { margin: 0;	padding: 3px 0pt 3px 16px; }
 .fm-body .fm-treeview .treeview .expandable-hitarea { background: url('../img/icons/expand.png') 0 0 no-repeat; }
-.fm-body .fm-treeview .treeview-folder { margin: 2px; padding: 2px; }
+.fm-body .fm-treeview .treeview-directory { margin: 2px; padding: 2px; }
 .fm-body .fm-treeview .filetree { margin-left: 10px; margin-top: 10px; display: block; }
 .fm-body .fm-treeview .filetree li { padding: 3px 0 2px 16px; white-space: nowrap; }
-.fm-body .fm-treeview .fm-folder-icon { padding-left: 23px; background: url('../img/icons/folder.png') no-repeat 0 0 }
+.fm-body .fm-treeview .fm-directory-icon { padding-left: 23px; background: url('../img/icons/directory.png') no-repeat 0 0 }
 .fm-body .fm-treeview .fm-root-icon { padding-left: 23px; background: url('../img/icons/root.png') no-repeat 0 0; }
 .fm-body .fm-content { color: #555555; height: 465px; background-color: #F5F5F5; border-left: 1px solid #D4D4D4; overflow: hidden; }
 .fm-body .fm-content h2 { color: #586B7D; font-size: 18px; margin: 5px; float: left; }

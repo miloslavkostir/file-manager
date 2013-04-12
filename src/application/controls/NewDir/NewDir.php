@@ -14,11 +14,11 @@ namespace Ixtrum\FileManager\Application\Controls;
 use Nette\Application\UI\Form;
 
 /**
- * New folder control.
+ * New directory control.
  *
  * @author Bronislav Sedlák <sedlak@ixtrum.com>
  */
-class NewFolder extends \Ixtrum\FileManager\Application\Controls
+class NewDir extends \Ixtrum\FileManager\Application\Controls
 {
 
     /**
@@ -26,36 +26,36 @@ class NewFolder extends \Ixtrum\FileManager\Application\Controls
      */
     public function render()
     {
-        $this->template->setFile(__DIR__ . "/NewFolder.latte");
+        $this->template->setFile(__DIR__ . "/NewDir.latte");
         $this->template->setTranslator($this->system->translator);
         $this->template->render();
     }
 
     /**
-     * NewFolderForm component factory
+     * NewDirForm component factory
      *
      * @return \Nette\Application\UI\Form
      */
-    protected function createComponentNewFolderForm()
+    protected function createComponentNewDirForm()
     {
         $form = new Form;
         $form->setTranslator($this->system->translator);
         $form->addText("name", "Name")
                 ->setRequired("Directory name is required.");
         $form->addSubmit("send", "Create");
-        $form->onSuccess[] = $this->newFolderFormSuccess;
+        $form->onSuccess[] = $this->newDirFormSuccess;
         $form->onError[] = $this->parent->parent->onFormError;
         return $form;
     }
 
     /**
-     * NewFolderForm success event
+     * NewDirForm success event
      *
      * @param \Nette\Application\UI\Form $form Form instance
      *
      * @return void
      */
-    public function newFolderFormSuccess(Form $form)
+    public function newDirFormSuccess(Form $form)
     {
         if ($this->system->parameters["readonly"]) {
             $this->parent->parent->flashMessage($this->system->translator->translate("Read-only mode enabled!"), "warning");
@@ -63,24 +63,24 @@ class NewFolder extends \Ixtrum\FileManager\Application\Controls
         }
 
         if (!$this->isPathValid($this->getActualDir())) {
-            $this->parent->parent->flashMessage($this->system->translator->translate("Folder %s already does not exist!", $this->getActualDir()), "warning");
+            $this->parent->parent->flashMessage($this->system->translator->translate("Directory '%s' already does not exist!", $this->getActualDir()), "warning");
             return;
         }
 
-        $foldername = $this->system->filesystem->safeFoldername($form->values->name);
-        if (!$foldername) {
-            $this->parent->parent->flashMessage($this->system->translator->translate("Folder name '%s' can not be used, not allowed characters used!", $form->values->name), "warning");
+        $dirname = $this->system->filesystem->safeDirname($form->values->name);
+        if (!$dirname) {
+            $this->parent->parent->flashMessage($this->system->translator->translate("Directory name '%s' can not be used, not allowed characters used!", $form->values->name), "warning");
             return;
         }
 
-        $targetPath = $this->getAbsolutePath($this->getActualDir()) . DIRECTORY_SEPARATOR . $foldername;
+        $targetPath = $this->getAbsolutePath($this->getActualDir()) . DIRECTORY_SEPARATOR . $dirname;
         if (is_dir($targetPath)) {
-            $this->parent->parent->flashMessage($this->system->translator->translate("Destination folder '%s' already exists!", $foldername), "warning");
+            $this->parent->parent->flashMessage($this->system->translator->translate("Destination directory '%s' already exists!", $dirname), "warning");
             return;
         }
 
         if (!$this->system->filesystem->mkdir($targetPath)) {
-            $this->parent->parent->flashMessage($this->system->translator->translate("An error occurred, can not create folder '%s'.", $foldername), "error");
+            $this->parent->parent->flashMessage($this->system->translator->translate("An error occurred, can not create directory '%s'.", $dirname), "error");
             return;
         }
 
@@ -93,7 +93,7 @@ class NewFolder extends \Ixtrum\FileManager\Application\Controls
             $this->system->caching->deleteItem(null, array("tags" => "treeview"));
         }
 
-        $this->parent->parent->flashMessage($this->system->translator->translate("Folder '%s' successfully created.", $foldername));
+        $this->parent->parent->flashMessage($this->system->translator->translate("Directory '%s' successfully created.", $dirname));
     }
 
 }

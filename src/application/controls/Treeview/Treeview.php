@@ -58,7 +58,7 @@ class Treeview extends \Ixtrum\FileManager\Application\Controls
 
             $html .= "<li>";
             $html .= '<span class="fm-droppable" data-move-url="' . $this->getComponent("control-Content")->link("move") . '" data-targetdir="' . $superior . '/' . $key . '/' . '">';
-            $html .= '<a href="' . $this->link("openDir", "$superior/$key/") . '" class="treeview-folder ajax fm-folder-icon" title="' . $superior . '/' . $key . '/">';
+            $html .= '<a href="' . $this->link("openDir", "$superior/$key/") . '" class="treeview-directory ajax fm-directory-icon" title="' . $superior . '/' . $key . '/">';
             $html .= $key;
             $html .= '</a></span>';
 
@@ -106,7 +106,7 @@ class Treeview extends \Ixtrum\FileManager\Application\Controls
 
         $output = '<ul class="filetree">';
         $output .= '<span class="fm-droppable" data-move-url="' . $this->getComponent("control-Content")->link("move") . '" data-targetdir="' . $rootname . '">';
-        $output .= '<a href="' . $this->link("openDir", $rootname) . '" class="ajax treeview-folder fm-root-icon" title="' . $rootname . '">';
+        $output .= '<a href="' . $this->link("openDir", $rootname) . '" class="ajax treeview-directory fm-root-icon" title="' . $rootname . '">';
         $output .= $rootname;
         $output .= '</a></span>';
         $output .= $this->generateTree($dirs, null);

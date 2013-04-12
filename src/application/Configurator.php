@@ -65,7 +65,7 @@ class Configurator
             throw new \Exception("Quota limit must defined if quota enabled, but '" . $config["quotaLimit"] . "' given!");
         }
         if (!is_dir($config["dataDir"])) {
-            throw new \Exception("Data dir '" . $config["dataDir"] . "' not found!");
+            throw new \Exception("Data directory '" . $config["dataDir"] . "' not found!");
         }
 
         // Canonicalize dataDir
@@ -95,7 +95,7 @@ class Configurator
     private function getPlugins($pluginsDir)
     {
         if (!is_dir($pluginsDir)) {
-            throw new \Exception("Plugins dir '$pluginsDir' not found!");
+            throw new \Exception("Plugins directory '$pluginsDir' not found!");
         }
 
         $plugins = array();

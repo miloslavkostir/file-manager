@@ -20,7 +20,7 @@
     border: 1px solid #5FB0D9;
 }
 .fm-adressbar .fm-location input.active {
-    background-image: url('../img/icons/folder.png');
+    background-image: url('../img/icons/directory.png');
     background-color: #FFFFFF;
     background-position: 6px 50%;
     background-repeat: no-repeat;
@@ -41,7 +41,7 @@
     height: 26px;
     width: 20px;
     float: left;
-    background: url('../img/icons/folder.png') no-repeat 50% 50% transparent;
+    background: url('../img/icons/directory.png') no-repeat 50% 50% transparent;
 }
 .fm-adressbar .fm-navigation a span {
     height: 26px;

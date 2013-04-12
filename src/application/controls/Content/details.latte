@@ -1,7 +1,7 @@
 <h2 title="{$actualdir}">{$actualdir}</h2>
 <a n:if="$actualdir <> $rootname"
    n:href="goToParent!"
-   title="{_'Parent folder'}"
+   title="{_'Parent directory'}"
    class="ajax fm-link-parent">
     <h2>[..]</h2>
 </a>
@@ -38,8 +38,8 @@
                         {/if}
                     <a n:href="openDir!, $targetPath"
                        class="fm-ajax-dbl fm-thumb"
-                       title="{_'Open folder'}">
-                        <img src="{$basePath}/{$resUrl}/img/icons/{$view}/folder.png"
+                       title="{_'Open directory'}">
+                        <img src="{$basePath}/{$resUrl}/img/icons/{$view}/directory.png"
                              data-filename="{$filename}"
                              data-targetdir="{$targetPath}"
                              data-move-url="{link move!}"

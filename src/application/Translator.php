@@ -51,7 +51,7 @@ class Translator implements ITranslator
     public function init($langDir, $lang)
     {
         if (!is_dir($langDir)) {
-            throw new \Exception("Language dir '$langDir' not found!");
+            throw new \Exception("Language directory '$langDir' not found!");
         }
         $this->langFile = $langDir . "/" .  strtolower($lang) . ".json";
         $this->loadLanguage();
