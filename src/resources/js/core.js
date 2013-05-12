@@ -23,13 +23,6 @@ $(function() {
     // Define scripts to initializate after page loaded or snippets refreshed
     function initScripts() {
 
-        var mb = $(".fm-alert").stop(true, true).fadeIn();
-        if (mb.data("delay"))
-            clearTimeout(mb.data("delay"));
-        mb.data("delay", setTimeout(function() {
-            mb.fadeOut(500);
-        }, 15000));
-
         $(".fm-draggable").draggable({
             revert: true,
             cursor: "pointer",
@@ -60,48 +53,17 @@ $(function() {
             }
         });
 
-        /** Clipboard */
-        $(".fm-clipboard").css({
-            top: $(".fm-toolbar").outerHeight()
-        });
-
-
-        /* Treeview */
-        $(".file-manager .filetree").treeview({
-            persist: "cookie"
-        });
-
-        $(".file-manager .hitarea").hide();
-
-
         /* Content */
-        $(".fm-content-files ul").shiftClick("li", "selected");
         $.ctrl("A", function() {
-            $(".fm-content-file").addClass("selected");
+            $(".fm-content-file").addClass("ui-selected");
         });
 
         $(".fm-content-files").selectable({
-            filter: ".fm-content-file",
-            selecting: function(event, ui) {
-                $(ui.selecting).addClass("selected");
-            },
-            unselecting: function(event, ui) {
-                $(ui.unselecting).removeClass("selected");
-            }
+            filter: ".fm-content-file"
         });
     }
 
     initScripts();
-
-    $(".file-manager").on("click", ".fm-show-messages", function(event) {
-        event.preventDefault()
-        $(".fm-alert-message-text").toggleClass("fm-hide");
-    });
-
-    $(".file-manager").on("click", ".fm-close", function(event) {
-        event.preventDefault()
-        $(".fm-alert").remove();
-    });
 
     $(".file-manager").on("dblclick", ".fm-ajax-dbl", function(event) {
         event.preventDefault();
@@ -112,41 +74,7 @@ $(function() {
         event.preventDefault()
     });
 
-
-
-    /* Navigation */
-    $("body").on("focusin", ".fm-location input", function() {
-        $(".fm-navigation").hide();
-        $(this).addClass("active");
-    });
-
-    $("body").on("focusout", ".fm-location input", function() {
-        $(this).removeClass("active");
-        $('.fm-navigation').show();
-    });
-
-
-    /* Treeview */
-    $(".file-manager .fm-treeview").mouseenter(function() {
-        $(this).find(".hitarea").stop(true, true).show("fade");
-    }).mouseleave(function() {
-        $(".file-manager .hitarea").hide("fade", 700);
-    });
-
-
-    /** Clipboard */
-    $(document).on("click", "#fm-clipboard-hide", function(event) {
-        event.preventDefault();
-        $(".fm-clipboard").slideToggle("slow");
-    });
-
-    $(document).on("click", "#show-clipboard", function(event) {
-        event.preventDefault();
-        $(".fm-clipboard").slideToggle("slow");
-    });
-
-    /** Toolbar */
-    $(".file-manager").on("change", ".ajax-select", function() {
+    $(".file-manager").on("change", "select.ajax-select", function() {
         $(this).closest("form").submit();
     });
 });
@@ -156,36 +84,6 @@ $(function() {
  * Custom functions & plugins
  */
 (function($) {
-
-    /*
-     * Based on Arron Bailiss <arron@arronbailiss.com> jQuery Shift-click Plugin
-     */
-    $.fn.shiftClick = function(tag, clickedClass) {
-        var lastSelected;
-        var parents = $(this),
-                childs = $(this).children(tag);
-        this.children(tag).each(function() {
-            parents.attr("unselectable", "on");
-            $(this).click(function(ev) {
-                if (ev.shiftKey) {
-                    var first = parents.children().index(this);
-                    var last = parents.children().index(lastSelected);
-
-                    var start = Math.min(first, last);
-                    var end = Math.max(first, last);
-
-                    for (var i = start; i <= end; i++) {
-                        childs.eq(i).addClass(clickedClass);
-                    }
-                }
-                else {
-                    $(this).toggleClass(clickedClass);
-                    lastSelected = this;
-                }
-            });
-        });
-    };
-
 
     /*
      * CTRL + key combination plugin

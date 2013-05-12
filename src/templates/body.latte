@@ -1,0 +1,36 @@
+<div class="file-manager">
+    <div class="fm-body row-fluid">
+        <div n:snippet="treeview" class="fm-treeview span3">
+            <ul>
+                <li>
+                    <a class="ajax" n:href="openDir!">
+                        <i class="icon-hdd"></i>
+                        <span>{$rootname}</span>
+                    </a>
+                    {$treeview}
+                </li>
+            </ul>
+        </div>
+        <div n:snippet="content" class="fm-content span9">
+            <div class="row-fluid">
+                <div class="span11">
+                    <h4 title="{$actualdir}">{$actualdir}</h4>
+                </div>
+                <div class="span1">
+                    <a n:if="$actualdir <> $rootname"
+                       n:href="goToParent!"
+                       title="{_'Parent directory'}"
+                       class="ajax pull-right">
+                        <h4>[..]</h4>
+                    </a>
+                </div>
+            </div>
+            <hr>
+            {ifset $plugin}
+                {control plugin-$plugin:content}
+            {else}
+                {include "content/$view.latte"}
+            {/ifset}
+        </div>
+    </div>
+</div>

@@ -1,7 +1,118 @@
-@import url("base.css");
-@import url("contextmenu.css");
-@import url("addressbar.css");
-@import url("toolbar.css");
-@import url("messages.css");
-@import url("content.css");
-@import url("infobar.css");
+.fm-inactive {
+    position: absolute;
+    background-color: #000000;
+    opacity: 0.4;
+    filter: alpha(opacity = 40);
+    z-index: 998;
+}
+
+.file-manager a:hover {
+    text-decoration: none;
+}
+.file-manager h4,
+.file-manager h3 {
+    font-weight: normal;
+}
+.file-manager .fm-adressbar {
+    margin-bottom: 0px;
+    background-color: #6891E7;
+    background-image: linear-gradient(to bottom, #4495E7 0px, #0053A6 100%);
+    background-image: -moz-linear-gradient(to bottom, #4495E7 0px, #0053A6 100%);
+    background-image: -webkit-linear-gradient(top,#4495E7 0,#0053A6 100%);
+}
+.file-manager .fm-adressbar > li {
+    margin: 10px;
+}
+.file-manager .fm-adressbar form,
+.file-manager .fm-adressbar select,
+.file-manager .fm-adressbar input,
+.file-manager .fm-adressbar .input-append,
+.file-manager .fm-adressbar .input-prepend {
+    margin: 0;
+}
+.file-manager .fm-toolbar {
+    margin-bottom: 0;
+    background-color: #6A6A6A;
+}
+.file-manager .fm-toolbar > li {
+    margin: 7px;
+}
+.file-manager .fm-toolbar form,
+.file-manager .fm-toolbar select,
+.file-manager .fm-toolbar input,
+.file-manager .fm-toolbar .input-append,
+.file-manager .fm-toolbar .input-prepend {
+    margin: 0;
+}
+.file-manager .fm-body .fm-treeview {
+    background-color: #000000;
+    height: 465px;
+    overflow: auto;
+}
+.file-manager .fm-body .fm-treeview .icon-hdd {
+    background-position: 0;
+    background-image: url("../img/icons/root-directory.png");
+}
+.file-manager .fm-body .fm-treeview > ul {
+    margin-top: 10px;
+}
+.file-manager .fm-body .fm-treeview ul {
+   list-style: none;
+}
+.file-manager .fm-body .fm-treeview .icon-folder-open {
+    background-position: 0;
+    background-image: url("../img/icons/directory.png");
+}
+.file-manager .fm-body .fm-treeview a {
+    color: #999999;
+}
+.file-manager .fm-body .fm-treeview a span {
+    padding: 4px;
+    border: 1px solid transparent;
+    border-radius: 4px;
+}
+.file-manager .fm-body .fm-treeview a span:hover {
+    color: #FFFFFF;
+    background-color: #6891E7;
+    background-image: linear-gradient(to bottom, #4495E7 0px, #0053A6 100%);
+    border-color: #0053A6 #0053A6 #000000;
+    box-shadow: 0 1px 0 rgba(255, 255, 255, 0.35) inset;
+    text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.5);    
+}
+.file-manager .fm-body {
+    background-color: #F5F5F5;
+    color: #555555;
+}
+.file-manager .fm-body .fm-content {
+    height: 465px;
+    overflow: auto;
+}
+.file-manager .fm-body .fm-content hr {
+    margin: 7px;
+}
+.file-manager .fm-body .fm-content .fm-content-file.ui-selected {
+    background-color: #6891E7;
+    background-image: linear-gradient(to bottom, #4495E7 0px, #0053A6 100%);
+    background-image: -moz-linear-gradient(to bottom, #4495E7 0px, #0053A6 100%);
+    background-image: -webkit-linear-gradient(top,#4495E7 0,#0053A6 100%);
+    filter: progid:DXImageTransform.Microsoft.Gradient(GradientType=0,StartColorStr=#ff4495e7,EndColorStr=#ff0053a6);
+    box-shadow: 0 1px 0 rgba(255, 255, 255, 0.35) inset;
+    -webkit-box-shadow: inset 0 1px 0 rgba(256, 256, 256, .35);
+    color: #FFFFFF;
+    text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.5);
+    border-color: #0053A6 #0053A6 #000000;
+}
+.file-manager .fm-body .fm-content .fm-content-file.ui-selected:hover {
+    background-image: linear-gradient(to bottom, #096BD2 0px, #0053A6 100%);
+    border-color: #002D59 #002D59 #000000;
+    box-shadow: 0 1px 0 rgba(255, 255, 255, 0.35) inset, 0 1px 3px rgba(0, 0, 0, 0.5);
+}
+.file-manager .fm-infobar {
+    min-height: 135px;
+    background-color: #EBEBEB;
+    color: #586b7d;
+    border: 1px solid #D4D4D4;
+}
+.file-manager .fm-infobar > li {
+    margin: 10px;    
+}
