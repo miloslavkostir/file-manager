@@ -11,8 +11,7 @@
 
 namespace Ixtrum\FileManager\Application;
 
-use Nette\DirectoryNotFoundException,
-    Nette\ImageMagick,
+use Nette\ImageMagick,
     Nette\Image,
     Imagick,
     Ixtrum\FileManager\Application\FileSystem\Finder;
@@ -40,9 +39,6 @@ class Thumbs
      */
     public function __construct($thumbsDir)
     {
-        if (!$thumbsDir) {
-            throw new \Exception("You must define thumbs dir!");
-        }
         if (!is_dir($thumbsDir)) {
 
             $oldumask = umask(0);
@@ -50,7 +46,7 @@ class Thumbs
             umask($oldumask);
         }
         if (!is_writable($thumbsDir)) {
-            throw new \Exception("Thumbs dir '$thumbsDir' is not writable!");
+            throw new \Exception("Thumbs directory '$thumbsDir' is not writable!");
         }
         $this->thumbsDir = $thumbsDir;
     }
@@ -122,29 +118,30 @@ class Thumbs
     }
 
     /**
-     * Delete all thumbs in folder recursively
+     * Delete all thumbs from directory recursively
      *
-     * @param string $dirPath Dir path
+     * @param string $dir Directory path
+     *
+     * @throws \Exception
      */
-    public function deleteDirThumbs($dirPath)
+    public function deleteDirThumbs($dir)
     {
-        if (is_dir($dirPath)) {
+        if (!is_dir($dir)) {
+            throw new \Exception("Directory '$dir' not found!");
+        }
 
-            $mask = $this->supported;
-            foreach ($mask as $key => $val) {
-                $mask[$key] = "*.$val";
+        $mask = $this->supported;
+        foreach ($mask as $key => $val) {
+            $mask[$key] = "*.$val";
+        }
+
+        $files = Finder::findFiles($mask)->from($dir);
+        foreach ($files as $file) {
+
+            $thumbPath = $this->getThumbPath($file->getPathname());
+            if (file_exists($thumbPath)) {
+                unlink($thumbPath);
             }
-
-            $files = Finder::findFiles($mask)->from($dirPath);
-            foreach ($files as $file) {
-
-                $thumbPath = $this->getThumbPath($file->getPathname());
-                if (file_exists($thumbPath)) {
-                    unlink($thumbPath);
-                }
-            }
-        } else {
-            throw new DirectoryNotFoundException("Given path $dirPath does not exist.");
         }
     }
 

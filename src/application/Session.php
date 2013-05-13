@@ -11,8 +11,6 @@
 
 namespace Ixtrum\FileManager\Application;
 
-use Nette\Http\SessionSection;
-
 /**
  * Session wrapper.
  *
@@ -27,11 +25,11 @@ class Session
     /**
      * Constructor
      *
-     * @param \Nette\Http\SessionSection $section session section
+     * @param \Nette\Http\Session $session Session instance
      */
-    public function __construct(SessionSection $section)
+    public function __construct(\Nette\Http\Session $session)
     {
-        $this->section = $section;
+        $this->section = $session->getSection("file-manager");
     }
 
     /**

@@ -2,7 +2,7 @@
     <li>
         {var $icon = "icon"}
         {if $file['dir']}
-            {var $icon = "folder"}
+            {var $icon = "directory"}
         {elseif is_file($resDir . "/img/icons/large/" . $file['extension'] . ".png")}
             {var $icon = $file['extension']}
         {/if}
@@ -12,7 +12,7 @@
         <ul class="fm-file-info-details">
             <li>
                 <h2>
-                    {if $file['dir']}{_'Folder'}{else}{$file['extension']|upper}{/if}
+                    {if $file['dir']}{_'Directory'}{else}{$file['extension']|upper}{/if}
                 </h2>
             </li>
             <li><span>{$file['name']}</span></li>
@@ -31,7 +31,7 @@
         <ul class="fm-file-info-details">
             <li><h2>{_"Selected items"}</h2></li>
             <li n:if="$files['filesCount'] > 0">{_"Files"}: <strong>{$files["filesCount"]}</strong></li>
-            <li n:if="$files['dirCount'] > 0">{_"Folders"}: <strong>{$files["dirCount"]}</strong></li>
+            <li n:if="$files['dirCount'] > 0">{_"Directories"}: <strong>{$files["dirCount"]}</strong></li>
             <li>{_'Size'}: <strong>{$files["size"]|bytes}</strong></li>
         </ul>
     </li>

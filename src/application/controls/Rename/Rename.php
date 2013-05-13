@@ -14,7 +14,7 @@ namespace Ixtrum\FileManager\Application\Controls;
 use Nette\Application\UI\Form;
 
 /**
- * New folder control.
+ * Rename control.
  *
  * @author Bronislav Sedlák <sedlak@ixtrum.com>
  */
@@ -80,7 +80,7 @@ class Rename extends \Ixtrum\FileManager\Application\Controls
         $origPath = $path . DIRECTORY_SEPARATOR . $form->values->originalFilename;
         if (is_dir($origPath)) {
 
-            $newFilename = $this->system->filesystem->safeFoldername($form->values->newFilename);
+            $newFilename = $this->system->filesystem->safeDirname($form->values->newFilename);
             if ($this->system->parameters["thumbs"]) {
                 $this->system->thumbs->deleteDirThumbs($origPath);
             }

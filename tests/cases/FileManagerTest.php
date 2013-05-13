@@ -47,16 +47,16 @@ class FileManagerTest extends TestCase
         // Non-existing files are not valid
         $this->assertFalse($fileManager->isPathValid("/test/", "non-existing-file"));
 
-        // Folders in dataDir superior are not valid
+        // Directorie in dataDir superior are not valid
         $this->assertFalse($fileManager->isPathValid("/../"));
 
         // dataDir is valid
         $this->assertTrue($fileManager->isPathValid("/"));
 
-        // Non-existing folders are not valid
+        // Non-existing directories are not valid
         $this->assertFalse($fileManager->isPathValid("/missing/"));
 
-        // Files in dataDir subfolder are valid
+        // Files in dataDir sub-directory are valid
         $dir = "/test/";
         $file = "test.txt";
         file_put_contents($this->dataDir . $dir . $file, "data");

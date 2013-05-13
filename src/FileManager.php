@@ -54,7 +54,7 @@ class FileManager extends Control
         $actualDir = $this->system->session->get("actualdir");
         $actualPath = $this->getAbsolutePath($actualDir);
         if (!is_dir($actualPath) || empty($actualDir)) {
-            // Set root dir as default
+            // Set root directory as default
             $actualDir = FileSystem::getRootname();
         }
         $this->setActualDir($actualDir);
@@ -69,11 +69,11 @@ class FileManager extends Control
     }
 
     /**
-     * Show new dir control
+     * Show newdir control
      */
-    public function handleRunNewFolder()
+    public function handleRunNewDir()
     {
-        $this->template->run = "newfolder";
+        $this->template->run = "newdir";
     }
 
     /**
@@ -132,7 +132,7 @@ class FileManager extends Control
     /**
      * Set actual dir
      *
-     * @param string $dir relative dir path
+     * @param string $dir Relative directory path
      */
     public function setActualDir($dir)
     {
@@ -343,19 +343,19 @@ class FileManager extends Control
             return true;
         }
 
-        return $this->system->filesystem->isSubFolder($this->system->parameters["dataDir"], $path);
+        return $this->system->filesystem->isSubDir($this->system->parameters["dataDir"], $path);
     }
 
     /**
      * Get absolute path from relative path
      *
-     * @param string $actualdir Actual dir in relative format
+     * @param string $actualDir Actual directory as relative path
      *
      * @return string
      */
-    public function getAbsolutePath($actualdir)
+    public function getAbsolutePath($actualDir)
     {
-        return realpath($this->system->parameters["dataDir"] . $actualdir);
+        return realpath($this->system->parameters["dataDir"] . $actualDir);
     }
 
 }

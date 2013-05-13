@@ -59,7 +59,7 @@ class Caching
                 umask($oldumask);
             }
             if (!is_writable($cacheDir)) {
-                throw new \Exception("Cache dir '$cacheDir' is not writable!");
+                throw new \Exception("Cache directory '$cacheDir' is not writable!");
             }
             $storage = new FileStorage($cacheDir, new FileJournal($cacheDir));
         }
@@ -90,7 +90,7 @@ class Caching
     /**
      * Delete items from cache with recursion
      *
-     * @param string $absDir Absolute dir path
+     * @param string $absDir Absolute directory path
      */
     public function deleteItemsRecursive($absDir)
     {

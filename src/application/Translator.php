@@ -39,15 +39,21 @@ class Translator implements ITranslator
     private $timeFormat = "Y-m-d H:i:s";
 
     /**
-     * Constructor
+     * Initialize translator
      *
-     * @param string $langFile Language file
+     * @param string $langDir Language dir
+     * @param string $lang    Language
      *
      * @return $this
+     *
+     * @throws \Exception
      */
-    public function init($langFile)
+    public function init($langDir, $lang)
     {
-        $this->langFile = $langFile;
+        if (!is_dir($langDir)) {
+            throw new \Exception("Language directory '$langDir' not found!");
+        }
+        $this->langFile = $langDir . "/" .  strtolower($lang) . ".json";
         $this->loadLanguage();
         return $this;
     }

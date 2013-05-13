@@ -38,21 +38,21 @@ class FileSystemTest extends TestCase
         $filePath = $this->dataDir . DIRECTORY_SEPARATOR . "test_file";
         file_put_contents($filePath, "data");
 
-        // Test copy file in the same folder
+        // Test copy file in the same directory
         $this->library->copy($filePath, $this->dataDir);
         $this->assertFileEquals($filePath, $this->dataDir . DIRECTORY_SEPARATOR . "1_test_file");
 
-        // Test copy file to a subfolder
+        // Test copy file to a sub-directory
         $dirPath = $this->dataDir . DIRECTORY_SEPARATOR . "test";
         mkdir($dirPath);
         $this->library->copy($filePath, $dirPath);
         $this->assertFileEquals($filePath, $dirPath . DIRECTORY_SEPARATOR . "test_file");
 
-        // Test copy folder in the same folder
+        // Test copy directory in the same directory
         $this->library->copy($dirPath, $this->dataDir);
         $this->assertFileEquals($this->dataDir . DIRECTORY_SEPARATOR . "1_test" . DIRECTORY_SEPARATOR . "test_file", $dirPath . DIRECTORY_SEPARATOR . "test_file");
 
-        // Test copy folder in other folder
+        // Test copy directory in other directory
         $this->library->copy($this->dataDir . DIRECTORY_SEPARATOR . "1_test", $dirPath);
         $this->assertFileEquals($dirPath . DIRECTORY_SEPARATOR . "1_test" . DIRECTORY_SEPARATOR . "test_file", $this->dataDir . DIRECTORY_SEPARATOR . "1_test" . DIRECTORY_SEPARATOR . "test_file");
     }
@@ -73,18 +73,18 @@ class FileSystemTest extends TestCase
     }
 
     /**
-     * Test isSubFolder
+     * Test isSubDir
      */
-    public function testIsSubFolder()
+    public function testIsSubDir()
     {
         $parent = $this->dataDir . DIRECTORY_SEPARATOR . "parent";
         mkdir($parent);
         $child = $parent . DIRECTORY_SEPARATOR . "child";
         mkdir($child);
 
-        $this->assertTrue($this->library->isSubFolder($parent, $child));
-        $this->assertFalse($this->library->isSubFolder($parent, $parent));
-        $this->assertFalse($this->library->isSubFolder($child, $parent));
+        $this->assertTrue($this->library->isSubDir($parent, $child));
+        $this->assertFalse($this->library->isSubDir($parent, $parent));
+        $this->assertFalse($this->library->isSubDir($child, $parent));
     }
 
     /**
