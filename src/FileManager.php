@@ -27,7 +27,7 @@ class FileManager extends Control
 {
 
     const NAME = "iXtrum File Manager";
-    const VERSION = "1.0-beta4";
+    const VERSION = "1.0";
 
     /** @var \Ixtrum\FileManager\Application\Loader */
     protected $system;
