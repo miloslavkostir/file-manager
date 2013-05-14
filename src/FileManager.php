@@ -80,7 +80,7 @@ class FileManager extends UI\Control
         if (in_array($view, $this->views)) {
             $this->view = $view;
         }
-        \nette\diagnostics\firelogger::log($this->system->session->clipboard);
+
         $this->invalidateControl();
     }
 
