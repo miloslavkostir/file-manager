@@ -17,7 +17,7 @@
 class FileSystemTest extends TestCase
 {
 
-    /** @var Ixtrum\FileManager\Application\FileSystem */
+    /** @var Ixtrum\FileManager\FileSystem */
     private $library;
 
     /**
@@ -26,7 +26,7 @@ class FileSystemTest extends TestCase
     public function setUp()
     {
         parent::setUp();
-        $this->library = new Ixtrum\FileManager\Application\FileSystem;
+        $this->library = new Ixtrum\FileManager\FileSystem;
     }
 
     /**
@@ -92,7 +92,7 @@ class FileSystemTest extends TestCase
      */
     public function testGetRootName()
     {
-        $this->assertEquals("/", Ixtrum\FileManager\Application\FileSystem::getRootName());
+        $this->assertEquals("/", Ixtrum\FileManager\FileSystem::getRootName());
     }
 
 }

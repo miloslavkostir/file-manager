@@ -26,7 +26,7 @@ class LoaderTest extends TestCase
         $this->assertInstanceOf("stdClass", $loader->caching);
 
         $loader = $this->createLoader(array("dataDir" => $this->dataDir, "cacheDir" => $this->cacheDir));
-        $this->assertInstanceOf("Ixtrum\FileManager\Application\Caching", $loader->caching);
+        $this->assertInstanceOf("Ixtrum\FileManager\Caching", $loader->caching);
     }
 
     /**
@@ -35,7 +35,7 @@ class LoaderTest extends TestCase
     public function testCreateServiceTranslator()
     {
         $loader = $this->createLoader(array("dataDir" => $this->dataDir));
-        $this->assertInstanceOf("Ixtrum\FileManager\Application\Translator", $loader->translator);
+        $this->assertInstanceOf("Ixtrum\FileManager\Translator", $loader->translator);
     }
 
     /**
@@ -44,7 +44,7 @@ class LoaderTest extends TestCase
     public function testCreateServiceSession()
     {
         $loader = $this->createLoader(array("dataDir" => $this->dataDir));
-        $this->assertInstanceOf("Ixtrum\FileManager\Application\Session", $loader->session);
+        $this->assertInstanceOf("Ixtrum\FileManager\Session", $loader->session);
     }
 
     /**
@@ -53,7 +53,7 @@ class LoaderTest extends TestCase
     public function testCreateServiceFilesystem()
     {
         $loader = $this->createLoader(array("dataDir" => $this->dataDir));
-        $this->assertInstanceOf("Ixtrum\FileManager\Application\FileSystem", $loader->filesystem);
+        $this->assertInstanceOf("Ixtrum\FileManager\FileSystem", $loader->filesystem);
     }
 
     /**
@@ -65,7 +65,7 @@ class LoaderTest extends TestCase
         $this->assertInstanceOf("stdClass", $loader->thumbs);
 
         $loader = $this->createLoader(array("dataDir" => $this->dataDir, "thumbsDir" => $this->cacheDir . "/thumbs"));
-        $this->assertInstanceOf("Ixtrum\FileManager\Application\Thumbs", $loader->thumbs);
+        $this->assertInstanceOf("Ixtrum\FileManager\Thumbs", $loader->thumbs);
     }
 
     /**
@@ -73,11 +73,11 @@ class LoaderTest extends TestCase
      *
      * @param array $config Configuration
      *
-     * @return \Ixtrum\FileManager\Application\Loader
+     * @return \Ixtrum\FileManager\Loader
      */
     private function createLoader(array $config)
     {
-        return new Ixtrum\FileManager\Application\Loader(new MockSession, $config);
+        return new Ixtrum\FileManager\Loader(new MockSession, $config);
     }
 
 }

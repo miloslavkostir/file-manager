@@ -104,18 +104,18 @@ class FileManagerTest extends TestCase
     }
 
     /**
-     * Test render content.latte
+     * Test render body.latte
      */
-    public function testRenderContent()
+    public function testRendeBody()
     {
         $this->presenter->addComponent($this->createControl(), "testControl");
         $this->presenter->run(new Nette\Application\Request("Homepage", "GET", array()));
 
         $fileManager = $this->presenter->getComponent("testControl");
-        $this->renderComponent($fileManager, "content");
+        $this->renderComponent($fileManager, "body");
 
         $this->assertInstanceOf("Nette\Templating\FileTemplate", $fileManager->template);
-        $this->assertEquals("content.latte", basename($fileManager->template->getFile()));
+        $this->assertEquals("body.latte", basename($fileManager->template->getFile()));
     }
 
     /**
@@ -149,6 +149,21 @@ class FileManagerTest extends TestCase
     }
 
     /**
+     * Test render contextmenu.latte
+     */
+    public function testRenderContextMenu()
+    {
+        $this->presenter->addComponent($this->createControl(), "testControl");
+        $this->presenter->run(new Nette\Application\Request("Homepage", "GET", array()));
+
+        $fileManager = $this->presenter->getComponent("testControl");
+        $this->renderComponent($fileManager, "contextMenu");
+
+        $this->assertInstanceOf("Nette\Templating\FileTemplate", $fileManager->template);
+        $this->assertEquals("contextmenu.latte", basename($fileManager->template->getFile()));
+    }
+
+    /**
      * Test render infobar.latte
      */
     public function testRenderInfobar()
@@ -161,21 +176,6 @@ class FileManagerTest extends TestCase
 
         $this->assertInstanceOf("Nette\Templating\FileTemplate", $fileManager->template);
         $this->assertEquals("infobar.latte", basename($fileManager->template->getFile()));
-    }
-
-    /**
-     * Test render messages.latte
-     */
-    public function testRenderMessages()
-    {
-        $this->presenter->addComponent($this->createControl(), "testControl");
-        $this->presenter->run(new Nette\Application\Request("Homepage", "GET", array()));
-
-        $fileManager = $this->presenter->getComponent("testControl");
-        $this->renderComponent($fileManager, "messages");
-
-        $this->assertInstanceOf("Nette\Templating\FileTemplate", $fileManager->template);
-        $this->assertEquals("messages.latte", basename($fileManager->template->getFile()));
     }
 
     /**

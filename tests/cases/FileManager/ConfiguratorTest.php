@@ -17,7 +17,7 @@
 class ConfiguratorTest extends TestCase
 {
 
-    /** @var \Ixtrum\FileManager\Application\Configurator */
+    /** @var \Ixtrum\FileManager\Configurator */
     private $instance;
 
     /** @var array */
@@ -46,7 +46,7 @@ class ConfiguratorTest extends TestCase
     public function setUp()
     {
         parent::setUp();
-        $this->instance = new Ixtrum\FileManager\Application\Configurator;
+        $this->instance = new Ixtrum\FileManager\Configurator;
     }
 
     /**
