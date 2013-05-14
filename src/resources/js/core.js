@@ -23,6 +23,10 @@ $(function() {
     // Define scripts to initializate after page loaded or snippets refreshed
     function initScripts() {
 
+        $(".fm-content-file").contextmenu({
+            target: "#file-context-menu"
+        });
+
         $(".fm-draggable").draggable({
             revert: true,
             cursor: "pointer",
