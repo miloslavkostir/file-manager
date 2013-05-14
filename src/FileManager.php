@@ -311,6 +311,7 @@ class FileManager extends UI\Control
     public function renderBody()
     {
         $this->template->setFile(__DIR__ . "/templates/body.latte");
+        $this->template->setTranslator($this->system->translator);
         $this->template->files = $this->loadData(
                 $this->getActualDir(), $this->system->session->get("mask"), $this->view, $this->system->session->get("order")
         );
@@ -334,6 +335,7 @@ class FileManager extends UI\Control
     public function renderContextMenu()
     {
         $this->template->setFile(__DIR__ . "/templates/contextmenu.latte");
+        $this->template->setTranslator($this->system->translator);
         $this->template->plugins = array();
         foreach ($this->system->parameters["plugins"] as $name => $config) {
 
