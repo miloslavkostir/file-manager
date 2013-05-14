@@ -84,7 +84,9 @@ class Configurator
         $config["resDir"] = dirname($_SERVER["SCRIPT_FILENAME"]) . "/" . $config["resUrl"];
 
         // Get available plugins
-        $config["plugins"] = $this->getPlugins($config["pluginsDirs"]);
+        if ($config["pluginsDirs"]) {
+            $config["plugins"] = $this->getPlugins($config["pluginsDirs"]);
+        }
 
         // Get available languages
         $config["langs"] = $this->getLanguages($config["langDir"]);
