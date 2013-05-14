@@ -57,9 +57,6 @@ class TestCase extends PHPUnit_Framework_TestCase
 
         // Set up dataDir
         $this->dataDir = $container->parameters["tempDir"] . "/dataDir";
-
-        // Set up dataDir
-        $this->cacheDir = $container->parameters["tempDir"] . "/cache";
     }
 
     /**
@@ -72,11 +69,10 @@ class TestCase extends PHPUnit_Framework_TestCase
     protected function createControl($config = array())
     {
         $default = array(
-            "dataDir" => $this->dataDir,
-            "cacheDir" => $this->cacheDir
+            "dataDir" => $this->dataDir
         );
         return new Ixtrum\FileManager(
-                $this->context->httpRequest, $this->context->session, array_merge($default, $config)
+                $this->context->httpRequest, $this->context->session, $this->context->cacheStorage, array_merge($default, $config)
         );
     }
 

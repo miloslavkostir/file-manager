@@ -27,8 +27,6 @@ class Configurator
         "appDir" => null,
         "dataDir" => null,
         "cache" => true,
-        "cacheDir" => null,
-        "cacheStorage" => "FileStorage",
         "thumbs" => true,
         "thumbsDir" => null,
         "resUrl" => "ixtrum-res",

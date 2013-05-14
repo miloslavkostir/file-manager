@@ -22,15 +22,20 @@ final class Loader extends \Nette\DI\Container
     /** @var \Nette\Http\Session */
     private $session;
 
+    /** @var \Nette\Caching\IStorage */
+    private $cacheStorage;
+
     /**
      * Constructor
      *
-     * @param \Nette\Http\Session $session Session
-     * @param array               $config  Custom configuration
+     * @param \Nette\Http\Session     $session      Session
+     * @param \Nette\Caching\IStorage $cacheStorage Cache storage
+     * @param array                   $config       Custom configuration
      */
-    public function __construct(\Nette\Http\Session $session, $config)
+    public function __construct(\Nette\Http\Session $session, \Nette\Caching\IStorage $cacheStorage, $config)
     {
         $this->session = $session;
+        $this->cacheStorage = $cacheStorage;
         $configurator = new Configurator;
         $this->parameters = $configurator->createConfig($config);
     }
@@ -45,7 +50,7 @@ final class Loader extends \Nette\DI\Container
         if (!$this->parameters["cache"]) {
             return new \stdClass;
         }
-        return new Caching($this->parameters["cacheStorage"], $this->parameters["cacheDir"]);
+        return new Caching($this->cacheStorage);
     }
 
     /**

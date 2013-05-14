@@ -25,7 +25,7 @@ class LoaderTest extends TestCase
         $loader = $this->createLoader(array("dataDir" => $this->dataDir, "cache" => false));
         $this->assertInstanceOf("stdClass", $loader->caching);
 
-        $loader = $this->createLoader(array("dataDir" => $this->dataDir, "cacheDir" => $this->cacheDir));
+        $loader = $this->createLoader(array("dataDir" => $this->dataDir));
         $this->assertInstanceOf("Ixtrum\FileManager\Caching", $loader->caching);
     }
 
@@ -64,7 +64,7 @@ class LoaderTest extends TestCase
         $loader = $this->createLoader(array("dataDir" => $this->dataDir, "thumbs" => false));
         $this->assertInstanceOf("stdClass", $loader->thumbs);
 
-        $loader = $this->createLoader(array("dataDir" => $this->dataDir, "thumbsDir" => $this->cacheDir . "/thumbs"));
+        $loader = $this->createLoader(array("dataDir" => $this->dataDir, "thumbsDir" => $this->context->parameters["tempDir"] . "/thumbs"));
         $this->assertInstanceOf("Ixtrum\FileManager\Thumbs", $loader->thumbs);
     }
 
@@ -77,7 +77,7 @@ class LoaderTest extends TestCase
      */
     private function createLoader(array $config)
     {
-        return new Ixtrum\FileManager\Loader(new MockSession, $config);
+        return new Ixtrum\FileManager\Loader(new MockSession, $this->context->cacheStorage, $config);
     }
 
 }

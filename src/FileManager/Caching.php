@@ -11,10 +11,6 @@
 
 namespace Ixtrum\FileManager;
 
-use Nette\Caching\Cache,
-    Nette\Caching\Storages\FileJournal,
-    Nette\Caching\Storages\FileStorage,
-    Nette\Caching\Storages\MemcachedStorage;
 /**
  * Cache wrapper.
  *
@@ -26,48 +22,16 @@ class Caching
     /** @var \Nette\Caching\Cache */
     private $cache;
 
-    /** @var array */
-    public static $supported = array("filestorage", "memcachedstorage");
-
     /**
      * Constructor
      *
-     * @param string $cacheDir Cache dir
-     * @param string $storage  Cache storage
+     * @param \Nette\Caching\IStorage $storage Cache storage
      *
      * @throws \Exception
      */
-    public function __construct($storage, $cacheDir)
+    public function __construct(\Nette\Caching\IStorage $storage)
     {
-        $storage = strtolower($storage);
-        if (!in_array($storage, self::$supported)) {
-            throw new \Exception("Unsupported storage '$storage'! Supported are only " . implode(",", self::$supported));
-        }
-
-        // File storage
-        if ($storage === "filestorage") {
-
-            if (!$cacheDir) {
-                throw new \Exception("You must define cache dir!");
-            }
-            if (!is_dir($cacheDir)) {
-
-                $oldumask = umask(0);
-                mkdir($cacheDir, 0777, true);
-                umask($oldumask);
-            }
-            if (!is_writable($cacheDir)) {
-                throw new \Exception("Cache directory '$cacheDir' is not writable!");
-            }
-            $storage = new FileStorage($cacheDir, new FileJournal($cacheDir));
-        }
-
-        // Memcached storage
-        if ($storage === "memcachedstorage") {
-            $storage = new MemcachedStorage();
-        }
-
-        $this->cache = new Cache($storage);
+        $this->cache = new \Nette\Caching\Cache($storage, "Ixtrum.FileManager");
     }
 
     /**

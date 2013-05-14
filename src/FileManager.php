@@ -46,18 +46,19 @@ class FileManager extends UI\Control
     /**
      * Constructor
      *
-     * @param \Nette\Http\Request $request HTTP request
-     * @param \Nette\Http\Session $session Session
-     * @param array               $config  Custom configuration
+     * @param \Nette\Http\Request     $request      HTTP request
+     * @param \Nette\Http\Session     $session      Session
+     * @param \Nette\Caching\IStorage $cacheStorage Cache storage
+     * @param array                   $config       Custom configuration
      */
-    public function __construct(Http\Request $request, Http\Session $session, $config = array())
+    public function __construct(Http\Request $request, Http\Session $session, \Nette\Caching\IStorage $cacheStorage, $config = array())
     {
         parent::__construct();
 
         $this->httpRequest = $request;
 
         // Create system container with services and configuration
-        $this->system = new FileManager\Loader($session, $config);
+        $this->system = new FileManager\Loader($session, $cacheStorage, $config);
         $this->system->freeze();
 
         // Get & validate actual dir
