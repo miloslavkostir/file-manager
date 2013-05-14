@@ -61,7 +61,7 @@ class FileManager extends UI\Control
         $this->system->freeze();
 
         // Get & validate actual dir
-        $actualDir = $this->system->session->get("actualdir");
+        $actualDir = $this->system->session->actualdir;
         $actualPath = $this->getAbsolutePath($actualDir);
         if (!is_dir($actualPath)) {
             // Set root directory as default
@@ -76,11 +76,11 @@ class FileManager extends UI\Control
         }
 
         // Get & validate selected view
-        $view = $this->system->session->get("view");
+        $view = $this->system->session->view;
         if (in_array($view, $this->views)) {
             $this->view = $view;
         }
-
+        \nette\diagnostics\firelogger::log($this->system->session->clipboard);
         $this->invalidateControl();
     }
 
@@ -191,7 +191,7 @@ class FileManager extends UI\Control
      */
     public function handleOrderBy($key)
     {
-        $this->system->session->set("order", $key);
+        $this->system->session->order = $key;
         if ($this->system->parameters["cache"]) {
             $this->system->caching->deleteItem(array("content", $this->getAbsolutePath($this->getActualDir())));
         }
@@ -260,7 +260,7 @@ class FileManager extends UI\Control
      */
     public function getActualDir()
     {
-        return $this->system->session->get("actualdir");
+        return $this->system->session->actualdir;
     }
 
     /**
@@ -271,7 +271,7 @@ class FileManager extends UI\Control
     public function setActualDir($dir)
     {
         if ($this->isPathValid($dir)) {
-            $this->system->session->set("actualdir", $dir);
+            $this->system->session->actualdir = $dir;
         }
     }
 
@@ -313,7 +313,7 @@ class FileManager extends UI\Control
         $this->template->setFile(__DIR__ . "/templates/body.latte");
         $this->template->setTranslator($this->system->translator);
         $this->template->files = $this->loadData(
-                $this->getActualDir(), $this->system->session->get("mask"), $this->view, $this->system->session->get("order")
+                $this->getActualDir(), $this->system->session->mask, $this->view, $this->system->session->order
         );
         $this->template->treeview = $this->getTreeview();
         $this->template->actualdir = $this->getActualDir();
@@ -355,7 +355,7 @@ class FileManager extends UI\Control
         $this->template->resUrl = $this->system->parameters["resUrl"];
 
         // Get theme
-        $theme = $this->system->session->get("theme");
+        $theme = $this->system->session->theme;
         if ($theme) {
             $this->template->theme = $theme;
         } else {

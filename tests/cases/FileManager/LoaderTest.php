@@ -44,7 +44,7 @@ class LoaderTest extends TestCase
     public function testCreateServiceSession()
     {
         $loader = $this->createLoader(array("dataDir" => $this->dataDir));
-        $this->assertInstanceOf("Ixtrum\FileManager\Session", $loader->session);
+        $this->assertInstanceOf("Nette\Http\SessionSection", $loader->session);
     }
 
     /**

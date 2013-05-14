@@ -62,11 +62,11 @@ final class Loader extends \Nette\DI\Container
     /**
      * Create service session
      *
-     * @return \Ixtrum\FileManager\Session
+     * @return \Nette\Http\SessionSection
      */
     protected function createServiceSession()
     {
-        return new Session($this->session);
+        return $this->session->getSection("ixtrum-file-manager");
     }
 
     /**

@@ -19,27 +19,10 @@ use Nette\Http\Session;
 class MockSession extends Session
 {
 
-    public $testSection;
-    
     /**
      * Constructor
      */
     public function __construct()
-    {
-
-    }
-
-    /**
-     * Get specified session section
-     *
-     * @param \Nette\Http\SessionSection $section Session section
-     * @param string                     $class   Class name
-     *
-     * @return void
-     */
-    public function getSection($section, $class = "Nette\Http\SessionSection")
-    {
-        return $this->testSection;
-    }
+    {}
 
 }
