@@ -13,6 +13,10 @@
 .file-manager h3 {
     font-weight: normal;
 }
+.file-manager .icon-arrow-right {
+    background-position: 0;
+    background-image: url("../img/icons/next.png");
+}
 .file-manager .fm-adressbar {
     margin-bottom: 0px;
     background-color: #6891E7;
