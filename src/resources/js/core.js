@@ -1,6 +1,9 @@
 $(function() {
 
-    $.nette.ext("fm-inactive", {
+    $.nette.ext("ixtrum-file-manager", {
+        before: function() {
+            $("#file-context-menu").hide();
+        },
         start: function() {
             $(".file-manager").each(function() {
                 $("<div>", {
@@ -22,10 +25,6 @@ $(function() {
 
     // Define scripts to initializate after page loaded or snippets refreshed
     function initScripts() {
-
-        $(".fm-content-file").contextmenu({
-            target: "#file-context-menu"
-        });
 
         $(".fm-draggable").draggable({
             revert: true,
@@ -64,6 +63,21 @@ $(function() {
 
         $(".fm-content-files").selectable({
             filter: ".fm-content-file"
+        });
+
+        /* Context menu */
+        $(".file-manager .fm-content-file").on("contextmenu", function(event) {
+            event.preventDefault();
+            $(".fm-content-file").removeClass("ui-selected");
+            $(this).addClass("ui-selected");
+            $("#file-context-menu").css({
+                position: "fixed",
+                top: event.clientY,
+                left: event.clientX
+            }).show();
+            $("body").click(function(){
+                $("#file-context-menu").hide();
+            });
         });
     }
 

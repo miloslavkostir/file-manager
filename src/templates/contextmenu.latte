@@ -1,18 +1,16 @@
-<div id="file-context-menu">
-    <ul class="dropdown-menu" role="menu">
-        <li>
-            <a n:href="delete!" data-confirm="{_'Do you really want to delete all these files?'}" class="ajax">{_'Delete'}</a>
-        </li>
-        <li>
-            <a n:href="download!">{_'Download'}</a>
-        </li>
-        {foreach $plugins as $name => $config}
-        <li n:foreach="$control['plugin-' . $name]->getContextMenu()->getFilesMenu() as $link => $title">
-            <a href="{$link}" class="ajax">{$title}</a>
-        </li>
-        {/foreach}
-    </ul>
-</div>
+<ul id="file-context-menu" class="dropdown-menu" role="menu">
+    <li>
+        <a n:href="delete!" data-confirm="{_'Do you really want to delete all these files?'}" class="ajax">{_'Delete'}</a>
+    </li>
+    <li>
+        <a n:href="download!">{_'Download'}</a>
+    </li>
+    {foreach $plugins as $name => $config}
+    <li n:foreach="$control['plugin-' . $name]->getContextMenu()->getFilesMenu() as $link => $title">
+        <a href="{$link}" class="ajax">{$title}</a>
+    </li>
+    {/foreach}
+</ul>
 <div id="content-context-menu">
     <ul class="dropdown-menu" role="menu">
         <li>
