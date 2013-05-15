@@ -68,12 +68,12 @@ class TestCase extends PHPUnit_Framework_TestCase
      */
     protected function createControl($config = array())
     {
-        $default = array(
-            "dataDir" => $this->dataDir
+        $default = array("dataDir" => $this->dataDir);
+        $control = new Ixtrum\FileManager(
+            $this->context->httpRequest, $this->context->session, $this->context->cacheStorage
         );
-        return new Ixtrum\FileManager(
-                $this->context->httpRequest, $this->context->session, $this->context->cacheStorage, array_merge($default, $config)
-        );
+        $control->init(array_merge($default, $config));
+        return $control;
     }
 
     /**

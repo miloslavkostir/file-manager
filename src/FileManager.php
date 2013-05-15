@@ -43,22 +43,36 @@ class FileManager extends UI\Control
     /** @var \Nette\Http\Request */
     private $httpRequest;
 
+    /** @var \Nette\Http\Session */
+    private $session;
+
+    /** @var \Nette\Caching\IStorage */
+    private $cacheStorage;
+
     /**
      * Constructor
      *
      * @param \Nette\Http\Request     $request      HTTP request
      * @param \Nette\Http\Session     $session      Session
-     * @param \Nette\Caching\IStorage $cacheStorage Cache storage
-     * @param array                   $config       Custom configuration
+     * @param \Nette\Caching\IStorage $cacheStorage Cache storagen
      */
-    public function __construct(Http\Request $request, Http\Session $session, \Nette\Caching\IStorage $cacheStorage, $config = array())
+    public function __construct(Http\Request $request, Http\Session $session, \Nette\Caching\IStorage $cacheStorage)
     {
         parent::__construct();
-
         $this->httpRequest = $request;
+        $this->session = $session;
+        $this->cacheStorage = $cacheStorage;
+    }
 
+    /**
+     * Initialize file manager
+     *
+     * @param array $config Custom configuration
+     */
+    public function init(array $config)
+    {
         // Create system container with services and configuration
-        $this->system = new FileManager\Loader($session, $cacheStorage, $config);
+        $this->system = new FileManager\Loader($this->session, $this->cacheStorage, $config);
         $this->system->freeze();
 
         // Get & validate actual dir
@@ -71,7 +85,7 @@ class FileManager extends UI\Control
         $this->setActualDir($actualDir);
 
         // Get selected files via POST
-        $selectedFiles = $request->getPost("files");
+        $selectedFiles = $this->httpRequest->getPost("files");
         if (is_array($selectedFiles)) {
             $this->selectedFiles = $selectedFiles;
         }
@@ -314,7 +328,7 @@ class FileManager extends UI\Control
         $this->template->setFile(__DIR__ . "/templates/body.latte");
         $this->template->setTranslator($this->system->translator);
         $this->template->files = $this->loadData(
-                $this->getActualDir(), $this->system->session->mask, $this->view, $this->system->session->order
+            $this->getActualDir(), $this->system->session->mask, $this->view, $this->system->session->order
         );
         $this->template->treeview = $this->getTreeview();
         $this->template->actualdir = $this->getActualDir();
@@ -403,11 +417,11 @@ class FileManager extends UI\Control
         // Sort messages according to priorities - 1. error, 2. warning, 3. info
         usort($this->template->flashes, function($next, $current) {
 
-                    if ($current->type === "warning" && $next->type === "info" || $current->type === "error" && $next->type !== "error"
-                    ) {
-                        return +1;
-                    }
-                });
+                if ($current->type === "warning" && $next->type === "info" || $current->type === "error" && $next->type !== "error"
+                ) {
+                    return +1;
+                }
+            });
 
         $this->template->plugins = array();
         foreach ($this->system->parameters["plugins"] as $name => $config) {
@@ -446,9 +460,9 @@ class FileManager extends UI\Control
 
         return new UI\Multiplier(function ($name) use ($system, $selectedFiles, $view) {
 
-                    $class = $system->parameters["plugins"][$name]["class"];
-                    return new $class($name, $system, $selectedFiles, $view);
-                });
+                $class = $system->parameters["plugins"][$name]["class"];
+                return new $class($name, $system, $selectedFiles, $view);
+            });
     }
 
     /**
@@ -517,8 +531,8 @@ class FileManager extends UI\Control
     private function getDirectoryContent($dir, $mask, $order)
     {
         $files = FileSystem\Finder::find($mask)
-                ->in($this->getAbsolutePath($dir))
-                ->orderBy($order);
+            ->in($this->getAbsolutePath($dir))
+            ->orderBy($order);
 
         $content = array();
         foreach ($files as $file) {
