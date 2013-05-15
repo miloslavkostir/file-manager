@@ -1,13 +1,13 @@
 <ul id="file-context-menu" class="dropdown-menu" role="menu">
     <li>
-        <a n:href="delete!" data-confirm="{_'Do you really want to delete all these files?'}" class="ajax">{_'Delete'}</a>
+        <a n:href="delete!" data-confirm="{_'Do you really want to delete all these files?'}">{_'Delete'}</a>
     </li>
     <li>
         <a n:href="download!">{_'Download'}</a>
     </li>
     {foreach $plugins as $name => $config}
     <li n:foreach="$control['plugin-' . $name]->getContextMenu()->getFilesMenu() as $link => $title">
-        <a href="{$link}" class="ajax">{$title}</a>
+        <a href="{$link}">{$title}</a>
     </li>
     {/foreach}
 </ul>
@@ -17,20 +17,20 @@
             <a href="#">{_'Select all'}</a>
         </li>
         <li>
-            <a n:href="orderBy!, 'name'" class="ajax">{_'Order by name'}</a>
+            <a n:href="orderBy!, 'name'">{_'Order by name'}</a>
         </li>
         <li>
-            <a n:href="orderBy!, 'size'" class="ajax">{_'Order by size'}</a>
+            <a n:href="orderBy!, 'size'">{_'Order by size'}</a>
         </li>
         <li>
-            <a n:href="orderBy!, 'time'" class="ajax">{_'Order by time'}</a>
+            <a n:href="orderBy!, 'time'">{_'Order by time'}</a>
         </li>
         <li>
-            <a n:href="orderBy!, 'type'" class="ajax">{_'Order by type'}</a>
+            <a n:href="orderBy!, 'type'">{_'Order by type'}</a>
         </li>
         {foreach $plugins as $name => $config}
         <li n:foreach="$control['plugin-' . $name]->getContextMenu()->getFilesMenu() as $link => $title">
-            <a href="{$link}" class="ajax">{$title}</a>
+            <a href="{$link}">{$title}</a>
         </li>
         {/foreach}
     </ul>

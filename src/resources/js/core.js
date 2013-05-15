@@ -88,6 +88,19 @@ $(function() {
 
     initScripts();
 
+    $("#file-context-menu li a").on("click", function(event) {
+        event.preventDefault();
+        var selected = {};
+        $(".fm-content-files .ui-selected").each(function(i) {
+            selected[i] = $(this).data("filename");
+        });
+        $.nette.ajax({
+            type: "post",
+            url: this.href,
+            data: { files: selected }
+        });
+    });
+
     $(".file-manager").on("dblclick", ".fm-ajax-dbl", function(event) {
         event.preventDefault();
         $.nette.ajax({
