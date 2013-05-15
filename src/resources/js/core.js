@@ -68,14 +68,19 @@ $(function() {
         /* Context menu */
         $(".file-manager .fm-content-file").on("contextmenu", function(event) {
             event.preventDefault();
-            $(".fm-content-file").removeClass("ui-selected");
+
+            // Select item
+            if ($(".fm-content-file.ui-selected").length === 1) {
+                $(".fm-content-file").removeClass("ui-selected");
+            }
             $(this).addClass("ui-selected");
+
             $("#file-context-menu").css({
                 position: "fixed",
                 top: event.clientY,
                 left: event.clientX
             }).show();
-            $("body").click(function(){
+            $("body").click(function() {
                 $("#file-context-menu").hide();
             });
         });
