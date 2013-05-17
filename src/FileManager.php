@@ -664,7 +664,7 @@ class FileManager extends UI\Control
 
             // Create file/dir link
             $link = Html::el("a")->href($this->link("openDir!", "$path/"))->class("ajax");
-            $link[0] = Html::el("i")->class("icon-folder-open");
+            $link[0] = Html::el("i")->class("icon-folder-close");
             $link[1] = Html::el("span", $dir->getFileName());
 
             // Create item in list

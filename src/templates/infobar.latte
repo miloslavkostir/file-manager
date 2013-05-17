@@ -1,6 +1,6 @@
 <div class="file-manager">
-    <div class="row-fluid">
-        <ul n:snippet="infobar" class="fm-infobar span12 inline">
+    <div class="fm-infobar row-fluid well">
+        <ul n:snippet="infobar" class="span12 inline">
             {foreach $plugins as $name => $plugin}{control plugin-$name:infobar}{/foreach}
         </ul>
     </div>
