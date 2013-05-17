@@ -1,28 +1,30 @@
 <div class="file-manager">
-    <div class="row-fluid">
-        <ul n:snippet="toolbar" class="fm-toolbar span12 inline">
+    <div class="navbar fm-toolbar">
+        <div class="navbar-inner" n:snippet="toolbar">
             {foreach $plugins as $name => $config}
                 {control plugin-$name:toolbar}
             {/foreach}
-            <li n:if="$flashes" class="pull-right">
-                <a href="#fm-messages"
-                   data-toggle="dropdown"
-                   n:class="$flashes[0]->type === 'info' ? btn-info, $flashes[0]->type === 'warning' ? btn-warning, $flashes[0]->type === 'error' ? btn-danger, btn, dropdown-toggle">
-                    <i class="icon-flag icon-white"></i> {_'Alerts'} <span class="label">{count($flashes)}</span>
-                    <span class="caret"></span>
-                </a>
-                <ul id="fm-messages" class="dropdown-menu">
-                    <li class="divider"></li>
-                    <li n:foreach="$flashes as $flash">
-                        <div class="alert alert-{$flash->type}">
-                            <span n:class="$flash->type === 'info' ? label-info, $flash->type === 'warning' ? label-warning, $flash->type === 'error' ? label-important, label">
-                                <i class="icon-flag icon-white"></i> {$flash->type|upper}
-                            </span>
-                            <p>{$flash->message}</p>
-                        </div>
-                    </li>
-                </ul>
-            </li>
-        </ul>
+            <ul class="nav pull-right">
+                <li n:if="$flashes" class="dropdown">
+                    <a href="#fm-messages"
+                       data-toggle="dropdown"
+                       n:class="$flashes[0]->type === 'info' ? btn-info, $flashes[0]->type === 'warning' ? btn-warning, $flashes[0]->type === 'error' ? btn-danger, btn, dropdown-toggle">
+                        <i class="icon-flag icon-white"></i> {_'Alerts'} <span class="label">{count($flashes)}</span>
+                        <span class="caret"></span>
+                    </a>
+                    <ul id="fm-messages" class="dropdown-menu">
+                        <li class="divider"></li>
+                        <li n:foreach="$flashes as $flash">
+                            <div class="alert alert-{$flash->type}">
+                                <span n:class="$flash->type === 'info' ? label-info, $flash->type === 'warning' ? label-warning, $flash->type === 'error' ? label-important, label">
+                                    <i class="icon-flag icon-white"></i> {$flash->type|upper}
+                                </span>
+                                <p>{$flash->message}</p>
+                            </div>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
     </div>
 </div>
