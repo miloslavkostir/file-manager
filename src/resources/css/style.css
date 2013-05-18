@@ -5,7 +5,6 @@
 .file-manager .fm-adressbar {
     padding: 0;
     margin: 0;
-    border-radius: 0;
 }
 .file-manager .fm-adressbar > li {
     margin: 10px;
@@ -22,18 +21,21 @@
 }
 .file-manager .fm-toolbar .navbar-inner {
     border-radius: 0;
+    border-left: none;
+    border-right: none;
+    border-top: 1px solid transparent;
+    border-bottom: 1px solid transparent;
+    box-shadow: none;
 }
 .file-manager .fm-toolbar .navbar-inner > .navbar-form .add-on {
     margin-top: 5px;
 }
 .file-manager .fm-body {
     height: 350px;
-    border-radius: 0;
     padding: 0;
     margin: 0;
 }
 .file-manager .fm-body .fm-treeview {
-    border-radius: 0;
     height: 100%;
     overflow: auto;
 }
@@ -46,7 +48,6 @@
 .file-manager .fm-body .fm-treeview a span {
     padding: 4px;
     border: 1px solid transparent;
-    border-radius: 4px;
 }
 .file-manager .fm-body .fm-content {
     height: 100%;
@@ -54,13 +55,18 @@
 }
 .file-manager .fm-body .fm-content .fm-content-file {
     border: 1px solid transparent;
-    border-radius: 4px;
+}
+.file-manager .fm-body .fm-content .fm-content-files-large  > li {
+    margin-bottom: 10px;
+}
+.file-manager .fm-body .fm-content .fm-content-files-small  > li {
+    margin-bottom: 10px;
 }
 .file-manager .fm-body .fm-content hr {
     margin: 7px 0 7px 0;
 }
 .file-manager .fm-infobar {
-    border-radius: 0;
+    border-top: 1px solid transparent;
     min-height: 135px;
     padding: 0;
     margin: 0;

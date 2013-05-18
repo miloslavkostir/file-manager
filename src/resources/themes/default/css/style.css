@@ -1,3 +1,9 @@
+.file-manager .fm-adressbar {
+    background-color: #F5F5F5;
+}
+.file-manager h4 {
+    font-weight: normal;
+}
 .file-manager .fm-body {
     background-color: #ffffff;
 }
@@ -6,4 +12,8 @@
     background-image: linear-gradient(to bottom, #0088CC, #0077B3);
     background-repeat: repeat-x;
     color: #FFFFFF;
+}
+.file-manager .fm-infobar {
+    background-color: #F5F5F5;
+    border-top-color: #E3E3E3;
 }
