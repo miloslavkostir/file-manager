@@ -23,12 +23,8 @@
 .file-manager .fm-toolbar .navbar-inner {
     border-radius: 0;
 }
-.file-manager .fm-toolbar form,
-.file-manager .fm-toolbar select,
-.file-manager .fm-toolbar input,
-.file-manager .fm-toolbar .input-append,
-.file-manager .fm-toolbar .input-prepend {
-    margin: 0;
+.file-manager .fm-toolbar .navbar-inner > .navbar-form .add-on {
+    margin-top: 5px;
 }
 .file-manager .fm-body {
     height: 350px;
