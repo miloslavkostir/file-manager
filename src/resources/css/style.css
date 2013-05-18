@@ -52,6 +52,10 @@
     height: 100%;
     overflow: auto;
 }
+.file-manager .fm-body .fm-content .fm-content-file {
+    border: 1px solid transparent;
+    border-radius: 4px;
+}
 .file-manager .fm-body .fm-content hr {
     margin: 7px 0 7px 0;
 }
