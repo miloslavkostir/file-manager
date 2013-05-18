@@ -7,25 +7,26 @@
             {if is_file($resDir . "/img/icons/" . $view . "/" . $file['extension'] . ".png")}
                 {var $icon = $file['extension']}
             {/if}
-        <img src="{$basePath}/{$resUrl}/img/icons/{$view}/{$icon}.png"
-             data-filename="{$filename}"
-             data-actualdir="{$actualdir}"
-             class="fm-draggable" />
+            <img src="{$basePath}/{$resUrl}/img/icons/{$view}/{$icon}.png"
+                 data-filename="{$filename}"
+                 data-actualdir="{$actualdir}"
+                 class="fm-draggable"
+                 alt="" />
         {else}
             {if $actualdir === $rootname}
                 {var $targetPath = '/' . $filename . '/'}
             {else}
                 {var $targetPath = $actualdir . $filename . '/'}
             {/if}
-        <a n:href="openDir!, $targetPath"
-           class="fm-ajax-dbl"
-           title="{_'Open directory'}">
-            <img src="{$basePath}/{$resUrl}/img/icons/{$view}/directory.png"
-                 data-filename="{$filename}"
-                 data-targetdir="{$targetPath}"
-                 data-move-url="{link move!}"
-                 class="fm-droppable fm-draggable" />
-        </a>
+            <a n:href="openDir!, $targetPath"
+               class="fm-ajax-dbl"
+               title="{_'Open directory'}">
+                <img src="{$basePath}/{$resUrl}/img/icons/{$view}/directory.png"
+                     data-filename="{$filename}"
+                     data-targetdir="{$targetPath}"
+                     data-move-url="{link move!}"
+                     class="fm-droppable fm-draggable" />
+            </a>
         {/if}
         <div>{$filename|truncate:20}</div>
     </li>
