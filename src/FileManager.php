@@ -54,7 +54,7 @@ class FileManager extends UI\Control
      *
      * @param \Nette\Http\Request     $request      HTTP request
      * @param \Nette\Http\Session     $session      Session
-     * @param \Nette\Caching\IStorage $cacheStorage Cache storagen
+     * @param \Nette\Caching\IStorage $cacheStorage Cache storage
      */
     public function __construct(Http\Request $request, Http\Session $session, \Nette\Caching\IStorage $cacheStorage)
     {
