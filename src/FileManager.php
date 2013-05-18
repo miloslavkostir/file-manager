@@ -78,7 +78,7 @@ class FileManager extends UI\Control
         // Get & validate actual dir
         $actualDir = $this->system->session->actualdir;
         $actualPath = $this->getAbsolutePath($actualDir);
-        if (!is_dir($actualPath)) {
+        if (!is_dir($actualPath) || empty($actualDir)) {
             // Set root directory as default
             $actualDir = FileSystem::getRootname();
         }
