@@ -9,20 +9,18 @@
  * the file LICENSE that was distributed with this source code.
  */
 
-use Nette\Http\Session;
+namespace Ixtrum\FileManager\Plugins;
 
 /**
- * Mock of \Nette\Http\Session
+ * Addressbar interface.
  *
  * @author Bronislav Sedlák <sedlak@ixtrum.com>
  */
-class MockSession extends Session
+interface IAddressbar
 {
 
     /**
-     * Constructor
+     * Render in addressbar
      */
-    public function __construct()
-    {}
-
+    public function renderAddressbar();
 }

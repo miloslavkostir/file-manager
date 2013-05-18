@@ -9,20 +9,18 @@
  * the file LICENSE that was distributed with this source code.
  */
 
-use Nette\Http\Session;
+namespace Ixtrum\FileManager\Plugins;
 
 /**
- * Mock of \Nette\Http\Session
+ * Content interface.
  *
  * @author Bronislav Sedlák <sedlak@ixtrum.com>
  */
-class MockSession extends Session
+interface IContent
 {
 
     /**
-     * Constructor
+     * Render in content
      */
-    public function __construct()
-    {}
-
+    public function renderContent();
 }

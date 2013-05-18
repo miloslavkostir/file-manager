@@ -1,20 +1,7 @@
 <div class="file-manager">
-    <div class="fm-info-bar">
-        <div n:snippet="diskusage" class="fm-disk-usage">
-            {control control-DiskUsage}
-        </div>
-        <div n:snippet="fileinfo" class="fm-file-info">
-            {ifset $fileinfo}
-                {control control-FileInfo}
-            {/ifset}
-        </div>
-        <div class="fm-file-info-plugins">
-            {foreach $fileInfoPlugins as $plugin}
-                <div class="fm-file-info-plugin">
-                    {var $pluginName = $plugin["name"]}
-                    {control plugin-$pluginName}
-                </div>
-            {/foreach}
-        </div>
+    <div class="fm-infobar row-fluid well">
+        <ul n:snippet="infobar" class="span12 inline">
+            {foreach $plugins as $name => $plugin}{control plugin-$name:infobar}{/foreach}
+        </ul>
     </div>
 </div>

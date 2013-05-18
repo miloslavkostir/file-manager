@@ -1,7 +1,9 @@
-@import url("base.css");
-@import url("contextmenu.css");
-@import url("addressbar.css");
-@import url("toolbar.css");
-@import url("messages.css");
-@import url("content.css");
-@import url("infobar.css");
+.file-manager .fm-body .fm-content .fm-content-file.ui-selected {
+    background-color: #0081C2;
+    background-image: linear-gradient(to bottom, #0088CC, #0077B3);
+    background-repeat: repeat-x;
+    color: #FFFFFF;
+}
+.file-manager .fm-body .fm-treeview {
+    background-color: #ffffff;
+}

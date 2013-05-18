@@ -1,0 +1,37 @@
+<ul id="file-context-menu" class="dropdown-menu" role="menu">
+    <li>
+        <a n:href="delete!" data-confirm="{_'Do you really want to delete all these files?'}">{_'Delete'}</a>
+    </li>
+    <li>
+        <a n:href="download!">{_'Download'}</a>
+    </li>
+    {foreach $plugins as $name => $config}
+    <li n:foreach="$control['plugin-' . $name]->getContextMenu()->getFilesMenu() as $link => $title">
+        <a href="{$link}">{$title}</a>
+    </li>
+    {/foreach}
+</ul>
+<div id="content-context-menu">
+    <ul class="dropdown-menu" role="menu">
+        <li>
+            <a href="#">{_'Select all'}</a>
+        </li>
+        <li>
+            <a n:href="orderBy!, 'name'">{_'Order by name'}</a>
+        </li>
+        <li>
+            <a n:href="orderBy!, 'size'">{_'Order by size'}</a>
+        </li>
+        <li>
+            <a n:href="orderBy!, 'time'">{_'Order by time'}</a>
+        </li>
+        <li>
+            <a n:href="orderBy!, 'type'">{_'Order by type'}</a>
+        </li>
+        {foreach $plugins as $name => $config}
+        <li n:foreach="$control['plugin-' . $name]->getContextMenu()->getFilesMenu() as $link => $title">
+            <a href="{$link}">{$title}</a>
+        </li>
+        {/foreach}
+    </ul>
+</div>

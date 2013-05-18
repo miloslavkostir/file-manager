@@ -1,0 +1,49 @@
+<table cellspacing="0" class="table table-condensed fm-content-files fm-content-files-details">
+    <thead>
+        <tr>
+            <th><a n:href="orderBy!, 'name'" class="ajax">{_'Name'}</a></th>
+            <th><a n:href="orderBy!, 'time'" class="ajax">{_'Modified'}</a></th>
+            <th><a n:href="orderBy!, 'type'" class="ajax">{_'Type'}</a></th>
+            <th><a n:href="orderBy!, 'size'" class="ajax">{_'Size'}</a></th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr n:foreach="$files as $filename => $file"
+            class="fm-content-file"
+            data-filename="{$filename}">
+            <td>
+                {if !$file['dir']}
+                    {var $icon = "icon"}
+                    {if is_file($resDir . "/img/icons/" . $view . "/" . $file['extension'] . ".png")}
+                        {var $icon = $file['extension']}
+                    {/if}
+                    <img src="{$basePath}/{$resUrl}/img/icons/{$view}/{$icon}.png"
+                         data-filename="{$filename}"
+                         data-actualdir="{$actualdir}"
+                         class="fm-draggable"
+                         alt="" />
+                {else}
+                    {if $actualdir === $rootname}
+                        {var $targetPath = '/' . $filename . '/'}
+                    {else}
+                        {var $targetPath = $actualdir . $filename . '/'}
+                    {/if}
+                    <a n:href="openDir!, $targetPath"
+                       class="fm-ajax-dbl"
+                       title="{_'Open directory'}">
+                        <img src="{$basePath}/{$resUrl}/img/icons/{$view}/directory.png"
+                             data-filename="{$filename}"
+                             data-targetdir="{$targetPath}"
+                             data-move-url="{link move!}"
+                             class="fm-droppable fm-draggable"
+                             alt="" />
+                    </a>
+                {/if}
+                {$filename|truncate:100}
+            </td>
+            <td>{$file['modified']|date:$timeFormat}</td>
+            <td>{ifset $file['extension']}{$file['extension']|upper}{/ifset}</td>
+            <td>{ifset $file['size']}{$file['size']|bytes}{/ifset}</td>
+        </tr>
+    </tbody>
+</table>

@@ -1,0 +1,62 @@
+.fm-inactive {
+    position: absolute;
+    z-index: 998;
+}
+.file-manager .fm-adressbar {
+    padding: 0;
+    margin: 0;
+}
+.file-manager .fm-adressbar > li {
+    margin: 10px;
+}
+.file-manager .fm-adressbar form,
+.file-manager .fm-adressbar select,
+.file-manager .fm-adressbar input,
+.file-manager .fm-adressbar .input-append,
+.file-manager .fm-adressbar .input-prepend {
+    margin: 0;
+}
+.file-manager .fm-toolbar {
+    margin-bottom: 0;
+}
+.file-manager .fm-toolbar > li {
+    margin: 7px;
+}
+.file-manager .fm-toolbar form,
+.file-manager .fm-toolbar select,
+.file-manager .fm-toolbar input,
+.file-manager .fm-toolbar .input-append,
+.file-manager .fm-toolbar .input-prepend {
+    margin: 0;
+}
+.file-manager .fm-body {
+    height: 350px;
+}
+.file-manager .fm-body .fm-treeview {
+    border-radius: 0;
+    height: 100%;
+    overflow: auto;
+}
+.file-manager .fm-body .fm-treeview > ul {
+    margin-top: 10px;
+}
+.file-manager .fm-body .fm-treeview ul {
+   list-style: none;
+}
+.file-manager .fm-body .fm-treeview a span {
+    padding: 4px;
+    border: 1px solid transparent;
+    border-radius: 4px;
+}
+.file-manager .fm-body .fm-content {
+    height: 100%;
+    overflow: auto;
+}
+.file-manager .fm-body .fm-content hr {
+    margin: 7px;
+}
+.file-manager .fm-infobar {
+    min-height: 135px;
+    padding: 0;
+    margin: 0;
+}

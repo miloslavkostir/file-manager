@@ -9,20 +9,18 @@
  * the file LICENSE that was distributed with this source code.
  */
 
-use Nette\Http\Session;
+namespace Ixtrum\FileManager\Plugins;
 
 /**
- * Mock of \Nette\Http\Session
+ * Infobar interface.
  *
  * @author Bronislav Sedlák <sedlak@ixtrum.com>
  */
-class MockSession extends Session
+interface IInfobar
 {
 
     /**
-     * Constructor
+     * Render in infobar
      */
-    public function __construct()
-    {}
-
+    public function renderInfobar();
 }

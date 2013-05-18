@@ -1,16 +1,7 @@
-<div class="file-manager">
-    <div class="fm-adressbar">
-        <div n:snippet="addressbar" class="fm-location">
-            {control control-Navigation}
-        </div>
-        <div class="fm-refresh">
-            <a n:href="refreshContent!" title="{_'Refresh content'}" class="ajax">
-                <div class="fm-refresh-icon"></div>
-            </a>
-        </div>
-        <div n:snippet="filter" class="fm-filter">
-            {control control-Filter}
-        </div>
-        <div class="fm-clear"></div>
-    </div>
+<div class="file-manager row-fluid">
+    <ul n:snippet="addressbar" class="fm-adressbar well span12 inline">
+        {foreach $plugins as $name => $config}
+            {control plugin-$name:addressbar}
+        {/foreach}
+    </ul>
 </div>
