@@ -6,14 +6,12 @@
             {/foreach}
             <ul class="nav pull-right">
                 <li n:if="$flashes" class="dropdown">
-                    <a href="#fm-messages"
-                       data-toggle="dropdown"
-                       n:class="$flashes[0]->type === 'info' ? btn-info, $flashes[0]->type === 'warning' ? btn-warning, $flashes[0]->type === 'error' ? btn-danger, btn, dropdown-toggle">
-                        <i class="icon-flag icon-white"></i> {_'Alerts'} <span class="label">{count($flashes)}</span>
+                    <a href="#" data-toggle="dropdown" class="dropdown-toggle">
+                        <i class="icon-flag"></i> {_'Alerts'}
                         <span class="caret"></span>
+                        <span n:class="$flashes[0]->type === 'info' ? badge-info, $flashes[0]->type === 'warning' ? badge-warning, $flashes[0]->type === 'error' ? badge-important, badge">{count($flashes)}</span>
                     </a>
-                    <ul id="fm-messages" class="dropdown-menu">
-                        <li class="divider"></li>
+                    <ul  class="dropdown-menu">
                         <li n:foreach="$flashes as $flash">
                             <div class="alert alert-{$flash->type}">
                                 <span n:class="$flash->type === 'info' ? label-info, $flash->type === 'warning' ? label-warning, $flash->type === 'error' ? label-important, label">
