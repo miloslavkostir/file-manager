@@ -1,9 +1,9 @@
+.file-manager .fm-body {
+    background-color: #ffffff;
+}
 .file-manager .fm-body .fm-content .fm-content-file.ui-selected {
     background-color: #0081C2;
     background-image: linear-gradient(to bottom, #0088CC, #0077B3);
     background-repeat: repeat-x;
     color: #FFFFFF;
-}
-.file-manager .fm-body .fm-treeview {
-    background-color: #ffffff;
 }
