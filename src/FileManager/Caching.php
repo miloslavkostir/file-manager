@@ -62,7 +62,6 @@ class Caching
             unset($cache[array("content", $dir->getRealPath())]);
         }
         unset($cache[array("content", $absDir)]);
-        $this->deleteItem(null, array("tags" => "treeview"));
     }
 
     /**

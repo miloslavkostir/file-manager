@@ -12,6 +12,7 @@
 namespace Ixtrum;
 
 use Ixtrum\FileManager\FileSystem,
+    Ixtrum\FileManager\Entities,
     Nette\Application\Responses\FileResponse,
     Nette\Application\UI,
     Nette\Utils\Html,
@@ -130,7 +131,6 @@ class FileManager extends UI\Control
                 if (is_dir($path)) {
                     $this->system->caching->deleteItemsRecursive($path);
                 }
-                $this->system->caching->deleteItem(null, array("tags" => "treeview"));
                 $this->system->caching->deleteItem(array("content", dirname($path)));
             }
 
@@ -177,13 +177,39 @@ class FileManager extends UI\Control
     }
 
     /**
-     * Go to to dir
+     * Open and set actual directory
      *
      * @param string $dir Directory
      */
     public function handleOpenDir($dir)
     {
-        $this->setActualDir($dir);
+        if ($this->isPathValid($dir)) {
+
+            $this->setActualDir($dir);
+            $this->template->content = $this->getContent(
+                    $this->getActualDir(), $this->system->session->mask, $this->system->session->order
+            );
+
+            // Treeview
+            if (isset($this->template->content["directories"])) {
+
+                $treeview = Html::el("ul");
+                foreach ($this->template->content["directories"] as $dir) {
+
+                    // Create Link
+                    $link = Html::el("a")
+                            ->href($this->link("openDir!", $dir->path))
+                            ->setHtml('<i class="icon-folder-close"></i>' . $dir->name);
+
+                    // Create item in list
+                    $item = Html::el("li");
+                    $item[0] = $link;
+                    $treeview->add($item);
+                }
+
+                $this->presenter->payload->treeview = (string) $treeview;
+            }
+        }
     }
 
     /**
@@ -327,10 +353,11 @@ class FileManager extends UI\Control
     {
         $this->template->setFile(__DIR__ . "/templates/body.latte");
         $this->template->setTranslator($this->system->translator);
-        $this->template->files = $this->loadData(
-            $this->getActualDir(), $this->system->session->mask, $this->view, $this->system->session->order
-        );
-        $this->template->treeview = $this->getTreeview();
+        if (!isset($this->template->content)) {
+            $this->template->content = $this->getContent(
+                    $this->getActualDir(), $this->system->session->mask, $this->system->session->order
+            );
+        }
         $this->template->actualdir = $this->getActualDir();
         $this->template->rootname = FileSystem::getRootName();
         $this->template->view = $this->view;
@@ -417,11 +444,11 @@ class FileManager extends UI\Control
         // Sort messages according to priorities - 1. error, 2. warning, 3. info
         usort($this->template->flashes, function($next, $current) {
 
-                if ($current->type === "warning" && $next->type === "info" || $current->type === "error" && $next->type !== "error"
-                ) {
-                    return +1;
-                }
-            });
+                    if ($current->type === "warning" && $next->type === "info" || $current->type === "error" && $next->type !== "error"
+                    ) {
+                        return +1;
+                    }
+                });
 
         $this->template->plugins = array();
         foreach ($this->system->parameters["plugins"] as $name => $config) {
@@ -460,9 +487,9 @@ class FileManager extends UI\Control
 
         return new UI\Multiplier(function ($name) use ($system, $selectedFiles, $view) {
 
-                $class = $system->parameters["plugins"][$name]["class"];
-                return new $class($name, $system, $selectedFiles, $view);
-            });
+                    $class = $system->parameters["plugins"][$name]["class"];
+                    return new $class($name, $system, $selectedFiles, $view);
+                });
     }
 
     /**
@@ -525,49 +552,11 @@ class FileManager extends UI\Control
      * @param string $order Order
      *
      * @return array
-     *
-     * @todo Finder does not support mask for directories
      */
-    private function getDirectoryContent($dir, $mask, $order)
+    private function getContent($dir, $mask, $order)
     {
-        $files = FileSystem\Finder::find($mask)
-            ->in($this->getAbsolutePath($dir))
-            ->orderBy($order);
+        $path = $this->getAbsolutePath($dir);
 
-        $content = array();
-        foreach ($files as $file) {
-
-            $name = $file->getFilename();
-            $content[$name]["modified"] = $file->getMTime();
-            $content[$name]["dir"] = false;
-
-            if ($file->isFile()) {
-
-                $content[$name]["size"] = $this->system->filesystem->getSize($file->getPathName());
-                $content[$name]["extension"] = strtolower(pathinfo($file->getFilename(), PATHINFO_EXTENSION));
-
-                $content[$name]["thumb"] = false;
-                if ($this->system->parameters["thumbs"]) {
-                    $content[$name]["thumb"] = in_array($content[$name]["extension"], $this->system->thumbs->supported);
-                }
-            } else {
-                $content[$name]["dir"] = true;
-            }
-        }
-        return $content;
-    }
-
-    /**
-     * Load data from actual directory
-     *
-     * @param string $dir   Directory
-     * @param string $mask  Mask
-     * @param string $order Order
-     *
-     * @return array
-     */
-    private function loadData($dir, $mask, $order)
-    {
         // Default filter mask
         if (empty($mask)) {
             $mask = "*";
@@ -575,21 +564,48 @@ class FileManager extends UI\Control
 
         if ($this->system->parameters["cache"] && $mask === "*") {
 
-            $absDir = $this->getAbsolutePath($dir);
-
-            $cacheData = $this->system->caching->getItem(array("content", $absDir));
-            if ($cacheData) {
-                return $cacheData;
+            $cache = $this->system->caching->getItem(array("content", $path));
+            if ($cache) {
+                return $cache;
             }
-
-            $output = $this->getDirectoryContent($dir, $mask, $order);
-            $this->system->caching->saveItem(array("content", $absDir), $output);
-            return $output;
         }
 
-        return $this->getDirectoryContent($dir, $mask, $order);
-    }
+        $content = array();
+        foreach (FileSystem\Finder::findDirectories($mask)->in($path)->orderBy($order) as $item) {
 
+            $entity = new Entities\Directory;
+            $entity->actualDir = $dir;
+            $entity->name = $item->getFilename();
+            $entity->path = $dir . "$entity->name/";
+            if ($dir === FileSystem::getRootname()) {
+                $entity->path = "/$entity->name/";
+            }
+            $entity->modified = $item->getMTime();
+            $content["directories"][] = $entity;
+        }
+
+        foreach (FileSystem\Finder::findFiles($mask)->in($path)->orderBy($order) as $item) {
+
+            $entity = new Entities\File;
+            $entity->actualDir = $dir;
+            $entity->name = $item->getFilename();
+            $entity->modified = $item->getMTime();
+            $entity->size = $this->system->filesystem->getSize($item->getPathName());
+            $entity->extension = strtolower(pathinfo($item->getFilename(), PATHINFO_EXTENSION));
+            $entity->thumb = false;
+            if ($this->system->parameters["thumbs"]) {
+                $entity->thumb = in_array($entity->extension, $this->system->thumbs->supported);
+            }
+            $content["files"][] = $entity;
+        }
+
+        if ($this->system->parameters["cache"]) {
+            $this->system->caching->saveItem(array("content", $path), $content);
+        }
+
+        return $content;
+    }
+    
     /**
      * Move file/dir
      *
@@ -633,72 +649,11 @@ class FileManager extends UI\Control
             if (is_dir($source)) {
                 $this->system->caching->deleteItemsRecursive($source);
             }
-            $this->system->caching->deleteItem(null, array("tags" => "treeview"));
             $this->system->caching->deleteItem(array("content", dirname($source)));
             $this->system->caching->deleteItem(array("content", $target));
         }
 
         $this->flashMessage($this->system->translator->translate("Succesfully moved."));
-    }
-
-    /**
-     * Generate directory treeview
-     *
-     * @param string $dir      Path to root dir
-     * @param string $superior Superior dir
-     *
-     * @return \Nette\Utils\Html
-     *
-     * @throws \Exception
-     */
-    private function generateTreeview($dir, $superior = null)
-    {
-        if (!is_dir($dir)) {
-            throw new \Exception("Directory '$dir' does not exist!");
-        }
-
-        $list = Html::el("ul");
-        foreach (FileSystem\Finder::findDirectories("*")->in($dir) as $dir) {
-
-            $path = "$superior/" . $dir->getFileName();
-
-            // Create file/dir link
-            $link = Html::el("a")->href($this->link("openDir!", "$path/"))->class("ajax");
-            $link[0] = Html::el("i")->class("icon-folder-close");
-            $link[1] = Html::el("span", $dir->getFileName());
-
-            // Create item in list
-            $item = Html::el("li");
-            $item[0] = $link;
-            $item[1] = $this->generateTreeview($dir->getPathName(), $path);
-
-            $list->add($item);
-        }
-        return $list;
-    }
-
-    /**
-     * Get treeview
-     *
-     * @return string
-     */
-    private function getTreeview()
-    {
-        if ($this->system->parameters["cache"]) {
-
-            $path = $this->system->parameters["dataDir"];
-            $cacheData = $this->system->caching->getItem($path);
-            if (!$cacheData) {
-
-                $output = $this->generateTreeview($this->system->parameters["dataDir"]);
-                $this->system->caching->saveItem($path, $output, array("tags" => array("treeview")));
-                return $output;
-            } else {
-                return $cacheData;
-            }
-        } else {
-            return $this->generateTreeview($this->system->parameters["dataDir"]);
-        }
     }
 
 }

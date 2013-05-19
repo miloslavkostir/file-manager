@@ -8,42 +8,48 @@
         </tr>
     </thead>
     <tbody>
-        <tr n:foreach="$files as $filename => $file"
-            class="fm-content-file"
-            data-filename="{$filename}">
-            <td>
-                {if !$file['dir']}
-                    {var $icon = "icon"}
-                    {if is_file($resDir . "/img/icons/" . $view . "/" . $file['extension'] . ".png")}
-                        {var $icon = $file['extension']}
-                    {/if}
-                    <img src="{$basePath}/{$resUrl}/img/icons/{$view}/{$icon}.png"
-                         data-filename="{$filename}"
-                         data-actualdir="{$actualdir}"
-                         class="fm-draggable"
-                         alt="" />
-                {else}
-                    {if $actualdir === $rootname}
-                        {var $targetPath = '/' . $filename . '/'}
-                    {else}
-                        {var $targetPath = $actualdir . $filename . '/'}
-                    {/if}
-                    <a n:href="openDir!, $targetPath"
+        {ifset $content['directories']}
+            <tr n:foreach="$content['directories'] as  $dir"
+                class="fm-content-file"
+                data-filename="{$dir->name}">
+                <td>
+                    <a n:href="openDir!, $dir->path"
                        class="fm-ajax-dbl"
                        title="{_'Open directory'}">
                         <img src="{$basePath}/{$resUrl}/img/icons/{$view}/directory.png"
-                             data-filename="{$filename}"
-                             data-targetdir="{$targetPath}"
+                             data-filename="{$dir->name}"
+                             data-targetdir="{$dir->path}"
                              data-move-url="{link move!}"
                              class="fm-droppable fm-draggable"
                              alt="" />
                     </a>
-                {/if}
-                {$filename|truncate:100}
-            </td>
-            <td>{$file['modified']|date:$timeFormat}</td>
-            <td>{ifset $file['extension']}{$file['extension']|upper}{/ifset}</td>
-            <td>{ifset $file['size']}{$file['size']|bytes}{/ifset}</td>
-        </tr>
+                    {$dir->name|truncate:100}
+                </td>
+                <td>{$dir->modified|date:$timeFormat}</td>
+                <td></td>
+                <td></td>
+            </tr>
+        {/ifset}
+        {ifset $content['files']}
+            <tr n:foreach="$content['files'] as $file"
+                class="fm-content-file"
+                data-filename="{$file->name}">
+                <td>
+                    {var $icon = "icon"}
+                    {if is_file($resDir . "/img/icons/" . $view . "/" . $file->extension . ".png")}
+                        {var $icon = $file->extension}
+                    {/if}
+                    <img src="{$basePath}/{$resUrl}/img/icons/{$view}/{$icon}.png"
+                         data-filename="{$file->name}"
+                         data-actualdir="{$actualdir}"
+                         class="fm-draggable"
+                         alt="" />
+                    {$file->name|truncate:100}
+                </td>
+                <td>{$file->modified|date:$timeFormat}</td>
+                <td>{ifset $file->extension}{$file->extension|upper}{/ifset}</td>
+                <td>{ifset $file->size}{$file->size|bytes}{/ifset}</td>
+            </tr>
+        {/ifset}
     </tbody>
 </table>

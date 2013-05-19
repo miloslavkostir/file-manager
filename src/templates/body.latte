@@ -1,13 +1,11 @@
 <div class="file-manager">
     <div class="fm-body row-fluid">
-        <div n:snippet="treeview" class="fm-treeview span3">
+        <div class="fm-treeview span3">
             <ul>
                 <li>
-                    <a class="ajax" n:href="openDir!">
-                        <i class="icon-hdd"></i>
-                        <span>{$rootname}</span>
+                    <a n:href="openDir!">
+                        <i class="icon-hdd"></i>{$rootname}
                     </a>
-                    {$treeview}
                 </li>
             </ul>
         </div>

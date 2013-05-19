@@ -39,15 +39,20 @@
     height: 100%;
     overflow: auto;
 }
-.file-manager .fm-body .fm-treeview > ul {
-    margin-top: 10px;
-}
 .file-manager .fm-body .fm-treeview ul {
    list-style: none;
+   margin-top: 5px;
 }
-.file-manager .fm-body .fm-treeview a span {
-    padding: 4px;
+.file-manager .fm-body .fm-treeview ul li {
+   margin: 3px 0 3px 0;
+}
+.file-manager .fm-body .fm-treeview a {
     border: 1px solid transparent;
+    padding: 2px 5px 2px 0;
+    white-space: nowrap;
+}
+.file-manager .fm-body .fm-treeview i {
+    margin: 0 5px 0 5px;
 }
 .file-manager .fm-body .fm-content {
     height: 100%;
@@ -56,11 +61,17 @@
 .file-manager .fm-body .fm-content .fm-content-file {
     border: 1px solid transparent;
 }
-.file-manager .fm-body .fm-content .fm-content-files-large  > li {
+.file-manager .fm-body .fm-content .fm-content-files-large > li {
     margin-bottom: 10px;
 }
-.file-manager .fm-body .fm-content .fm-content-files-small  > li {
+.file-manager .fm-body .fm-content .fm-content-files-small > li {
     margin-bottom: 10px;
+}
+.file-manager .fm-body .fm-content .fm-content-files-list > li {
+    white-space: nowrap;
+}
+.file-manager .fm-body .fm-content .fm-content-files-details td {
+    white-space: nowrap;
 }
 .file-manager .fm-body .fm-content hr {
     margin: 7px 0 7px 0;

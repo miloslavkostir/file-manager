@@ -1,42 +1,43 @@
 <ul class="fm-content-files fm-content-files-large inline">
-    <li n:foreach="$files as $filename => $file"
-        class="fm-content-file text-center"
-        data-filename="{$filename}">
-        {if !$file['dir']}
-            {if $file['thumb']}
-                <img src="{link showThumb! $actualdir, $filename}"
-                     data-filename="{$filename}"
+    {ifset $content['directories']}
+        <li n:foreach="$content['directories'] as $dir"
+            class="fm-content-file text-center"
+            data-filename="{$dir->name}">
+            <a n:href="openDir! $dir->path"
+               class="fm-ajax-dbl"
+               title="{_'Open directory'}">
+                <img src="{$basePath}/{$resUrl}/img/icons/{$view}/directory.png"
+                     data-filename="{$dir->name}"
+                     data-targetdir="{$dir->path}"
+                     data-move-url="{link move!}"
+                     class="fm-droppable fm-draggable"
+                     alt="" />
+            </a>
+            <div>{$dir->name|truncate:20}</div>
+        </li>
+    {/ifset}
+    {ifset $content['files']}
+        <li n:foreach="$content['files'] as $file"
+            class="fm-content-file text-center"
+            data-filename="{$file->name}">
+            {if $file->thumb}
+                <img src="{link showThumb! $actualdir, $file->name}"
+                     data-filename="{$file->name}"
                      data-actualdir="{$actualdir}"
                      class="fm-draggable"
                      alt="" />
             {else}
                 {var $icon = "icon"}
-                {if is_file($resDir . "/img/icons/" . $view . "/" . $file['extension'] . ".png")}
-                    {var $icon = $file['extension']}
+                {if is_file($resDir . "/img/icons/" . $view . "/" . $file->extension . ".png")}
+                    {var $icon = $file->extension}
                 {/if}
                 <img src="{$basePath}/{$resUrl}/img/icons/{$view}/{$icon}.png"
-                     data-filename="{$filename}"
+                     data-filename="{$file->name}"
                      data-actualdir="{$actualdir}"
                      class="fm-draggable"
                      alt="" />
             {/if}
-        {else}
-            {if $actualdir === $rootname}
-                {var $targetPath = '/' . $filename . '/'}
-            {else}
-                {var $targetPath = $actualdir . $filename . '/'}
-            {/if}
-            <a n:href="openDir!, $targetPath"
-               class="fm-ajax-dbl"
-               title="{_'Open directory'}">
-                <img src="{$basePath}/{$resUrl}/img/icons/{$view}/directory.png"
-                     data-filename="{$filename}"
-                     data-targetdir="{$targetPath}"
-                     data-move-url="{link move!}"
-                     class="fm-droppable fm-draggable"
-                     alt="" />
-            </a>
-        {/if}
-        <div>{$filename|truncate:20}</div>
-    </li>
+            <div>{$file->name|truncate:20}</div>
+        </li>
+    {/ifset}
 </ul>

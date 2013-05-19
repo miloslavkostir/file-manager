@@ -1,3 +1,40 @@
+(function($) {
+
+    filemanager = {
+        cache: {
+            defaults: {
+                treeview: {}
+            },
+            namespace: "ixtrum.filemanager",
+            getData: function() {
+                var data = JSON.parse(localStorage.getItem(this.namespace));
+                return $.extend(this.defaults, data);
+            },
+            saveData: function(data) {
+                localStorage.setItem(this.namespace, JSON.stringify(data));
+            }
+        },
+        treeview: {
+            load: function() {
+                var data = filemanager.cache.getData();
+                if (typeof data.treeview !== "undefined") {
+                    return data.treeview;
+                }
+            },
+            save: function(data) {
+
+                // Update data in cache
+                var original = filemanager.cache.getData();
+                original.treeview = data;
+
+                // Save data
+                filemanager.cache.saveData(original);
+            }
+        }
+    }
+
+})(jQuery);
+
 $(function() {
 
     $.nette.ext("ixtrum-file-manager", {
@@ -21,6 +58,49 @@ $(function() {
             $(".file-manager .fm-inactive").remove();
             initScripts();
         }
+    });
+
+    // Treeview
+    var treeview$ = $(".file-manager .fm-treeview");
+    var treeviewData = filemanager.treeview.load();
+    if (treeviewData) {
+        treeview$.html(treeviewData);
+    }
+    treeview$.on("dblclick", "a", function(event) {
+        event.preventDefault();
+        var selected$ = $(this);
+        var icon$ = selected$.find("i");
+
+        if (icon$.hasClass("icon-folder-open")) {
+            $.nette.ajax({
+                url: this.href,
+                success: function() {
+                    icon$.addClass("icon-folder-close").removeClass("icon-folder-open");
+                    selected$.next("ul").remove();
+
+                    // Save treeview into the cache
+                    filemanager.treeview.save(treeview$.html());
+                }
+            });
+        } else {
+
+            $.nette.ajax({
+                url: this.href,
+                success: function(payload) {
+                    if (payload.treeview !== "") {
+                        $(payload.treeview).insertAfter(selected$);
+                    }
+                    icon$.addClass("icon-folder-open").removeClass("icon-folder-close");
+
+                    // Save treeview into the cache
+                    filemanager.treeview.save(treeview$.html());
+                }
+            });
+        }
+    }).on("click", "a", function(event){
+        event.preventDefault();
+        treeview$.find("a").removeClass("ui-selected");
+        $(this).addClass("ui-selected");
     });
 
     // Define scripts to initializate after page loaded or snippets refreshed
