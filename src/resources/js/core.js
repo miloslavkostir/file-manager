@@ -63,7 +63,7 @@ $(function() {
     // Treeview
     var treeview$ = $(".file-manager .fm-treeview");
     var treeviewData = filemanager.treeview.load();
-    if (treeviewData) {
+    if (!jQuery.isEmptyObject(treeviewData)) {
         treeview$.html(treeviewData);
     }
     treeview$.on("dblclick", "a", function(event) {
