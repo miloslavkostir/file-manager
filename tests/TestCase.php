@@ -41,7 +41,13 @@ class TestCase extends PHPUnit_Framework_TestCase
         // Set up configuration
         $configurator = new Nette\Config\Configurator;
         $configurator->setTempDirectory($tempDir);
-        $container = $configurator->createContainer();
+
+        // Get system container
+        if (class_exists("SystemContainer")) {
+            $container = new SystemContainer;
+        } else {
+            $container = $configurator->createContainer();
+        }
 
         // Create wwwDir
         $wwwDir = "$tempDir/www";
