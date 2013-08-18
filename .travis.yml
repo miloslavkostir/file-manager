@@ -11,6 +11,6 @@ notifications:
 
 before_script:
   - composer self-update
-  - composer install --dev
+  - composer install --no-interaction --dev
 
 script: phpunit --bootstrap tests/bootstrap.php --stderr tests
