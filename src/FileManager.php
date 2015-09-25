@@ -48,6 +48,9 @@ class FileManager extends Control
 
         // Create system container with services and configuration
         $this->system = new FileManager\Application\Loader($session, $config);
+		if (method_exists($this->system, "freeze")) {
+			$this->system->freeze();
+		}
 
         // Get & validate actual dir
         $actualDir = $this->system->getService("session")->get("actualdir");

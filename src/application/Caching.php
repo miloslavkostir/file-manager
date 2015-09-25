@@ -97,9 +97,9 @@ class Caching
         $dirs = Finder::findDirectories("*")->from($absDir);
         $cache = $this->cache;
         foreach ($dirs as $dir) {
-            unset($cache[array("content", $dir->getRealPath())]);
+			$cache->remove(array("content", $dir->getRealPath()));
         }
-        unset($cache[array("content", $absDir)]);
+		$cache->remove(array("content", $absDir));
         $this->deleteItem(null, array("tags" => "treeview"));
     }
 

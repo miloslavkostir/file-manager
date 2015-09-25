@@ -15,7 +15,7 @@
         "ext-bcmath": "*"
     },
     "require-dev": {
-        "nette/nette": "2.0.*",
+        "nette/nette": "2.*",
         "phpunit/phpunit": "3.7.*"
     },
     "suggest": {
