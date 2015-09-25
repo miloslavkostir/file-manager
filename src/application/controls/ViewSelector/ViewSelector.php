@@ -27,7 +27,7 @@ class ViewSelector extends \Ixtrum\FileManager\Application\Controls
     public function render()
     {
         $this->template->setFile(__DIR__ . "/ViewSelector.latte");
-        $this->template->setTranslator($this->system->translator);
+        $this->template->setTranslator($this->system->getService("translator"));
         $this->template->render();
     }
 
@@ -39,10 +39,10 @@ class ViewSelector extends \Ixtrum\FileManager\Application\Controls
     protected function createComponentChangeViewForm()
     {
         $items = array(
-            "large" => $this->system->translator->translate("Large images"),
-            "small" => $this->system->translator->translate("Small images"),
-            "list" => $this->system->translator->translate("List"),
-            "details" => $this->system->translator->translate("Details")
+            "large" => $this->system->getService("translator")->translate("Large images"),
+            "small" => $this->system->getService("translator")->translate("Small images"),
+            "list" => $this->system->getService("translator")->translate("List"),
+            "details" => $this->system->getService("translator")->translate("Details")
         );
 
         $form = new Form;
@@ -59,7 +59,7 @@ class ViewSelector extends \Ixtrum\FileManager\Application\Controls
      */
     public function changeViewFormSuccess(Form $form)
     {
-        $this->system->session->set("view", $form->values->view);
+        $this->system->getService("session")->set("view", $form->values->view);
     }
 
 }

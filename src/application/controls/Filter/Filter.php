@@ -27,7 +27,7 @@ class Filter extends \Ixtrum\FileManager\Application\Controls
     public function render()
     {
         $this->template->setFile(__DIR__ . "/Filter.latte");
-        $this->template->setTranslator($this->system->translator);
+        $this->template->setTranslator($this->system->getService("translator"));
         $this->template->render();
     }
 
@@ -39,10 +39,10 @@ class Filter extends \Ixtrum\FileManager\Application\Controls
     protected function createComponentFilterForm()
     {
         $form = new Form;
-        $form->setTranslator($this->system->translator);
+        $form->setTranslator($this->system->getService("translator"));
         $form->addText("phrase")
-                ->setDefaultValue($this->system->session->get("mask"))
-                ->setAttribute("placeholder", $this->system->translator->translate("Filter"));
+                ->setDefaultValue($this->system->getService("session")->get("mask"))
+                ->setAttribute("placeholder", $this->system->getService("translator")->translate("Filter"));
         $form->onSuccess[] = $this->filterFormSuccess;
         return $form;
     }
@@ -54,7 +54,7 @@ class Filter extends \Ixtrum\FileManager\Application\Controls
      */
     public function filterFormSuccess(Form $form)
     {
-        $this->system->session->set("mask", $form->values->phrase);
+        $this->system->getService("session")->set("mask", $form->values->phrase);
     }
 
 }

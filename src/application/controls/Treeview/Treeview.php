@@ -38,7 +38,7 @@ class Treeview extends \Ixtrum\FileManager\Application\Controls
     public function render()
     {
         $this->template->setFile(__DIR__ . "/Treeview.latte");
-        $this->template->setTranslator($this->system->translator);
+        $this->template->setTranslator($this->system->getService("translator"));
         $this->template->treeview = $this->loadData();
         $this->template->render();
     }
@@ -125,11 +125,11 @@ class Treeview extends \Ixtrum\FileManager\Application\Controls
         if ($this->system->parameters["cache"]) {
 
             $path = $this->system->parameters["dataDir"];
-            $cacheData = $this->system->caching->getItem($path);
+            $cacheData = $this->system->getService("caching")->getItem($path);
             if (!$cacheData) {
 
                 $output = $this->generateTreeview();
-                $this->system->caching->saveItem($path, $output, array("tags" => array("treeview")));
+                $this->system->getService("caching")->saveItem($path, $output, array("tags" => array("treeview")));
                 return $output;
             } else {
                 return $cacheData;

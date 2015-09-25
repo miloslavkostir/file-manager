@@ -48,10 +48,9 @@ class FileManager extends Control
 
         // Create system container with services and configuration
         $this->system = new FileManager\Application\Loader($session, $config);
-        $this->system->freeze();
 
         // Get & validate actual dir
-        $actualDir = $this->system->session->get("actualdir");
+        $actualDir = $this->system->getService("session")->get("actualdir");
         $actualPath = $this->getAbsolutePath($actualDir);
         if (!is_dir($actualPath) || empty($actualDir)) {
             // Set root directory as default
@@ -91,8 +90,8 @@ class FileManager extends Control
     {
         if ($this->system->parameters["cache"]) {
 
-            $this->system->caching->deleteItem(null, array("tags" => "treeview"));
-            $this->system->caching->deleteItem(array(
+            $this->system->getService("caching")->deleteItem(null, array("tags" => "treeview"));
+            $this->system->getService("caching")->deleteItem(array(
                 "content",
                 $this->getAbsolutePath($this->getActualDir())
             ));
@@ -115,7 +114,7 @@ class FileManager extends Control
         }
 
         if (!isset($this->template->plugin)) {
-            $this->flashMessage($this->system->translator->translate("Plugin '%s' not found!", $name), "warning");
+            $this->flashMessage($this->system->getService("translator")->translate("Plugin '%s' not found!", $name), "warning");
         }
     }
 
@@ -126,7 +125,7 @@ class FileManager extends Control
      */
     public function getActualDir()
     {
-        return $this->system->session->get("actualdir");
+        return $this->system->getService("session")->get("actualdir");
     }
 
     /**
@@ -137,7 +136,7 @@ class FileManager extends Control
     public function setActualDir($dir)
     {
         if ($this->isPathValid($dir)) {
-            $this->system->session->set("actualdir", $dir);
+            $this->system->getService("session")->set("actualdir", $dir);
         }
     }
 
@@ -161,7 +160,7 @@ class FileManager extends Control
     public function renderAddressbar()
     {
         $this->template->setFile(__DIR__ . "/templates/addressbar.latte");
-        $this->template->setTranslator($this->system->translator);
+        $this->template->setTranslator($this->system->getService("translator"));
         $this->template->render();
     }
 
@@ -171,7 +170,7 @@ class FileManager extends Control
     public function renderContent()
     {
         $this->template->setFile(__DIR__ . "/templates/content.latte");
-        $this->template->setTranslator($this->system->translator);
+        $this->template->setTranslator($this->system->getService("translator"));
         $this->template->render();
     }
 
@@ -184,7 +183,7 @@ class FileManager extends Control
         $this->template->resUrl = $this->system->parameters["resUrl"];
 
         // Get theme
-        $theme = $this->system->session->get("theme");
+        $theme = $this->system->getService("session")->get("theme");
         if ($theme) {
             $this->template->theme = $theme;
         } else {
@@ -199,7 +198,7 @@ class FileManager extends Control
     public function renderInfobar()
     {
         $this->template->setFile(__DIR__ . "/templates/infobar.latte");
-        $this->template->setTranslator($this->system->translator);
+        $this->template->setTranslator($this->system->getService("translator"));
 
         // Get plugins
         $this->template->fileInfoPlugins = array();
@@ -218,7 +217,7 @@ class FileManager extends Control
     public function renderMessages()
     {
         $this->template->setFile(__DIR__ . "/templates/messages.latte");
-        $this->template->setTranslator($this->system->translator);
+        $this->template->setTranslator($this->system->getService("translator"));
 
         // Sort messages according to priorities - 1. error, 2. warning, 3. info
         usort($this->template->flashes, function($next, $current) {
@@ -248,7 +247,7 @@ class FileManager extends Control
     public function renderToolbar()
     {
         $this->template->setFile(__DIR__ . "/templates/toolbar.latte");
-        $this->template->setTranslator($this->system->translator);
+        $this->template->setTranslator($this->system->getService("translator"));
         $this->template->toolbarPlugins = array();
         foreach ($this->system->parameters["plugins"] as $plugin) {
 
@@ -314,7 +313,7 @@ class FileManager extends Control
     public function getFreeSpace()
     {
         if ($this->system->parameters["quota"]) {
-            return $this->system->parameters["quotaLimit"] * 1048576 - $this->system->filesystem->getSize($this->system->parameters["dataDir"]);
+            return $this->system->parameters["quotaLimit"] * 1048576 - $this->system->getService("filesystem")->getSize($this->system->parameters["dataDir"]);
         } else {
             return disk_free_space($this->system->parameters["dataDir"]);
         }
@@ -343,7 +342,7 @@ class FileManager extends Control
             return true;
         }
 
-        return $this->system->filesystem->isSubDir($this->system->parameters["dataDir"], $path);
+        return $this->system->getService("filesystem")->isSubDir($this->system->parameters["dataDir"], $path);
     }
 
     /**

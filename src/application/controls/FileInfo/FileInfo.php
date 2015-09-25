@@ -27,10 +27,10 @@ class FileInfo extends \Ixtrum\FileManager\Application\Controls
     public function render()
     {
         $this->template->setFile(__DIR__ . "/FileInfo.latte");
-        $this->template->setTranslator($this->system->translator);
+        $this->template->setTranslator($this->system->getService("translator"));
         $this->template->resUrl = $this->system->parameters["resUrl"];
         $this->template->resDir = $this->system->parameters["resDir"];
-        $this->template->timeFormat = $this->system->translator->getTimeFormat();
+        $this->template->timeFormat = $this->system->getService("translator")->getTimeFormat();
 
         if (count($this->selectedFiles) > 1) {
 
@@ -45,7 +45,7 @@ class FileInfo extends \Ixtrum\FileManager\Application\Controls
                 $this->template->file = $this->getFileInfo($actualDir, $filename);
             } else {
                 // @todo messages in this phase can not be rendered?
-                $this->parent->parent->flashMessage($this->system->translator->translate("'%s' already does not exist!", $filename), "warning");
+                $this->parent->parent->flashMessage($this->system->getService("translator")->translate("'%s' already does not exist!", $filename), "warning");
             }
         }
 
@@ -67,17 +67,17 @@ class FileInfo extends \Ixtrum\FileManager\Application\Controls
         $info = array();
         $info["name"] = $filename;
         $info["modificated"] = date("F d Y H:i:s", filemtime($path));
-        $info["permissions"] = $this->system->filesystem->getFileMod($path);
+        $info["permissions"] = $this->system->getService("filesystem")->getFileMod($path);
         $info["dir"] = false;
 
         if (is_file($path)) {
 
             $info["extension"] = pathinfo($path, PATHINFO_EXTENSION);
-            $info["size"] = $this->system->filesystem->getSize($path);
+            $info["size"] = $this->system->getService("filesystem")->getSize($path);
         } else {
 
             $info["dir"] = true;
-            $info["size"] = $this->system->filesystem->getSize($path);
+            $info["size"] = $this->system->getService("filesystem")->getSize($path);
             $info["filesCount"] = $this->getDirFilesCount($path);
         }
         return $info;
@@ -126,7 +126,7 @@ class FileInfo extends \Ixtrum\FileManager\Application\Controls
             $filePath = $path . DIRECTORY_SEPARATOR . $file;
             if (!is_dir($filePath)) {
 
-                $info['size'] += $this->system->filesystem->getSize($filePath);
+                $info['size'] += $this->system->getService("filesystem")->getSize($filePath);
                 $info['filesCount']++;
             } elseif ($iterate) {
 
@@ -138,7 +138,7 @@ class FileInfo extends \Ixtrum\FileManager\Application\Controls
                     if ($item->isDir()) {
                         $info['dirCount']++;
                     } else {
-                        $info['size'] += $this->system->filesystem->getSize($item->getPathName());
+                        $info['size'] += $this->system->getService("filesystem")->getSize($item->getPathName());
                         $info['filesCount']++;
                     }
                 }

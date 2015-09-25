@@ -28,7 +28,7 @@ class Themes extends \Ixtrum\FileManager\Application\Controls
     public function render()
     {
         $this->template->setFile(__DIR__ . "/Themes.latte");
-        $this->template->setTranslator($this->system->translator);
+        $this->template->setTranslator($this->system->getService("translator"));
         $this->template->render();
     }
 
@@ -39,10 +39,10 @@ class Themes extends \Ixtrum\FileManager\Application\Controls
      */
     protected function createComponentThemeForm()
     {
-        $default = $this->system->session->get("theme");
+        $default = $this->system->getService("session")->get("theme");
         if (empty($default)) {
             $default = "default";
-            $this->system->session->set("theme", $default);
+            $this->system->getService("session")->set("theme", $default);
         }
 
         $themeDir = $this->system->parameters["resDir"] . "/themes";
@@ -60,7 +60,7 @@ class Themes extends \Ixtrum\FileManager\Application\Controls
      */
     public function themeFormSuccess(Form $form)
     {
-        $this->system->session->set("theme", $form->values->theme);
+        $this->system->getService("session")->set("theme", $form->values->theme);
         $this->redirect("this");
     }
 
@@ -75,7 +75,7 @@ class Themes extends \Ixtrum\FileManager\Application\Controls
     {
         $themes = array();
         if (!is_dir($themeDir)) {
-            return $themes;
+            throw new \Exception("Themes directory '" . $themeDir . "' not found!");
         }
 
         $dirs = Finder::findDirectories("*")->in($themeDir);

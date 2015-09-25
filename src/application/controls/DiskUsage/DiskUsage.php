@@ -22,12 +22,12 @@ class DiskUsage extends \Ixtrum\FileManager\Application\Controls
     public function render()
     {
         $this->template->setFile(__DIR__ . "/DiskUsage.latte");
-        $this->template->setTranslator($this->system->translator);
+        $this->template->setTranslator($this->system->getService("translator"));
         $this->template->spaceLeft = $this->getFreeSpace();
 
         if ($this->system->parameters["quota"]) {
 
-            $this->template->usedSize = $this->system->filesystem->getSize($this->system->parameters["dataDir"]);
+            $this->template->usedSize = $this->system->getService('filesystem')->getSize($this->system->parameters["dataDir"]);
             $this->template->usedPercent = round(($this->template->usedSize / ($this->system->parameters["quotaLimit"] * 1048576)) * 100);
         } else {
 

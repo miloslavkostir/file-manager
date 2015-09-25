@@ -39,8 +39,8 @@ class Navigation extends \Ixtrum\FileManager\Application\Controls
     {
         if ($this->system->parameters["cache"]) {
 
-            $this->system->caching->deleteItem(null, array("tags" => "treeview"));
-            $this->system->caching->deleteItem(array(
+            $this->system->getService("caching")->deleteItem(null, array("tags" => "treeview"));
+            $this->system->getService("caching")->deleteItem(array(
                 "content",
                 $this->getAbsolutePath($this->getActualDir())
             ));
@@ -53,7 +53,7 @@ class Navigation extends \Ixtrum\FileManager\Application\Controls
     public function render()
     {
         $this->template->setFile(__DIR__ . "/Navigation.latte");
-        $this->template->setTranslator($this->system->translator);
+        $this->template->setTranslator($this->system->getService("translator"));
         $this->template->items = $this->getNav($this->getActualDir());
         $this->template->render();
     }
@@ -66,7 +66,7 @@ class Navigation extends \Ixtrum\FileManager\Application\Controls
     protected function createComponentLocationForm()
     {
         $form = new Form;
-        $form->setTranslator($this->system->translator);
+        $form->setTranslator($this->system->getService("translator"));
         $form->addText("location")
                 ->setDefaultValue($this->getActualDir());
         $form->onSuccess[] = $this->locationFormSuccess;

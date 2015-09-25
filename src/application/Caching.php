@@ -83,7 +83,7 @@ class Caching
         if ($conds) {
             $this->cache->clean($conds);
         } else {
-            unset($this->cache[$key]);
+			$this->cache->remove($key);
         }
     }
 
@@ -112,8 +112,8 @@ class Caching
      */
     public function getItem($key)
     {
-        if (isset($this->cache[$key])) {
-            return $this->cache[$key];
+        if (($value = $this->cache->load($key)) !== NULL) {
+            return $value;
         }
         return null;
     }
