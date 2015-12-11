@@ -82,15 +82,14 @@ class Treeview extends \Ixtrum\FileManager\Application\Controls
      *
      * @return array
      */
-    private function getDirTree($dir)
+    private function getDirTree($dir, $excludeDirs)
     {
         $x = array();
-        $dirs = Finder::findDirectories("*")->in($dir);
+        $dirs = Finder::findDirectories("*")->exclude($excludeDirs)->in($dir);
 
         foreach ($dirs as $dir) {
-            $x[$dir->getFilename()] = $this->getDirTree($dir->getPathName());
+            $x[$dir->getFilename()] = $this->getDirTree($dir->getPathName(), NULL);
         }
-
         return $x;
     }
 
@@ -101,7 +100,7 @@ class Treeview extends \Ixtrum\FileManager\Application\Controls
      */
     private function generateTreeview()
     {
-        $dirs = $this->getDirTree($this->system->parameters["dataDir"]);
+        $dirs = $this->getDirTree($this->system->parameters["dataDir"], $this->system->parameters["hiddenDirs"]);
         $rootname = FileSystem::getRootName();
 
         $output = '<ul class="filetree">';

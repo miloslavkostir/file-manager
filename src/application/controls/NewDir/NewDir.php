@@ -74,7 +74,13 @@ class NewDir extends \Ixtrum\FileManager\Application\Controls
         }
 
         $targetPath = $this->getAbsolutePath($this->getActualDir()) . DIRECTORY_SEPARATOR . $dirname;
-        if (is_dir($targetPath)) {
+        if (is_dir($targetPath) AND in_array($dirname, $this->system->parameters["hiddenDirs"])) {
+            $this->parent->parent->flashMessage($this->system->getService("translator")->translate("Destination directory '%s' is reserved by system!", $dirname), "warning");
+            return;
+
+        } 
+		
+		if (is_dir($targetPath)) {
             $this->parent->parent->flashMessage($this->system->getService("translator")->translate("Destination directory '%s' already exists!", $dirname), "warning");
             return;
         }

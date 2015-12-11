@@ -80,7 +80,9 @@ class Navigation extends \Ixtrum\FileManager\Application\Controls
      */
     public function locationFormSuccess(Form $form)
     {
-        $this->setActualDir($form->values->location);
+		if (!in_array(preg_replace('/^\/(.*)/', '\\1', $this->getActualDir()), $this->system->parameters["hiddenDirs"])) {
+			$this->setActualDir($form->values->location);
+		}
     }
 
     /**

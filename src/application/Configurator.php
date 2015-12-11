@@ -26,6 +26,7 @@ class Configurator
     private $defaults = array(
         "appDir" => null,
         "dataDir" => null,
+		"hiddenDirs" => null,
         "cache" => true,
         "cacheDir" => null,
         "cacheStorage" => "FileStorage",

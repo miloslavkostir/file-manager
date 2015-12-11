@@ -13,7 +13,8 @@ namespace Ixtrum\FileManager\Application\Controls;
 
 use Nette\Application\Responses\FileResponse,
     Ixtrum\FileManager\Application\FileSystem\Finder,
-    Ixtrum\FileManager\Application\FileSystem;
+    Ixtrum\FileManager\Application\FileSystem,
+	Ixtrum\FileManager\Application\Loader;
 
 /**
  * Content control.
@@ -22,6 +23,15 @@ use Nette\Application\Responses\FileResponse,
  */
 class Content extends \Ixtrum\FileManager\Application\Controls
 {
+
+    protected function attached($presenter)
+    {
+        parent::attached($presenter);
+
+		if (in_array(preg_replace('/^\/(.*)/', '\\1', $this->getActualDir()), $this->system->parameters["hiddenDirs"])) {
+			exit;
+		}
+    }
 
     /**
      * Show file/directory details
@@ -276,7 +286,10 @@ class Content extends \Ixtrum\FileManager\Application\Controls
 
         $content = array();
         foreach ($files as $file) {
-
+			if (in_array($file->getBaseName(), $this->system->parameters["hiddenDirs"])) {
+				continue;
+			}
+			
             $name = $file->getFilename();
             $content[$name]["modified"] = $file->getMTime();
             $content[$name]["dir"] = false;
